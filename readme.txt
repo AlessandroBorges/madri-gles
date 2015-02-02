@@ -1,0 +1,1 @@
+This project is about a PC based emulator for Android's OpenGL ES API
