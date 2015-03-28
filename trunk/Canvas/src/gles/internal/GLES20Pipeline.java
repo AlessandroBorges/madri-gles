@@ -24,7 +24,7 @@ public class GLES20Pipeline implements Pipeline {
 	/** Includes **/
 	//@off
 	/*JNI
-	  #include <gles20>
+	  #include <GLES2/gl2.h>
 	  #include <vector>
 	  
 	  using namespace std;
@@ -69,7 +69,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     protected static void GLES20ClassInit() {
-        GLES20Pipeline.nGLES20ClassInit();
+        nGLES20ClassInit();
     }
 
     /**
@@ -145,8 +145,7 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glBindAttribLocation ( (GLuint) program, (GLuint) index, const char *name );
 
      * */
-    private static native void nGLBindAttribLocation(int program, int index, String name);/*
-            
+    private static native void nGLBindAttribLocation(int program, int index, String name);/*            
     		glBindAttribLocation ( (GLuint) program, (GLuint) index, name);
     */
 
@@ -513,7 +512,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLClearDepthf(float depth);/*
-    			glClearDepthf ( GLclampf depth );
+    			glClearDepthf ( (GLclampf) depth );
     */
 
     /**
@@ -697,12 +696,12 @@ public class GLES20Pipeline implements Pipeline {
     		int target, 
     		int level, 
     		int xoffset, 	int yoffset, 
-    		int width, 		int height, 
+    		int width, 	int height, 
     		int format, 
     		int imageSize, 
-    		java.nio.Buffer data,
-    		int offsetBytes);/*
+    		java.nio.Buffer data, int offsetBytes);/*
     		//native code
+    		char * data0 = (char *) (data + offsetBytes);
     		glCompressedTexSubImage2D ( 
     					(GLenum) target,
     					(GLint) level, 
@@ -784,14 +783,12 @@ public class GLES20Pipeline implements Pipeline {
     		int width, 
     		int height);/*
     		
-    			glCopyTexSubImage2D (( (GLenum) target, 
+    			glCopyTexSubImage2D (
+    			(GLenum) target, 
     			(GLint) level, 
-    			(GLint) xoffset, 
-    			(GLint) yoffset, 
-    			(GLint) x, 
-    			(GLint) y, 
-    			(GLsizei) width, 
-    			(GLsizei) height );
+    			(GLint) xoffset, (GLint) yoffset, 
+    			(GLint) x,       (GLint) y, 
+    			(GLsizei) width, (GLsizei) height );
     
     */
 
@@ -858,7 +855,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLCullFace(int mode);/*
-    		glCreateShader ( (GLenum) type );
+    		glCullFace ( (GLenum) mode );
     
     */
     
@@ -1184,7 +1181,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDepthMask(boolean flag);/*
-    			glDepthMask ( (GLboolean)  flag )
+    			glDepthMask ( (GLboolean)  flag );
     */
 
     /**
@@ -1316,7 +1313,10 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDrawElements(int mode, int count, int type, int offset);/*
-    			glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, (GLint) offset );
+    			glDrawElements ( (GLenum) mode, 
+    					 (GLsizei) count, 
+    					 (GLenum) type, 
+    					  reinterpret_cast<GLvoid *>(offset) );
     */
 
     /**
@@ -1439,7 +1439,8 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLFlush();/*
-    					glFlush ( void );
+       // simple call
+    	glFlush ();
     */
 
     /**
@@ -1861,33 +1862,27 @@ public class GLES20Pipeline implements Pipeline {
     												int index, 
     												int[] size, int sizeOffset, 
     												int[] type, int typeOffset);/*
-    
-    							    							    							
-    							GLint  max_length = 0;    													   							
-    							char *name;
-    							
-    							//get max length of attribute
+        							    							    							
+    				GLint  max_length = 0;    													   							
+       							
+    				//get max length of attribute
                                 glGetProgramiv((GLuint) program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length);
-                                //alloc some space
-                                name = malloc(max_length + 1);
-    							
-    							// gles call
-    							glGetActiveAttrib ( 
-    										(GLuint) program, 
-    										(GLuint) index, 
-    										 max_length + 1, 
-    										 &max_length, // not used after call
-    										 (GLint *)(size + sizeOffset), 
-    										 (GLenum *)(type + typeOffset), 
-    										  name);
-    									 
-    							jstring result = env->NewStringUTF(name);
-    							    							
-    							// let it go...
-    							free(name);
-    							
-    							return result;									 
     
+                                //alloc some space
+                                std::vector<GLchar> name(max_length + 1);
+    							
+    				// gles call
+    				glGetActiveAttrib ( 
+    						(GLuint) program, 
+    						(GLuint) index, 
+    						 max_length + 1, 
+    						 &max_length, // not used after call
+    						 (GLint *)(size + sizeOffset), 
+    						 (GLenum *)(type + typeOffset), 
+    						  &name[0]);
+    									 
+    				jstring result = env->NewStringUTF(&name[0]);
+				return result;
     */
 
     /**
@@ -1926,38 +1921,33 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native String nGLGetActiveAttrib(int program, 
-    												int index, 
-    												java.nio.IntBuffer size, int sizeOffset,
-    												java.nio.IntBuffer type, int typeOffset);/*
+    			        			int index, 
+    							java.nio.IntBuffer size, int sizeOffset,
+    							java.nio.IntBuffer type, int typeOffset);/*
     
                                 // used code snipet from
                                 // http://people.freedesktop.org/~idr/OpenGL_tutorials/05-attributes.html
-    							GLint  max_length = 0;    													   							
-    							char *name;
+    				GLint  max_length = 0;   													   							
     							
-    							//get max length of attribute
+    							
+    				//get max length of attribute
                                 glGetProgramiv((GLuint) program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length);
 
                                 //alloc some space
-                                name = malloc(max_length + 1);
+                                std::vector<GLchar> name(max_length + 1);
                                 
                                 // gles call
-    							glGetActiveAttrib ( 
-    										(GLuint) program, 
-    										(GLuint) index, 
-    										 max_length + 1, 
-    										 &max_length, // not used after call
-    										 (GLint *)  (size + sizeOffset), 
-    										 (GLenum *) (type + typeOffset), 
-    										 name);
-    									 
-    							jstring result = env->NewStringUTF(name);
-    							    							
-    							// let it go...
-    							free(name);
-    							
-    							return result;	
-    
+    				glGetActiveAttrib ( 
+    						(GLuint) program, 
+    						(GLuint) index, 
+    						 max_length + 1, 
+    						 &max_length, // not used after call
+    						 (GLint *)  (size + sizeOffset), 
+    						 (GLenum *) (type + typeOffset), 
+    						 &name[0]);
+    							 
+    				jstring result = env->NewStringUTF(&name[0]);
+    				return result;	
     */
 
     /**
@@ -2067,18 +2057,18 @@ public class GLES20Pipeline implements Pipeline {
      * 
      *  @hide Method is broken, but used to be public (b/6006380) */
     @Deprecated
-    private static native void nGLGetActiveUniform(
+    private static /*native*/ void nGLGetActiveUniform(
     		int program, 
     		int index, int bufsize, 
     		java.nio.IntBuffer length, 
     		java.nio.IntBuffer size, 
     		java.nio.IntBuffer type, 
-    		byte name);/*
+    		byte name){}/*
     		
     		// no OP.
     		// deprecated
     		
-    		*/
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2109,32 +2099,24 @@ public class GLES20Pipeline implements Pipeline {
     
     					 // used code snipet from
                          // http://people.freedesktop.org/~idr/OpenGL_tutorials/05-attributes.html
-    					 GLint  max_length = 0;    													   							
-    					 char *name;
+    			 GLint  max_length = 0;
     							
-    					//get max length of attribute
+    			//get max length of attribute
                         glGetProgramiv((GLuint) program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length);
                         //alloc some space
-                        name = malloc(max_length + 1);
-    					
+                        std::vector<GLchar> name(max_length + 1);   					
     
-    					glGetActiveUniform ( 
-    								(GLuint) program, 
-    								(GLuint) index, 
-    								max_length + 1, 
-    								&max_length, // not used after call
-    								(GLint *)  &size[sizeOffset], 
-    								(GLenum *) &type[typeOffset], 
-    								name );
+    			glGetActiveUniform (    (GLuint) program, 
+    						(GLuint) index, 
+    						max_length + 1, 
+    						&max_length, // not used after call
+    						(GLint *)  &size[sizeOffset], 
+    						(GLenum *) &type[typeOffset], 
+    						&name[0] );
     								
     				  // return the requested String				 
-    				  jstring result = env->NewStringUTF(name);
-    				      							
-    				  // let it go...
-    				 free(name);
-    							
-    				 return result; 			  
-    
+    			jstring result = env->NewStringUTF(&name[0]);    				   	
+    			return result; 
     */
 
     /**
@@ -2157,34 +2139,27 @@ public class GLES20Pipeline implements Pipeline {
      * */
     private static native String nGLGetActiveUniform(int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type);/*
     
-    					 // used code snipet from
+    			 // used code snipet from
                          // http://people.freedesktop.org/~idr/OpenGL_tutorials/05-attributes.html
-    					 GLint  max_length = 0;    													   							
-    					 char *name;
+    			 GLint  max_length = 0;    			
     							
-    					//get max length of attribute
+    			//get max length of attribute
                         glGetProgramiv((GLuint) program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_length);
+                        
                         //alloc some space
-                        name = malloc(max_length + 1);
-    					
-    
-    					glGetActiveUniform ( 
-    								(GLuint) program, 
-    								(GLuint) index, 
-    								max_length + 1, 
-    								&max_length, // not used after call
-    								(GLint *)  size, 
-    								(GLenum *) type, 
-    								name );
+                        std::vector<GLchar> name(max_length + 1);
+
+			glGetActiveUniform ((GLuint) program,
+					    (GLuint) index, 
+    					    (max_length + 1), 
+    					    &max_length, // not used after call
+    				            (GLint *)  size, 
+    					    (GLenum *) type, 
+    					    &name[0] );
     								
-    				  // return the requested String				 
-    				  jstring result = env->NewStringUTF(name);
-    				      							
-    				  // let it go...
-    				 free(name);
-    							
-    				 return result; 	
-    
+    		      // return the requested String				 
+    		     jstring result = env->NewStringUTF(&name[0]);    				 	
+    		     return result; 	    
     */
 
     /**
@@ -2269,7 +2244,7 @@ public class GLES20Pipeline implements Pipeline {
     private static native int nGLGetAttribLocation(int program, String name);/*
     
                 // name is converted to (const char *)
-    			glGetAttribLocation ( (GLuint) program, name );
+    		return (jint)	glGetAttribLocation ( (GLuint) program, name );
     */
 
     /**
@@ -2636,8 +2611,11 @@ public class GLES20Pipeline implements Pipeline {
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES20.glGetProgramInfoLog([int program]);
      * 
-     *      GLchar * infoLog);
-
+      *  void glGetProgramInfoLog(	GLuint program,
+     *   	GLsizei maxLength,
+     *    	GLsizei *length,
+     *          GLchar * infoLog);
+     *   
      * */
     private static native String nGLGetProgramInfoLog(int program);/*
     
@@ -2651,10 +2629,13 @@ public class GLES20Pipeline implements Pipeline {
     		std::vector<GLchar> infoLog(maxLength + 1);
 	        
 	        // get the log with right buffer size
-    		void glGetProgramInfoLog( (GLuint) program, maxLength + 1,	&maxLength,  &infoLog[0]);
+    		glGetProgramInfoLog( (GLuint) program, 
+    		                     (GLsizei) (maxLength + 1), 
+    		                     (GLsizei *) &maxLength, 
+    		                     (GLchar *) &infoLog[0]);
  										
- 			// return the requested String				 
-    		jstring result = env->NewStringUTF(infoLog);
+ 		// return the requested String				 
+    		jstring result = env->NewStringUTF(&infoLog[0]);
     		
     		// get result back
     		return result;    
@@ -2815,7 +2796,7 @@ public class GLES20Pipeline implements Pipeline {
              	 &maxLength,
               	 &infoLog[0]);
               
-           jstring result = env->NewStringUTF(infolog);
+           jstring result = env->NewStringUTF(&infoLog[0]);
                                  
            return result;
     
@@ -2933,21 +2914,9 @@ public class GLES20Pipeline implements Pipeline {
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES20.glGetShaderSource([int shader, int bufsize, java.nio.IntBuffer length, byte source]);
-     * 
-     * 
-     * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES20.glGetShaderSource([int shader, int bufsize, java.nio.IntBuffer length, byte source]);
-     * 
-     *  @hide Method is broken, but used to be public (b/6006380) 
-     *  @hide Method is broken, but used to be public (b/6006380) 
-     * 
-     * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES20.glGetShaderSource([int shader, int bufsize, java.nio.IntBuffer length, byte source]);
-     * 
-     *  @hide Method is broken, but used to be public (b/6006380) 
      *  @hide Method is broken, but used to be public (b/6006380) */
     @Deprecated
-    private static native void nGLGetShaderSource(int shader, int bufsize, java.nio.IntBuffer length, byte source);/*
+    private static /*native*/ void nGLGetShaderSource(int shader, int bufsize, java.nio.IntBuffer length, byte source){}/*
                      //nop
     */
 
@@ -2972,14 +2941,14 @@ public class GLES20Pipeline implements Pipeline {
     private static native String nGLGetShaderSource(int shader);/*
     
     				GLint maxLength = 0;
-					glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &maxLength);
- 
-					// The maxLength includes the NULL character
-					std::vector<GLchar> source(maxLength + 1);
+				glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &maxLength);
+				
+          			// The maxLength includes the NULL character
+				std::vector<GLchar> source(maxLength + 1);
     
     				glGetShaderSource ( (GLuint) shader, maxLength + 1, &maxLength, &source[0]);
     				
-    				jstring result = env->NewStringUTF(source);                                 
+    				jstring result = env->NewStringUTF(&source[0]);                                 
                     return result;	
     				
     */
@@ -3789,19 +3758,19 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glShaderBinary ( (GLsizei) n, const (GLuint) *shaders, (GLenum) binaryformat, const GLvoid *binary, (GLsizei) length )
 
      * */
-    private static native void nGLShaderBinary(int n, 
-    											java.nio.IntBuffer shaders, 
-    											int binaryformat, 
-    											java.nio.Buffer binary, int offsetBytes,
-    											int length);/*
+    private static native void nGLShaderBinary(int n,
+	    java.nio.IntBuffer shaders, 
+	    int binaryformat,
+	    java.nio.Buffer binary, int offsetBytes,
+	    int length);/*
     								
- 						// native code	
- 					char * data0 = (char *) (binary + offsetBytes);	
-    				glShaderBinary( (GLsizei) n, 
-    								(const GLuint *)shaders, 
-    								(GLenum) binaryformat, 
-    								(const GLvoid *) data0, 
-    								(GLsizei) length );
+ 		// native code	
+ 		char * data0 = (char *) (binary + offsetBytes);	
+    		glShaderBinary( (GLsizei) n, 
+    				(const GLuint *)shaders, 
+    				(GLenum) binaryformat, 
+    				(const GLvoid *) data0, 
+    				(GLsizei) length );
     
     */
 
@@ -3826,13 +3795,9 @@ public class GLES20Pipeline implements Pipeline {
     private static native void nGLShaderSource(int shader, String source);/*
         										
    			//Send the vertex shader source code to GL
-			//Note that std::string's .c_str is NULL character terminated.
-			 
-			const GLchar *source = (const GLchar *)source;
-						
-			glShaderSource((GLuint)shader, 1, &source, 0);
-    
-    
+   			// GL expects an array of strings
+   			const char* sourceArr[] = {source};								
+			glShaderSource((GLuint)shader, 1, sourceArr, 0);
     */
 
     /**
@@ -4515,7 +4480,7 @@ public class GLES20Pipeline implements Pipeline {
      * */
     private static native void nGLUniform2iv(int location, int count, int[] v, int offset);/*
     
-    			glUniform2iv ( (GLint) location, (GLsizei) count, (const GLint *) &v[offset] );
+    	 glUniform2iv ( (GLint) location, (GLsizei) count, (const GLint *) &v[offset] );
     
     */
 
@@ -5273,8 +5238,7 @@ public class GLES20Pipeline implements Pipeline {
     private static native void nGLVertexAttrib2fv(int indx, java.nio.FloatBuffer values, int offset);/*
     
             // apply offset    
-            (const GLfloat *) values0 = (const GLfloat *) (values + offset);
-     		glVertexAttrib2fv ( (GLuint) indx,  values );
+            glVertexAttrib2fv ( (GLuint) indx,  (const GLfloat *)(values + offset) );
     
     */
 
@@ -5449,13 +5413,19 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glVertexAttribPointer ( (GLuint) indx, (GLint) size, (GLenum) type, (GLboolean)  normalized, (GLsizei) stride, (GLint) offset )
 
      * */
-    private static native void nGLVertexAttribPointer(int indx, int size, int type, boolean normalized, int stride, int offset);/*
+    private static native void nGLVertexAttribPointer(
+	    int indx, 
+	    int size, 
+	    int type, 
+	    boolean normalized, 
+	    int stride, 
+	    int offset);/*
     		glVertexAttribPointer ( (GLuint) indx, 
     		                        (GLint) size, 
     		                        (GLenum) type, 
     		                        (GLboolean)  normalized, 
     		                        (GLsizei) stride, 
-    		                        (GLint) offset );
+    		                         reinterpret_cast<GLvoid *>(offset) );
     */
 
     /**
