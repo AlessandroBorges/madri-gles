@@ -2410,7 +2410,7 @@ public class GLES20Pipeline implements Pipeline {
 				
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				GLES20Pipeline.nGLGetFloatv(pname, values, offset);				
 		}else{
 				throw new RuntimeException(FLOATBUFFER_ND);
@@ -3016,7 +3016,19 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params) {
-        GLES20Pipeline.nGLGetTexParameterfv(target, pname, params);
+        if (params == null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (params.isDirect()) {
+            int offset = BufferInfo.getOffset(params);
+            GLES20Pipeline.nGLGetTexParameterfv(target, pname, params, offset);
+        } else {           
+            float[] array = params.array();            
+            int offset = BufferInfo.getOffset(params); 
+            XXX
+    }
+        
     }
 
     /**
@@ -3026,9 +3038,9 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glGetTexParameterfv ( (GLenum) target, (GLenum) pname, (GLfloat) *params )
 
      * */
-    private static native void nGLGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params);/*
+    private static native void nGLGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params, int offset);/*
     
-    			glGetTexParameterfv ( (GLenum) target, (GLenum) pname,  (GLfloat *)  params );
+    			glGetTexParameterfv ( (GLenum) target, (GLenum) pname,  (GLfloat *)  (params + offset) );
     
     */
 
@@ -4409,7 +4421,7 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniform2fv(int location, int count, java.nio.FloatBuffer values) {    
     
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 				
 		// now, the offset...		
 		if(values.isDirect()){
@@ -4417,7 +4429,7 @@ public class GLES20Pipeline implements Pipeline {
 				GLES20Pipeline.nGLUniform2fv(location, count, values, offset);
 				
 		}else{
-				throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+				throw new RuntimeException(FLOATBUFFER_ND);
 		}			
         
     }
@@ -4494,14 +4506,14 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniform2iv(int location, int count, java.nio.IntBuffer values) {    
     
 		if(values == null) 
-				throw new RuntimeException("java.nio.IntBuffer values is null.");
+				throw new RuntimeException(INTBUFFER_NULL);
 				
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				 GLES20Pipeline.nGLUniform2iv(location, count, values, offset);
 		}else{
-				throw new RuntimeException("java.nio.IntBuffer values is non-direct.");
+				throw new RuntimeException(INTBUFFER_ND);
     }
        
     }
@@ -4551,8 +4563,8 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glUniform3fv ( (GLint) location, (GLsizei) count, (const (GLfloat) *)v )
 
      * */
-    public void glUniform3fv(int location, int count, float[] v, int offset) {
-        GLES20Pipeline.nGLUniform3fv(location, count, v, offset);
+    public void glUniform3fv(int location, int count, float[] value, int offset) {
+        GLES20Pipeline.nGLUniform3fv(location, count, value, offset);
     }
 
     /**
@@ -4578,15 +4590,15 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniform3fv(int location, int count, java.nio.FloatBuffer values) {
         
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 				
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				GLES20Pipeline.nGLUniform3fv(location, count, values, offset);
 				
 		}else{
-				throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+				throw new RuntimeException(FLOATBUFFER_ND);
     }
         
     }
@@ -4635,8 +4647,8 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
 
      * */
-    public void glUniform3iv(int location, int count, int[] v, int offset) {
-        GLES20Pipeline.nGLUniform3iv(location, count, v, offset);
+    public void glUniform3iv(int location, int count, int[] value, int offset) {
+        GLES20Pipeline.nGLUniform3iv(location, count, value, offset);
     }
 
     /**
@@ -4646,9 +4658,8 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
 
      * */
-    private static native void nGLUniform3iv(int location, int count, int[] v, int offset);/*
-    
-        glUniform3iv ( (GLint) location, (GLsizei) count, (const GLint *) &v[offset] );
+    private static native void nGLUniform3iv(int location, int count, int[] value, int offset);/*    
+        glUniform3iv ( (GLint) location, (GLsizei) count, (const GLint *) &value[offset] );    
     
     
     */
@@ -4663,15 +4674,15 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniform3iv(int location, int count, java.nio.IntBuffer values) {
     
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(INTBUFFER_NULL);
 				
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				 GLES20Pipeline.nGLUniform3iv(location, count, values, offset);
 				
 		}else{
-				throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+				throw new RuntimeException(INTBUFFER_ND);
 		}		
        
     }
@@ -4747,14 +4758,14 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniform4fv(int location, int count, java.nio.FloatBuffer values) {
   
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 				
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				GLES20Pipeline.nGLUniform4fv(location, count, values, offset);				
 		}else{
-				throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+				throw new RuntimeException(FLOATBUFFER_ND);
 		}			  
         
     }
@@ -4829,14 +4840,14 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniform4iv(int location, int count, java.nio.IntBuffer values) {
 
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(INTBUFFER_NULL);
 				
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				GLES20Pipeline.nGLUniform4iv(location, count, values, offset);				
 		}else{
-			throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+			throw new RuntimeException(INTBUFFER_ND);
 		}		
         
     }
@@ -4888,14 +4899,14 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniformMatrix2fv(int location, int count, boolean transpose, java.nio.FloatBuffer values) {
     	    	
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 		
 		// now, the offset...		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				 GLES20Pipeline.nGLUniformMatrix2fv(location, count, transpose, values, offset);
 		}else{
-				throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 		}			
     	
        
@@ -4909,9 +4920,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLUniformMatrix2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    						// apply offset    
-			        GLfloat * value0 = (GLfloat *) (value + offset);
-    				glUniformMatrix2fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, value0 );
+    				glUniformMatrix2fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (GLfloat *) (value + offset) );    
     
     */
 
@@ -4949,14 +4958,14 @@ public class GLES20Pipeline implements Pipeline {
     	
 
 		if(value == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(INTBUFFER_NULL);
 		
 		if(value.isDirect()){
-				int offset = value.position();
+				int offset = BufferInfo.getOffset(value);
 				 GLES20Pipeline.nGLUniformMatrix3fv(location, count, transpose, value, offset);
 		}
 		else{
-				throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+				throw new RuntimeException(FLOATBUFFER_ND);
 		}	
     	
        
@@ -4972,8 +4981,8 @@ public class GLES20Pipeline implements Pipeline {
     private static native void nGLUniformMatrix3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
     		
 			// apply offset    
-			GLfloat * value0 = (GLfloat *) (value + offset);
-    		glUniformMatrix3fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const GLfloat *) value0 );
+			//GLfloat * value0 = (GLfloat *) (value + offset);
+    		glUniformMatrix3fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const GLfloat *) (value + offset) );    
     
     */
 
@@ -5011,13 +5020,13 @@ public class GLES20Pipeline implements Pipeline {
     public void glUniformMatrix4fv(int location, int count, boolean transpose, java.nio.FloatBuffer values) {
 
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 		
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				GLES20Pipeline.nGLUniformMatrix4fv(location, count, transpose, values, offset);
 		}else{
-			throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+			throw new RuntimeException(FLOATBUFFER_ND);
     }
 		
     }
@@ -5138,12 +5147,12 @@ public class GLES20Pipeline implements Pipeline {
     	
 
 		if(values == null) 
-				throw new RuntimeException("java.nio.FloatBuffer values is null.");
+				throw new RuntimeException(FLOATBUFFER_NULL);
 		if(values.isDirect()){
-				int offset = values.position();
+				int offset = BufferInfo.getOffset(values);
 				GLES20Pipeline.nGLVertexAttrib1fv(indx, values, offset);
 		}else{
-			throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+			throw new RuntimeException(FLOATBUFFER_ND);
 		}
     }
 
@@ -5205,7 +5214,7 @@ public class GLES20Pipeline implements Pipeline {
      * */
     private static native void nGLVertexAttrib2fv(int indx, float[] values, int offset);/*
     
-    			glVertexAttrib2fv ( (GLuint) indx, (const GLfloat *)values );
+    			glVertexAttrib2fv ( (GLuint) indx, (const GLfloat *)(values + offset) );
     */
 
     /**
@@ -5218,13 +5227,13 @@ public class GLES20Pipeline implements Pipeline {
     public void glVertexAttrib2fv(int indx, java.nio.FloatBuffer values) {
 		
     	if(values == null) 
-			throw new RuntimeException("java.nio.FloatBuffer values is null.");
+			throw new RuntimeException(FLOATBUFFER_NULL);
     	
 		if(values.isDirect()){
-			int offset = values.position();
+			int offset = BufferInfo.getOffset(values);
 			GLES20Pipeline.nGLVertexAttrib2fv(indx, values, offset);
 		}else{
-			throw new RuntimeException("java.nio.FloatBuffer values is non-direct.");
+			throw new RuntimeException(FLOATBUFFER_ND);
     }
     }
 
@@ -5297,9 +5306,9 @@ public class GLES20Pipeline implements Pipeline {
     public void glVertexAttrib3fv(int indx, java.nio.FloatBuffer values) {
 		
     	if(values == null) 
-    		throw new RuntimeException("java.nio.FloatBuffer values is null.");
+    		throw new RuntimeException(FLOATBUFFER_NULL);
     	if(values.isDirect()){
-    		int offset = values.position();
+    		int offset = BufferInfo.getOffset(values);
     		GLES20Pipeline.nGLVertexAttrib3fv(indx, values, offset);
     	}
     	
@@ -5315,7 +5324,7 @@ public class GLES20Pipeline implements Pipeline {
     private static native void nGLVertexAttrib3fv(int indx, java.nio.FloatBuffer values, int offset);/*
     			// apply offset    
  				GLfloat * values0 = values + offset;
-    			glVertexAttrib3fv ( (GLuint) indx,(const GLfloat *) values0 );
+    			glVertexAttrib3fv ( (GLuint) indx,(const GLfloat *) (values0 );
     */
 
     /**
@@ -5373,10 +5382,10 @@ public class GLES20Pipeline implements Pipeline {
     public void glVertexAttrib4fv(int indx, java.nio.FloatBuffer values) {
     	
     	if(values == null) 
-    		throw new RuntimeException("java.nio.FloatBuffer values is null.");
+    		throw new RuntimeException(FLOATBUFFER_NULL);
     	
     	if(values.isDirect()){
-    		int offset = values.position();
+    		int offset = BufferInfo.getOffset(values);
     		 GLES20Pipeline.nGLVertexAttrib4fv(indx, values, offset);
     	}
        
@@ -5391,8 +5400,8 @@ public class GLES20Pipeline implements Pipeline {
      * */
     private static native void nGLVertexAttrib4fv(int indx, java.nio.FloatBuffer values, int offset);/*
        // apply offset    
-        GLfloat * values0 = values + offset;
-        glVertexAttrib4fv ( (GLuint) indx, (const GLfloat *)values0 );
+       // GLfloat * values0 = values + offset;
+        glVertexAttrib4fv ( (GLuint) indx, (const GLfloat *)(values + offset) );
     */
 
     /**
@@ -5438,14 +5447,14 @@ public class GLES20Pipeline implements Pipeline {
     public void glVertexAttribPointerBounds(int indx, int size, int type, boolean normalized, int stride, java.nio.Buffer ptr, int remaining) {
     	
     	if(ptr==null) {
-    		throw new RuntimeException("java.nio.Buffer ptr is null.");
+    		throw new RuntimeException(BUFFER_NULL);
     	}
     	if(ptr.isDirect()){
     		// parameter int remaining is unused
-    		int offsetBytes = BufferInfo.getOffsetInBytes(ptr);
+    		int offsetBytes = BufferInfo.getOffset(ptr);
     		GLES20Pipeline.nGLVertexAttribPointerBounds(indx, size, type, normalized, stride, ptr, offsetBytes);
     	}else{
-    		throw new RuntimeException("java.nio.Buffer ptr is non-direct.");
+    		throw new RuntimeException(BUFFER_ND);
     }
     }
 
@@ -5462,8 +5471,7 @@ public class GLES20Pipeline implements Pipeline {
     		int type, 
     		boolean normalized, 
     		int stride, 
-    		java.nio.Buffer ptr, 
-    		int offsetBytes);/*
+    		java.nio.Buffer ptr, int offsetBytes);/*
     		
     		 // native code	
  			char * data0 = (char *) (ptr + offsetBytes);
