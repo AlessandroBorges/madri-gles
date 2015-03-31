@@ -21,8 +21,8 @@ public class CanvasBuilder {
     
  // Angle Stuff
     public static String ANGLE_INC = "C:/Projetos/Android/Builder/Angle/inc";
-    public static String ANGLE_LIB_X86 = "C:/Projetos/Android/Builder/Angle/x86";
-    public static String ANGLE_LIB_X64 = "C:/Projetos/Android/Builder/Angle/x64";      
+    public static String ANGLE_LIB_X86 = "C:/Projetos/Android/Builder/Angle/x86/libs";
+    public static String ANGLE_LIB_X64 = "C:/Projetos/Android/Builder/Angle/x64/libs";      
 
     // Mali Stuff
     public static String MALI_INC = "C:/Projetos/Android/Builder/Mali/inc/";
@@ -48,7 +48,7 @@ public class CanvasBuilder {
 	
 	boolean genFFP = false;
 	
-	SDK sdk = SDK.MALI;
+	SDK sdk = SDK.ANGLE;
       
       String[]	ffpSrc = {	//"**/gles/opengl/GLES10.java", "**/gles/opengl/GLES10Ext.java", "**/gles/opengl/GLES11.java",
 			            //	"**/android/opengl/GLES11Ext.java",
@@ -99,6 +99,8 @@ public class CanvasBuilder {
 	  String jawt_Lib64 = "C:/JDK8_64/lib";
 	  String[] libsWin32Dir={jawt_Lib32};
 	  String[] libsWin64Dir={jawt_Lib64};
+	  String[] libGLESAngle={"-llibGLESv2-x64"};
+	  String[] libGLES={"-lGLESv2"};
 	 
 	  switch (sdk) {
 	    case ADRENO:
@@ -110,6 +112,7 @@ public class CanvasBuilder {
 	    case ANGLE:
 		 headerDir = ANGLE_SDK.mergeInclude(headerDir);
 		 libsWin32Dir = ANGLE_SDK.mergeWin32Lib(libsWin32Dir);
+		 libsWin64Dir= merge(libsWin64Dir, libAngle);
 		 libsWin64Dir = ANGLE_SDK.mergeWin64Lib(libsWin64Dir);
 		 break;		 
 	    case MALI:
@@ -137,7 +140,7 @@ public class CanvasBuilder {
 	    win32.cppFlags += " ";
 	    win32.headerDirs = headerDir;//
 	    win32.libraries = SDKPath.libPath(libsWin32Dir) 
-		             + " -ljawt -luser32 -llibGLESv2 "  ;
+		             + " -ljawt -luser32 -lGLESv2 "  ;
 		              //"-ljawt -lwinmm -lgdi32 -lshell32 -luser32 -lkernel32 -lcomctl32 ";
 	    win32.cFlags += " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
             win32.linkerFlags = " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
@@ -150,7 +153,7 @@ public class CanvasBuilder {
             win64.compilerPrefix = "";// "mingw32-";
             win64.headerDirs = headerDir;// {"HEADERS HERE"};
             win64.libraries = SDKPath.libPath(libsWin64Dir) +
-        	             " -ljawt -luser32 -lGLESv2 ";
+        	             " -ljawt -luser32 -llibGLESv2-x64 ";
             
             win64.cFlags +=  " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
             win64.linkerFlags += win32.linkerFlags;
