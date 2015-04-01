@@ -3026,7 +3026,7 @@ public class GLES20Pipeline implements Pipeline {
         } else {           
             float[] array = params.array();            
             int offset = BufferInfo.getOffset(params); 
-            XXX
+            GLES20Pipeline.nGLGetTexParameterfv(target, pname, array, offset);
     }
         
     }

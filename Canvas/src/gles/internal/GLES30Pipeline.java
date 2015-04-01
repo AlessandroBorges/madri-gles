@@ -657,10 +657,8 @@ public class GLES30Pipeline
      *  C function (GLboolean) glIsQuery ( (GLuint)  id )
 
      * */
-    private static native boolean nGLIsQuery(int id);/*
-    
-       return (jboolean) glIsQuery ( (GLuint)  id );
-    
+    private static native boolean nGLIsQuery(int id);/*    
+       return (jboolean) glIsQuery ( (GLuint)  id );    
     */
 
     /**
@@ -1300,7 +1298,11 @@ public class GLES30Pipeline
     							 int mask, 
     							 int filter) {
     	
-        GLES30Pipeline.nGLBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
+        GLES30Pipeline.nGLBlitFramebuffer(srcX0, srcY0, 
+        				   srcX1, srcY1, 
+        				   dstX0, dstY0, 
+        				   dstX1, dstY1, 
+        				   mask, filter);
     }
 
     /**
@@ -1311,11 +1313,11 @@ public class GLES30Pipeline
 
      * */
     private static native void nGLBlitFramebuffer(int srcX0, int srcY0, 
-    											  int srcX1, int srcY1, 
-    											  int dstX0, int dstY0, 
-    											  int dstX1, int dstY1, 
-    											  int mask, 
-    											  int filter);/*
+    						  int srcX1, int srcY1, 
+    						  int dstX0, int dstY0, 
+    						  int dstX1, int dstY1, 
+    						  int mask, 
+    						  int filter);/*
    
     				glBlitFramebuffer ( (GLint) srcX0, (GLint) srcY0, 
     									(GLint) srcX1, (GLint) srcY1, 
@@ -1454,11 +1456,8 @@ public class GLES30Pipeline
      *  C function void glBindVertexArray ( (GLuint)  array )
 
      * */
-    private static native void nGLBindVertexArray(int array);/*
-    
+    private static native void nGLBindVertexArray(int array);/*    
     		glBindVertexArray((GLuint) array );
-    
-    
     */
 
     /**
@@ -1670,8 +1669,7 @@ public class GLES30Pipeline
      *  C function void glBeginTransformFeedback ( (GLenum) primitiveMode )
 
      * */
-    private static native void nGLBeginTransformFeedback(int primitiveMode);/*
-    
+    private static native void nGLBeginTransformFeedback(int primitiveMode);/*    
     		glBeginTransformFeedback ( (GLenum) primitiveMode );
     */
 
@@ -2397,7 +2395,11 @@ public class GLES30Pipeline
      *  C function void glClearBufferiv ( (GLenum) buffer, (GLint) drawbuffer, const (GLint) *value )
 
      * */
-    private static native void nGLClearBufferiv(int buffer, int drawbuffer, int[] value, int offset);
+    private static native void nGLClearBufferiv(int buffer, int drawbuffer, int[] value, int offset);/*
+    		glClearBufferiv((GLenum) buffer, 
+    				(GLint) drawbuffer, 
+    				(const GLint *)(value + offset));
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2407,7 +2409,21 @@ public class GLES30Pipeline
 
      * */
     public void glClearBufferiv(int buffer, int drawbuffer, java.nio.IntBuffer value) {
-        GLES30Pipeline.nGLClearBufferiv(buffer, drawbuffer, value);
+	 if (value == null)
+	            throw new RuntimeException(INTBUFFER_NULL);
+
+	        // now, the offset...
+	        if (value.isDirect()) {
+	            int offset = BufferInfo.getOffset(value);
+	            GLES30Pipeline.nGLClearBufferiv(buffer, drawbuffer, value, offset);
+	        } else {
+	            if(!value.hasArray()){
+	                throw new RuntimeException(INTBUFFER_ND);
+	            }
+	            int[] array = value.array();            
+	            int offset =  BufferInfo.getOffset(value); 
+	            GLES30Pipeline.nGLClearBufferiv(buffer, drawbuffer, array, offset);
+	         }       
     }
 
     /**
@@ -2417,7 +2433,11 @@ public class GLES30Pipeline
      *  C function void glClearBufferiv ( (GLenum) buffer, (GLint) drawbuffer, const (GLint) *value )
 
      * */
-    private static native void nGLClearBufferiv(int buffer, int drawbuffer, java.nio.IntBuffer value);
+    private static native void nGLClearBufferiv(int buffer, int drawbuffer, java.nio.IntBuffer value, int offset);/*
+    			glClearBufferiv((GLenum) buffer, 
+    				(GLint) drawbuffer, 
+    				(const GLint *)(value + offset));
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2437,7 +2457,11 @@ public class GLES30Pipeline
      *  C function void glClearBufferuiv ( (GLenum) buffer, (GLint) drawbuffer, const (GLuint)  *value )
 
      * */
-    private static native void nGLClearBufferuiv(int buffer, int drawbuffer, int[] value, int offset);
+    private static native void nGLClearBufferuiv(int buffer, int drawbuffer, int[] value, int offset);/*
+    		glClearBufferuiv((GLenum) buffer, 
+    				 (GLint) drawbuffer, 
+    				(const GLuint  *)(value + offset) );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2447,7 +2471,23 @@ public class GLES30Pipeline
 
      * */
     public void glClearBufferuiv(int buffer, int drawbuffer, java.nio.IntBuffer value) {
-        GLES30Pipeline.nGLClearBufferuiv(buffer, drawbuffer, value);
+	if (value == null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (value.isDirect()) {
+            int offset = BufferInfo.getOffset(value);
+            GLES30Pipeline.nGLClearBufferuiv(buffer, drawbuffer, value, offset);
+            
+        } else {
+            if(!value.hasArray()){
+                throw new RuntimeException(INTBUFFER_ND);
+            }
+            int[] array = value.array();            
+            int offset =  BufferInfo.getOffset(value); 
+            GLES30Pipeline.nGLClearBufferuiv(buffer, drawbuffer, array, offset);
+         }
+       
     }
 
     /**
@@ -2457,7 +2497,11 @@ public class GLES30Pipeline
      *  C function void glClearBufferuiv ( (GLenum) buffer, (GLint) drawbuffer, const (GLuint)  *value )
 
      * */
-    private static native void nGLClearBufferuiv(int buffer, int drawbuffer, java.nio.IntBuffer value);
+    private static native void nGLClearBufferuiv(int buffer, int drawbuffer, java.nio.IntBuffer value, int offset);/*
+    		glClearBufferuiv((GLenum) buffer, 
+    				 (GLint) drawbuffer, 
+    				(const GLuint  *)(value + offset) );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2477,7 +2521,11 @@ public class GLES30Pipeline
      *  C function void glClearBufferfv ( (GLenum) buffer, (GLint) drawbuffer, const (GLfloat) *value )
 
      * */
-    private static native void nGLClearBufferfv(int buffer, int drawbuffer, float[] value, int offset);
+    private static native void nGLClearBufferfv(int buffer, int drawbuffer, float[] value, int offset);/*
+    			glClearBufferfv((GLenum) buffer, 
+    					(GLint) drawbuffer, 
+    					(const GLfloat *)(value+offsset );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2487,7 +2535,22 @@ public class GLES30Pipeline
 
      * */
     public void glClearBufferfv(int buffer, int drawbuffer, java.nio.FloatBuffer value) {
-        GLES30Pipeline.nGLClearBufferfv(buffer, drawbuffer, value);
+	
+	if (value == null)
+            throw new RuntimeException(FLOATBUFFER_NULL);
+
+        // now, the offset...
+        if (value.isDirect()) {
+            int offset = BufferInfo.getOffset(value);
+            GLES30Pipeline.nGLClearBufferfv(buffer, drawbuffer, value, offset);
+        } else {
+            if(!value.hasArray()){
+                throw new RuntimeException(INTBUFFER_ND);
+            }
+            float[] array = value.array();            
+            int offset =  BufferInfo.getOffset(value); 
+            GLES30Pipeline.nGLClearBufferfv(buffer, drawbuffer, array, offset);
+         }
     }
 
     /**
@@ -2497,7 +2560,12 @@ public class GLES30Pipeline
      *  C function void glClearBufferfv ( (GLenum) buffer, (GLint) drawbuffer, const (GLfloat) *value )
 
      * */
-    private static native void nGLClearBufferfv(int buffer, int drawbuffer, java.nio.FloatBuffer value);
+    private static native void nGLClearBufferfv(int buffer, int drawbuffer, java.nio.FloatBuffer value, int offset);/*
+    			glClearBufferfv((GLenum) buffer, 
+    					(GLint) drawbuffer, 
+    					(const GLfloat *)(value+offsset );
+    
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2961,10 +3029,12 @@ public class GLES30Pipeline
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES30.glClientWaitSync([long sync, int flags, long timeout]);
      * 
-     *  C function (GLenum) glClientWaitSync ( GLsync sync, GLbitfield flags, (GLuint) 64 timeout )
+     *  C function (GLenum) glClientWaitSync ( GLsync sync, GLbitfield flags, (GLuint64) timeout )
 
      * */
-    private static native int nGLClientWaitSync(long sync, int flags, long timeout);
+    private static native int nGLClientWaitSync(long sync, int flags, long timeout);/*
+    		return	(jint) glClientWaitSync((GLsync) sync, (GLbitfield) flags, (GLuint64) timeout );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -2984,7 +3054,9 @@ public class GLES30Pipeline
      *  C function void glWaitSync ( GLsync sync, GLbitfield flags, (GLuint) 64 timeout )
 
      * */
-    private static native void nGLWaitSync(long sync, int flags, long timeout);
+    private static native void nGLWaitSync(long sync, int flags, long timeout);/*
+    		glWaitSync ( GLsync sync, GLbitfield flags, (GLuint64) timeout );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -3004,7 +3076,9 @@ public class GLES30Pipeline
      *  C function void glGetInteger64v ( (GLenum) pname, GLint64 *params )
 
      * */
-    private static native void nGLGetInteger64v(int pname, long[] params, int offset);
+    private static native void nGLGetInteger64v(int pname, long[] params, int offset);/*
+    
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -3324,7 +3398,22 @@ public class GLES30Pipeline
 
      * */
     public void glSamplerParameteriv(int sampler, int pname, java.nio.IntBuffer param) {
-        GLES30Pipeline.nGLSamplerParameteriv(sampler, pname, param);
+	 if (param == null)
+	            throw new RuntimeException(INTBUFFER_NULL);
+
+	        // now, the offset...
+	        if (param.isDirect()) {
+	            int offset = BufferInfo.getOffset(param);
+	            GLES30Pipeline.nGLSamplerParameteriv(sampler, pname, param, offset);
+	        } else {
+	            if(!param.hasArray()){
+	                throw new RuntimeException(INTBUFFER_ND);
+	            }
+	            int[] array = param.array();            
+	            int offset = BufferInfo.getOffset(param);
+	            GLES30Pipeline.nGLSamplerParameteriv(sampler, pname, array, offset);
+	         }
+        
     }
 
     /**
@@ -3334,9 +3423,13 @@ public class GLES30Pipeline
      *  C function void glSamplerParameteriv ( (GLuint)  sampler, (GLenum) pname, const (GLint) *param )
 
      * */
-    private static native void nGLSamplerParameteriv(int sampler, int pname, java.nio.IntBuffer param);/*
+    private static native void nGLSamplerParameteriv(int sampler, 
+	    					     int pname, 
+	    					     java.nio.IntBuffer param, int offset);/*
     
-    					glSamplerParameteriv ( (GLuint)  sampler, (GLenum) pname, const (GLint) *param );
+    		glSamplerParameteriv((GLuint)  sampler, 
+    				     (GLenum) pname, 
+    				     (const GLint *)(param + offset) );
     */
 
     /**
@@ -3357,9 +3450,8 @@ public class GLES30Pipeline
      *  C function void glSamplerParameterf ( (GLuint)  sampler, (GLenum) pname, (GLfloat) param )
 
      * */
-    private static native void nGLSamplerParameterf(int sampler, int pname, float param);/*
-    
-    				glSamplerParameterf ( (GLuint)  sampler, (GLenum) pname, (GLfloat) param );
+    private static native void nGLSamplerParameterf(int sampler, int pname, float param);/*    
+    	       glSamplerParameterf ( (GLuint)  sampler, (GLenum) pname, (GLfloat) param );
     */
 
     /**
@@ -3380,7 +3472,11 @@ public class GLES30Pipeline
      *  C function void glSamplerParameterfv ( (GLuint)  sampler, (GLenum) pname, const (GLfloat) *param )
 
      * */
-    private static native void nGLSamplerParameterfv(int sampler, int pname, float[] param, int offset);
+    private static native void nGLSamplerParameterfv(int sampler, int pname, float[] param, int offset);/*
+    		glSamplerParameterfv((GLuint)  sampler, 
+    				     (GLenum) pname, 
+    				     (const GLfloat *)(param + offset));
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -3390,7 +3486,23 @@ public class GLES30Pipeline
 
      * */
     public void glSamplerParameterfv(int sampler, int pname, java.nio.FloatBuffer param) {
-        GLES30Pipeline.nGLSamplerParameterfv(sampler, pname, param);
+	 if (param == null)
+	            throw new RuntimeException(INTBUFFER_NULL);
+
+	 // now, the offset...
+	 if (param.isDirect()) {
+	       int offset = BufferInfo.getOffset(param);
+	       GLES30Pipeline.nGLSamplerParameterfv(sampler, pname, param, offset);
+	 } else 
+	    {
+	       if(!param.hasArray()){
+	                throw new RuntimeException(INTBUFFER_ND);
+	        }
+	       float[] array = param.array();            
+	       int offset = BufferInfo.getOffset(param);
+	       GLES30Pipeline.nGLSamplerParameterfv(sampler, pname, array, offset);	           
+	    }
+        
     }
 
     /**
@@ -3400,7 +3512,9 @@ public class GLES30Pipeline
      *  C function void glSamplerParameterfv ( (GLuint)  sampler, (GLenum) pname, const (GLfloat) *param )
 
      * */
-    private static native void nGLSamplerParameterfv(int sampler, int pname, java.nio.FloatBuffer param);
+    private static native void nGLSamplerParameterfv(int sampler, 
+	    					     int pname, 
+	    					     java.nio.FloatBuffer param, int offset);
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -3420,7 +3534,11 @@ public class GLES30Pipeline
      *  C function void glGetSamplerParameteriv ( (GLuint)  sampler, (GLenum) pname, (GLint) *params )
 
      * */
-    private static native void nGLGetSamplerParameteriv(int sampler, int pname, int[] params, int offset);
+    private static native void nGLGetSamplerParameteriv(int sampler, int pname, int[] params, int offset);/*
+          glGetSamplerParameteriv((GLuint)  sampler, 
+          			  (GLenum)  pname, 
+          			  (GLint *) (params + offset) );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -3430,7 +3548,21 @@ public class GLES30Pipeline
 
      * */
     public void glGetSamplerParameteriv(int sampler, int pname, java.nio.IntBuffer params) {
-        GLES30Pipeline.nGLGetSamplerParameteriv(sampler, pname, params);
+	if (params == null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (params.isDirect()) {
+            int offset = BufferInfo.getOffset(params);
+            GLES30Pipeline.nGLGetSamplerParameteriv(sampler, pname, params, offset);
+        } else {
+            if(!params.hasArray()){
+                throw new RuntimeException(INTBUFFER_ND);
+            }
+            int[] array = params.array();            
+            int offset =  BufferInfo.getOffset(params);
+            GLES30Pipeline.nGLGetSamplerParameteriv(sampler, pname, array, offset);
+         }        
     }
 
     /**
@@ -3440,7 +3572,13 @@ public class GLES30Pipeline
      *  C function void glGetSamplerParameteriv ( (GLuint)  sampler, (GLenum) pname, (GLint) *params )
 
      * */
-    private static native void nGLGetSamplerParameteriv(int sampler, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetSamplerParameteriv(int sampler, 
+	    						int pname, 
+	    						java.nio.IntBuffer params, int offset);/*
+    		glGetSamplerParameteriv((GLuint)  sampler, 
+    					(GLenum) pname, 
+    					(GLint *)(params + offset));
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -3481,9 +3619,10 @@ public class GLES30Pipeline
             int offset = BufferInfo.getOffset(params);
             GLES30Pipeline.nGLGetSamplerParameterfv(sampler, pname, params,offset);
         } else {
-            throw new RuntimeException(BUFFER_ND);
+            float[] array = params.array();            
+            int offset =  BufferInfo.getOffset(params);
+            GLES30Pipeline.nGLGetSamplerParameterfv(sampler, pname, array,offset);
         }
-       
     }
 
     /**
@@ -3493,8 +3632,12 @@ public class GLES30Pipeline
      *  C function void glGetSamplerParameterfv ( (GLuint)  sampler, (GLenum) pname, (GLfloat *) params );
 
      * */
-    private static native void nGLGetSamplerParameterfv(int sampler, int pname, java.nio.FloatBuffer params, int offset);/*
-    			glGetSamplerParameterfv ( (GLuint)  sampler, (GLenum) pname, (GLfloat *) (params + offset) );
+    private static native void nGLGetSamplerParameterfv(int sampler, 
+	    						int pname, 
+	    						java.nio.FloatBuffer params, int offset);/*
+    			glGetSamplerParameterfv((GLuint)  sampler, 
+    						(GLenum) pname, 
+    						(GLfloat *) (params + offset) );
     */
 
     /**
@@ -3516,7 +3659,7 @@ public class GLES30Pipeline
 
      * */
     private static native void nGLVertexAttribDivisor(int index, int divisor);/*
-         glVertexAttribDivisor ( (GLuint)  index, (GLuint)  divisor )
+         glVertexAttribDivisor ( (GLuint)  index, (GLuint)  divisor );
     */
 
     /**
@@ -3538,7 +3681,7 @@ public class GLES30Pipeline
 
      * */
     private static native void nGLBindTransformFeedback(int target, int id);/*
-     				glBindTransformFeedback ( (GLenum) target, (GLuint)  id )
+     		glBindTransformFeedback ( (GLenum) target, (GLuint)  id );
     */
 
     /**
@@ -3559,8 +3702,7 @@ public class GLES30Pipeline
      *  C function void glDeleteTransformFeedbacks ( (GLsizei) n, const (GLuint)  *ids )
 
      * */
-    private static native void nGLDeleteTransformFeedbacks(int n, int[] ids, int offset);/*
-        
+    private static native void nGLDeleteTransformFeedbacks(int n, int[] ids, int offset);/*        
           	glDeleteTransformFeedbacks ( (GLsizei) n, (const GLuint *) &ids[offset] );
     */
 
@@ -3569,10 +3711,23 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glDeleteTransformFeedbacks([int n, java.nio.IntBuffer ids]);
      * 
      *  C function void glDeleteTransformFeedbacks ( (GLsizei) n, const (GLuint)  *ids )
-
      * */
     public void glDeleteTransformFeedbacks(int n, java.nio.IntBuffer ids) {
-        GLES30Pipeline.nGLDeleteTransformFeedbacks(n, ids);
+	if (ids == null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (ids.isDirect()) {
+            int offset = BufferInfo.getOffset(ids);
+            GLES30Pipeline.nGLDeleteTransformFeedbacks(n, ids, offset);            
+        } else {
+            if(!ids.hasArray()){
+                throw new RuntimeException(INTBUFFER_ND);
+            }
+            int[] array = ids.array();            
+            int offset =  BufferInfo.getOffset(ids); 
+            GLES30Pipeline.nGLDeleteTransformFeedbacks(n, array, offset);
+         }      
     }
 
     /**
@@ -3583,8 +3738,7 @@ public class GLES30Pipeline
 
      * */
     private static native void nGLDeleteTransformFeedbacks(int n, java.nio.IntBuffer ids, int offset);/*
-    				glDeleteTransformFeedbacks ( (GLsizei) n, (const GLuint *) (ids + offset) )
-    
+    		glDeleteTransformFeedbacks( (GLsizei) n, (const GLuint *) (ids + offset) );    
     */
 
     /**
@@ -3605,10 +3759,8 @@ public class GLES30Pipeline
      *  C function void glGenTransformFeedbacks ( (GLsizei) n, (GLuint)  *ids )
 
      * */
-    private static native void nGLGenTransformFeedbacks(int n, int[] ids, int offset);/*
-    
-    			glGenTransformFeedbacks ( (GLsizei) n, (GLuint *) &ids[offset] );
-    
+    private static native void nGLGenTransformFeedbacks(int n, int[] ids, int offset);/*    
+    		glGenTransformFeedbacks ( (GLsizei) n, (GLuint *) &ids[offset] );    
     */
 
     /**
@@ -3619,7 +3771,24 @@ public class GLES30Pipeline
 
      * */
     public void glGenTransformFeedbacks(int n, java.nio.IntBuffer ids) {
-        GLES30Pipeline.nGLGenTransformFeedbacks(n, ids);
+	
+	if (ids == null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (ids.isDirect()) {
+            int offset = BufferInfo.getOffset(ids);
+            GLES30Pipeline.nGLGenTransformFeedbacks(n, ids, offset);
+            
+        } else {
+            if(!ids.hasArray()){
+                throw new RuntimeException(INTBUFFER_ND);
+            }
+            int[] array = ids.array();            
+            int offset =  BufferInfo.getOffset(ids);
+            GLES30Pipeline.nGLGenTransformFeedbacks(n, array, offset);
+         }
+        
     }
 
     /**
@@ -3652,7 +3821,7 @@ public class GLES30Pipeline
 
      * */
     private static native boolean nGLIsTransformFeedback(int id);/*
-    			return (jboolean) glIsTransformFeedback ( (GLuint)  id );
+    		return (jboolean) glIsTransformFeedback ( (GLuint)  id );
     */
 
     /**
@@ -3707,12 +3876,25 @@ public class GLES30Pipeline
 
      * */
     public void glGetProgramBinary(int program, 
-    								int bufSize, 
-    								int[] length, int lengthOffset, 
-    								int[] binaryFormat, int binaryFormatOffset, 
-    								java.nio.Buffer binary) {
-    	
-        GLES30Pipeline.nGLGetProgramBinary(program, bufSize, length, lengthOffset, binaryFormat, binaryFormatOffset, binary);
+    				   int bufSize, 
+    				   int[] length, int lengthOffset, 
+    				   int[] binaryFormat, int binaryFormatOffset, 
+    				   java.nio.Buffer binary) {
+	if (binary == null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (binary.isDirect()) {
+            int binaryOffset = BufferInfo.getOffset(binary);
+            GLES30Pipeline.nGLGetProgramBinary(program, 
+        	    				bufSize, 
+        	    				length, lengthOffset, 
+        	    				binaryFormat, binaryFormatOffset, 
+        	    				binary, binaryOffset);
+        } else {          
+                throw new RuntimeException(INTBUFFER_ND);          
+         }
+       
     }
 
     /**
@@ -3723,16 +3905,16 @@ public class GLES30Pipeline
 
      * */
     private static native void nGLGetProgramBinary(int program, 
-    												int bufSize, 
-    												int[] length, int lengthOffset, 
-    												int[] binaryFormat, int binaryFormatOffset, 
-    												java.nio.Buffer binary, int binaryOffset);/*
+    					           int bufSize, 
+    						   int[] length, int lengthOffset, 
+    						   int[] binaryFormat, int binaryFormatOffset, 
+    						   java.nio.Buffer binary, int binaryOffset);/*
     												
-    												glGetProgramBinary( (GLuint)  program, 
-    												                    (GLsizei) bufSize, 
-    												                    (GLsizei *) &length[lengthOffset], 
-    												                    (GLenum *)  &binaryFormat[binaryFormatOffset], 
-    												                    (GLvoid *)  &binary[binaryOffset] );
+    			glGetProgramBinary( (GLuint)  program, 
+    			                    (GLsizei) bufSize,
+    			                    (GLsizei *) &length[lengthOffset], 
+    				            (GLenum *)  &binaryFormat[binaryFormatOffset], 
+    					    (GLvoid *)  &binary[binaryOffset] );
     												
     	*/
 
@@ -3744,12 +3926,29 @@ public class GLES30Pipeline
 
      * */
     public void glGetProgramBinary(int program, 
-    								int bufSize, 
-    								java.nio.IntBuffer length, 
-    								java.nio.IntBuffer binaryFormat, 
-    								java.nio.Buffer binary) {
-    	
-        GLES30Pipeline.nGLGetProgramBinary(program, bufSize, length, binaryFormat, binary);
+    				   int bufSize,
+    				   java.nio.IntBuffer length,
+    				   java.nio.IntBuffer binaryFormat,
+    				   java.nio.Buffer binary) {
+	if (binary == null || length==null)
+            throw new RuntimeException(INTBUFFER_NULL);
+
+        // now, the offset...
+        if (binary.isDirect()) {
+            
+            int lengthOffset 	   = BufferInfo.getOffset(length);
+            int binaryFormatOffset = BufferInfo.getOffset(binaryFormat);
+            int binaryOffset       = BufferInfo.getOffset(binary);
+            
+            GLES30Pipeline.nGLGetProgramBinary(program, 
+        	    				bufSize,
+        	    				length, lengthOffset,
+        	    				binaryFormat, binaryFormatOffset,
+        	    				binary, binaryOffset);
+            
+        } else {
+            throw new RuntimeException(INTBUFFER_ND);   
+         }
     }
 
     /**
@@ -3760,16 +3959,16 @@ public class GLES30Pipeline
 
      * */
     private static native void nGLGetProgramBinary(int program, 
-    												int bufSize, 
-    												java.nio.IntBuffer length, int lengthOffset,
-    												java.nio.IntBuffer binaryFormat, int binaryFormatOffset,
-    												java.nio.Buffer binary, int binaryOffset);/*
+    						   int bufSize, 
+    						   java.nio.IntBuffer length, int lengthOffset,
+    						   java.nio.IntBuffer binaryFormat, int binaryFormatOffset,
+    						   java.nio.Buffer binary, int binaryOffset);/*
     												
-    							glGetProgramBinary( (GLuint)  program, 
-    												(GLsizei) bufSize, 
-    												(GLsizei *) (length + lenghtOffset), 
-    												(GLenum *) (binaryFormat + binaryFormatOffset ), 
-    												(GLvoid *) (binary + binaryOffset));	
+    			glGetProgramBinary( (GLuint)  program, 
+    		                            (GLsizei) bufSize, 
+    					    (GLsizei *) (length + lenghtOffset), 
+    					    (GLenum *) (binaryFormat + binaryFormatOffset ), 
+    					    (GLvoid *) (binary + binaryOffset));	
     												
     		*/
 
@@ -3777,11 +3976,23 @@ public class GLES30Pipeline
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES30.glProgramBinary([int program, int binaryFormat, java.nio.Buffer binary, int length]);
      * 
-     *  C function void glProgramBinary ( (GLuint)  program, (GLenum) binaryFormat, const GLvoid *binary, (GLsizei) length )
-
+     *  C function void glProgramBinary((GLuint)  program, 
+     *  				(GLenum) binaryFormat, 
+     *  				const GLvoid *binary, 
+     *  				(GLsizei) length );
      * */
-    public void glProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int length) {
-        GLES30Pipeline.nGLProgramBinary(program, binaryFormat, binary, length);
+    public void glProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int length) {	
+
+        if (binary == null)
+            throw new RuntimeException(BUFFER_NULL);
+
+        // now, the offset...
+        if (binary.isDirect()) {
+            int offset = BufferInfo.getOffset(binary);
+            GLES30Pipeline.nGLProgramBinary(program, binaryFormat, binary, offset, length);
+        } else {          
+            throw new RuntimeException(BUFFER_ND);
+         }
     }
 
     /**
@@ -3793,11 +4004,10 @@ public class GLES30Pipeline
      * */
     private static native void nGLProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int offset, int length);/*
     
-    								glProgramBinary((GLuint)  program, 
-    												(GLenum) binaryFormat, 
-    												(const GLvoid *) (binary + offset), 
-    												(GLsizei) length );
-    
+    					glProgramBinary((GLuint)  program, 
+    							(GLenum) binaryFormat, 
+    							(const GLvoid *) (binary + offset), 
+    							(GLsizei) length );    
     */
 
     /**
@@ -3872,7 +4082,7 @@ public class GLES30Pipeline
             int[] array = attachments.array();            
             int offset = attachments.arrayOffset(); 
             GLES30Pipeline.nGLInvalidateFramebuffer(target, numAttachments, array, offset);
-    }
+         }
         
     }
 
