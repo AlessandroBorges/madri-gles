@@ -112,7 +112,7 @@ public class CanvasBuilder {
 	    case ANGLE:
 		 headerDir = ANGLE_SDK.mergeInclude(headerDir);
 		 libsWin32Dir = ANGLE_SDK.mergeWin32Lib(libsWin32Dir);
-		 libsWin64Dir= merge(libsWin64Dir, libAngle);
+		 libsWin64Dir= merge(libsWin64Dir, libGLES);
 		 libsWin64Dir = ANGLE_SDK.mergeWin64Lib(libsWin64Dir);
 		 break;		 
 	    case MALI:

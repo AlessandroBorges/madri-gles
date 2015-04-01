@@ -640,12 +640,11 @@ public class GLES30 extends GLES20 {
      *  C function void glReadBuffer ( GLenum mode )
 
      * */
-    private static void _nativeClassInit() {
-        getPipeline().GLES30ClassInit();
+    private static void nativeClassInit() {        
     }
 
     static {
-        _nativeClassInit();
+        nativeClassInit();
     }
 
     /**
