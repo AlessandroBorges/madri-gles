@@ -32,9 +32,15 @@ public abstract class EGLObjectHandle {
     protected EGLObjectHandle(int handle) {
         mHandle = handle;
     }
+    
+    /**
+     * EGLObjectHandle for 64bits handles
+     * @param handle 64Bits handle
+     */
     protected EGLObjectHandle(long handle) {
         mHandle = handle;
     }
+    
     /**
      * @deprecated Use {@link #getNativeHandle()} instead. Handles on
      *     64 bit platforms will be wider than java ints.
@@ -46,6 +52,8 @@ public abstract class EGLObjectHandle {
         }
         return (int)mHandle;
     }
+    
+    
     /**
      * Returns the native handle of the wrapped EGL object. This handle can be
      * cast to the corresponding native type on the native side.
@@ -57,6 +65,12 @@ public abstract class EGLObjectHandle {
     public long getNativeHandle() {
         return mHandle;
     }
+    
+    /**
+     * 32 bits Hashcode. <br>
+     * Based on the algorithm suggested in
+     * http://developer.android.com/reference/java/lang/Object.html
+     */
     @Override
     public int hashCode() {
         /*

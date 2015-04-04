@@ -1,6 +1,7 @@
 package gles.internal;
 
 import android.opengl.*;
+import static gles.internal.EGLUtil.*;
 
 /**
  * THIS IS A TEMPLATE
@@ -71,17 +72,23 @@ public class EGLPipeline implements Pipeline {
      * 
      *
      **/
-    public EGLDisplay eglGetDisplay(int display_id) {
-        return EGLPipeline.nEGLGetDisplay(display_id);
+    public EGLDisplay eglGetDisplay(int displayID) {
+        int handle = nEGLGetDisplay(displayID);
+        EGLDisplay eglDisplay = createEGLDisplay(handle);
+        return eglDisplay;
     }
 
     /**
      * MACHINE GENERATED!
      * Method generated from EGL14.eglGetDisplay([int display_id]);
      * 
-     *
-     **/
-    private static native EGLDisplay nEGLGetDisplay(int display_id);
+     * native version of eglDisplay
+     * @param display_id handler of display
+     * @return handler created for 
+     */
+    private static native int nEGLGetDisplay(int display_id);/*
+          return (jint) eglGetDisplay( (NativeDisplayType)display_id);
+    */
 
     /**
      * MACHINE GENERATED!

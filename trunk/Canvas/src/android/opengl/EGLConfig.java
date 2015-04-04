@@ -37,4 +37,7 @@ implements javax.microedition.khronos.egl.EGLConfig
         EGLConfig that = (EGLConfig) o;
         return getNativeHandle() == that.getNativeHandle();
     }
+    
+    
+    
 }
