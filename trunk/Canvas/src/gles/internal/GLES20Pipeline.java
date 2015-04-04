@@ -12,22 +12,32 @@ import gles.util.BufferInfo;
 public class GLES20Pipeline implements Pipeline {
 
 
-   protected static String FLOATBUFFER_NULL = "java.nio.FloatBuffer param is null.";
-   protected static String FLOATBUFFER_ND = "java.nio.FloatBuffer param is non-direct.";
+   protected static String FLOATBUFFER_NULL = " java.nio.FloatBuffer param is null.";
+   protected static String FLOATBUFFER_ND = " java.nio.FloatBuffer param is non-direct.";
    
-   protected static String INTBUFFER_NULL = "java.nio.IntBuffer param is null.";
-   protected static String INTBUFFER_ND = "java.nio.IntBuffer param is non-direct.";
+   protected static String INTBUFFER_NULL = " java.nio.IntBuffer param is null.";
+   protected static String INTBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
    
-   protected static String BUFFER_NULL = "java.nio.Buffer param  is null.";
-   protected static String BUFFER_ND = "java.nio.Buffer param is non-direct.";
+   protected static String LONGBUFFER_NULL = " java.nio.IntBuffer param is null.";
+   protected static String LONGBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
+   
+   protected static String BUFFER_NULL = " java.nio.Buffer param  is null.";
+   protected static String BUFFER_ND = " java.nio.Buffer param is non-direct.";
+   
+   protected static String OFFSET_0 = "offset < 0";
+   protected static String ARRAY_INT_0 = "int[] == null";
+   protected static String ARRAY_FLOAT_0 = "float[] == null";
+   protected static String ARRAY_0 = "array == null";
 	
 	/** Includes **/
 	//@off
 	/*JNI
 	  #include <GLES2/gl2.h>
-	  #include <vector>
-	  
-	  using namespace std;
+	  #include <stdio.h>
+          #include <stdlib.h>
+          #include <vector>
+          
+          using namespace std;
 	  
 	  ////////////////////////////////////////
 	 */
@@ -79,7 +89,7 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glActiveTexture ( (GLenum) texture )
 
      * */
-    private static native void nGLES20ClassInit();/*
+    private static native void nGLES20ClassInit();/*  
          // hold
     */
 
@@ -641,9 +651,9 @@ public class GLES20Pipeline implements Pipeline {
     	   char * data0 = (char *) (data + offsetBytes);
     	   
     	   // raw java.nio.Buffer is translated as (char *)
-           glCompressedTexImage2D (   (GLenum) target, 
-           							  (GLint) level,
-           							  (GLenum) internalformat,
+           glCompressedTexImage2D((GLenum) target, 
+           			  (GLint) level,
+           			             							  (GLenum) internalformat,
            							  (GLsizei) width,
            							  (GLsizei) height,
            							  (GLint) border,
@@ -2695,9 +2705,10 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
 
      * */
-    private static native void nGLGetRenderbufferParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
-       
-       						glGetRenderbufferParameteriv ( (GLenum) target, 
+    private static native void nGLGetRenderbufferParameteriv(int target, 
+	    int pname, 
+	    java.nio.IntBuffer params, int offset);/*       
+       	glGetRenderbufferParameteriv ( (GLenum) target, 
        														(GLenum) pname, 
        														(GLint *) (params + offset));
        
@@ -5322,9 +5333,9 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLVertexAttrib3fv(int indx, java.nio.FloatBuffer values, int offset);/*
-    			// apply offset    
- 				GLfloat * values0 = values + offset;
-    			glVertexAttrib3fv ( (GLuint) indx,(const GLfloat *) (values0 );
+    			// apply offset  
+ 			
+    			glVertexAttrib3fv ( (GLuint) indx,(const GLfloat *) (values + offset) );
     */
 
     /**
@@ -5473,11 +5484,10 @@ public class GLES20Pipeline implements Pipeline {
     		int stride, 
     		java.nio.Buffer ptr, int offsetBytes);/*
     		
-    		 // native code	
- 			char * data0 = (char *) (ptr + offsetBytes);
+    	   // native code	
+ 	     char * data0 = (char *) (ptr + offsetBytes);
     		
-            // param remaining is unused.
-    		
+            // param remaining is unused.    		
     	        glVertexAttribPointer ( 
     					(GLuint) indx, 
     					(GLint) size, 
@@ -5507,6 +5517,6 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLViewport(int x, int y, int width, int height);/*
-    			glViewport ( (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height );
+    	    glViewport ( (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height );
     */
 }

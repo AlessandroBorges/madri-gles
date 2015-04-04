@@ -61,6 +61,7 @@ public class CanvasBuilder {
 					"**/gles/emulator/util/DrawingSurface.java",
 					"**/gles/emulator/util/DrawingSurfaceInfo.java",
 					"**/gles/internal/GLES20Pipeline.java",
+					"**/gles/internal/GLES30Pipeline.java",
 					//"**/gles/internal/TesteGL.java",
 					//"**/android/opengl/EGL14.java", 
 			            	// "**/android/opengl/EGLExt.java"

@@ -260,7 +260,7 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
      */
     public static  EGLDisplay eglGetDisplay(long displayID){
     	long handle = nEGLGetDisplay(displayID);
-    	EGLDisplay eglDisplay = new EGLDisplay(handle);
+    	EGLDisplay eglDisplay = (handle==0) ? EGLDisplay.getNullEGLDisplay() : new EGLDisplay(handle);
     	return eglDisplay;
     }
     
@@ -270,7 +270,7 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
      * @return the pointer of EGLDisplay
      */
     private static native long nEGLGetDisplay(long displayID);/*
-                return (jlong) eglGetDisplay((EGLNativeDisplayType) displayID);
+         return (jlong) eglGetDisplay((EGLNativeDisplayType) displayID);
     */
     
     
@@ -278,39 +278,45 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
     // C function EGLBoolean eglInitialize ( EGLDisplay dpy, EGLint *major, EGLint *minor )
 
     /**
-     *  <pre>
+     * <pre>
      *  C function EGLBoolean eglInitialize ( EGLDisplay dpy, EGLint *major, EGLint *minor )
-     *  </pre>
+     * </pre>
+     * 
      * <b>eglInitialize</b> — initialize an EGL display connection.<br>
      * eglInitialize initialized the EGL display connection obtained with
      * {@link #eglGetDisplay(long)}. <br>
-     * Initializing an already initialized EGL display connection
-     * has no effect besides returning the version numbers.<br>
-     * <b>major</b> and <b>minor</b> do not return values if they are specified as NULL.<br>
+     * Initializing an already initialized EGL display connection has no effect
+     * besides returning the version numbers.<br>
+     * <b>major</b> and <b>minor</b> do not return values if they are specified
+     * as NULL.<br>
      * 
-     * Use {@link #eglTerminate(EGLDisplay)} to release resources associated with an EGL display
-     * connection.  <br><br>
+     * Use {@link #eglTerminate(EGLDisplay)} to release resources associated
+     * with an EGL display connection. <br>
+     * <br>
      * 
-     * <P>Errors:</P>
+     * <P>
+     * Errors:
+     * </P>
      * 
-     * <li>EGL_BAD_DISPLAY is generated if display is not an EGL display connection. 
-     * <li>EGL_NOT_INITIALIZED is generated if display cannot be initialized.
+     * <li>EGL_BAD_DISPLAY is generated if display is not an EGL display
+     * connection. <li>EGL_NOT_INITIALIZED is generated if display cannot be
+     * initialized.
      * 
      * @see #eglTerminate(EGLDisplay)
-     * @see  #eglGetDisplay(long)
+     * @see #eglGetDisplay(long)
      * 
      * @param dpy
-     *            Specifies the EGL display connection to initialize.
+     *        Specifies the EGL display connection to initialize.
      * @param major
-     *            Returns the major version number of the EGL implementation.
-     *            May be NULL.
+     *        Returns the major version number of the EGL implementation.
+     *        May be NULL.
      * @param majorOffset
-     *            offset in major array
+     *        offset in major array
      * @param minor
-     *            Returns the minor version number of the EGL implementation.
-     *            May be NULL.
+     *        Returns the minor version number of the EGL implementation.
+     *        May be NULL.
      * @param minorOffset
-     *            offset in minorOffset
+     *        offset in minorOffset
      * 
      * @return true is sucessful
      */
@@ -374,8 +380,7 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
      * @return
      */
     private static native boolean nEGLTerminate(long dpy);/*
-       // C function EGLBoolean eglTerminate ( EGLDisplay dpy )
-        
+       // C function EGLBoolean eglTerminate ( EGLDisplay dpy )        
          return (jboolean) eglTerminate ( (EGLDisplay) dpy );        
     */
 
@@ -526,16 +531,36 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
     private static native boolean nEGLGetConfigs( long eglDisplay, 
             long[] configs,            
             int config_size,
-            int[] num_config);/*
-        
+            int[] num_config);/*        
         // C function EGLBoolean eglGetConfigs ( EGLDisplay dpy, EGLConfig *configs, EGLint config_size, EGLint *num_config )
-           EGLint _num_config = num_config[0]; 
-           EGLBoolean res =  eglGetConfigs ( (EGLDisplay) dpy, (EGLConfig *) configs, (EGLint) config_size, &_num_config );
-           
+           EGLBoolean res =  eglGetConfigs ( (EGLDisplay) dpy, 
+                                             (EGLConfig *) configs, 
+                                             (EGLint)  config_size, 
+                                             (EGLint *) num_config );           
       
         */
 
-    // 
+    
+    /**
+     * check if attrib_list array contains EGL_NOME
+     * @param attrib_list attrib list
+     * @param attrib_listOffset offset
+     * @return true if attrib list contains EGL_NONE 
+     */
+    private static boolean checkEGLNONE(int[] attrib_list, int attrib_listOffset){
+        boolean attrib_list_sentinel = false;
+        
+        int remaining = attrib_list.length - attrib_listOffset;
+        for (int i = remaining - 1; i >= 0; i--)  {
+            if (attrib_list[i] == EGL_NONE){
+                attrib_list_sentinel = true;
+                break;
+            }
+        }
+        return attrib_list_sentinel;
+    }  
+    
+    
  /**
   * <p>
   * Prototype: C function EGLBoolean eglChooseConfig ( EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config )
@@ -548,10 +573,11 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
   * @param attrib_listOffset offset of attrib_list
   * @param configs Returns an array of frame buffer configurations.
   * @param configsOffset offset of configs
-  * @param config_size
-  * @param num_config
-  * @param num_configOffset
-  * @return
+  * @param config_size Specifies the size of the array of frame buffer configurations.
+  * @param num_config Returns the number of frame buffer configurations returned.
+  * @param num_configOffset offset  num_config array
+  * 
+  * @return true if i
   */
     public static  boolean eglChooseConfig(
 	        EGLDisplay display,
@@ -564,39 +590,105 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
 	        int num_configOffset
 	    ){
 	
+        // check null arrays
+        
+            String error = null;
+            // attrib_list check
+            if (attrib_list == null) error = "attrib_list == null";
+            if (attrib_listOffset < 0) error = "attrib_listOffset < 0";
+            if (checkEGLNONE(attrib_list, attrib_listOffset)) error = "attrib_list must contain EGL_NONE!";
+            
+            // configs check
+            if (configs == null) error = "configs == null";
+            if (configsOffset < 0) error = "configsOffset < 0";            
+            int remaining = attrib_list.length - attrib_listOffset;
+            if (remaining < config_size) error = "length - configsOffset < config_size < needed";
+            
+            // num_config checks
+            if (num_config == null) error = "num_config == null";
+            if (num_configOffset < 0) error = "num_configOffset < 0";
+            int num_configRemaining = num_config.length - num_configOffset;            
+            if (num_configRemaining < 1) error = "length - num_configOffset < 1 < needed";
+            
+            if (error != null) { 
+                throw new IllegalArgumentException(error); 
+            }
+        
+        
 	long displayHandler = display.getNativeHandle();
 	
+	long[] configHandlers = new long[num_configRemaining];
 	boolean val=true;
+	
+	val = nEGLChooseConfig(displayHandler, 
+	                       attrib_list, attrib_listOffset, 
+	                       configHandlers, num_configRemaining, 
+	                       config_size, 
+	                       num_config, 
+	                       num_configOffset);
+	
+	// prepare returning EGLConfig array
+	for (int i = 0; i < configHandlers.length; i++) {
+            long handle = configHandlers[i];
+            EGLConfig eglConfig = (handle == 0) ? null : new EGLConfig(handle);
+            configs[i + configsOffset] = eglConfig;
+        }
+	
+	
 	return val;
     }
     
+   
+    
+    /**
+     * <p>
+     * Prototype: C function EGLBoolean eglChooseConfig ( EGLDisplay dpy, const
+     * EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint
+     * *num_config )
+     * </p>
+     * 
+     * @param dpy EGLDisplay handler
+     * @param attrib_list
+     * @param attrib_listOffset
+     * @param configs
+     * @param configsOffset
+     * @param config_size
+     * @param num_config
+     * @param num_configOffset
+     * @return
+     */
     public static native boolean nEGLChooseConfig(
-        EGLDisplay dpy,
-        int[] attrib_list,
-        int attrib_listOffset,
-        EGLConfig[] configs,
-        int configsOffset,
+        long dpy,
+        int[] attrib_list, int attrib_listOffset,
+        long[] configsHandler, int configLength,
         int config_size,
-        int[] num_config,
-        int num_configOffset
+        int[] num_config, int num_configOffset
     );/*
        
-           // apply offset
-	    EGLint const * _attrib_list = (EGLint const *) (attrib_list + attrib_listOffset);
-	    EGLConfig *    _configs = (EGLConfig *)(configs + offset);
-	    EGLint *       _num_config = (EGLint*) (num_config + num_configOffset);
+           // var
+	    EGLint const * _attrib_list = (EGLint *) (attrib_list + attrib_listOffset);
 	    
-	      bool val = eglChooseConfig(
-	      (EGLDisplay) display, 
-	       _attrib_list, 	    
-	       _configs,	   
-	      (EGLint) config_size,
-	      (int*) _num_config);
+	    EGLConfig * _configs = (EGLConfig *) 0;
+	    configs = new EGLConfig[configLength];
+	    
+	    bool val = eglChooseConfig(
+	                                (EGLDisplay) display,
+	      	                         (EGLint *) (attrib_list + attrib_listOffset), 
+	      	                          _configs,
+	      	                          (EGLint) config_size,
+	      	                          (EGLint *) (num_config + num_configOffset)
+	      	                          );
 	      
-	      return (jboolean) val;  
-    
-    
-    
+	     // cast EGLConfig objects to jlong 
+	     // they can be 32 or 64 bits, so lets cast it one by one to bigger 
+	     if (configs) {
+	         for (int i = 0; i < configLength; i++) {
+	                    configsHandler[i] = (jlong) configs[i];
+	          }
+              delete[] configs;
+              }
+	      
+	      return (jboolean) val;
     */
 
     // C function EGLBoolean eglGetConfigAttrib ( EGLDisplay dpy, EGLConfig config, EGLint attribute, EGLint *value )
@@ -672,7 +764,10 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
         EGLConfig config,
         int[] attrib_list,
         int offset
-    );
+    );/*
+    
+    
+    */
 
     // C function EGLSurface eglCreatePixmapSurface ( EGLDisplay dpy, EGLConfig config, EGLNativePixmapType pixmap, const EGLint *attrib_list )
 
@@ -810,26 +905,128 @@ public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
 
     // C function EGLSurface eglGetCurrentSurface ( EGLint readdraw )
 
-    public static native EGLSurface eglGetCurrentSurface(int readdraw);
+    /**
+     * TODO fix me
+     * @param readdraw
+     * @return
+     */
+    public static  EGLSurface eglGetCurrentSurface(int readdraw){        
+        long handle = nEGLGetCurrentSurface(readdraw); 
+        EGLSurface surface = (handle==0) ? null : new EGLSurface(handle);
+        return surface;        
+    }
+    
+    /**
+     * Native side of {@link #eglGetCurrentSurface(int)}
+     * @param readdraw
+     * @return
+     */
+    public static native long nEGLGetCurrentSurface(int readdraw);/*        
+        EGLSurface _returnValue = (EGLSurface) 0;
+         _returnValue = eglGetCurrentSurface((EGLint)readdraw);
+         
+        return (jlong) _returnValue;     
+    */
 
     // C function EGLDisplay eglGetCurrentDisplay ( void )
 
-    public static native EGLDisplay eglGetCurrentDisplay();
+    /**
+     * 
+     * @return current EGL Display
+     */
+    public static EGLDisplay eglGetCurrentDisplay(){
+        long handle = nEGLGetCurrentDisplay();
+        EGLDisplay dsp = handle == 0 ? EGLDisplay.getNullEGLDisplay() : new EGLDisplay(handle);
+        
+        return dsp;
+    }
+    
+    public static native long nEGLGetCurrentDisplay();/*
+        EGLDisplay _returnValue = (EGLDisplay) 0;
+        _returnValue = eglGetCurrentDisplay();
+        
+        return (jlong) _returnValue;
+        
+    */
 
     // C function EGLBoolean eglQueryContext ( EGLDisplay dpy, EGLContext ctx, EGLint attribute, EGLint *value )
 
-    public static native boolean eglQueryContext(
+    /**
+     * 
+     * @param dpy
+     * @param ctx
+     * @param attribute
+     * @param value
+     * @param offset
+     * @return
+     */
+    public static boolean eglQueryContext(
         EGLDisplay dpy,
         EGLContext ctx,
         int attribute,
         int[] value,
         int offset
-    );
+    ){
+        String error = null;
+        
+        if(value == null) error = "value == null";
+        if (offset < 0)  error =  "offset < 0";
+        
+        int remaining = value.length - offset;
+        if (remaining < 1) error =  "length - offset < 1 < needed";
+        
+        long dpyHandle = (dpy == null) ? 0L : dpy.getNativeHandle();
+        long ctxHandle = (ctx == null) ? 0L : ctx.getNativeHandle();
+        
+        boolean ret = nEGLQueryContext(dpyHandle, ctxHandle, attribute, value, offset);
+        
+        return ret;        
+    }
+    
+    /**
+     * 
+     * @param dpy
+     * @param ctx
+     * @param attribute
+     * @param value
+     * @param offset
+     * @return
+     */
+    public static native boolean nEGLQueryContext(
+                                                 long dpy,
+                                                 long ctx,
+                                                 int attribute,
+                                                 int[] value,
+                                                 int offset
+                                             );/*
+                                             
+        EGLBoolean _returnValue = (EGLBoolean) 0;                                       
+        _returnValue = eglQueryContext( (EGLDisplay)dpy_native,
+                (EGLContext)ctx_native,
+                (EGLint)attribute,
+                (EGLint *)(value + offset));                
+            
+         return (jboolean)_returnValue;                                   
+       */
+
 
     // C function EGLBoolean eglWaitGL ( void )
-
-    public static native boolean eglWaitGL(
-    );
+    /**
+     * 
+     * @return
+     */
+    public static boolean eglWaitGL(){
+        return nEGLWaitGL();
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public static native boolean nEGLWaitGL(
+    );/*
+        return (jboolean) eglWaitGL();
+    */
 
     // C function EGLBoolean eglWaitNative ( EGLint engine )
 
