@@ -624,7 +624,7 @@ public class GLES30 extends GLES20 {
     public static final int GL_TEXTURE_IMMUTABLE_LEVELS = 0x82DF;
     
     
-	private static GLES30Pipeline pipeline;
+    private static GLES30Pipeline pipeline;
     
     private static GLES30Pipeline getPipeline(){
     	if(pipeline==null){
@@ -1276,22 +1276,43 @@ public class GLES30 extends GLES20 {
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glGetTransformFeedbackVarying([int program, int index, int bufsize, int[] length, int lengthOffset, int[] size, int sizeOffset, int[] type, int typeOffset, byte[] name, int nameOffset]);
+     * Delegate Method generated from GLES30.glGetTransformFeedbackVarying([int
+     * program, int index, int bufsize, int[] length, int lengthOffset, int[]
+     * size, int sizeOffset, int[] type, int typeOffset, byte[] name, int
+     * nameOffset]);
      * 
-     *  C function void glGetTransformFeedbackVarying ( GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name )
-
+     * C function void glGetTransformFeedbackVarying ( GLuint program, GLuint
+     * index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type,
+     * GLchar *name )
+     * 
      * */
-    public static void glGetTransformFeedbackVarying(int program, int index, int bufsize, int[] length, int lengthOffset, int[] size, int sizeOffset, int[] type, int typeOffset, byte[] name, int nameOffset) {
-        getPipeline().glGetTransformFeedbackVarying(program, index, bufsize, length, lengthOffset, size, sizeOffset, type, typeOffset, name, nameOffset);
+    public static void glGetTransformFeedbackVarying(
+                                                     int program,
+                                                         int index,
+                                                         int bufsize,
+                                                         int[] length,
+                                                         int lengthOffset,
+                                                         int[] size,
+                                                         int sizeOffset,
+                                                         int[] type,
+                                                         int typeOffset,
+                                                         byte[] name,
+                                                         int nameOffset) {
+        getPipeline().glGetTransformFeedbackVarying(program, index, bufsize, length, lengthOffset, size, sizeOffset,
+                type, typeOffset, name, nameOffset);
     }
 
     /**
+     * @deprecated Use {@link #glGetTransformFeedbackVarying(int, int, java.nio.IntBuffer, java.nio.IntBuffer)} or
+     * {@link #glGetTransformFeedbackVarying(int, int, int, int[], int, int[], int, int[], int, byte[], int)}
+     * <pre>
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES30.glGetTransformFeedbackVarying([int program, int index, int bufsize, java.nio.IntBuffer length, java.nio.IntBuffer size, java.nio.IntBuffer type, byte name]);
      * 
      *  C function void glGetTransformFeedbackVarying ( GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name )
-
+     *  </pre>
      * */
+    @Deprecated
     public static void glGetTransformFeedbackVarying(int program, int index, int bufsize, java.nio.IntBuffer length, java.nio.IntBuffer size, java.nio.IntBuffer type, byte name) {
         getPipeline().glGetTransformFeedbackVarying(program, index, bufsize, length, size, type, name);
     }
@@ -1303,19 +1324,32 @@ public class GLES30 extends GLES20 {
      *  C function void glGetTransformFeedbackVarying ( GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name )
 
      * */
-    public static String glGetTransformFeedbackVarying(int program, int index, int[] size, int sizeOffset, int[] type, int typeOffset) {
-    	return  getPipeline().glGetTransformFeedbackVarying(program, index, size, sizeOffset, type, typeOffset);
+    public static String glGetTransformFeedbackVarying(
+                                                       int program,
+                                                           int index,
+                                                           int[] size,
+                                                           int sizeOffset,
+                                                           int[] type,
+                                                           int typeOffset) {
+        return getPipeline().glGetTransformFeedbackVarying(program, index, size, sizeOffset, type, typeOffset);
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glGetTransformFeedbackVarying([int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type]);
+     * Delegate Method generated from GLES30.glGetTransformFeedbackVarying([int
+     * program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type]);
      * 
-     *  C function void glGetTransformFeedbackVarying ( GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name )
-
+     * C function void glGetTransformFeedbackVarying ( GLuint program, GLuint
+     * index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type,
+     * GLchar *name )
+     * 
      * */
-    public static String glGetTransformFeedbackVarying(int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type) {
-    	return   getPipeline().glGetTransformFeedbackVarying(program, index, size, type);
+    public static String glGetTransformFeedbackVarying(
+                                                       int program,
+                                                           int index,
+                                                           java.nio.IntBuffer size,
+                                                           java.nio.IntBuffer type) {
+        return getPipeline().glGetTransformFeedbackVarying(program, index, size, type);
     }
 
     /**

@@ -65,22 +65,22 @@ public class BufferInfo {
 	 * @param b Buffer to query
 	 * @return base native address 
 	 */
-	public static long getAddress(Buffer b){		
-		// sanity check
-		if(b == null || !b.isDirect()){
-			return 0L;
-		}
-		
-		long address = 0;
-		try {
-			address = fieldAddress.getLong(b);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return address;
+    public static long getAddress(Buffer b) {
+	// sanity check
+	if (b == null || !b.isDirect()) {
+	    return 0L;
 	}
+
+	long address = 0;
+	try {
+	    address = fieldAddress.getLong(b);
+	} catch (Exception e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+
+	return address;
+    }
 	
 	/**
 	 * Get element Shift to get size in bytes.
