@@ -13,29 +13,21 @@ import com.badlogic.gdx.jnigen.JniGenSharedLibraryLoader;
  *
  */
 public class JAWT {
-    static{
-	new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
-}
-    
-    
-    
-	//@off
-	/*JNI
-	  
-    #define WIN32_LEAN_AND_MEAN
-    #define VC_EXTRALEAN
-    
-    #include <windows.h>
+   //@off
+   /*JNI 
+    #include "madrigles.h"
     #include <assert.h>
     #include <stdlib.h> 
     #include <jni.h>
     #include <jawt.h>  
-    #include "jawt_md.h"
-    #include "main.h"
+    #include "jawt_md.h"  
 
- 
-   
+ /////////////////////////////////////////   
     */
+    
+    static{
+        new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
+        }
 	
 	private Component c;
 	/** AWT Handle */
@@ -87,8 +79,7 @@ public class JAWT {
 		return 0;
 	    }
 
-	    return (jlong)awt;
-	    
+	    return (jlong) awt;	    
 	 */
 	
 	
@@ -107,7 +98,7 @@ public class JAWT {
 	    final DrawingSurface drawingSurface = getDrawingSurface();
 	    long handle = getDrawingSurfaceInfo0(drawingSurface.getNativeHandle());
 	    if(dsi==null){
-		dsi = new DrawingSurfaceInfo(handle);
+		dsi = new DrawingSurfaceInfo(handle, this, drawingSurface);
 	    }else{
 		// check handler against old value.
 		if(handle != dsi.getNativeHandle()){
@@ -129,12 +120,12 @@ public class JAWT {
       	JAWT_DrawingSurfaceInfo *dsi;
        	jint lock;
 
-       ds->env = env;
-       lock = ds->Lock(ds);
-       if ((lock & JAWT_LOCK_ERROR) != 0) {
+        ds->env = env;
+        lock = ds->Lock(ds);
+        if ((lock & JAWT_LOCK_ERROR) != 0) {
 	       fprintf(stderr, "Error locking surface\n");
 	       return 0;
-       }
+        }
 
        dsi = ds->GetDrawingSurfaceInfo(ds);
 
@@ -146,8 +137,6 @@ public class JAWT {
        
       return (jlong)dsi;
       */
-	
-	
 	
 	
 	
@@ -185,7 +174,7 @@ public class JAWT {
 	 * @param dsiObj DrawingSurfaceInfo handler
 	 * @param display 
 	 * @param screen
-	 * @return
+	 * @return HWND handler
 	 */
 	private static native long getDrawingSurfaceWindowIdAWT(Component canvas, 
 			long dsObj, 
@@ -195,17 +184,34 @@ public class JAWT {
 			
       JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*) dsObj;
       JAWT_DrawingSurfaceInfo *dsi = (JAWT_DrawingSurfaceInfo *) dsiObj;
+      jint lock;
       jlong window;
       
-      // win32 only !
-      JAWT_Win32DrawingSurfaceInfo *wds = (JAWT_Win32DrawingSurfaceInfo*) dsi->platformInfo;
-      window = (jlong)wds->hdc;    
-     
-     // Don't free DrawingSurfaceInfo here, otherwise
-     // HDC will free in windows JDK1.4 and window
-     // is invalid.
-     
       ds->env = env;
+      
+      lock = ds->Lock(ds);
+      if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
+          printf("Error locking surface \n");
+          ds->Unlock(ds);
+          lock = ds->Lock(ds);
+      }
+      
+      #ifdef OS_WIN32     
+          JAWT_Win32DrawingSurfaceInfo *dsi_win = (JAWT_Win32DrawingSurfaceInfo*) dsi->platformInfo;
+          window = (jlong)dsi_win->hwnd;
+          //printf("releasing dsi \n");
+          //ds->FreeDrawingSurfaceInfo(dsi);
+          // Don't free DrawingSurfaceInfo here, otherwise
+          // HDC will free in windows JDK1.4 and window
+          // is invalid.
+      
+      #elif OS_UNIX
+            jawt_X11DrawingSurfaceInfo *dsi_x11 = (jawt_X11DrawingSurfaceInfo*) dsi->platformInfo;
+            window = (jint)dsi_x11->drawable;
+            printf("releasing dsi \n");
+            ds->FreeDrawingSurfaceInfo(dsi);
+      #endif
+    
       ds->Unlock(ds);
 
        return window;      
@@ -263,11 +269,11 @@ public class JAWT {
 	public static native void freeResource(long awtObj, long drawingSurface, long drawingSurfaceInfo);/*
 	    JAWT *awt = (JAWT*) awtObj;
 	    JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
-    	JAWT_DrawingSurfaceInfo *dsi = (JAWT_DrawingSurfaceInfo *) drawingSurfaceInfo;
+    	    JAWT_DrawingSurfaceInfo *dsi = (JAWT_DrawingSurfaceInfo *) drawingSurfaceInfo;
     
-    	ds->env = env;
-    	ds->FreeDrawingSurfaceInfo(dsi);
-    	awt->FreeDrawingSurface(ds);	
+    	    ds->env = env;
+    	    ds->FreeDrawingSurfaceInfo(dsi);
+    	    awt->FreeDrawingSurface(ds);	
 	*/
 	
 	/**
