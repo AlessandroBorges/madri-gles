@@ -9,26 +9,29 @@ public class DrawingSurface extends ObjectHandler{
     
 
 
-//@off
-  	/*JNI
+     //@off
+      /*JNI
   	  
-      #define WIN32_LEAN_AND_MEAN
-      #define VC_EXTRALEAN
-      
-      #include <windows.h>
+      #include <madrigles.h>
       #include <assert.h>
       #include <stdlib.h> 
       #include <jni.h>
       #include <jawt.h>  
-      #include "jawt_md.h"
-      #include "main.h"
+        
 */
-    protected DrawingSurface(int handle) {
-	super(handle);		
+    /**
+     * AWT reference
+     */
+    private JAWT awt;
+    
+    protected DrawingSurface(int handle, JAWT awt) {
+	super(handle);	
+	this.awt = awt;
     }
     
     protected DrawingSurface(long handle) {
-	super(handle);		
+	super(handle);	
+	this.awt = awt;
     }
     
 /**
@@ -51,13 +54,16 @@ private static native boolean lock0(long drawingSurface);/*
 
     	if ((lock & JAWT_LOCK_ERROR) != 0) {
         	return JNI_FALSE;
-    	} else if ((lock & JAWT_LOCK_SURFACE_CHANGED) != 0) {
-			ds->Unlock(ds);
-        	return JNI_FALSE;
-    	} else {
+    	} 
+    	else 
+    	if ((lock & JAWT_LOCK_SURFACE_CHANGED) != 0) {
+	    ds->Unlock(ds);
+            return JNI_FALSE;
+    	} else 
         return JNI_TRUE;
-    	}
-	*/
+    	
+    	
+      */
 
 /**
  * Unlock this drawing surface after OpenGL Draw
@@ -72,8 +78,7 @@ public boolean unlock() {
  * @param drawingSurface - the unlocking DrawingSurface handler 
  *
  */
-private static native boolean unlock0(long drawingSurface);/*
-	
+private static native boolean unlock0(long drawingSurface);/*	
 	JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
 	ds->env = env;
 	ds->Unlock(ds);

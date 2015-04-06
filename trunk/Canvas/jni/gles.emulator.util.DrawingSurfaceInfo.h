@@ -16,26 +16,26 @@ extern "C" {
 /*
  * Class:     gles_emulator_util_DrawingSurfaceInfo
  * Method:    updateEGLhandlers0
- * Signature: (J[J)Z
+ * Signature: (JJ[J)Z
  */
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_DrawingSurfaceInfo_updateEGLhandlers0
-  (JNIEnv *, jclass, jlong, jlongArray);
+  (JNIEnv *, jclass, jlong, jlong, jlongArray);
 
 /*
  * Class:     gles_emulator_util_DrawingSurfaceInfo
  * Method:    getRectangle0
- * Signature: (J[I)Z
+ * Signature: (JJ[I)Z
  */
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_DrawingSurfaceInfo_getRectangle0
-  (JNIEnv *, jclass, jlong, jintArray);
+  (JNIEnv *, jclass, jlong, jlong, jintArray);
 
 /*
  * Class:     gles_emulator_util_DrawingSurfaceInfo
  * Method:    getHWND
- * Signature: (J[J)Z
+ * Signature: (JJ[J)Z
  */
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_DrawingSurfaceInfo_getHWND
-  (JNIEnv *, jclass, jlong, jlongArray);
+  (JNIEnv *, jclass, jlong, jlong, jlongArray);
 
 #ifdef __cplusplus
 }

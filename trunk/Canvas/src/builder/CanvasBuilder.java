@@ -8,7 +8,9 @@ public class CanvasBuilder {
     static final boolean buildIt = true;
     static final boolean createBuild = true;
     static final boolean generateCPP = true;
-    static final boolean packIt = false; 
+    static final boolean packIt = true;
+    static final boolean buildLinux = false;
+    
   
     public enum SDK {
 	ADRENO, ANGLE, PowerVR, MALI
@@ -60,8 +62,8 @@ public class CanvasBuilder {
 					"**/gles/emulator/util/JAWT.java",
 					"**/gles/emulator/util/DrawingSurface.java",
 					"**/gles/emulator/util/DrawingSurfaceInfo.java",
-					"**/gles/internal/GLES20Pipeline.java",
-					"**/gles/internal/GLES30Pipeline.java",
+					//"**/gles/internal/GLES20Pipeline.java",
+					//"**/gles/internal/GLES30Pipeline.java",
 					//"**/gles/internal/TesteGL.java",
 					//"**/android/opengl/EGL14.java", 
 			            	// "**/android/opengl/EGLExt.java"
@@ -144,7 +146,7 @@ public class CanvasBuilder {
 		             + " -ljawt -luser32 -lGLESv2 "  ;
 		              //"-ljawt -lwinmm -lgdi32 -lshell32 -luser32 -lkernel32 -lcomctl32 ";
 	    win32.cFlags += " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
-            win32.linkerFlags = " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
+        win32.linkerFlags = " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
 	   // win32.linkerFlags = " -Wl,-verbose ";
             
             ///////////////////////////////////////////////////////////////////////////
@@ -158,12 +160,21 @@ public class CanvasBuilder {
             
             win64.cFlags +=  " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
             win64.linkerFlags += win32.linkerFlags;
-      
-      //BuildTarget linux32 = BuildTarget.newDefaultTarget(TargetOs.Linux, false);
-     // BuildTarget linux64 = BuildTarget.newDefaultTarget(TargetOs.Linux, true);
+            
+            BuildTarget linux32 = null;
+            BuildTarget linux64 = null;
+      if(buildLinux){
+         linux32 = BuildTarget.newDefaultTarget(TargetOs.Linux, false);
+        linux32.cIncludes = win32.cIncludes;
+        linux32.headerDirs = win32.headerDirs;
+        linux32.libraries = win32.libraries;
+        linux32.cFlags = win32.cFlags;
+        linux32.linkerFlags = win32.linkerFlags;
+        
+        linux64 = BuildTarget.newDefaultTarget(TargetOs.Linux, true);
      // BuildTarget mac = BuildTarget.newDefaultTarget(TargetOs.MacOsX, true);
    
-            
+      }  
             if (createBuild) {
         	System.out.println("\n\n#### Create Ant Build  ... \n");
 		    BuildConfig config = new BuildConfig("GLES");
@@ -174,10 +185,8 @@ public class CanvasBuilder {
 		System.out.println("\n\n#### Run Ant Build  ... \n");
 		//BuildExecutor.executeAnt("jni/build-windows32.xml", "-v -Dhas-compiler=true clean postcompile");
 		BuildExecutor.executeAnt("jni/build-windows64.xml", "-v -Dhas-compiler=true clean postcompile");
-		// BuildExecutor.executeAnt("jni/build-linux32.xml",
-		// "-v -Dhas-compiler=true clean postcompile");
-		// BuildExecutor.executeAnt("jni/build-linux64.xml",
-		// "-v -Dhas-compiler=true clean postcompile");
+		//BuildExecutor.executeAnt("jni/build-linux32.xml",   "-v -Dhas-compiler=true clean postcompile");
+		//BuildExecutor.executeAnt("jni/build-linux64.xml",  "-v -Dhas-compiler=true clean postcompile");
 		// BuildExecutor.executeAnt("jni/build-macosx32.xml",
 		// "-v -Dhas-compiler=true  clean postcompile");
 		

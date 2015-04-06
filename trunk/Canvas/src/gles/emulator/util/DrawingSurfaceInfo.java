@@ -9,15 +9,15 @@ package gles.emulator.util;
 	  //@off
 		/*JNI
 		  
-	    #include "main.h"	    
+	    #include <madrigles.h>	    
 	    #include <assert.h>
 	    #include <stdlib.h> 
 	    #include <jni.h>
 	    #include <jawt.h>  
-	    #include "jawt_md.h"
-	    
+	    #include "jawt_md.h"	    
 	  */
-	    
+	    private DrawingSurface ds;
+	    private JAWT awt;
 	    public boolean alwaysUpdate = true;
 	    
 	    /**
@@ -89,12 +89,16 @@ package gles.emulator.util;
 	    
 	    
 	    
-	    protected DrawingSurfaceInfo(int handle) {
-		super(handle);		
+	    protected DrawingSurfaceInfo(int handle, JAWT awt, DrawingSurface ds) {
+		super(handle);	
+		this.awt = awt;
+                this.ds = ds;
 	    }
 	    
-	    protected DrawingSurfaceInfo(long handle) {
+	    protected DrawingSurfaceInfo(long handle, JAWT awt, DrawingSurface ds) {
 		super(handle);		
+		this.awt = awt;
+		this.ds = ds;
 	    }
 	    
 	   
@@ -204,7 +208,10 @@ package gles.emulator.util;
 		if(this.egl_handlers == null){
 		    egl_handlers = new long[3];
 		}
-		updateEGLhandlers0(getNativeHandle(), egl_handlers);
+		updateEGLhandlers0(//awt.getAwtHandler(), 
+		                   ds.getNativeHandle(),
+		                   getNativeHandle(),
+		                   egl_handlers);
 	    }
 	    
 	    /**
@@ -212,23 +219,61 @@ package gles.emulator.util;
 	     * @param dsiHandler
 	     * @param handlers
 	     */
-	    private static native boolean updateEGLhandlers0(long dsiHandler, long[] EGLhandlers);/*
+	    private static native boolean updateEGLhandlers0(//long awtHandle, 
+	                                                     long dsHandle,
+	                                                     long dsiHandler, 
+	                                                     long[] EGLhandlers);/*
+	      jint lock;
+	     // JAWT *awt; 
+	      JAWT_DrawingSurface* ds;
+	      JAWT_DrawingSurfaceInfo* dsi;
 	      
-	      JAWT_DrawingSurfaceInfo* dsi;	     
-	      JAWT_Win32DrawingSurfaceInfo* dsi_win;	      
-	      	       
-	       dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;	          
+	      #ifdef OS_WIN32
+                  JAWT_Win32DrawingSurfaceInfo* dsi_win;
+              #else
+                  JAWT_X11DrawingSurfaceInfo* dsi_x11;
+              #endif
+	            
+	      	      
+	     // awt = (JAWT *) awtHandle;
+	      ds = (JAWT_DrawingSurface *)dsHandle;
+	      
+	      ds->env = env;
+	      lock = ds->Lock(ds);
+              if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
+                //printf("Error locking surface \n");
+                return 0;
+              }
+              
+               // update dsi
+	       dsi = ds->GetDrawingSurfaceInfo(ds);
+	       //ignore older  one	       
+	       //dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;	          
 	       	       	       
 	       // Get the platform-specific drawing info
-	       // Win32
-                dsi_win = (JAWT_Win32DrawingSurfaceInfo*)dsi->platformInfo;
+	       
+	       #ifdef OS_WIN32	       
+                dsi_win = (JAWT_Win32DrawingSurfaceInfo *) dsi->platformInfo;
 	        if(dsi_win == NULL){
 	              return JNI_FALSE;
-	          }
+	         }
 	          EGLhandlers[0] = (jlong) dsi_win->hdc;     // EGLNativeDisplayType_index 0L
 	          EGLhandlers[1] = (jlong) dsi_win->hbitmap; // EGLNativePixmapType_index  1L
-	          EGLhandlers[2] = (jlong) dsi_win->hwnd;    // EGLNativeWindowType_index  2L 	         
-	            
+	          EGLhandlers[2] = (jlong) dsi_win->hwnd;    // EGLNativeWindowType_index  2L
+	        #endif   	         
+	        #ifdef OS_UNIX
+	         dsi_x11 = (JAWT_X11DrawingSurfaceInfo *)dsi->platformInfo;
+                 if(dsi_x11 == NULL){
+                      return JNI_FALSE;
+                 }
+                 
+                  EGLhandlers[0] = (jlong) dsi_x11->display;    // EGLNativeDisplayType_index 0L
+                  EGLhandlers[1] = (jlong) dsi_x11->colormapID; // EGLNativePixmapType_index  1L
+                  EGLhandlers[2] = (jlong) dsi_x11->drawable;   // EGLNativeWindowType_index  2L
+                 
+	         #endif   
+	         
+	         ds->Unlock(ds);
 	       return JNI_TRUE;
 	    */
 	    
@@ -238,7 +283,7 @@ package gles.emulator.util;
 	     * @return
 	     */
 	    public long getHWND(){
-		if(getHWND(getNativeHandle(), hwnd_hdc)){
+		if(getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)){
 		    return hwnd_hdc[0];
 		}else{
 		    return 0;
@@ -250,7 +295,7 @@ package gles.emulator.util;
 	     * @return
 	     */
 	    public long getHDC(){
-		if(getHWND(getNativeHandle(), hwnd_hdc)){
+		if(getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)){
 		    return hwnd_hdc[1];
 		}else{
 		    return 0;
@@ -264,7 +309,7 @@ package gles.emulator.util;
 	    public JAWT_Rectangle getRectangle(){
 		JAWT_Rectangle rect = new JAWT_Rectangle();
 		int[] val = new int[4];
-		if(getRectangle0(getNativeHandle(), val)){
+		if(getRectangle0(ds.getNativeHandle(), getNativeHandle(), val)){
 		  rect.x = val[0];
 		  rect.y = val[1];
 		  rect.width = val[2];
@@ -273,25 +318,33 @@ package gles.emulator.util;
 		return rect;
 	    }
 	    
-	    private static native boolean getRectangle0(long dsiHandler, int[] val);/*
-	     // JAWT_DrawingSurface *ds;
+	    private static native boolean getRectangle0(long dsHandle, 
+	                                                long dsiHandle, 
+	                                                int[] val);/*	     
+	      JAWT_DrawingSurface *ds;
 	      JAWT_DrawingSurfaceInfo* dsi;
-	      JAWT_Win32DrawingSurfaceInfo* dsi_win;	      
+	      jint lock;
 	      	       
-	       dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;
-	      // ds = dsi->ds;	       
+	       ds  = (JAWT_DrawingSurface *) dsHandle; 
 	       
-	       	       	       
-	       // Get the platform-specific drawing info
-                dsi_win = (JAWT_Win32DrawingSurfaceInfo*)dsi->platformInfo;
-	        if(dsi_win == NULL){
-	              return JNI_FALSE;
-	          }
-	          
+	       ds->env = env;
+	       lock = ds->Lock(ds);
+                if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
+                   printf("Error locking surface \n");
+                
+               }
+              
+               // update dsi
+               dsi = ds->GetDrawingSurfaceInfo(ds);
+               //ignore older  one             
+               //dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;
+	      	       	          
 	       val[0] = dsi->bounds.x;
                val[1] = dsi->bounds.y;
                val[2] = dsi->bounds.width;
                val[3] = dsi->bounds.height;
+	       
+	       ds->Unlock(ds);   
 	            
 	       return JNI_TRUE;
 	    */
@@ -300,35 +353,53 @@ package gles.emulator.util;
 	     * Get HWND and HDC from DrawingSurfaceInfo
 	     * @param dsiHandler
 	     * @param val
-	     * @return
+	     * @return array with val[0] = HWND and val[1] = HDC 
 	     */
-	    private static native boolean getHWND(long dsiHandler, long[] val);/*
-	    
-	       JAWT_DrawingSurfaceInfo* dsi;
-	       JAWT_Win32DrawingSurfaceInfo* dsi_win;
-	     //  jint lock;
-	       jlong HWND;
-	       jlong HDC;
-	       
-	       dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;
-	       
-	       //lock = ds->Lock(ds);
-               //  assert((lock & JAWT_LOCK_ERROR) == 0);
-	       	       
+	    private static native boolean getHWND(long dsHandle,
+	                                          long dsiHandle, 
+	                                          long[] val);/*	    
+	      JAWT_DrawingSurface *ds;
+              JAWT_DrawingSurfaceInfo* dsi;                
+              jint lock;  
+              
+              #ifdef OS_WIN32
+                  JAWT_Win32DrawingSurfaceInfo *dsi_win;
+              #else
+                  JAWT_X11DrawingSurfaceInfo *dsi_x11;
+              #endif
+                    
+              
+              ds  = (JAWT_DrawingSurface *) dsHandle;               
+              ds->env = env;
+              
+              lock = ds->Lock(ds);
+              
+               if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
+                   printf("Error locking surface \n");
+               }
+              
+               // update dsi
+               dsi = ds->GetDrawingSurfaceInfo(ds);
+               //ignore older  one             
+               //dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;
+                	       
 	       // Get the platform-specific drawing info
-                dsi_win = (JAWT_Win32DrawingSurfaceInfo*)dsi->platformInfo;
-	        if(dsi_win == NULL){
-	              return JNI_FALSE;	              
-	        }else{
-	             HWND = (jlong) dsi_win->hwnd;
-	             HDC = (jlong) dsi_win->hdc;
-	        }
-	        
-	        val[0] = HWND;
-	        val[1] = HDC;
-	        
-                 // Unlock the drawing surface
-                // ds->Unlock(ds);
+	       
+	       #ifdef OS_WIN32        
+                    dsi_win = (JAWT_Win32DrawingSurfaceInfo *)dsi->platformInfo;
+                    if(dsi_win == NULL) return JNI_FALSE;                
+                    val[0] = (jlong) dsi_win->hwnd;    // EGLNativeWindowType
+                    val[1] = (jlong) dsi_win->hdc;     // EGLNativeDisplayType 
+                
+                #elif OS_UNIX
+                     dsi_x11 = (JAWT_X11DrawingSurfaceInfo *)dsi->platformInfo;
+                     if(dsi_x11 == NULL) return JNI_FALSE;                 
+                     val[0] = (jlong) dsi_x11->drawable;   // EGLNativeWindowType
+                     val[1] = (jlong) dsi_x11->display;    // EGLNativeDisplayType 
+                 #endif   
+	               
+                // Unlock the drawing surface
+                ds->Unlock(ds);
                  
                 return JNI_TRUE;                
 	    */
