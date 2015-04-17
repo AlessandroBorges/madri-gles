@@ -1,0 +1,1 @@
+A basic PC-Desktop emulator for Android's OpenGL API.
