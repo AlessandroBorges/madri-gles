@@ -287,6 +287,14 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapBuffers0
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglCopyBuffers0
   (JNIEnv *, jclass, jlong, jlong, jlong);
 
+/*
+ * Class:     gles_internal_EGL14Pipeline
+ * Method:    eglPresentationTimeANDROID0
+ * Signature: (JJJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglPresentationTimeANDROID0
+  (JNIEnv *, jclass, jlong, jlong, jlong);
+
 #ifdef __cplusplus
 }
 #endif

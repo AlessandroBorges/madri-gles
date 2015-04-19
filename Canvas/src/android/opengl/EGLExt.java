@@ -18,6 +18,9 @@
 
 package android.opengl;
 
+import gles.internal.EGL14Pipeline;
+import gles.internal.Sys;
+
 /**
  * EGL Extensions
  */
@@ -29,17 +32,37 @@ public class EGLExt {
     public static final int EGL_CONTEXT_FLAGS_KHR           = 0x30FC;
     public static final int EGL_OPENGL_ES3_BIT_KHR          = 0x0040;
 
-    native private static void nativeClassInit();
+    //native private static void nativeClassInit();
     static {
-        nativeClassInit();
+      //  nativeClassInit();
     }
 
     // C function EGLBoolean eglPresentationTimeANDROID ( EGLDisplay dpy, EGLSurface sur, EGLnsecsANDROID time )
 
-    public static native boolean eglPresentationTimeANDROID(
-        EGLDisplay dpy,
-        EGLSurface sur,
-        long time
-    );
+    public static boolean eglPresentationTimeANDROID(EGLDisplay dpy,
+                                                     EGLSurface sur,
+                                                     long time) {
+        return getPipeline().eglPresentationTimeANDROID(dpy, sur, time);
+    }
+    
+    /**
+     * Local instance of pipeline       
+     */
+    private static EGL14Pipeline pipeline;
+    
+    /**
+     * Get the pipeline from Sys.
+     * All logic from selecting undelying API implementation 
+     * is provided by Sys class.
+     * 
+     * @return Pipeline instance for this OpenGL ES
+     */
+     private static EGL14Pipeline getPipeline(){
+        if(pipeline==null){
+                pipeline = (EGL14Pipeline) Sys.getEGLPipelineInstance(Sys.EGL_PIPE.EGL14);
+        }
+        return pipeline;
+     }
+    
 
 }

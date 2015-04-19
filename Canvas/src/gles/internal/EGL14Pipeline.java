@@ -38,6 +38,7 @@ public class EGL14Pipeline {
     /*JNI
         #include <EGL/egl.h>
         #include <EGL/eglext.h> 
+        #include <KHR/khrplatform.h>
         #include <stdio.h>
         #include <stdlib.h>
           
@@ -1509,6 +1510,46 @@ public class EGL14Pipeline {
                                         (EGLSurface) surface, 
                                         (EGLNativePixmapType) target);  
        */
+    
+    /**
+     * Often when rendering a sequence of images, there is some time at which
+     * each image is intended to be presented to the viewer. This extension allows
+     * this desired presentation time to be specified for each frame rendered to
+     * an EGLSurface, allowing the native window system to use it.
+     * 
+     * @param dpy
+     * @param sur
+     * @param time
+     * @return
+     */
+    public  boolean eglPresentationTimeANDROID(EGLDisplay dpy,
+                                                            EGLSurface sur,
+                                                            long time){        
+        long dpyHandle = check(dpy);
+        long surHandle = check(sur);
+        return eglPresentationTimeANDROID0(dpyHandle, surHandle, time);        
+    }
+    
+
+    /**
+     * 
+     * @param dpy
+     * @param sur
+     * @param time
+     * @return
+     */
+    public static native boolean eglPresentationTimeANDROID0(long dpy,
+                                                             long sur,
+                                                             long time);/*
+        #ifdef   eglPresentationTimeANDROID                                                   
+        return (jboolean) eglPresentationTimeANDROID((EGLDisplay) dpy,
+                                                     (EGLSurface) sur,
+                                                     (EGLnsecsANDROID)  time); 
+         #else
+          return JNI_FALSE;
+         #endif                                                                        
+      */
+    
     
     /////////////////////////////////////////////////////////////////////////////////
     /// Error Checking
