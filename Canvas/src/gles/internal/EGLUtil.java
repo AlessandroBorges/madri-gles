@@ -5,6 +5,7 @@ package gles.internal;
 
 import java.lang.reflect.Constructor;
 
+import android.opengl.EGL14;
 import android.opengl.EGLConfig;
 import android.opengl.EGLContext;
 import android.opengl.EGLDisplay;
@@ -84,8 +85,8 @@ public class EGLUtil {
      * @return EGLConfig instance
      */
     public static EGLContext createEGLContext(long handle){
-        if(handle==0){           
-            return null;
+        if(handle == 0 && EGL14.EGL_NO_CONTEXT != null){            
+            return EGL14.EGL_NO_CONTEXT;
         }
         try{
             EGLContext ctx = ctorEGLContext.newInstance(handle);
@@ -101,14 +102,12 @@ public class EGLUtil {
      * @param handle native long handle
      * @return EGLSurface instance
      */
-    public static EGLSurface createEGLSurface(long handle){
-        if(handle==0){           
-            return null;
-        }
-        try{
+    public static EGLSurface createEGLSurface(long handle) {
+        if (handle == 0 && EGL14.EGL_NO_SURFACE != null) { return EGL14.EGL_NO_SURFACE; }
+        try {
             EGLSurface sur = ctorEGLSurface.newInstance(handle);
             return sur;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

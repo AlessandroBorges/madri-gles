@@ -20,18 +20,16 @@ public class Sys {
 		GLES31Ext
 	}
 	
-	
-	
-	public static Pipeline getPipelineInstance(GL_PIPE mode){
-		 return null;
-	}
+    public enum EGL_PIPE {
+        EGL14
+    }
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+    public static Pipeline getPipelineInstance(GL_PIPE mode) {
+        return null;
+    }
 
-	}
+    public static Pipeline getEGLPipelineInstance(EGL_PIPE mode) {
+        return null;
+    }
 
 }
