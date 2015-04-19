@@ -35,13 +35,11 @@ public class EGL14Pipeline {
      * CPP codes
      */
     //@off
-    /*JNI  
-        #include <stdio>
+    /*JNI
         #include <EGL/egl.h>
         #include <EGL/eglext.h> 
         #include <stdio.h>
         #include <stdlib.h>
-        #include <vector>
           
         using namespace std;
         
@@ -383,11 +381,10 @@ public class EGL14Pipeline {
      * @return EGL_FALSE is returned on failure, EGL_TRUE otherwise. 
      *  configs and num_config are not modified when EGL_FALSE is returned.
      */
-    public boolean eglGetConfigs(
-        EGLDisplay display,
-        EGLConfig[] configs,
-        int configsOffset, int config_size,
-        int[] num_config, int num_configOffset){
+    public boolean eglGetConfigs(EGLDisplay display,
+                                 EGLConfig[] configs,
+                                 int configsOffset, int config_size,
+                                 int[] num_config, int num_configOffset) {
     	              
         if(null == configs) throw new IllegalArgumentException("configs == null");        
         if(null == num_config) throw new IllegalArgumentException("num_config == null");        
@@ -404,6 +401,7 @@ public class EGL14Pipeline {
     	long[] eglConfigs = new long[configs.length-configsOffset];    	
     	config_size = eglConfigs.length;
     	int[] pNum_config = new int[1];
+    	
     	long eglDisplay = check(display);
     	
     	boolean val = eglGetConfigs0(eglDisplay, eglConfigs, config_size, pNum_config);
@@ -429,12 +427,12 @@ public class EGL14Pipeline {
      * @param num_config
      * @return
      */
-    private static native boolean eglGetConfigs0( long eglDisplay, 
-            long[] configs,            
-            int config_size,
-            int[] num_config);/*        
+    private static native boolean eglGetConfigs0(long eglDisplay,
+                                                 long[] configs,
+                                                 int config_size,
+                                                 int[] num_config);/*        
         // C function EGLBoolean eglGetConfigs ( EGLDisplay dpy, EGLConfig *configs, EGLint config_size, EGLint *num_config )
-           EGLBoolean res =  eglGetConfigs ( (EGLDisplay) dpy, 
+           return (jboolean)  eglGetConfigs ( (EGLDisplay) eglDisplay, 
                                              (EGLConfig *) configs, 
                                              (EGLint)  config_size, 
                                              (EGLint *) num_config );           
@@ -526,7 +524,7 @@ public class EGL14Pipeline {
      * @param num_configOffset
      * @return
      */
-    private static native boolean eglChooseConfig0(long dpy,
+    private static native boolean eglChooseConfig0(long display,
                                                    int[] attrib_list, int attrib_listOffset,
                                                    long[] configsHandler, int configLength,
                                                    int config_size,
@@ -656,10 +654,10 @@ public class EGL14Pipeline {
     );/*
     
        EGLSurface  surface = eglCreateWindowSurface(
-                                            (EGLDisplay)dpy_native,
-                                            (EGLConfig)config_native,
-                                            (EGLNativeWindowType)window,
-                                            (EGLint *)attrib_list );
+                                            (EGLDisplay)dpy,
+                                            (EGLConfig)config,
+                                            (EGLNativeWindowType) win,
+                                            (EGLint *)(attrib_list + offset) );
     
        return (jlong) surface;
     */
@@ -805,6 +803,7 @@ public class EGL14Pipeline {
         );/*
         
          // no op
+          return JNI_FALSE;
         
         */
 
@@ -1302,10 +1301,11 @@ public class EGL14Pipeline {
      * @param ctx
      * @return
      */
-    private static native boolean eglMakeCurrent0(long /*EGLDisplay*/ dpy,
-                                                long /*EGLSurface*/ draw,
-                                                long /*EGLSurface*/ read,
-                                                long /*EGLContext*/ ctx);/*
+    private static native boolean eglMakeCurrent0(long dpy,
+                                                long draw,
+                                                long  read,
+                                                long  ctx);/*
+                                                
        return (jboolean) eglMakeCurrent((EGLDisplay) dpy, 
                                         (EGLSurface) draw, 
                                         (EGLSurface) read, 
@@ -1410,8 +1410,8 @@ public class EGL14Pipeline {
                                                    int attribute,
                                                    int[] value,
                                                    int offset);/*
-         return (jboolean) = eglQueryContext((EGLDisplay)dpy_native,
-                                             (EGLContext)ctx_native,
+         return (jboolean) eglQueryContext((EGLDisplay)dpy,
+                                             (EGLContext)ctx,
                                              (EGLint) attribute,
                                              (EGLint *)(value + offset));                            
        */
@@ -1503,7 +1503,7 @@ public class EGL14Pipeline {
     private static native boolean eglCopyBuffers0(
             long dpy,
             long surface,
-            int target
+            long target
         );/*        
        return (jboolean) eglCopyBuffers((EGLDisplay) dpy, 
                                         (EGLSurface) surface, 

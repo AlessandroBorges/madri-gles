@@ -62,6 +62,7 @@ public class CanvasBuilder {
 					"**/gles/emulator/util/JAWT.java",
 					"**/gles/emulator/util/DrawingSurface.java",
 					"**/gles/emulator/util/DrawingSurfaceInfo.java",
+					"**/gles/internal/EGL14Pipeline.java",
 					//"**/gles/internal/GLES20Pipeline.java",
 					//"**/gles/internal/GLES30Pipeline.java",
 					//"**/gles/internal/TesteGL.java",
@@ -72,11 +73,11 @@ public class CanvasBuilder {
       
      
             
-      String[] strs = null;
+      String[] src2Natives = null;
       if(genFFP) {
-	  strs = ffpSrc; /* Fixed Pipeline */ 
+	  src2Natives = ffpSrc; /* Fixed Pipeline */ 
       }else{ 
-	  strs = ppSrc;        /* Programable Pipeline */	
+	  src2Natives = ppSrc;  /* Programable Pipeline */	
       };
       	
       
@@ -88,7 +89,7 @@ public class CanvasBuilder {
 	    jnigen.generate(src, // the .Java folder
 		    bin, // the .class folder
 		    jni, // output folder
-		    strs, // files/directories to parse and generate files *.h
+		    src2Natives, // files/directories to parse and generate files *.h
 		    null); // files/directores to exclude
 	    System.out.println("end generation.");
 

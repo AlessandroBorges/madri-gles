@@ -732,7 +732,12 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glCopyTexImage2D ( (GLenum) target, (GLint) level, (GLenum) internalformat, (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height, (GLint) border )
 
      * */
-    public void glCopyTexImage2D(int target, int level, int internalformat, int x, int y, int width, int height, int border) {
+    public void glCopyTexImage2D(int target, 
+                                 int level, 
+                                 int internalformat, 
+                                 int x, int y, 
+                                 int width, int height, 
+                                 int border) {
         GLES20Pipeline.nGLCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
     }
 
@@ -5333,7 +5338,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLVertexAttrib3fv(int indx, java.nio.FloatBuffer values, int offset);/*
-    			// apply offset  
+    			// apply offset 
  			
     			glVertexAttrib3fv ( (GLuint) indx,(const GLfloat *) (values + offset) );
     */
@@ -5398,8 +5403,11 @@ public class GLES20Pipeline implements Pipeline {
     	if(values.isDirect()){
     		int offset = BufferInfo.getOffset(values);
     		 GLES20Pipeline.nGLVertexAttrib4fv(indx, values, offset);
-    	}
-       
+    	}else if(values.hasArray()){
+    	     float[] array = values.array();
+    	     int offset = BufferInfo.getOffset(values);
+    	     GLES20Pipeline.nGLVertexAttrib4fv(indx, array, offset);
+    	}       
     }
 
     /**
