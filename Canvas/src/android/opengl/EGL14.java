@@ -16,7 +16,7 @@
 
 package android.opengl;
 
-import gles.graphics.SurfaceTexture;
+import android.graphics.SurfaceTexture;
 import gles.internal.EGL14Pipeline;
 import gles.internal.EGLUtil;
 import gles.internal.Sys;

@@ -95,18 +95,15 @@ public class GLES30Pipeline
      *  C function void glDrawRangeElements((GLenum) mode, (GLuint)  start, (GLuint)  end, (GLsizei) count, (GLenum) type, const GLvoid *indices)
 
      **/
-    public void glDrawRangeElements(int mode, int start, int end, int count, int type, java.nio.Buffer indices) {
-
-	if (indices == null)
-	    throw new IllegalArgumentException(BUFFER_NULL);
-
-	// now, the offset...
-	if (indices.isDirect()) {
-	    int offsetBytes = BufferInfo.getOffsetInBytes(indices);
-	    GLES30Pipeline.nGLDrawRangeElements(mode, start, end, count, type, indices, offsetBytes);
-	} else {
-	    throw new IllegalArgumentException(BUFFER_ND);
-	}
+    public void glDrawRangeElements(int mode, int start, int end, int count,
+            int type, java.nio.Buffer indices) {
+        checkBuffer(indices, 1, "indices");   
+        int offsetBytes = getOffset(indices);
+        if (indices.isDirect()) {
+            GLES30Pipeline.nGLDrawRangeElements(mode, start, end, count, type, indices, offsetBytes);
+        } else {
+            throw new IllegalArgumentException(BUFFER_ND);
+        }
 
     }
 
@@ -216,7 +213,7 @@ public class GLES30Pipeline
     								(GLint) border, 
     								(GLenum) format, 
     								(GLenum) type, 
-    								(const GLvoid *) pixels0);						
+    							    (const GLvoid *) pixels0);						
     	*/
 
     /**

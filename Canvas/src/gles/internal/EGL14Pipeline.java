@@ -19,8 +19,10 @@
 package gles.internal;
 
 
+import android.graphics.SurfaceTexture;
+
+
 import android.opengl.*;
-import gles.graphics.SurfaceTexture;
 import gles.view.Surface;
 import gles.view.SurfaceView;
 import gles.view.SurfaceHolder;
@@ -591,23 +593,22 @@ public class EGL14Pipeline {
         return (jboolean) res;                      
       */
 
-    // 
 
     /**
      * C function EGLSurface eglCreateWindowSurface ( EGLDisplay dpy, EGLConfig config, EGLNativeWindowType win, const EGLint *attrib_list ) 
-     * @param dpy
-     * @param config
-     * @param win
+     * Returns a EGLSurface handler
+     * @param dpy - EGLDisplay handle
+     * @param config - EGLConfig handle
+     * @param win - EGLNativeWindowType handle
      * @param attrib_list
      * @param offset
-     * @return
+     * @return  EGLSurface handle 
      */
-    private static native long /* EGLSurface */eglCreateWindowSurface0(long /* EGLDisplay */dpy,
-                                                                       long /* EGLConfig */config,
+    private static native long eglCreateWindowSurface0(long dpy,
+                                                       long config,
                                                                        long win,
                                                                        int[] attrib_list,
-                                                                       int offset
-            );/*
+                                                       int offset);/*                
                 
                 EGLSurface surface = eglCreateWindowSurface((EGLDisplay) dpy,
                                                             (EGLConfig) config,
@@ -616,6 +617,16 @@ public class EGL14Pipeline {
                 
                 return (jlong) surface;
        */
+    
+    /**
+     * Returns a EGLSurface handler
+     * @param dpy - EGLDisplay handle
+     * @param config - EGLConfig handle
+     * @param win - EGLNativeWindowType handle
+     * @param attrib_list 
+     * @param offset
+     * @return
+     */
 
     public EGLSurface eglCreateWindowSurfaceTexture(EGLDisplay dpy,
                                                     EGLConfig config,
@@ -638,21 +649,20 @@ public class EGL14Pipeline {
    
     
     /**
-     * 
-     * @param dpy
-     * @param config
-     * @param win
+     * Returns a EGLSurface handler
+     * @param dpy - EGLDisplay handle
+     * @param config - EGLConfig handle
+     * @param win - EGLNativeWindowType handle
      * @param attrib_list
      * @param offset
      * @return
      */
-    private static native long /*EGLSurface*/ eglCreateWindowSurfaceTexture0(
-        long /*EGLDisplay*/ dpy,
-        long /*EGLCOnfig*/ config,
-        long win,
+    private static native long eglCreateWindowSurfaceTexture0(
+        long  dpy, // EGLDisplay
+        long  config, // EGLConfig
+        long win, // EGLNativeWindowType
         int[] attrib_list,
-        int offset
-    );/*
+        int offset);/*    
     
        EGLSurface  surface = eglCreateWindowSurface(
                                             (EGLDisplay)dpy,

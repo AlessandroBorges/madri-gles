@@ -16,10 +16,11 @@
 
 package android.opengl;
 
-import gles.graphics.Bitmap;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGL11;
+
+import android.graphics.Bitmap;
 
 /**
  *

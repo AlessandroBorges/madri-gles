@@ -98,7 +98,7 @@ public class EGLUtil {
     }
     
     /**
-     * create a instance of  {@link #createEGLSurface(long)}
+     * create a instance of  {@link #EGLSurface(long)}
      * @param handle native long handle
      * @return EGLSurface instance
      */
