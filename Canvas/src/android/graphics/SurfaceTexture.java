@@ -18,6 +18,8 @@ package android.graphics;
 
 import java.lang.ref.WeakReference;
 
+
+
 //import android.annotation.Nullable;
 //import android.os.Handler;
 //import android.os.Looper;
@@ -145,7 +147,12 @@ public class SurfaceTexture {
      */
     public SurfaceTexture(int texName, boolean singleBufferMode) {
         mCreatorLooper = Looper.myLooper();
-        nativeInit(false, texName, singleBufferMode, new WeakReference<SurfaceTexture>(this));
+        try {
+            nativeInit(false, texName, singleBufferMode, new WeakReference<SurfaceTexture>(this));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -172,7 +179,12 @@ public class SurfaceTexture {
      */
     public SurfaceTexture(boolean singleBufferMode) {
         mCreatorLooper = Looper.myLooper();
-        nativeInit(true, 0, singleBufferMode, new WeakReference<SurfaceTexture>(this));
+        try {
+            nativeInit(true, 0, singleBufferMode, new WeakReference<SurfaceTexture>(this));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -385,8 +397,9 @@ public class SurfaceTexture {
     }
 
     private native void nativeInit(boolean isDetached, int texName,
-            boolean singleBufferMode, WeakReference<SurfaceTexture> weakSelf)
-            throws Exception;//Surface.OutOfResourcesException;
+                                   boolean singleBufferMode, 
+                                   WeakReference<SurfaceTexture> weakSelf)
+                                   throws Exception;//Surface.OutOfResourcesException;
     private native void nativeFinalize();
     private native void nativeGetTransformMatrix(float[] mtx);
     private native long nativeGetTimestamp();
@@ -404,4 +417,8 @@ public class SurfaceTexture {
      */
     private static native void nativeClassInit();
     static { nativeClassInit(); }
+    public long getNativeHandle() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

@@ -28,6 +28,9 @@ public class EGLUtil {
     private static Constructor<EGLContext> ctorEGLContext;
     private static Constructor<EGLSurface> ctorEGLSurface;
     
+    public static EGLDisplay EGL_NO_DISPLAY = EGLDisplay.getNullEGLDisplay(); 
+    public static EGLContext EGL_NO_CONTEXT = createEGLContext(0L); 
+    
     static{
         
         try {
