@@ -142,7 +142,7 @@ public class Bitmap {
         }
 
         int nativeAllocationByteCount = buffer == null ? getByteCount() : 0;
-        mFinalizer = new BitmapFinalizer(nativeBitmap, nativeAllocationByteCount);
+        mFinalizer = new BitmapFinalizer(this, nativeAllocationByteCount);
     }
 
             /**
@@ -1394,7 +1394,7 @@ public class Bitmap {
             public int getPixel(int x, int y) {
                 checkRecycled("Can't call getPixel() on a recycled bitmap");
                 checkPixelAccess(x, y);
-                return nativeGetPixel(mNativeBitmap, x, y);
+                return nativeGetPixel(x, y);
             }
 
             /**
@@ -1427,7 +1427,7 @@ public class Bitmap {
                     return; // nothing to do
                 }
                 checkPixelsAccess(x, y, width, height, offset, stride, pixels);
-                nativeGetPixels(mNativeBitmap, pixels, offset, stride,
+                nativeGetPixels(pixels, offset, stride,
                                 x, y, width, height);
             }
 
@@ -1660,14 +1660,16 @@ public class Bitmap {
             }
 
             private static class BitmapFinalizer {
-                private final long mNativeBitmap;
+                //private final long mNativeBitmap;
+                private final Bitmap mBitmap;
 
                 // Native memory allocated for the duration of the Bitmap,
                 // if pixel data allocated into native memory, instead of java byte[]
                 private final int mNativeAllocationByteCount;
 
-                BitmapFinalizer(long nativeBitmap, int nativeAllocationByteCount) {
-                    mNativeBitmap = nativeBitmap;
+                BitmapFinalizer(/*long nativeBitmap,*/ Bitmap bitmap, int nativeAllocationByteCount) {
+                    //mNativeBitmap = nativeBitmap;
+                    mBitmap = bitmap;
                     mNativeAllocationByteCount = nativeAllocationByteCount;
 
                     if (mNativeAllocationByteCount != 0) {
@@ -1685,7 +1687,7 @@ public class Bitmap {
                         if (mNativeAllocationByteCount != 0) {
                  //   VMRuntime.getRuntime().registerNativeFree(mNativeAllocationByteCount);
                         }
-                        nativeDestructor(mNativeBitmap);
+                        nativeDestructor(mBitmap);
                     }
                 }
             }
@@ -1762,7 +1764,12 @@ public class Bitmap {
      * @return
      */
             private static native Bitmap nativeCopy(long nativeSrcBitmap, int nativeConfig, boolean isMutable);
-            private static native void nativeDestructor(long nativeBitmap);
+            
+            private static void nativeDestructor(Bitmap b){
+                b.mBuffer = null;
+                b.mWidth = 0;
+                b.mHeight = 0;
+            }
             private static native boolean nativeRecycle(long nativeBitmap);
             private static native void nativeReconfigure(long nativeBitmap, int width, int height,
                                                          int config, int allocSize,
@@ -1775,10 +1782,81 @@ public class Bitmap {
             private static native int nativeRowBytes(long nativeBitmap);
             private static native int nativeConfig(long nativeBitmap);
 
-            private static native int nativeGetPixel(long nativeBitmap, int x, int y);
-            private static native void nativeGetPixels(long nativeBitmap, int[] pixels,
-                                                       int offset, int stride, int x, int y,
-                                                       int width, int height);
+            /**
+             * 
+             * @param nativeBitmap
+             * @param x
+             * @param y
+             * @return
+             */
+            private int nativeGetPixel(int x, int y){
+                
+                //if(mConfig==null) return 0;
+                int pos = x + y*mWidth;
+                
+                if(Config.ARGB_8888.nativeInt== mConfig.nativeInt){
+                    pos = pos << 2;
+                    int c =  (mBuffer[pos++] & 0xFF) << 24;   
+                    c |= (mBuffer[pos++] & 0xFF) << 16;
+                    c |= (mBuffer[pos++] & 0xFF) << 8;
+                    c |= (mBuffer[pos  ] & 0xFF);
+                    
+                    c = BitmapUtil.skPMColorToColor(c);
+                    return c;
+                }
+                
+                if(Config.RGB_565.nativeInt == mConfig.nativeInt){
+                    pos = pos << 1;
+                    char c16 =  (char) ((mBuffer[pos++] & 0xFF) << 8);
+                    c16 |= (mBuffer[pos  ] & 0xFF);
+                    int pmColor = RGB565to888(c16) | 0xFF000000; // add alpha
+                    return pmColor;
+                }
+                
+                if(Config.ALPHA_8.nativeInt == mConfig.nativeInt){
+                    return (mBuffer[pos] & 0xFF);
+                }
+                return 0;
+                
+            }
+            
+            /**
+             * Returns in pixels[] a copy of the data in the bitmap. Each value is
+             * a packed int representing a {@link Color}. The stride parameter allows
+             * the caller to allow for gaps in the returned pixels array between
+             * rows. For normal packed results, just pass width for the stride value.
+             * The returned colors are non-premultiplied ARGB values.
+             *
+             * @param pixels   The array to receive the bitmap's colors
+             * @param offset   The first index to write into pixels[]
+             * @param stride   The number of entries in pixels[] to skip between
+             *                 rows (must be >= bitmap's width). Can be negative.
+             * @param x        The x coordinate of the first pixel to read from
+             *                 the bitmap
+             * @param y        The y coordinate of the first pixel to read from
+             *                 the bitmap
+             * @param width    The number of pixels to read from each row
+             * @param height   The number of rows to read
+             *             
+             */
+            private void nativeGetPixels( int[] pixels,
+                                          int offset, int stride, 
+                                          int x, int y,
+                                          int width, int height)
+            {
+                
+                
+                             
+                for(int dstY = y, line=0; (dstY < height); dstY++, line++){
+                    int dstPos = offset + line * stride; 
+               
+                    for(int dstX = x; (dstX < width); dstX++){                        
+                      int c =  nativeGetPixel(dstX, dstY);
+                      pixels[dstPos++] = c;
+                    }
+                }
+                
+            }
 
             /**
              * non native version.
@@ -1797,12 +1875,14 @@ public class Bitmap {
                        
                     case 3: /* RGB565 */
                         char rgb565 = RGB888to565(color);
+                        pos = pos << 1;
                         mBuffer[pos++] = (byte)((rgb565 >> 8) & 0xFF);
                         mBuffer[pos  ] = (byte)((rgb565     ) & 0xFF);
                         break;
                         
                     case 4:
                     case 5:
+                        pos = pos << 2;
                         mBuffer[pos++] = (byte)((color >> 24) & 0xFF);//alpha
                         mBuffer[pos++] = (byte)((color >> 16) & 0xFF);//red
                         mBuffer[pos++] = (byte)((color >>  8) & 0xFF);//green
@@ -1861,6 +1941,7 @@ public class Bitmap {
             }
             
             
+            
             /**
              * 
              * @param p24
@@ -1882,29 +1963,42 @@ public class Bitmap {
             private static byte[] copy = new byte[4]; 
            /**
             * 
-            * @param p24 int color in ARGB
+            * @param c24 int color in ARGB
             * @param dst array of bytes with lenght > 3
             * @return byte array with [r,g,b, ...] 
             */
-            private static byte[] RGB888to565(int p24, byte[] dst){
-                p24 = p24 & 0x00FFffFF; // cut alpha off
-                dst[2] = (byte)((p24 >> 3) & 0x00001F); // blue
-                dst[1] = (byte)((p24 >> 5) & 0x0007E0); // green
-                dst[0] = (byte)((p24 >> 8) & 0x00f800); // red
+            private static byte[] RGB888to565(int c24, byte[] dst){
+                c24 = c24 & 0x00FFffFF; // cut alpha off
+                dst[2] = (byte)((c24 >> 3) & 0x00001F); // blue
+                dst[1] = (byte)((c24 >> 5) & 0x0007E0); // green
+                dst[0] = (byte)((c24 >> 8) & 0x00f800); // red
                 
                 return dst;        
             }
             
             /**
              * TODO upgrade this Old version
-             * @param p16
+             * @param c16
              * @return
              */
-            private static int RGB565to888(char p16){        
-                int b = (p16 & 0x001F) << 3;
-                int g = (p16 & 0x07E0) << 5;
-                int r = (p16 & 0xf800) << 8;        
+            private static int RGB565to888(char c16){        
+                int b = (c16 & 0x001F) << 3;
+                int g = (c16 & 0x07E0) << 5;
+                int r = (c16 & 0xf800) << 8;        
                 return (r | g | b);        
+            }
+            
+            /**
+             * TODO upgrade this Old version
+             * @param c16
+             * @return
+             */
+            private static int RGB565toARGB8888(char c16){ 
+                
+                int b = (c16 & 0x001F) << 3;
+                int g = (c16 & 0x07E0) << 5;
+                int r = (c16 & 0xf800) << 8;        
+                return (0xFF000000 | r | g | b);        
             }
 
     //private static native Bitmap nativeCreateFromParcel(Parcel p);
