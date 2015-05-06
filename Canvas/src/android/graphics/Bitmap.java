@@ -16,11 +16,17 @@
 package android.graphics;
 
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import java.util.Iterator;
+
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
 
 public class Bitmap {
 
@@ -89,12 +95,30 @@ public class Bitmap {
             ////////////////////////////////////////////////////////
             /// GLES fields
             ///////////////////////////////////////////////////////
+            /**
+             * default value for mConfig
+             */
             private Config mConfig = Config.ARGB_8888;
+            /**
+             * isOpaque checking.
+             * Possible values are:
+             *  null - unchecked.
+             *  true - no alpha (RGB565) or all set as 0xFF (ARGB_8888 and ALPHA_8)
+             *  false - ARGB_8888 with alpha != 0xFF;
+             */
+            private Boolean mIsOpaque = null;
+            
+            /**
+             * ALPHA value for opaque pixel
+             */
+            private static final byte ALPHA_OPAQUE = (byte)0xff;  
+            
             /**
              * For backwards compatibility, allows the app layer to change the default
              * density when running old apps.
              * @hide
              */
+            
             public static void setDefaultDensity(int density) {
                 sDefaultDensity = density;
             }
@@ -110,10 +134,10 @@ public class Bitmap {
         return sDefaultDensity;
     }
 
-            /**
-             * Private constructor that must received an already allocated native bitmap
-             * int (pointer).
-             */
+    /**
+     * Private constructor that must received an already allocated native bitmap
+     * int (pointer).
+     */
     @SuppressWarnings({ "UnusedDeclaration" })
     // called from JNI
     Bitmap(long nativeBitmap,
@@ -240,8 +264,7 @@ public class Bitmap {
                     throw new IllegalStateException("native-backed bitmaps may not be reconfigured");
                 }
 
-                nativeReconfigure(mNativeBitmap, width, height, config.nativeInt, mBuffer.length,
-                        mRequestPremultiplied);
+                nativeReconfigure(mNativeBitmap, width, height, config.nativeInt, mBuffer.length, mRequestPremultiplied);
                 mWidth = width;
                 mHeight = height;
             }
@@ -318,7 +341,7 @@ public class Bitmap {
              */
             public void recycle() {
                 if (!mRecycled) {
-                    if (nativeRecycle(mNativeBitmap)) {
+                    if (nativeRecycle(this)) {
                         // return value indicates whether native pixel object was actually recycled.
                         // false indicates that it is still in use at the native level and these
                         // objects should not be collected now. They will be collected later when the
@@ -626,7 +649,7 @@ public class Bitmap {
              */
             public Bitmap copy(Config config, boolean isMutable) {
                 checkRecycled("Can't copy a recycled bitmap");
-                Bitmap b = nativeCopy(mNativeBitmap, config.nativeInt, isMutable);
+                Bitmap b = nativeCopy(this, config.nativeInt, isMutable);
                 if (b != null) {
                     b.setPremultiplied(mRequestPremultiplied);
                     b.mDensity = mDensity;
@@ -895,7 +918,7 @@ public class Bitmap {
                 }
                 bm.setHasAlpha(hasAlpha);
                 if (config == Config.ARGB_8888 && !hasAlpha) {
-                    nativeErase(bm.mNativeBitmap, 0xff000000);
+                    nativeErase(bm, 0xff000000);
                 }
                 // No need to initialize the bitmap to zeroes with other configs;
                 // it is backed by a VM byte array which is by definition preinitialized
@@ -1087,8 +1110,10 @@ public class Bitmap {
                     throw new IllegalArgumentException("quality must be 0..100");
                 }
        // Trace.traceBegin(Trace.TRACE_TAG_RESOURCES, "Bitmap.compress");
-                boolean result = nativeCompress(mNativeBitmap, format.nativeInt, quality,
-                                      stream, new byte[WORKING_COMPRESS_STORAGE]);
+                boolean result = nativeCompress(this, format.nativeInt, quality,
+                                                 stream,
+                                                 null //new byte[WORKING_COMPRESS_STORAGE]
+                                                 );
        // Trace.traceEnd(Trace.TRACE_TAG_RESOURCES);
                 return result;
             }
@@ -1128,7 +1153,7 @@ public class Bitmap {
              * @see BitmapFactory.Options#inPremultiplied
              */
             public final boolean isPremultiplied() {
-                return nativeIsPremultiplied(mNativeBitmap);
+                return nativeIsPremultiplied();
             }
 
             /**
@@ -1152,8 +1177,12 @@ public class Bitmap {
              * @see BitmapFactory.Options#inPremultiplied
              */
             public final void setPremultiplied(boolean premultiplied) {
+                if(premultiplied == mRequestPremultiplied) 
+                    return;
+                
+                boolean oldStatus = mRequestPremultiplied;
                 mRequestPremultiplied = premultiplied;
-                nativeSetPremultiplied(mNativeBitmap, premultiplied);
+                nativeSetPremultiplied(oldStatus, premultiplied);
             }
 
             /** Returns the bitmap's width */
@@ -1306,7 +1335,7 @@ public class Bitmap {
              * it will return true by default.
              */
             public final boolean hasAlpha() {
-                return nativeHasAlpha(mNativeBitmap);
+                return nativeHasAlpha();
             }
 
             /**
@@ -1320,7 +1349,7 @@ public class Bitmap {
              * non-opaque per-pixel alpha values.
              */
             public void setHasAlpha(boolean hasAlpha) {
-                nativeSetHasAlpha(mNativeBitmap, hasAlpha, mRequestPremultiplied);
+                nativeSetHasAlpha(hasAlpha, mRequestPremultiplied);
             }
 
             /**
@@ -1378,7 +1407,7 @@ public class Bitmap {
                 if (!isMutable()) {
                     throw new IllegalStateException("cannot erase immutable bitmaps");
                 }
-                nativeErase(mNativeBitmap, c);
+                nativeErase(this, c);
             }
 
             /**
@@ -1627,7 +1656,7 @@ public class Bitmap {
             public Bitmap extractAlpha(Paint paint, int[] offsetXY) {
                 checkRecycled("Can't extractAlpha on a recycled bitmap");
                 long nativePaint = paint != null ? paint.mNativePaint : 0;
-                Bitmap bm = nativeExtractAlpha(mNativeBitmap, nativePaint, offsetXY);
+                Bitmap bm = nativeExtractAlpha(this, nativePaint, offsetXY);
                 if (bm == null) {
                     throw new RuntimeException("Failed to extractAlpha on Bitmap");
                 }
@@ -1656,7 +1685,7 @@ public class Bitmap {
              * and therefore is harmless.
              */
             public void prepareToDraw() {
-                nativePrepareToDraw(mNativeBitmap);
+                nativePrepareToDraw();
             }
 
             private static class BitmapFinalizer {
@@ -1713,7 +1742,7 @@ public class Bitmap {
      * @param mutable
      * @return
      */
-    private static /*native*/ Bitmap nativeCreate(int[] colors, int offset,
+    private static Bitmap nativeCreate(int[] colors, int offset,
                                                   int stride, 
                                                   int width, int height,
                                                   int nativeConfig, 
@@ -1726,17 +1755,24 @@ public class Bitmap {
             }
         
         byte[] buffer = null;
+        
+        boolean requestPremultiply = true;
+        
         if(null != colors){
             if(colors.length < stride * height){
                 throw new ArrayIndexOutOfBoundsException("colors < stride * height");                
             }
             
             int numBytes = 4;
+           
+            
             if(nativeConfig == Config.RGB_565.nativeInt){
                  numBytes = 2;
+                 requestPremultiply = false;
              }
             if(nativeConfig == Config.ALPHA_8.nativeInt){
                 numBytes = 1;
+                requestPremultiply = false;
             }
             
             int size = width * height * numBytes;
@@ -1748,7 +1784,7 @@ public class Bitmap {
                                     buffer, width, height, 
                                     0, 
                                     mutable, 
-                                    false, 
+                                    requestPremultiply, //alpha pre-multiply 
                                     null, //ninePatchChunk,
                                     null); // ninePatchInsets
         
@@ -1756,31 +1792,138 @@ public class Bitmap {
         return bitmap;
     }
     
-    /**
-     * 
-     * @param nativeSrcBitmap
-     * @param nativeConfig
-     * @param isMutable
-     * @return
-     */
-            private static native Bitmap nativeCopy(long nativeSrcBitmap, int nativeConfig, boolean isMutable);
+    
+            private static Bitmap nativeCopy(Bitmap bm, int nativeConfig, boolean isMutable){
+                                
+                int w = bm.mWidth;
+                int h = bm.mHeight;
+                byte[] buffer = new byte[w*h];
+                byte[] mbuff = bm.mBuffer;
+                
+                int size = bm.mBuffer.length;                
+                for(int i=0; i<size; i++){                    
+                    buffer[i] = mbuff[i];
+                }
+                
+                long id = nativeBitmapId++;
+                Bitmap bAlpha = new Bitmap( id, buffer, 
+                                            w, h, 
+                                            bm.mDensity, isMutable, 
+                                            bm.isPremultiplied(), 
+                                            null, null);                
+                return bAlpha;                
+            }
             
             private static void nativeDestructor(Bitmap b){
                 b.mBuffer = null;
                 b.mWidth = 0;
                 b.mHeight = 0;
             }
-            private static native boolean nativeRecycle(long nativeBitmap);
+            /**
+             * return value indicates whether native pixel object was actually recycled.
+             * false indicates that it is still in use at the native level and these
+             * objects should not be collected now. They will be collected later when the
+             * Bitmap itself is collected.
+             * 
+             * @param nativeBitmap bitmap to be recycled
+             * @return true is ok to recicly now
+             */
+            private static boolean nativeRecycle(Bitmap bm){
+                // TODO - implement correct behavior
+                return true; 
+                
+            }
+            
             private static native void nativeReconfigure(long nativeBitmap, int width, int height,
                                                          int config, int allocSize,
                                                          boolean isPremultiplied);
 
-            private static native boolean nativeCompress(long nativeBitmap, int format,
-                                                    int quality, OutputStream stream,
-                                                    byte[] tempStorage);
-            private static native void nativeErase(long nativeBitmap, int color);
-            private static native int nativeRowBytes(long nativeBitmap);
-            private static native int nativeConfig(long nativeBitmap);
+    private static boolean nativeCompress(Bitmap bm, int format,
+                                          int quality, OutputStream stream,
+                                          byte[] tempStorage) {
+
+        int imageType = java.awt.image.BufferedImage.TYPE_INT_ARGB;
+        java.awt.image.BufferedImage bimg = new java.awt.image.BufferedImage(bm.mWidth, bm.mHeight, imageType);
+
+        int h = bimg.getHeight();
+        int w = bimg.getWidth();
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int rgb = bm.getPixel(x, y);
+                bimg.setRGB(x, y, rgb);
+            }
+        }
+
+        String formatName = "";
+        if (CompressFormat.JPEG.nativeInt == format) formatName = "jpg";
+        else if (CompressFormat.PNG.nativeInt == format) formatName = "PNG";
+        else if (CompressFormat.WEBP.nativeInt == format) formatName = "webp";
+        else{
+            throw new IllegalArgumentException("Unsupported format:" + format);
+        }
+
+        {
+            Iterator<ImageWriter> it = ImageIO.getImageWritersByFormatName(formatName);
+            ImageWriter writer = it.next();
+            if(writer==null){
+                throw new IllegalArgumentException("Unsupported format:" + format);
+            }
+            ImageWriteParam writeParam = writer.getDefaultWriteParam();
+
+            if (writeParam.canWriteCompressed()) {
+                writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                writeParam.setCompressionQuality((float) (quality) / 100f);
+            }
+            writer.setOutput(stream);
+            try {
+                writer.write(bimg);
+                writer.dispose();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        return true;
+    }
+            
+            /**
+             * overwrite bitmap with single color
+             * @param b bitmap to erase
+             * @param color ARGB color to set
+             */
+            private static void nativeErase(Bitmap b, int color){
+                int h = b.mHeight;
+                int w = b.mWidth;
+                
+                for(int y=0; y < h; y++){
+                    for(int x = 0; x < w; x++){
+                        b.nativeSetPixel(x, y, color);
+                    }
+                }    
+            }
+            
+            /**
+             * 
+             * @return number of bytes spend in a single row
+             */
+            private int nativeRowBytes(){
+                int shift = 2;
+                
+                if(Config.RGB_565 == mConfig){
+                    shift = 1;
+                }                
+                if(Config.ALPHA_8 == mConfig){
+                    shift = 0;
+                }
+                
+                return mWidth << shift;
+            }
+            
+            private int nativeConfig(){               
+                return mConfig.nativeInt;
+            }
 
             /**
              * 
@@ -1801,7 +1944,10 @@ public class Bitmap {
                     c |= (mBuffer[pos++] & 0xFF) << 8;
                     c |= (mBuffer[pos  ] & 0xFF);
                     
-                    c = BitmapUtil.skPMColorToColor(c);
+                    // un-pre-multiply, if necessary
+                    if(mRequestPremultiplied){                         
+                        c = BitmapUtil.skPMColorToColor(c);
+                    }
                     return c;
                 }
                 
@@ -1816,8 +1962,8 @@ public class Bitmap {
                 if(Config.ALPHA_8.nativeInt == mConfig.nativeInt){
                     return (mBuffer[pos] & 0xFF);
                 }
-                return 0;
                 
+                return 0;                
             }
             
             /**
@@ -1845,8 +1991,6 @@ public class Bitmap {
                                           int width, int height)
             {
                 
-                
-                             
                 for(int dstY = y, line=0; (dstY < height); dstY++, line++){
                     int dstPos = offset + line * stride; 
                
@@ -1875,19 +2019,33 @@ public class Bitmap {
                        
                     case 3: /* RGB565 */
                         char rgb565 = RGB888to565(color);
-                        pos = pos << 1;
+                        pos = pos << 1; // times 2
                         mBuffer[pos++] = (byte)((rgb565 >> 8) & 0xFF);
                         mBuffer[pos  ] = (byte)((rgb565     ) & 0xFF);
                         break;
                         
                     case 4:
                     case 5:
-                        pos = pos << 2;
-                        mBuffer[pos++] = (byte)((color >> 24) & 0xFF);//alpha
-                        mBuffer[pos++] = (byte)((color >> 16) & 0xFF);//red
-                        mBuffer[pos++] = (byte)((color >>  8) & 0xFF);//green
-                        mBuffer[pos  ] = (byte)((color      ) & 0xFF);//blue
+                        pos = pos << 2;   // times 4                     
+                        byte a = (byte)((color >> 24) & 0xFF);//alpha
+                        byte r = (byte)((color >> 16) & 0xFF);//red
+                        byte g = (byte)((color >>  8) & 0xFF);//green
+                        byte b = (byte)((color      ) & 0xFF);//blue
+                        
+                        if(mRequestPremultiplied){
+                          int pmColor = BitmapUtil.skPremultiplyARGB(a, r, g, b);
+                          a = (byte)((pmColor >> 24) & 0xff);
+                          r = (byte)((pmColor >> 16) & 0xff);
+                          g = (byte)((pmColor >>  8) & 0xff);
+                          b = (byte)((pmColor      ) & 0xff);
+                        }
+                        mBuffer[pos++] = a; // alpha
+                        mBuffer[pos++] = r; //red
+                        mBuffer[pos++] = g; //green
+                        mBuffer[pos  ] = b; //blue
+                        
                         break;
+                        
                     default:
                         break;
                 }
@@ -1910,9 +2068,10 @@ public class Bitmap {
              * @param height   The number of rows to write to the bitmap
              */
             private void nativeSetPixels(/* long nativeBitmap,*/ 
-                                         int[] colors, int offset, 
-                                         int stride, int x, int y,
-                                         int width, int height){                
+                                         int[] colors, int offset, int stride, 
+                                         int x, int y,
+                                         int width, int height)
+            {                
                 int maxX = mWidth;
                 int maxY = mHeight;
                 
@@ -1977,27 +2136,27 @@ public class Bitmap {
             }
             
             /**
-             * TODO upgrade this Old version
-             * @param c16
-             * @return
+             * Convert RGB565 to RGB888
+             * @param c16 16 bits RGB565 color
+             * @return 24bits color as RGB888. Alpha is zero
              */
             private static int RGB565to888(char c16){        
-                int b = (c16 & 0x001F) << 3;
-                int g = (c16 & 0x07E0) << 5;
-                int r = (c16 & 0xf800) << 8;        
+                int b = (int)( (c16 & 0x001F) * (255f/31f));             //(c16 & 0x001F) << 3 ;
+                int g = (int)(((c16 & 0x07E0) >>  5) * (255f/63f)) << 8; //(c16 & 0x07E0) << 5;
+                int r = (int)(((c16 & 0xf800) >> 11) * (255f/31f)) << 16;//(c16 & 0xf800) << 8 ;        
                 return (r | g | b);        
             }
             
             /**
              * TODO upgrade this Old version
-             * @param c16
-             * @return
+             * @param c16 16 bits RGB565 color
+             * @return 32bits color as ARGB8888. Alpha is set as 0xFF;
              */
             private static int RGB565toARGB8888(char c16){ 
                 
-                int b = (c16 & 0x001F) << 3;
-                int g = (c16 & 0x07E0) << 5;
-                int r = (c16 & 0xf800) << 8;        
+                int b = (int)( (c16 & 0x001F) * (255f/31f));             //(c16 & 0x001F) << 3 ;
+                int g = (int)(((c16 & 0x07E0) >>  5) * (255f/63f)) << 8; //(c16 & 0x07E0) << 5;
+                int r = (int)(((c16 & 0xf800) >> 11) * (255f/31f)) << 16;//(c16 & 0xf800) << 8 ;     
                 return (0xFF000000 | r | g | b);        
             }
 
@@ -2007,20 +2166,168 @@ public class Bitmap {
 //                                                      boolean isMutable,
 //                                                      int density,
 //                                                      Parcel p);
+            
             // returns a new bitmap built from the native bitmap's alpha, and the paint
-            private static native Bitmap nativeExtractAlpha(long nativeBitmap,
-                                                            long nativePaint,
-                                                            int[] offsetXY);
+            
+            private static Bitmap nativeExtractAlpha(Bitmap bm,
+                                                     long nativePaint,
+                                                     int[] offsetXY){
+                
+                int w = bm.mWidth;
+                int h = bm.mHeight;
+                byte[] buffer = new byte[w*h];
+                byte[] mbuff = bm.mBuffer;
+                
+                int size = bm.mBuffer.length;
+                int pos = 0;
+                for(int i=0; i<size; i += 4){
+                    byte alpha = mbuff[i];
+                    buffer[pos++] = alpha;
+                }
+                long id = nativeBitmapId++;
+                Bitmap bAlpha = new Bitmap( id, buffer, 
+                                            w, h, 
+                                            bm.mDensity, bm.isMutable(), 
+                                            bm.isPremultiplied(), 
+                                            null, null);
+                
+                return bAlpha;
+            }
 
-            private static native void nativePrepareToDraw(long nativeBitmap);
-            private static native boolean nativeHasAlpha(long nativeBitmap);
-            private static native boolean nativeIsPremultiplied(long nativeBitmap);
-            private static native void nativeSetPremultiplied(long nativeBitmap,
-                                                              boolean isPremul);
-            private static native void nativeSetHasAlpha(long nativeBitmap,
-                                                         boolean hasAlpha,
-                                                         boolean requestPremul);
-            private static native boolean nativeHasMipMap(long nativeBitmap);
+           // private static native void nativePrepareToDraw(long nativeBitmap);
+            
+            private void nativePrepareToDraw(){
+                // no op
+            }
+            
+//            private static native boolean nativeHasAlpha(long nativeBitmap);
+            
+            /**
+             * return true if this bitmap support alpha transparency
+             * @return true if alpha is available.
+             */
+            private boolean nativeHasAlpha(){
+                if(Config.ARGB_8888.nativeInt== mConfig.nativeInt){
+                    return !isOpaque();
+                }
+                if(Config.RGB_565.nativeInt== mConfig.nativeInt){
+                    return false;
+                }
+                if(Config.ALPHA_8.nativeInt==mConfig.nativeInt){
+                    return !isOpaque();
+                }
+                return false;
+            }
+            
+            /**
+             * Brute force for opaque checking.
+             * @return true if this image is opaque
+             */
+            private boolean isOpaque(){                
+                if(mBuffer==null) return true;
+                
+                if(Config.ARGB_8888.nativeInt== mConfig.nativeInt){
+                    int sz = mBuffer.length;
+                    for(int i=0; i<sz;){                        
+                        if(ALPHA_OPAQUE != mBuffer[i]) 
+                            return false;
+                        i +=4;
+                    } 
+                    return true;
+                }
+               
+                if(Config.ALPHA_8.nativeInt==mConfig.nativeInt){
+                    int sz = mBuffer.length;
+                   for(int i=0; i<sz;i++){
+                       if(ALPHA_OPAQUE != mBuffer[i]) 
+                           return false;
+                   }
+                }   
+                
+                return true;
+            }
+            
+            /**
+             * <p>Indicates whether pixels stored in this bitmaps are stored pre-multiplied.
+             * When a pixel is pre-multiplied, the RGB components have been multiplied by
+             * the alpha component. For instance, if the original color is a 50%
+             * translucent red <code>(128, 255, 0, 0)</code>, the pre-multiplied form is 
+             * <code>(128, 128, 0, 0)</code>.</p>
+             * 
+             * <p>This method always returns false if {@link #getConfig()} is
+             * {@link Bitmap.Config#RGB_565}.</p>
+             * 
+             * <p>The return value is undefined if {@link #getConfig()} is
+             * {@link Bitmap.Config#ALPHA_8}.</p>
+             *
+             * <p>This method only returns true if {@link #hasAlpha()} returns true.
+             * A bitmap with no alpha channel can be used both as a pre-multiplied and
+             * as a non pre-multiplied bitmap.</p>
+             *
+             * <p>Only pre-multiplied bitmaps may be drawn by the view system or
+             * {@link Canvas}. If a non-pre-multiplied bitmap with an alpha channel is
+             * drawn to a Canvas, a RuntimeException will be thrown.</p>
+             *
+             * @return true if the underlying pixels have been pre-multiplied, false
+             *         otherwise
+             *
+             * @see Bitmap#setPremultiplied(boolean)
+             * @see BitmapFactory.Options#inPremultiplied
+             */
+            private boolean nativeIsPremultiplied(){
+                
+                if(!nativeHasAlpha()) return false;
+                
+                return mRequestPremultiplied;                
+            }
+            
+            /**
+             * Sets whether the bitmap should treat its data as pre-multiplied.
+             *
+             * <p>Bitmaps are always treated as pre-multiplied by the view system and
+             * {@link Canvas} for performance reasons. Storing un-pre-multiplied data in
+             * a Bitmap (through {@link #setPixel}, {@link #setPixels}, or {@link
+             * BitmapFactory.Options#inPremultiplied BitmapFactory.Options.inPremultiplied})
+             * can lead to incorrect blending if drawn by the framework.</p>
+             *
+             * <p>This method will not affect the behavior of a bitmap without an alpha
+             * channel, or if {@link #hasAlpha()} returns false.</p>
+             *
+             * <p>Calling {@link #createBitmap} or {@link #createScaledBitmap} with a source
+             * Bitmap whose colors are not pre-multiplied may result in a RuntimeException,
+             * since those functions require drawing the source, which is not supported for
+             * un-pre-multiplied Bitmaps.</p>
+             *
+             * @see Bitmap#isPremultiplied()
+             * @see BitmapFactory.Options#inPremultiplied
+             */
+            private void nativeSetPremultiplied(boolean oldStatus, boolean isPremul){
+                                               
+                if(mBuffer==null) return;
+                
+                // temporary switch back
+                mRequestPremultiplied = oldStatus;
+                
+                //reset colors
+                
+                
+                // set new status
+                mRequestPremultiplied = isPremul;
+                
+            }
+            
+            /**
+             * no OP
+             * @param hasAlpha
+             * @param requestPremul
+             */
+            private  void nativeSetHasAlpha( boolean hasAlpha, boolean requestPremul){
+                // no op
+            }
+            
+            private boolean nativeHasMipMap(long nativeBitmap){
+                return false;
+            }
             private static native void nativeSetHasMipMap(long nativeBitmap, boolean hasMipMap);
             private static native boolean nativeSameAs(long nativeBitmap0, long nativeBitmap1);
 
