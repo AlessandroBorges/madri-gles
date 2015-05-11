@@ -28,9 +28,11 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 
+import android.util.Log;
+
 public class Bitmap {
 
-        
+         private static final String TAG = "Bitmap";
          /**
              * Indicates that the bitmap was created for an unknown pixel density.
              *
@@ -56,10 +58,10 @@ public class Bitmap {
              *
              * @hide
              */
-            @SuppressWarnings("UnusedDeclaration") // native code only
+            // native code only
             public byte[] mBuffer;
 
-            @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"}) // Keep to finalize native resources
+            // Keep to finalize native resources
             private final BitmapFinalizer mFinalizer;
 
             private final boolean mIsMutable;
@@ -123,8 +125,6 @@ public class Bitmap {
                 sDefaultDensity = density;
             }
             
-    
-    
 
     static int getDefaultDensity() {
         if (sDefaultDensity >= 0) { return sDefaultDensity; }
@@ -264,7 +264,10 @@ public class Bitmap {
                     throw new IllegalStateException("native-backed bitmaps may not be reconfigured");
                 }
 
-                nativeReconfigure(mNativeBitmap, width, height, config.nativeInt, mBuffer.length, mRequestPremultiplied);
+                nativeReconfigure(this, width, height, 
+                                  config, 
+                                  mBuffer.length, 
+                                  mRequestPremultiplied);
                 mWidth = width;
                 mHeight = height;
             }
@@ -479,7 +482,7 @@ public class Bitmap {
                  */
                 ARGB_8888   (5);
 
-                final int nativeInt;
+                public final int nativeInt;
 
                 @SuppressWarnings({"deprecation"})
                 private static Config sConfigs[] = {
@@ -1394,7 +1397,7 @@ public class Bitmap {
              * @see #hasMipMap()
              */
             public final void setHasMipMap(boolean hasMipMap) {
-                nativeSetHasMipMap(mNativeBitmap, hasMipMap);
+               // nativeSetHasMipMap(mNativeBitmap, hasMipMap);
             }
 
             /**
@@ -1664,14 +1667,34 @@ public class Bitmap {
                 return bm;
             }
 
-            /**
-             *  Given another bitmap, return true if it has the same dimensions, config,
-             *  and pixel data as this bitmap. If any of those differ, return false.
-             *  If other is null, return false.
-             */
-            public boolean sameAs(Bitmap other) {
-                return this == other || (other != null && nativeSameAs(mNativeBitmap, other.mNativeBitmap));
-            }
+    /**
+     * Given another bitmap, return true if it has the same dimensions, config,
+     * and pixel data as this bitmap. If any of those differ, return false.
+     * If other is null, return false.
+     */
+    public boolean sameAs(Bitmap other) {
+        if (null == other) return false;
+        if (this == other) return true;
+        // return this == other || (other != null && nativeSameAs(mNativeBitmap,
+        // other.mNativeBitmap));
+
+        // check dimensions
+        if (this.mWidth != other.mWidth || this.mHeight != other.mHeight)
+            return false;
+        // check config
+        if (this.mConfig != other.mConfig)
+            return false;
+
+        // check pixel data
+        if(this.mBuffer == null || other.mBuffer == null) 
+            return false;
+        for (int i = 0; i < mBuffer.length; i++) {
+            if (this.mBuffer[i] != other.mBuffer[i])
+                return false;
+        }
+
+        return true;
+    }
 
             /**
              * Rebuilds any caches associated with the bitmap that are used for
@@ -1792,28 +1815,41 @@ public class Bitmap {
         return bitmap;
     }
     
-    
-            private static Bitmap nativeCopy(Bitmap bm, int nativeConfig, boolean isMutable){
-                                
-                int w = bm.mWidth;
-                int h = bm.mHeight;
-                byte[] buffer = new byte[w*h];
-                byte[] mbuff = bm.mBuffer;
-                
-                int size = bm.mBuffer.length;                
-                for(int i=0; i<size; i++){                    
-                    buffer[i] = mbuff[i];
-                }
-                
-                long id = nativeBitmapId++;
-                Bitmap bAlpha = new Bitmap( id, buffer, 
-                                            w, h, 
-                                            bm.mDensity, isMutable, 
-                                            bm.isPremultiplied(), 
-                                            null, null);                
-                return bAlpha;                
+    /**
+     * 
+     * @param bm
+     * @param nativeConfig
+     * @param isMutable
+     * @return
+     */
+    private static Bitmap nativeCopy(Bitmap bm, int nativeConfig, boolean isMutable) {
+
+        int w = bm.mWidth;
+        int h = bm.mHeight;
+        byte[] buffer = new byte[w * h];
+        byte[] mbuff = bm.mBuffer;
+
+        int size = buffer.length;
+        if (null != mbuff) {
+            for (int i = 0; i < size; i++) {
+
+                buffer[i] = mbuff[i];
             }
+        }
+
+        long id = nativeBitmapId++;
+        Bitmap bAlpha = new Bitmap(id, buffer,
+                w, h,
+                bm.mDensity, isMutable,
+                bm.isPremultiplied(),
+                null, null);
+        return bAlpha;
+    }
             
+            /**
+             * 
+             * @param b - Bitmap instance to destroy.
+             */
             private static void nativeDestructor(Bitmap b){
                 b.mBuffer = null;
                 b.mWidth = 0;
@@ -1834,9 +1870,67 @@ public class Bitmap {
                 
             }
             
-            private static native void nativeReconfigure(long nativeBitmap, int width, int height,
-                                                         int config, int allocSize,
-                                                         boolean isPremultiplied);
+            /**
+             * <p>Modifies the bitmap to have a specified width, height, and {@link
+             * Config}, without affecting the underlying allocation backing the bitmap.
+             * Bitmap pixel data is not re-initialized for the new configuration.</p>
+             *
+             * <p>This method can be used to avoid allocating a new bitmap, instead
+             * reusing an existing bitmap's allocation for a new configuration of equal
+             * or lesser size. If the Bitmap's allocation isn't large enough to support
+             * the new configuration, an IllegalArgumentException will be thrown and the
+             * bitmap will not be modified.</p>
+             *
+             * <p>The result of {@link #getByteCount()} will reflect the new configuration,
+             * while {@link #getAllocationByteCount()} will reflect that of the initial
+             * configuration.</p>
+             *
+             * <p>Note: This may change this result of hasAlpha(). When converting to 565,
+             * the new bitmap will always be considered opaque. When converting from 565,
+             * the new bitmap will be considered non-opaque, and will respect the value
+             * set by setPremultiplied().</p>
+             *
+             * <p>WARNING: This method should NOT be called on a bitmap currently used
+             * by the view system. It does not make guarantees about how the underlying
+             * pixel buffer is remapped to the new config, just that the allocation is
+             * reused. Additionally, the view system does not account for bitmap
+             * properties being modifying during use, e.g. while attached to
+             * drawables.</p>
+             *
+             * @see #setWidth(int)
+             * @see #setHeight(int)
+             * @see #setConfig(Config)
+             */
+            private static void nativeReconfigure(Bitmap bitmap, int width, int height,
+                                                  Config config, int allocSize, 
+                                                  boolean isPremultiplied){
+                
+                
+                int shift = 2;
+                if(config == Config.RGB_565) shift = 1;
+                if(config == Config.ALPHA_8) shift = 0;
+                
+                int newSize = (width * height) << shift;
+                
+                if(newSize > allocSize) {
+                    throw new IllegalArgumentException("Bitmap not large enough to support new configuration");
+                }
+                
+                if (bitmap.mConfig != Config.RGB_565  && bitmap.isOpaque()) {
+                    // If the original bitmap was set to opaque, keep that setting, unless it
+                    // was 565, which is required to be opaque.
+                    bitmap.setHasAlpha(false);
+                   // alphaType = kOpaque_SkAlphaType;
+                } else {
+                    // Otherwise respect the premultiplied request.
+                    bitmap.setPremultiplied(isPremultiplied);
+                    //alphaType = isPremultiplied ? kPremul_SkAlphaType : kUnpremul_SkAlphaType;
+                }
+                
+            }
+            
+            
+            
 
     private static boolean nativeCompress(Bitmap bm, int format,
                                           int quality, OutputStream stream,
@@ -1859,6 +1953,7 @@ public class Bitmap {
         else if (CompressFormat.PNG.nativeInt == format) formatName = "PNG";
         else if (CompressFormat.WEBP.nativeInt == format) formatName = "webp";
         else{
+            Log.e(TAG, "Fail to Compress bitmap. Unsupported format number: " + format);
             throw new IllegalArgumentException("Unsupported format:" + format);
         }
 
@@ -1866,6 +1961,7 @@ public class Bitmap {
             Iterator<ImageWriter> it = ImageIO.getImageWritersByFormatName(formatName);
             ImageWriter writer = it.next();
             if(writer==null){
+                Log.e(TAG, "Fail to Compress bitmap. Unsupported format: " + formatName + " - number: " + format);
                 throw new IllegalArgumentException("Unsupported format:" + format);
             }
             ImageWriteParam writeParam = writer.getDefaultWriteParam();
@@ -1874,12 +1970,13 @@ public class Bitmap {
                 writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                 writeParam.setCompressionQuality((float) (quality) / 100f);
             }
-            writer.setOutput(stream);
+           
             try {
+                writer.setOutput(stream);
                 writer.write(bimg);
                 writer.dispose();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
+                Log.e(TAG, "Exception on compressing image.", e);
                 e.printStackTrace();
                 return false;
             }
@@ -2328,8 +2425,8 @@ public class Bitmap {
             private boolean nativeHasMipMap(long nativeBitmap){
                 return false;
             }
-            private static native void nativeSetHasMipMap(long nativeBitmap, boolean hasMipMap);
-            private static native boolean nativeSameAs(long nativeBitmap0, long nativeBitmap1);
+            //private static native void nativeSetHasMipMap(long nativeBitmap, boolean hasMipMap);
+           // private static native boolean nativeSameAs(long nativeBitmap0, long nativeBitmap1);
 
             /* package */ final long ni() {
                 return mNativeBitmap;

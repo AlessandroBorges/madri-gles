@@ -17,6 +17,10 @@
 package android.opengl;
 
 
+import java.nio.ByteBuffer;
+
+import gles.internal.Sys;
+
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGL11;
 
@@ -278,10 +282,238 @@ public final class GLUtils {
 
     native private static void nativeClassInit();
 
-    native private static int native_getInternalFormat(Bitmap bitmap);
-    native private static int native_getType(Bitmap bitmap);
-    native private static int native_texImage2D(int target, int level, int internalformat,
-            Bitmap bitmap, int type, int border);
-    native private static int native_texSubImage2D(int target, int level, int xoffset, int yoffset,
-            Bitmap bitmap, int format, int type);
+   // native private static int native_getInternalFormat(Bitmap bitmap);
+    
+    /**
+     * Return OpenGL color type as GL_RGBA, GL_RGB an GL_ALPHA 
+     * @param bitmap bitmap source
+     * @return one of GL_RGBA, GL_RGB an GL_ALPHA 
+     */
+    @SuppressWarnings("deprecation")
+    private static int native_getInternalFormat(Bitmap bitmap){
+        Bitmap.Config config = bitmap.getConfig();
+        
+        if(config == Bitmap.Config.ARGB_8888 )
+            return  GLES10.GL_RGBA;
+        
+        if(config == Bitmap.Config.RGB_565 )
+            return  GLES10.GL_RGB;
+        
+        if(config == Bitmap.Config.ALPHA_8 )
+            return  GLES10.GL_ALPHA;
+        
+        if(config == Bitmap.Config.ARGB_4444 )
+            return  GLES10.GL_RGBA;
+        
+        return -1;
+    }
+    
+    /**
+     * Return OpenGL type, as GL_UNSIGNED_BYTE,
+     * GL_UNSIGNED_SHORT_5_6_5, 
+     * 
+     * @param bitmap bitmap source
+     * @return one of GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT_5_6_5 
+     *  or GL_UNSIGNED_SHORT_4_4_4_4 
+     */
+    @SuppressWarnings("deprecation")
+    private static int native_getType(Bitmap bitmap){
+        Bitmap.Config config = bitmap.getConfig();
+       
+        if(config == Bitmap.Config.ARGB_8888 )
+            return  GLES10.GL_UNSIGNED_BYTE;
+        
+        if(config == Bitmap.Config.RGB_565 )
+            return  GLES10.GL_UNSIGNED_SHORT_5_6_5;
+        
+        if(config == Bitmap.Config.ALPHA_8 )
+            return  GLES10.GL_UNSIGNED_BYTE;
+        
+        if(config == Bitmap.Config.ARGB_4444 )
+            return  GLES10.GL_UNSIGNED_SHORT_4_4_4_4;
+        
+        return -1;
+        
+        
+//        switch(colorType.) {
+//            case kAlpha_8_SkColorType:
+//                return GL_UNSIGNED_BYTE;
+//            case kARGB_4444_SkColorType:
+//                return GL_UNSIGNED_SHORT_4_4_4_4;
+//            case kN32_SkColorType:
+//                return GL_UNSIGNED_BYTE;
+//            case kIndex_8_SkColorType:
+//                return -1; // No type for compressed data.
+//            case kRGB_565_SkColorType:
+//                return GL_UNSIGNED_SHORT_5_6_5;
+//            default:
+//                return -1;
+//        }
+        
+    }
+    
+    private static int native_texImage2D(int target, int level, 
+                                                int internalformat,  
+                                                Bitmap bitmap, 
+                                                int type, int border){
+        
+        Bitmap.Config config = bitmap.getConfig();
+        int colorType = config.nativeInt;
+        if (internalformat < 0) {
+            internalformat = getInternalFormat(bitmap);
+        }
+        if (type < 0) {
+            type = getType(bitmap);
+        }
+        int err = checkFormat(colorType, internalformat, type);
+        if (err<0)
+            return err;
+        
+        final int w = bitmap.getWidth();
+        final int h = bitmap.getHeight();
+        final byte[] p = bitmap.mBuffer;
+        
+        if (internalformat == GLES10.GL_PALETTE8_RGBA8_OES) {
+            throw new IllegalArgumentException("Pallete8_RGBA_OES is not supported yet.");
+            
+//            final int size = bitmap.getByteCount();
+//            final int palette_size = 256*4;
+//            final int imageSize = size + palette_size;
+//            final byte[] data = new byte[imageSize];
+//            if (data != null) {
+//                byte[] pixels = (char*)data + palette_size;
+//                SkColorTable* ctable = bitmap.getColorTable();
+//                memcpy(data, ctable->lockColors(), ctable->count() * sizeof(SkPMColor));
+//                memcpy(pixels, p, size);
+//               
+//                glCompressedTexImage2D(target, level, internalformat, w, h, border, imageSize, data);
+//                free(data);
+//            } else {
+//                err = -1;
+//            }
+        } else {
+            glTexImage2D(target, level, internalformat, w, h, border, internalformat, type, p);
+        }
+    
+        return err;        
+    }
+    
+    /**
+     * internal method to apply bitmap as texture
+     * @param target
+     * @param level
+     * @param internalformat
+     * @param w
+     * @param h
+     * @param border
+     * @param internalformat2
+     * @param type
+     * @param p
+     */
+    private static void glTexImage2D(int target, int level,
+                                     int internalformat,
+                                     int w, int h,
+                                     int border,
+                                     int internalformat2, int type,
+                                     byte[] p) 
+    {   
+         ByteBuffer pixel = ByteBuffer.wrap(p);         
+         if(Sys.isGL10()){
+             GLES10.glTexImage2D(target, level, internalformat, w, h, border, internalformat2, type, pixel);
+         }else{
+             GLES20.glTexImage2D(target, level, internalformat, w, h, border, internalformat2, type, pixel);
+         }        
+    }
+
+    
+    
+    
+    private static int checkFormat(int colorType, int format, int type)
+    {
+        switch(colorType) {
+//            case kIndex_8_SkColorType:
+//                if (format == GLES10.GL_PALETTE8_RGBA8_OES)
+//                    return 0;
+            case 5: //Bitmap.Config.ARGB_8888
+            case 1: //Bitmap.Config.ALPHA_8
+                if (type == GLES10.GL_UNSIGNED_BYTE)
+                    return 0;
+            case 4: //Bitmap.Config.ARGB_4444
+            case 3: //Bitmap.Config.RGB_565
+                switch (type) {
+                    case GLES10.GL_UNSIGNED_SHORT_4_4_4_4:
+                    case GLES10.GL_UNSIGNED_SHORT_5_6_5:
+                    case GLES10.GL_UNSIGNED_SHORT_5_5_5_1:
+                        return 0;
+                    case GLES10.GL_UNSIGNED_BYTE:
+                        if (format == GLES10.GL_LUMINANCE_ALPHA)
+                            return 0;
+                }
+                break;
+            default:
+                break;
+        }
+        return -1;
+    }
+    
+    
+    private static int native_texSubImage2D(int target, int level,
+                                            int xoffset, int yoffset,
+                                            Bitmap bitmap, int format, int type) {
+
+        Bitmap.Config config = bitmap.getConfig();
+        int colorType = config.nativeInt;
+
+        if (format < 0) {
+            format = getInternalFormat(bitmap);
+            if (format == GLES10.GL_PALETTE8_RGBA8_OES)
+                return -1; // glCompressedTexSubImage2D() not supported
+        }
+        int err = checkFormat(colorType, format, type);
+        if (err < 0)
+            return err;
+
+        final int w = bitmap.getWidth();
+        final int h = bitmap.getHeight();
+        byte[] p = bitmap.mBuffer;
+        glTexSubImage2D(target, level, xoffset, yoffset, w, h, format, type, p);
+        return 0;
+    }
+
+    /**
+     * 
+     * @param target
+     * @param level
+     * @param xoffset
+     * @param yoffset
+     * @param w
+     * @param h
+     * @param format
+     * @param type
+     * @param p
+     */
+    private static void glTexSubImage2D( int target, int level,
+                                         int xoffset, int yoffset,
+                                         int w, int h,
+                                         int format, int type,
+                                         byte[] p) 
+    {
+        ByteBuffer pixel = ByteBuffer.wrap(p);        
+        if(Sys.isGL10()){
+            GLES10.glTexSubImage2D(target, level, xoffset, yoffset, w, h, format, type, pixel);
+        }else{
+            GLES20.glTexSubImage2D(target, level, xoffset, yoffset, w, h, format, type, pixel);
+        } 
+    }
+    
+//    native public static void setTracingLevel(int level);
+//
+//    native private static void nativeClassInit();
+//
+//    native private static int native_getInternalFormat(Bitmap bitmap);
+//    native private static int native_getType(Bitmap bitmap);
+//    native private static int native_texImage2D(int target, int level, int internalformat,
+//            Bitmap bitmap, int type, int border);
+//    native private static int native_texSubImage2D(int target, int level, int xoffset, int yoffset,
+//            Bitmap bitmap, int format, int type);
 }

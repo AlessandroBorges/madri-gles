@@ -211,19 +211,19 @@ public class GLU {
      *         of GL10.GL_FALSE indicates failure.
      */
     public static int gluUnProject(float winX, float winY, float winZ,
-            float[] model, int modelOffset, float[] project, int projectOffset,
-            int[] view, int viewOffset, float[] obj, int objOffset) {
+                                   float[] model, int modelOffset, 
+                                   float[] project, int projectOffset,
+                                   int[] view, int viewOffset, 
+                                   float[] obj, int objOffset) {
         float[] scratch = sScratch;
-        synchronized(scratch) {
+        synchronized (scratch) {
             final int PM_OFFSET = 0; // 0..15
             final int INVPM_OFFSET = 16; // 16..31
-               final int V_OFFSET = 0; // 0..3 Reuses PM_OFFSET space
+            final int V_OFFSET = 0; // 0..3 Reuses PM_OFFSET space
             Matrix.multiplyMM(scratch, PM_OFFSET, project, projectOffset,
                     model, modelOffset);
 
-            if (!Matrix.invertM(scratch, INVPM_OFFSET, scratch, PM_OFFSET)) {
-                return GL10.GL_FALSE;
-            }
+            if (!Matrix.invertM(scratch, INVPM_OFFSET, scratch, PM_OFFSET)) { return GL10.GL_FALSE; }
 
             scratch[V_OFFSET + 0] =
                     2.0f * (winX - view[viewOffset + 0]) / view[viewOffset + 2]

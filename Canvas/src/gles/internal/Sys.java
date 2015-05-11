@@ -32,4 +32,13 @@ public class Sys {
         return null;
     }
 
+    /**
+     * return true if current GLES mode is GL10
+     * @return
+     */
+    public static boolean isGL10() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }

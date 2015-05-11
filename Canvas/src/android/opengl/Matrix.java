@@ -56,7 +56,8 @@ public class Matrix {
      * The same float array may be passed for result, lhs, and/or rhs. However,
      * the result element values are undefined if the result elements overlap
      * either the lhs or rhs elements.
-     *
+     *     
+     * 
      * @param result The float array that holds the result.
      * @param resultOffset The offset into the result array where the result is
      *        stored.
@@ -69,8 +70,144 @@ public class Matrix {
      * resultOffset + 16 > result.length or lhsOffset + 16 > lhs.length or
      * rhsOffset + 16 > rhs.length.
      */
-    public static native void multiplyMM(float[] result, int resultOffset,
-            float[] lhs, int lhsOffset, float[] rhs, int rhsOffset);
+    private static  void multiplyMM_old(float[] result, int resultOffset,
+                                   float[] lhs, int lhsOffset, 
+                                   float[] rhs, int rhsOffset)
+    {      
+        for(int i=0; i<16;i++){
+            result[resultOffset + i] = 0;
+        }
+        for(int i=0; i<4; i++){
+             for(int j=0; j<4; j++){
+                 int n = resultOffset + 4*j + i;
+                 for(int k=0; k<4; k++){                     
+                     result[n] += lhs[lhsOffset + 4*k + i] * rhs[rhsOffset + 4*j + k];
+                 }
+             }
+         }
+    }
+    
+    /**
+     * temporary 
+     */
+    private static float[] sMMul = null;
+    /**
+     * Multiply with overlap capality.
+     * M = m
+     * 
+     * 
+     * @param mResult
+     * @param lhs
+     * @param lhr
+     */
+    private static void mulMM(final float[] mResult, final float[] lhs, final float[] lhr) {
+        if (sMMul == null) {
+            sMMul = new float[16];
+        } else {
+            for (int i = 0; i < 16; ++i) {
+                sMMul[i] = 0;
+            }
+        }
+
+        final float[] mLocal = sMMul;// matrixStack.pop();
+        for (int i = 0; i < 4; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                final int n = 4 * j + i;
+                for (int k = 0; k < 4; ++k) {
+                    mLocal[n] += lhs[4 * k + i] * lhr[4 * j + k];
+                }
+            }
+        }
+        for (int i = 0; i < 16; i++) {
+            mResult[i] = mLocal[i];
+        }
+        // matrixStack.push(mLocal);
+    }
+    
+    private static final int idx(int i, int j){
+        return i*4 + j;
+    }
+    
+    /**
+     * This is the original android implementation
+     * at http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/jni/android/opengl/util.cpp
+     * 
+     * 
+     * @param r
+     * @param lhs
+     * @param rhs
+     */
+    private static void native_multiplyMM(float[] r,  float[] lhs, float[] rhs)
+    {
+        for (int i=0 ; i<4 ; i++) {
+             final float rhs_i0 = rhs[ idx(i,0) ];
+             float ri0 = lhs[ idx(0,0) ] * rhs_i0;
+             float ri1 = lhs[ idx(0,1) ] * rhs_i0;
+             float ri2 = lhs[ idx(0,2) ] * rhs_i0;
+             float ri3 = lhs[ idx(0,3) ] * rhs_i0;
+            for (int j=1 ; j<4 ; j++) {
+                final float rhs_ij = rhs[ idx(i,j) ];
+                ri0 += lhs[ idx(j,0) ] * rhs_ij;
+                ri1 += lhs[ idx(j,1) ] * rhs_ij;
+                ri2 += lhs[ idx(j,2) ] * rhs_ij;
+                ri3 += lhs[ idx(j,3) ] * rhs_ij;
+            }
+            r[ idx(i,0) ] = ri0;
+            r[ idx(i,1) ] = ri1;
+            r[ idx(i,2) ] = ri2;
+            r[ idx(i,3) ] = ri3;
+        }
+    }
+    
+    /**
+     * Multiplies two 4x4 matrices together and stores the result in a third 4x4
+     * matrix. In matrix notation: result = lhs x rhs. Due to the way
+     * matrix multiplication works, the result matrix will have the same
+     * effect as first multiplying by the rhs matrix, then multiplying by
+     * the lhs matrix. This is the opposite of what you might expect.
+     * <p>
+     * The same float array may be passed for result, lhs, and/or rhs. However,
+     * the result element values are undefined if the result elements overlap
+     * either the lhs or rhs elements.
+     *     
+     * 
+     * @param result The float array that holds the result.
+     * @param resultOffset The offset into the result array where the result is
+     *        stored.
+     * @param lhs The float array that holds the left-hand-side matrix.
+     * @param lhsOffset The offset into the lhs array where the lhs is stored
+     * @param rhs The float array that holds the right-hand-side matrix.
+     * @param rhsOffset The offset into the rhs array where the rhs is stored.
+     *
+     * @throws IllegalArgumentException if result, lhs, or rhs are null, or if
+     * resultOffset + 16 > result.length or lhsOffset + 16 > lhs.length or
+     * rhsOffset + 16 > rhs.length.
+     */
+    public static void multiplyMM( float[] result, int resultOffset, 
+                                          float[] lhs, int lhsOffset, 
+                                          float[] rhs, int rhsOffset)
+    {
+        //using original Android implementation,
+        // http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/jni/android/opengl/util.cpp#494
+        for (int i=0 ; i<4 ; i++) {
+             final float rhs_i0 = rhs[ rhsOffset + idx(i,0) ];
+             float ri0 = lhs[ lhsOffset + idx(0,0) ] * rhs_i0;
+             float ri1 = lhs[ lhsOffset + idx(0,1) ] * rhs_i0;
+             float ri2 = lhs[ lhsOffset + idx(0,2) ] * rhs_i0;
+             float ri3 = lhs[ lhsOffset + idx(0,3) ] * rhs_i0;
+            for (int j=1 ; j<4 ; j++) {
+                final float rhs_ij = rhs[ rhsOffset + idx(i,j) ];
+                ri0 += lhs[ lhsOffset + idx(j,0) ] * rhs_ij;
+                ri1 += lhs[ lhsOffset + idx(j,1) ] * rhs_ij;
+                ri2 += lhs[ lhsOffset + idx(j,2) ] * rhs_ij;
+                ri3 += lhs[ lhsOffset + idx(j,3) ] * rhs_ij;
+            }
+            result[ idx(i,0) ] = ri0;
+            result[ idx(i,1) ] = ri1;
+            result[ idx(i,2) ] = ri2;
+            result[ idx(i,3) ] = ri3;
+        }
+    }
 
     /**
      * Multiplies a 4 element vector by a 4x4 matrix and stores the result in a
@@ -94,9 +231,56 @@ public class Matrix {
      * or lhsMatOffset + 16 > lhsMat.length or
      * rhsVecOffset + 4 > rhsVec.length.
      */
-    public static native void multiplyMV(float[] resultVec,
-            int resultVecOffset, float[] lhsMat, int lhsMatOffset,
-            float[] rhsVec, int rhsVecOffset);
+    public static void multiplyMV(float[] resultVec, int resultVecOffset, 
+                                  float[] lhsMat, int lhsMatOffset, 
+                                  float[] rhsVec, int rhsVecOffset)
+    {
+        if(null == resultVec || null==lhsMat || null==rhsVec ){
+            throw new IllegalArgumentException("array == null");
+        }
+        
+        if(lhsMatOffset < 0 || resultVecOffset<0 || rhsVecOffset < 0){
+            throw new IllegalArgumentException("offset < 0");
+        }
+        
+        if(   ((lhsMatOffset + 16) > lhsMat.length)  
+           || ((resultVecOffset + 4) > resultVec.length) 
+           || ((rhsVecOffset + 4) > rhsVec.length))
+        {
+            throw new IllegalArgumentException("length - offset < n");
+        }
+        
+        float x = rhsVec[rhsVecOffset++];
+        float y = rhsVec[rhsVecOffset++];
+        float z = rhsVec[rhsVecOffset++];
+        float w = rhsVec[rhsVecOffset];        
+        mx4transform(x, y, z, w, lhsMat, lhsMatOffset, resultVec, resultVecOffset);
+    }
+    
+    /**
+     * Vector transform, as from 
+     *  http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/jni/android/opengl/util.cpp
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param m - matrix
+     * @param mOffset matrix offset
+     * @param dst - destination vector
+     * @param dstOffset - dst offset
+     */
+    private static void  mx4transform(float x, float y, float z, float w,  
+                                     float[] m, int mOffset,
+                                     float[] dst, int dstOffset) {
+        
+        int off = dstOffset;
+        dst[dstOffset++] = m[off + 0] * x + m[off + 4] * y + m[off +  8] * z + m[off + 12] * w;
+        dst[dstOffset++] = m[off + 1] * x + m[off + 5] * y + m[off +  9] * z + m[off + 13] * w;
+        dst[dstOffset++] = m[off + 2] * x + m[off + 6] * y + m[off + 10] * z + m[off + 14] * w;
+        dst[dstOffset  ] = m[off + 3] * x + m[off + 7] * y + m[off + 11] * z + m[off + 15] * w;
+       
+    }
+    
 
     /**
      * Transposes a 4 x 4 matrix.
@@ -109,8 +293,9 @@ public class Matrix {
      * @param m the input array
      * @param mOffset an offset into m where the input matrix is stored.
      */
-    public static void transposeM(float[] mTrans, int mTransOffset, float[] m,
-            int mOffset) {
+    public static void transposeM( float[] mTrans, int mTransOffset, 
+                                   float[] m, int mOffset) 
+    {
         for (int i = 0; i < 4; i++) {
             int mBase = i * 4 + mOffset;
             mTrans[i + mTransOffset] = m[mBase];
