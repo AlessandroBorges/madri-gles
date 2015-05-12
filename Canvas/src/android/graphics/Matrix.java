@@ -18,11 +18,16 @@ package android.graphics;
 
 import java.io.PrintWriter;
 
+import android.util.VecPool;
+
 
 /**
  * The Matrix class holds a 3x3 matrix for transforming coordinates.
  */
 public class Matrix {
+    
+    /** Pool for temporary float[9] */
+    private static VecPool vecPool = new VecPool(9); 
 
     public static final int MSCALE_X = 0;   //!< use with getValues/setValues
     public static final int MSKEW_X  = 1;   //!< use with getValues/setValues
@@ -228,7 +233,7 @@ public class Matrix {
      * Create an identity matrix
      */
     public Matrix() {
-       // native_instance = native_create(0);
+       native_instance = native_create(0);
     }
 
     /**
@@ -296,8 +301,14 @@ public class Matrix {
     @Override
     public boolean equals(Object obj) {
         //if (obj == this) return true;     -- NaN value would mean matrix != itself
-        if (!(obj instanceof Matrix)) return false;
-        return native_equals(native_instance, ((Matrix)obj).native_instance);
+        if (obj == null || !(obj instanceof Matrix)) return false;
+       //return native_equals(native_instance, ((Matrix)obj).native_instance);
+        
+        Matrix other = (Matrix)obj;
+        for (int i = 0; i < MATRIX_SIZE; i++) {
+            if(mValues[i] != other.mValues[i]) return false;
+    }
+        return true;        
     }
 
     @Override
@@ -349,7 +360,106 @@ public class Matrix {
      * specified transformation.
      */
     public void setScale(float sx, float sy, float px, float py) {
-        native_setScale(native_instance, sx, sy, px, py);
+       // native_setScale(native_instance, sx, sy, px, py);        
+       getScale(this.mValues, sx, sy, px, py);  
+    }
+    
+   
+  
+    
+    
+    
+    
+    private static float[] getScale(float[] dest, float sx, float sy, float px,  float py) {
+        // translate tmp so that the pivot is in 0,0
+        setTranslate(dest, -px, -py);
+        float[] tmp = vecPool.get();
+        // scale into dest
+        multiply(dest, dest, setScale(tmp, sx, sy));
+        // translate back the pivot back into dest
+        multiply(dest, dest, setTranslate(tmp, px, py));
+        vecPool.recycle(tmp);
+        return dest;
+    }
+    
+        
+    /**
+     * Apply scale factors to float matrix.
+     * 
+     * @param dest - 3x3 float matrix, to set scale factors
+     * @param sx - scale in x axis
+     * @param sy - scale in y axis
+     * 
+     * @return matrix - dest with scale factors
+     */
+    private static float[] setScale(float[] dest, float sx, float sy) {             
+             //return new float[] { sx, 0, 0, 0, sy, 0, 0, 0, 1 };
+             dest[0] = sx;
+             dest[1] = 0;
+             dest[2] = 0;
+             dest[3] = 0;
+             dest[4] = sy;
+             dest[5] = 0;
+             dest[6] = 0;
+             dest[7] = 0;
+             dest[8] = 1;
+             return dest;
+     }
+    
+    
+    
+    /**
+     * Apply translate factors to a array.
+     * 
+     * @param dest - 3x3 matrix to set translate factors.
+     * @param dx - translation in x axis.
+     * @param dy - translation in y axis.
+     * 
+     * @return matrix dest with translate factors set
+     */
+    private static float[] setTranslate(float[] dest, float dx, float dy) {
+                dest[0] = 1;
+                dest[1] = 0;
+                dest[2] = dx;
+                dest[3] = 0;
+                dest[4] = 1;
+                dest[5] = dy;
+                dest[6] = 0;
+                dest[7] = 0;
+                dest[8] = 1;
+                return dest;
+     }
+    
+    /**
+     * multiply two matrices and store them in a 3rd.
+     * <p/>This in effect does dest = a*b
+     * dest can be the same as a or b.
+     */
+     private static void multiply(float dest[], float[] a, float[] b) {
+             // first row
+             float d0 = b[0] * a[0] + b[1] * a[3] + b[2] * a[6];
+             float d1 = b[0] * a[1] + b[1] * a[4] + b[2] * a[7];
+             float d2 = b[0] * a[2] + b[1] * a[5] + b[2] * a[8];
+     
+             // 2nd row
+             float d3 = b[3] * a[0] + b[4] * a[3] + b[5] * a[6];
+             float d4 = b[3] * a[1] + b[4] * a[4] + b[5] * a[7];
+             float d5 = b[3] * a[2] + b[4] * a[5] + b[5] * a[8];
+     
+             // 3rd row
+             float d6 = b[6] * a[0] + b[7] * a[3] + b[8] * a[6];
+             float d7 = b[6] * a[1] + b[7] * a[4] + b[8] * a[7];
+             float d8 = b[6] * a[2] + b[7] * a[5] + b[8] * a[8];
+             
+             dest[0] = d0;
+             dest[1] = d1;
+             dest[2] = d2;
+             dest[3] = d3;
+             dest[4] = d4;
+             dest[5] = d5;
+             dest[6] = d6;
+             dest[7] = d7;
+             dest[8] = d8;
     }
 
     /** Set the matrix to scale by sx and sy. */
@@ -372,15 +482,42 @@ public class Matrix {
      * unchanged by the specified transformation.
      */
     public void setRotate(float degrees, float px, float py) {
-        native_setRotate(native_instance, degrees, px, py);
+        //native_setRotate(native_instance, degrees, px, py);
+        double rad = Math.toRadians(degrees);
+        float sin = (float)Math.sin(rad);
+        float cos = (float)Math.cos(rad);
+        setSinCos(sin, cos, px, py);
     }
 
     /**
      * Set the matrix to rotate about (0,0) by the specified number of degrees.
      */
     public void setRotate(float degrees) {
-        native_setRotate(native_instance, degrees);
+       // native_setRotate(native_instance, degrees);        
+       setRotate(mValues, degrees);
     }
+    
+    private static float[] setRotate(float[] dest, float degrees) {
+        // native_setRotate(native_instance, degrees);
+         double rad = Math.toRadians(degrees);
+         float sin = (float)Math.sin(rad);
+         float cos = (float)Math.cos(rad);
+         return setRotate(dest,sin,cos);
+     }
+    
+       
+    private static float[] setRotate(float[] dest, float sin, float cos) {
+                 dest[0] = cos;
+                 dest[1] = -sin;
+                 dest[2] = 0;
+                 dest[3] = sin;
+                 dest[4] = cos;
+                 dest[5] = 0;
+                 dest[6] = 0;
+                 dest[7] = 0;
+                 dest[8] = 1;
+                 return dest;
+      }
 
     /**
      * Set the matrix to rotate by the specified sine and cosine values, with a
@@ -388,12 +525,41 @@ public class Matrix {
      * remain unchanged by the specified transformation.
      */
     public void setSinCos(float sinValue, float cosValue, float px, float py) {
-        native_setSinCos(native_instance, sinValue, cosValue, px, py);
+        //native_setSinCos(native_instance, sinValue, cosValue, px, py);
+        // translate so that the pivot is in 0,0
+        setTranslate(mValues, -px, -py);
+         
+        // scale
+        float[] tmp = vecPool.get();        
+            postTransform(setRotate(tmp, sinValue, cosValue));
+            // translate back the pivot
+            postTransform(setTranslate(tmp, px, py));
+        vecPool.recycle(tmp);
+    }
+
+     
+    /**
+     * Adds the given transformation to the current Matrix.
+    *  This in effect does this = this*matrix
+    * @param matrix
+    */
+    private void postTransform(float[] matrix) {
+            multiply(mValues, mValues, matrix);
+    }
+    
+    /**
+     * Adds the given transformation to the current Matrix
+     * This in effect does this = matrix*this
+     * @param matrix
+     */
+    private void preTransform(float[] matrix) {           
+            multiply(mValues, matrix, mValues);                      
     }
 
     /** Set the matrix to rotate by the specified sine and cosine values. */
     public void setSinCos(float sinValue, float cosValue) {
-        native_setSinCos(native_instance, sinValue, cosValue);
+        //native_setSinCos(native_instance, sinValue, cosValue);
+       setRotate(mValues, sinValue, cosValue);
     }
 
     /**
@@ -401,13 +567,60 @@ public class Matrix {
      * The pivot point is the coordinate that should remain unchanged by the
      * specified transformation.
      */
-    public void setSkew(float kx, float ky, float px, float py) {
-        native_setSkew(native_instance, kx, ky, px, py);
+    public void setSkew(float sx, float sy, float px, float py) {
+        //native_setSkew(native_instance, kx, ky, px, py);
+        setSkew(mValues, sx, sy, px, py);
+    }
+    
+    /**
+     * TODO - fix it
+     * @param dst
+     * @param kx
+     * @param ky
+     * @param px
+     * @param py
+     * @return
+     */
+    private static float[] setSkew(float[] dst, float kx, float ky, float px, float py) {
+        float[] mtx = dst;      
+
+        // translate so that the pivot is in 0,0
+        setTranslate(mtx, -px, -py);
+
+        // skew into mtx
+        float[] tmp = vecPool.get();
+            tmp = setSkew(tmp, kx, ky);        
+            multiply(mtx, mtx, tmp);
+        // translate back the pivot back into tmp  
+            tmp = setTranslate(tmp, px, py);
+            multiply(mtx, mtx, tmp);
+        vecPool.recycle(tmp);
+        return mtx;
     }
 
     /** Set the matrix to skew by sx and sy. */
     public void setSkew(float kx, float ky) {
-        native_setSkew(native_instance, kx, ky);
+        // native_setSkew(native_instance, kx, ky);
+       setSkew(mValues, kx, ky);
+    }
+
+    /**
+     * Set the matrix to skew by sx and sy. 
+     * 
+     * @return float[] { 1, kx, 0, ky, 1, 0, 0, 0, 1 }
+     * */
+    private static float[] setSkew(float[] m, float kx, float ky) {
+        // native_setSkew(native_instance, kx, ky);
+        m[0] = 1;
+        m[1] = kx;
+        m[2] = 0;
+        m[3] = ky;
+        m[4] = 1;
+        m[5] = 0;
+        m[6] = 0;
+        m[7] = 0;
+        m[8] = 1;
+        return m;
     }
 
     /**
@@ -422,7 +635,13 @@ public class Matrix {
      * {@link android.os.Build.VERSION_CODES#HONEYCOMB} and above, it always returns true.</p>
      */
     public boolean setConcat(Matrix a, Matrix b) {
-        native_setConcat(native_instance, a.native_instance, b.native_instance);
+        //native_setConcat(native_instance, a.native_instance, b.native_instance);
+        if(null==a || null ==b) return false;
+        
+        //if(this==a) return preConcat(b);
+        //if(this==b) return postConcat(a);
+        
+        multiply(mValues, a.mValues, b.mValues);        
         return true;
     }
 
@@ -431,7 +650,11 @@ public class Matrix {
      * M' = M * T(dx, dy)
      */
     public boolean preTranslate(float dx, float dy) {
-        native_preTranslate(native_instance, dx, dy);
+        //native_preTranslate(native_instance, dx, dy);
+        float[] tmp = vecPool.get();
+            tmp = setTranslate(tmp, dx,dy);
+            preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -494,7 +717,9 @@ public class Matrix {
      * M' = M * other
      */
     public boolean preConcat(Matrix other) {
-        native_preConcat(native_instance, other.native_instance);
+        //native_preConcat(native_instance, other.native_instance);
+        if(null==other) return false;
+        preTransform(other.mValues);
         return true;
     }
 
@@ -521,7 +746,10 @@ public class Matrix {
      * M' = S(sx, sy) * M
      */
     public boolean postScale(float sx, float sy) {
-        native_postScale(native_instance, sx, sy);
+        //native_postScale(native_instance, sx, sy);   
+        float[] tmp = vecPool.get();
+            postTransform(setScale(tmp,sx,sy));
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -557,7 +785,8 @@ public class Matrix {
      * M' = K(kx, ky) * M
      */
     public boolean postSkew(float kx, float ky) {
-        native_postSkew(native_instance, kx, ky);
+        //native_postSkew(native_instance, kx, ky);
+        getSkew(mValues, kx, ky);
         return true;
     }
 
@@ -566,7 +795,10 @@ public class Matrix {
      * M' = other * M
      */
     public boolean postConcat(Matrix other) {
-        native_postConcat(native_instance, other.native_instance);
+        //native_postConcat(native_instance, other.native_instance);
+        if(null==other) return false;
+        
+        postTransform(other.mValues);
         return true;
     }
 
@@ -759,11 +991,10 @@ public class Matrix {
      * @param srcIndex The index of the first [x,y] pair of src floats
      * @param pointCount The number of points (x,y pairs) to transform
      */
-    public void mapPoints(float[] dst, int dstIndex, float[] src, int srcIndex,
-                          int pointCount) {
+    public void mapPoints(float[] dst, int dstIndex, float[] src, int srcIndex, int pointCount) {
         checkPointArrays(src, srcIndex, dst, dstIndex, pointCount);
-        native_mapPoints(native_instance, dst, dstIndex, src, srcIndex,
-                         pointCount, true);
+        //native_mapPoints(native_instance, dst, dstIndex, src, srcIndex, pointCount, true);
+        mapPoints0(dst, dstIndex, src, srcIndex, pointCount);
     }
 
     /**
@@ -781,11 +1012,82 @@ public class Matrix {
      * @param srcIndex The index of the first [x,y] pair of src floats
      * @param vectorCount The number of vectors (x,y pairs) to transform
      */
-    public void mapVectors(float[] dst, int dstIndex, float[] src, int srcIndex,
-                          int vectorCount) {
+    public void mapVectors(float[] dst, int dstIndex, float[] src, int srcIndex,  int vectorCount) {
         checkPointArrays(src, srcIndex, dst, dstIndex, vectorCount);
-        native_mapPoints(native_instance, dst, dstIndex, src, srcIndex,
-                         vectorCount, false);
+        //native_mapPoints(native_instance, dst, dstIndex, src, srcIndex, vectorCount, false);
+        mapVectors0(dst, dstIndex, src, srcIndex, vectorCount);
+    }
+    
+    
+    private void mapVectors0(float[] dst, int dstIndex, float[] src, int srcIndex, int vectorCount) {
+        if (hasPerspective()) {
+            // transform the (0,0) point
+            float[] origin = new float[] { 0.f, 0.f };
+            mapPoints(origin);
+
+            // translate the vector data as points
+            mapPoints(dst, dstIndex, src, srcIndex, vectorCount);
+
+            // then substract the transformed origin.
+            final int count = vectorCount * 2;
+            for (int i = 0; i < count; i += 2) {
+                dst[dstIndex + i    ] = dst[dstIndex + i    ] - origin[0];
+                dst[dstIndex + i + 1] = dst[dstIndex + i + 1] - origin[1];
+            }
+        } else {
+            // make a copy of the matrix
+            Matrix copy = new Matrix(this);
+            // remove the translation
+            setTranslate(copy.mValues, 0, 0);
+            // map the content as points.
+            copy.mapPoints(dst, dstIndex, src, srcIndex, vectorCount);
+    }
+    }
+    
+    public boolean hasPerspective() {
+           return (mValues[6] != 0 || mValues[7] != 0 || mValues[8] != 1);
+    }
+
+    /**
+     * Apply this matrix to the array of 2D points specified by src, and write
+     * the transformed points into the array of points specified by dst. The two
+     * arrays represent their "points" as pairs of floats [x, y].
+     *
+     * @param dst
+     *            The array of dst points (x,y pairs)
+     * @param dstIndex
+     *            The index of the first [x,y] pair of dst floats
+     * @param src
+     *            The array of src points (x,y pairs)
+     * @param srcIndex
+     *            The index of the first [x,y] pair of src floats
+     * @param pointCount
+     *            The number of points (x,y pairs) to transform
+     */
+
+    private void mapPoints0(float[] dst, int dstIndex, float[] src,  int srcIndex, int pointCount) {
+        final int count = pointCount * 2;
+
+        float[] tmpDest = dst;
+        boolean inPlace = (dst == src);
+        if (inPlace) {
+            tmpDest = new float[count];
+        }
+
+        for (int i = 0; i < count; i += 2) {
+            // just in case we are doing in place, we better put this in temp
+            // vars
+            float x = mValues[0] * src[i + srcIndex] + mValues[1] * src[i + srcIndex + 1] + mValues[2];
+            float y = mValues[3] * src[i + srcIndex] + mValues[4] * src[i + srcIndex + 1] + mValues[5];
+            
+            int pos = inPlace ? i : (i + dstIndex);
+            tmpDest[pos    ] = x;
+            tmpDest[pos + 1] = y;
+        }
+
+        if (inPlace) {
+            System.arraycopy(tmpDest, 0, dst, dstIndex, count);
+        }
     }
 
     /**
@@ -857,7 +1159,33 @@ public class Matrix {
         if (dst == null || src == null) {
             throw new NullPointerException();
         }
-        return native_mapRect(native_instance, dst, src);
+
+        // array with 4 corners
+        float[] corners = new float[] { src.left, src.top, 
+                                        src.right, src.top,
+                                        src.right, src.bottom, 
+                                        src.left, src.bottom, };
+        
+//        float c0 = src.left,  c1 = src.top,
+//              c2 = src.right, c3 = src.top,
+//              c4 = src.right, c5 = src.bottom,
+//              c6 = src.left,  c7 = src.bottom
+        
+
+        // apply the transform to them.
+        mapPoints(corners);
+
+        // now put the result in the rect. We take the min/max of Xs and min/max
+        // of Ys
+        dst.left = Math.min(Math.min(corners[0], corners[2]), Math.min(corners[4], corners[6]));
+        dst.right = Math.max(Math.max(corners[0], corners[2]),Math.max(corners[4], corners[6]));
+
+        dst.top = Math.min(Math.min(corners[1], corners[3]), Math.min(corners[5], corners[7]));
+        dst.bottom = Math.max(Math.max(corners[1], corners[3]), Math.max(corners[5], corners[7]));
+
+        return (computeTypeMask() & kRectStaysRect_Mask) != 0;
+
+        // return native_mapRect(native_instance, dst, src);
     }
 
     /**
@@ -878,7 +1206,24 @@ public class Matrix {
      * has its center at the origin.
      */
     public float mapRadius(float radius) {
-        return native_mapRadius(native_instance, radius);
+        //return native_mapRadius(native_instance, radius);
+        float[] src = new float[] { radius, 0.f, 0.f, radius };
+        mapVectors(src, 0, src, 0, 2);
+         
+        float l1 = getPointLength(src, 0);
+        float l2 = getPointLength(src, 2);
+         
+        return (float) Math.sqrt(l1 * l2);
+    }
+    
+    /**
+     * 
+     * @param src
+     * @param index
+     * @return
+     */
+    private static float getPointLength(float[] src, int index) {
+             return (float) Math.sqrt(src[index] * src[index] + src[index + 1] * src[index + 1]);
     }
 
     /** Copy 9 values from the matrix into the array.
@@ -887,7 +1232,8 @@ public class Matrix {
         if (values.length < 9) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        native_getValues(native_instance, values);
+        System.arraycopy(mValues, 0, values, 0, MATRIX_SIZE);
+        //native_getValues(native_instance, values);
     }
 
     /** Copy 9 values from the array into the matrix.
@@ -900,7 +1246,8 @@ public class Matrix {
         if (values.length < 9) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        native_setValues(native_instance, values);
+        System.arraycopy(values, 0, mValues, 0, MATRIX_SIZE);
+        //native_setValues(native_instance, values);
     }
 
     @Override
@@ -953,15 +1300,38 @@ public class Matrix {
 
     @Override
     protected void finalize() throws Throwable {
-        try {
-            finalizer(native_instance);
-        } finally {
-            super.finalize();
+//        try {            
+//            finalizer(native_instance);
+//        } finally {
+//            super.finalize();
+//        }
         }
-    }
 
     /*package*/ final long ni() {
         return native_instance;
+    }
+
+    /**
+     * TO be used by transform
+     */
+    private float[] temp = new float[2];
+    /**
+     * apply transform [M] * [x,y,1]
+     * @param x - x coordinate
+     * @param y - y coordinate
+     * @return float[] with x' and y' values.
+     */
+    private final float[] transform(float x, float y){
+         float[] m = mValues;
+         temp[0] = m[0] * x + m[1] * y + m[2];
+         temp[1] = m[3] * x + m[4] * y + m[5];
+         
+         return temp;        
+    }
+    
+    private static long snativeID = 0;
+    private static long native_create(long native_src_or_zero){
+        return ++snativeID;
     }
 
 //    private static native long native_create(long native_src_or_zero);
