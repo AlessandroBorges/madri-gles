@@ -16,8 +16,11 @@
 
 package android.graphics;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.io.PrintWriter;
 
+import android.util.Log;
 import android.util.VecPool;
 
 
@@ -25,6 +28,8 @@ import android.util.VecPool;
  * The Matrix class holds a 3x3 matrix for transforming coordinates.
  */
 public class Matrix {
+    
+    private static final String TAG = "android.graphics.Matrix";
     
     /** Pool for temporary float[9] */
     private static VecPool vecPool = new VecPool(9); 
@@ -361,7 +366,7 @@ public class Matrix {
      */
     public void setScale(float sx, float sy, float px, float py) {
        // native_setScale(native_instance, sx, sy, px, py);        
-       getScale(this.mValues, sx, sy, px, py);  
+       setScale(this.mValues, sx, sy, px, py);  
     }
     
    
@@ -370,7 +375,7 @@ public class Matrix {
     
     
     
-    private static float[] getScale(float[] dest, float sx, float sy, float px,  float py) {
+    private static float[] setScale(float[] dest, float sx, float sy, float px,  float py) {
         // translate tmp so that the pivot is in 0,0
         setTranslate(dest, -px, -py);
         float[] tmp = vecPool.get();
@@ -518,6 +523,34 @@ public class Matrix {
                  dest[8] = 1;
                  return dest;
       }
+    
+    /**
+     * set rotate with translation
+     * @param dest
+     * @param degrees
+     * @param px
+     * @param py
+     * @return dest
+     */
+    private static float[] setRotate(float[] dest, float degrees, float px, float py) {
+        float[] tmp = dest;
+        float[] tmp2 = vecPool.get();
+        
+        // translate so that the pivot is in 0,0
+        setTranslate(tmp, -px, -py);
+        // rotate into tmp2
+        double rad = Math.toRadians(degrees);
+        float cos = (float)Math.cos(rad);
+        float sin = (float)Math.sin(rad);
+        
+        multiply(tmp, tmp, setRotate(tmp2, sin, cos));
+        // translate back the pivot back into tmp
+        multiply(tmp, tmp2, setTranslate(tmp2,px, py));
+
+        return tmp;
+    }
+    
+  
 
     /**
      * Set the matrix to rotate by the specified sine and cosine values, with a
@@ -663,7 +696,11 @@ public class Matrix {
      * M' = M * S(sx, sy, px, py)
      */
     public boolean preScale(float sx, float sy, float px, float py) {
-        native_preScale(native_instance, sx, sy, px, py);
+       // native_preScale(native_instance, sx, sy, px, py);
+        float[] tmp = vecPool.get();
+        tmp = setScale(tmp, sx, sy, px, py);
+        preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -672,7 +709,11 @@ public class Matrix {
      * M' = M * S(sx, sy)
      */
     public boolean preScale(float sx, float sy) {
-        native_preScale(native_instance, sx, sy);
+        //native_preScale(native_instance, sx, sy);
+        float[] tmp = vecPool.get();
+        setScale(tmp, sx, sy);
+        preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -681,7 +722,11 @@ public class Matrix {
      * M' = M * R(degrees, px, py)
      */
     public boolean preRotate(float degrees, float px, float py) {
-        native_preRotate(native_instance, degrees, px, py);
+       // native_preRotate(native_instance, degrees, px, py);
+        float[] tmp = vecPool.get();
+        setRotate(tmp, degrees, px, py);
+        preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -690,7 +735,11 @@ public class Matrix {
      * M' = M * R(degrees)
      */
     public boolean preRotate(float degrees) {
-        native_preRotate(native_instance, degrees);
+        //native_preRotate(native_instance, degrees);        
+        float[] tmp = vecPool.get();
+        setRotate(tmp, degrees);
+        preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -699,7 +748,11 @@ public class Matrix {
      * M' = M * K(kx, ky, px, py)
      */
     public boolean preSkew(float kx, float ky, float px, float py) {
-        native_preSkew(native_instance, kx, ky, px, py);
+       // native_preSkew(native_instance, kx, ky, px, py);
+        float[] tmp = vecPool.get();
+        setSkew(tmp, kx, ky, px, py);
+        preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -708,7 +761,11 @@ public class Matrix {
      * M' = M * K(kx, ky)
      */
     public boolean preSkew(float kx, float ky) {
-        native_preSkew(native_instance, kx, ky);
+        //native_preSkew(native_instance, kx, ky);
+        float[] tmp = vecPool.get();
+        setSkew(tmp, kx, ky);
+        preTransform(tmp);
+        vecPool.recycle(tmp);
         return true;
     }
 
@@ -728,7 +785,11 @@ public class Matrix {
      * M' = T(dx, dy) * M
      */
     public boolean postTranslate(float dx, float dy) {
-        native_postTranslate(native_instance, dx, dy);
+        //native_postTranslate(native_instance, dx, dy);
+        float[] temp = vecPool.get();
+            setTranslate(temp,dx,dy);
+            postTransform(temp);
+        vecPool.recycle(temp);
         return true;
     }
 
@@ -737,7 +798,11 @@ public class Matrix {
      * M' = S(sx, sy, px, py) * M
      */
     public boolean postScale(float sx, float sy, float px, float py) {
-        native_postScale(native_instance, sx, sy, px, py);
+        //native_postScale(native_instance, sx, sy, px, py);
+        float[] temp = vecPool.get();
+            setScale(temp, sx, sy, px, py);
+            postTransform(temp);
+        vecPool.recycle(temp);
         return true;
     }
 
@@ -758,7 +823,11 @@ public class Matrix {
      * M' = R(degrees, px, py) * M
      */
     public boolean postRotate(float degrees, float px, float py) {
-        native_postRotate(native_instance, degrees, px, py);
+        //native_postRotate(native_instance, degrees, px, py);
+        float[] temp = vecPool.get();
+            setRotate(temp, degrees, px, py);
+            postTransform(temp);
+        vecPool.recycle(temp);
         return true;
     }
 
@@ -767,7 +836,11 @@ public class Matrix {
      * M' = R(degrees) * M
      */
     public boolean postRotate(float degrees) {
-        native_postRotate(native_instance, degrees);
+       // native_postRotate(native_instance, degrees);
+        float[] temp = vecPool.get();
+            setRotate(temp, degrees);
+            postTransform(temp);
+        vecPool.recycle(temp);
         return true;
     }
 
@@ -776,7 +849,11 @@ public class Matrix {
      * M' = K(kx, ky, px, py) * M
      */
     public boolean postSkew(float kx, float ky, float px, float py) {
-        native_postSkew(native_instance, kx, ky, px, py);
+        //native_postSkew(native_instance, kx, ky, px, py);
+        float[] temp = vecPool.get();
+            setSkew(temp, kx, ky, px, py);
+            postTransform(temp);
+        vecPool.recycle(temp);
         return true;
     }
 
@@ -786,7 +863,10 @@ public class Matrix {
      */
     public boolean postSkew(float kx, float ky) {
         //native_postSkew(native_instance, kx, ky);
-        getSkew(mValues, kx, ky);
+        float[] temp = vecPool.get();
+            setSkew(temp, kx, ky);
+            postTransform(temp);
+        vecPool.recycle(temp);
         return true;
     }
 
@@ -928,11 +1008,70 @@ public class Matrix {
      * @param stf the ScaleToFit option
      * @return true if the matrix can be represented by the rectangle mapping.
      */
-    public boolean setRectToRect(RectF src, RectF dst, ScaleToFit stf) {
+    public boolean setRectToRect(RectF src, RectF dst, ScaleToFit stf_obj) {
         if (dst == null || src == null) {
             throw new NullPointerException();
         }
-        return native_setRectToRect(native_instance, src, dst, stf.nativeInt);
+        //return native_setRectToRect(native_instance, src, dst, stf.nativeInt);
+        
+        if (src.isEmpty()) {
+            reset(mValues);
+            return false;
+        }
+        
+        int stf = stf_obj.nativeInt;
+        
+        if (dst.isEmpty()) {
+            mValues[0] = mValues[1] = mValues[2] = mValues[3] = mValues[4] = mValues[5]
+               = mValues[6] = mValues[7] = 0;
+            mValues[8] = 1;
+        } else {
+            float    tx, sx = dst.width() / src.width();
+            float    ty, sy = dst.height() / src.height();
+            boolean  xLarger = false;
+
+            if (stf != ScaleToFit.FILL.nativeInt) {
+                if (sx > sy) {
+                    xLarger = true;
+                    sx = sy;
+                } else {
+                    sy = sx;
+                }
+            }
+
+            tx = dst.left - src.left * sx;
+            ty = dst.top - src.top * sy;
+            if (stf == ScaleToFit.CENTER.nativeInt || stf == ScaleToFit.END.nativeInt) {
+                float diff;
+
+                if (xLarger) {
+                    diff = dst.width() - src.width() * sy;
+                } else {
+                    diff = dst.height() - src.height() * sy;
+                }
+
+                if (stf == ScaleToFit.CENTER.nativeInt) {
+                    diff = diff / 2;
+                }
+
+                if (xLarger) {
+                    tx += diff;
+                } else {
+                    ty += diff;
+                }
+            }
+
+            mValues[0] = sx;
+            mValues[4] = sy;
+            mValues[2] = tx;
+            mValues[5] = ty;
+            mValues[1]  = mValues[3] = mValues[6] = mValues[7] = 0;
+
+        }
+        // shared cleanup
+        mValues[8] = 1;
+        
+        return true;
     }
 
     // private helper to perform range checks on arrays of "points"
@@ -967,9 +1106,25 @@ public class Matrix {
             throw new IllegalArgumentException();
         }
         checkPointArrays(src, srcIndex, dst, dstIndex, pointCount);
-        return native_setPolyToPoly(native_instance, src, srcIndex,
-                                    dst, dstIndex, pointCount);
+//        return native_setPolyToPoly(native_instance, src, srcIndex,
+//                                    dst, dstIndex, pointCount);
+        Log.d(TAG, "Matrix.setPolyToPoly is not supported.");
+        return false;
     }
+    
+    public AffineTransform getAffineTransform() {
+                return getAffineTransform(mValues);
+      }
+    
+    private static AffineTransform getAffineTransform(float[] matrix) {
+        // the AffineTransform constructor takes the value in a different order
+        // for a matrix [ 0 1 2 ]
+        // [ 3 4 5 ]
+        // the order is 0, 3, 1, 4, 2, 5...
+        return new AffineTransform( matrix[0], matrix[3], matrix[1],
+                                    matrix[4], matrix[2], matrix[5]);
+    }
+        
 
     /**
      * If this matrix can be inverted, return true and if inverse is not null,
@@ -977,7 +1132,22 @@ public class Matrix {
      * inverted, ignore inverse and return false.
      */
     public boolean invert(Matrix inverse) {
-        return native_invert(native_instance, inverse.native_instance);
+        //return native_invert(native_instance, inverse.native_instance);
+        
+        try {
+            AffineTransform affineTransform = getAffineTransform();
+            AffineTransform inverseTransform = affineTransform.createInverse();
+            inverse.mValues[0] = (float)inverseTransform.getScaleX();
+            inverse.mValues[1] = (float)inverseTransform.getShearX();
+            inverse.mValues[2] = (float)inverseTransform.getTranslateX();
+            inverse.mValues[3] = (float)inverseTransform.getScaleX();
+            inverse.mValues[4] = (float)inverseTransform.getShearY();
+            inverse.mValues[5] = (float)inverseTransform.getTranslateY();
+
+            return true;
+        } catch (NoninvertibleTransformException e) {
+            return false;
+        }
     }
 
     /**
