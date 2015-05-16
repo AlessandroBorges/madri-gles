@@ -530,7 +530,12 @@ public class GLES30Pipeline
      *  C function void glCompressedTexSubImage3D((GLenum) target, (GLint) level, (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLenum) format, (GLsizei) imageSize, (GLsizei) offset)
 
      **/
-    private static native void nGLCompressedTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int imageSize, int offset);/*
+    private static native void nGLCompressedTexSubImage3D( int target, 
+                                                           int level, 
+                                                           int xoffset, int yoffset, int zoffset, 
+                                                           int width, int height, int depth, 
+                                                           int format, 
+                                                           int imageSize, int offset);/*
           glCompressedTexSubImage3D((GLenum) target, 
                                       (GLint) level, 
                                       (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
@@ -5104,23 +5109,16 @@ public class GLES30Pipeline
     										int x, int y, 
     										int width, int height) {
     	
-        if (attachments == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
-        // now, the offset...
+        checkBuffer(attachments, 1, "attachments");
+        int offset = getOffset(attachments);       
         if (attachments.isDirect()) {
-            int offset = BufferInfo.getOffset(attachments);
             GLES30Pipeline.nGLInvalidateSubFramebuffer(target, 
                     numAttachments, 
                     attachments, offset, 
                     x, y, 
                     width, height);            
         } else {
-            if(!attachments.hasArray()){
-                throw new IllegalArgumentException(INTBUFFER_ND);
-            }
             int[] array = attachments.array();            
-            int offset = attachments.arrayOffset();            
             GLES30Pipeline.nGLInvalidateSubFramebuffer(target, numAttachments, array, offset, x, y, width, height);            
         }
     }
@@ -5219,6 +5217,7 @@ public class GLES30Pipeline
     					int pname, 
     					int bufSize,
     					int[] params, int offset) {
+        checkArray(params, offset, 1, "params");
         GLES30Pipeline.nGLGetInternalformativ(target, internalformat, pname, bufSize, params, offset);
     }
 
@@ -5249,14 +5248,13 @@ public class GLES30Pipeline
 
      **/
     public void glGetInternalformativ(int target, int internalformat, int pname, int bufSize, java.nio.IntBuffer params) {
-        if (params == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-        // now, the offset...
+        checkBuffer(params, 1, "params");
+        int offset = getOffset(params);
         if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
             GLES30Pipeline.nGLGetInternalformativ(target, internalformat, pname, bufSize, params, offset);            
         } else {
-            throw new IllegalArgumentException(INTBUFFER_NULL);
+            int[] array = params.array();
+            GLES30Pipeline.nGLGetInternalformativ(target, internalformat, pname, bufSize, array, offset); 
         }        
     }
 

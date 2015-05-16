@@ -10,6 +10,20 @@ package gles.internal;
 public class GLES31Pipeline
 	extends GLES30Pipeline
 	implements Pipeline {
+    
+    /** Includes **/
+    //@off
+    /*JNI
+      #include <GLES3/gl3.h>
+      #include <GLES3/gl3ext.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     */
 
 	/**
 	 * static & native initialization
@@ -77,7 +91,13 @@ public class GLES31Pipeline
      *  C function void glDispatchCompute ( GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z )
 
      * */
-    private static native void nGLDispatchCompute(int num_groups_x, int num_groups_y, int num_groups_z);
+    private static native void nGLDispatchCompute(int num_groups_x, int num_groups_y, int num_groups_z);/*
+       glDispatchCompute(
+        (GLuint)num_groups_x,
+        (GLuint)num_groups_y,
+        (GLuint)num_groups_z
+    );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -97,7 +117,9 @@ public class GLES31Pipeline
      *  C function void glDispatchComputeIndirect ( GLintptr indirect );
 
      * */
-    private static native void nGLDispatchComputeIndirect(long indirect);
+    private static native void nGLDispatchComputeIndirect(long indirect);/*
+       glDispatchComputeIndirect((GLintptr)indirect);
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -117,7 +139,9 @@ public class GLES31Pipeline
      *  C function void glDrawArraysIndirect ( GLenum mode, const void *indirect );
 
      * */
-    private static native void nGLDrawArraysIndirect(int mode, long indirect);
+    private static native void nGLDrawArraysIndirect(int mode, long indirect);/*
+       glDrawArraysIndirect(mode, (const void*)indirect);
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -137,7 +161,9 @@ public class GLES31Pipeline
      *  C function glDrawElementsIndirect ( GLenum mode, GLenum type, const void *indirect );
 
      * */
-    private static native void nGLDrawElementsIndirect(int mode, int type, long indirect);
+    private static native void nGLDrawElementsIndirect(int mode, int type, long indirect);/*
+       glDrawElementsIndirect(mode, type, (const void*)indirect);
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -157,7 +183,9 @@ public class GLES31Pipeline
      *  C function void glFramebufferParameteri ( GLenum target, GLenum pname, GLint param )
 
      * */
-    private static native void nGLFramebufferParameteri(int target, int pname, int param);
+    private static native void nGLFramebufferParameteri(int target, int pname, int param);/*
+             glFramebufferParameteri( (GLenum)target, (GLenum)pname, (GLint)param );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -167,6 +195,7 @@ public class GLES31Pipeline
 
      * */
     public void glGetFramebufferParameteriv(int target, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, "params");
         GLES31Pipeline.nGLGetFramebufferParameteriv(target, pname, params, offset);
     }
 
@@ -177,7 +206,13 @@ public class GLES31Pipeline
      *  C function void glGetFramebufferParameteriv ( GLenum target, GLenum pname, GLint *params )
 
      * */
-    private static native void nGLGetFramebufferParameteriv(int target, int pname, int[] params, int offset);
+    private static native void nGLGetFramebufferParameteriv(int target, int pname, int[] params, int offset);/*
+      glGetFramebufferParameteriv(
+        (GLenum)target,
+        (GLenum)pname,
+        (GLint *)(params + offset);
+    );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -187,7 +222,14 @@ public class GLES31Pipeline
 
      * */
     public void glGetFramebufferParameteriv(int target, int pname, java.nio.IntBuffer params) {
-        GLES31Pipeline.nGLGetFramebufferParameteriv(target, pname, params);
+        checkBuffer(params, 0, "params");
+        int offset = getOffset(params);
+        if (params.isDirect()) {            
+            GLES31Pipeline.nGLGetFramebufferParameteriv(target, pname, params, offset);
+        } else {           
+            int[] array = params.array();
+            GLES31Pipeline.nGLGetFramebufferParameteriv(target, pname, array, offset);
+        } 
     }
 
     /**
@@ -197,7 +239,12 @@ public class GLES31Pipeline
      *  C function void glGetFramebufferParameteriv ( GLenum target, GLenum pname, GLint *params )
 
      * */
-    private static native void nGLGetFramebufferParameteriv(int target, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetFramebufferParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
+           glGetFramebufferParameteriv(
+        (GLenum)target,
+        (GLenum)pname,
+        (GLint *)(params + offset) );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -206,7 +253,8 @@ public class GLES31Pipeline
      *  C function void glGetProgramInterfaceiv ( GLuint program, GLenum programInterface, GLenum pname, GLint *params )
 
      * */
-    public void glGetProgramInterfaceiv(int program, int programInterface, int pname, int[] params, int offset) {
+    public void glGetProgramInterfaceiv( int program, int programInterface, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, "params");
         GLES31Pipeline.nGLGetProgramInterfaceiv(program, programInterface, pname, params, offset);
     }
 
@@ -217,7 +265,16 @@ public class GLES31Pipeline
      *  C function void glGetProgramInterfaceiv ( GLuint program, GLenum programInterface, GLenum pname, GLint *params )
 
      * */
-    private static native void nGLGetProgramInterfaceiv(int program, int programInterface, int pname, int[] params, int offset);
+    private static native void nGLGetProgramInterfaceiv( int program, 
+                                                         int programInterface, 
+                                                         int pname, 
+                                                         int[] params, int offset);/*
+       glGetProgramInterfaceiv( (GLuint)program,
+                                (GLenum)programInterface,
+                                (GLenum)pname,
+                                (GLint *)(params + offset)  );
+                                                         
+   */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -227,7 +284,14 @@ public class GLES31Pipeline
 
      * */
     public void glGetProgramInterfaceiv(int program, int programInterface, int pname, java.nio.IntBuffer params) {
-        GLES31Pipeline.nGLGetProgramInterfaceiv(program, programInterface, pname, params);
+        checkBuffer(params, 0, "params");
+        int offset = getOffset(params);
+        if (params.isDirect()) {            
+            GLES31Pipeline.nGLGetProgramInterfaceiv(program, programInterface, pname, params, offset);
+        } else {           
+            int[] array = params.array();
+            GLES31Pipeline.nGLGetProgramInterfaceiv(program, programInterface, pname, array, offset);
+        }  
     }
 
     /**
@@ -237,7 +301,15 @@ public class GLES31Pipeline
      *  C function void glGetProgramInterfaceiv ( GLuint program, GLenum programInterface, GLenum pname, GLint *params )
 
      * */
-    private static native void nGLGetProgramInterfaceiv(int program, int programInterface, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetProgramInterfaceiv( int program, 
+                                                         int programInterface, 
+                                                         int pname, 
+                                                         java.nio.IntBuffer params, int offset);/*
+         glGetProgramInterfaceiv( (GLuint)program,
+                                  (GLenum)programInterface,
+                                  (GLenum)pname,
+                                  (GLint *)(params + offset)   );                                                 
+   */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -247,6 +319,9 @@ public class GLES31Pipeline
 
      * */
     public int glGetProgramResourceIndex(int program, int programInterface, String name) {
+        if(null == name){
+            throw new IllegalArgumentException("name==null");
+        }
        return GLES31Pipeline.nGLGetProgramResourceIndex(program, programInterface, name);
     }
 
@@ -257,7 +332,9 @@ public class GLES31Pipeline
      *  C function GLuint glGetProgramResourceIndex ( GLuint program, GLenum programInterface, const GLchar *name )
 
      * */
-    private static native int nGLGetProgramResourceIndex(int program, int programInterface, String name);
+    private static native int nGLGetProgramResourceIndex(int program, int programInterface, String name);/*
+         return (jint) glGetProgramResourceIndex( (GLuint)program,  (GLenum)programInterface, (GLchar *)name);
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -266,8 +343,8 @@ public class GLES31Pipeline
      *  C function void glGetProgramResourceName ( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name )
 
      * */
-    public String glGetProgramResourceName(int program, int programInterface, int index) {
-        return GLES31Pipeline.nGLGetProgramResourceName(program, programInterface, index);
+    public String glGetProgramResourceName(int program, int programInterface, int index) {        
+       return GLES31Pipeline.nGLGetProgramResourceName(program, programInterface, index);
     }
 
     /**
@@ -277,7 +354,27 @@ public class GLES31Pipeline
      *  C function void glGetProgramResourceName ( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name )
 
      * */
-    private static native String nGLGetProgramResourceName(int program, int programInterface, int index);
+    private static native String nGLGetProgramResourceName(int program, int programInterface, int index);/*
+      // based on code from 
+      // http://people.freedesktop.org/~idr/OpenGL_tutorials/05-attributes.html
+      GLint  max_length = 0;
+            
+       //get max length of attribute
+       glGetProgramInterfaceiv(program, programInterface,  GL_MAX_NAME_LENGTH, &max_length);
+        //alloc some space
+        std::vector<GLchar> name(max_length + 1);
+        
+        glGetProgramResourceName ( (GLuint) program, 
+                                   (GLenum) programInterface, 
+                                   (GLuint) index, 
+                                   (GLsizei) max_length, 
+                                    &max_length, 
+                                    &name[0] );
+        
+         jstring result = env->NewStringUTF(&name[0]);
+         return result; 
+       
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -286,8 +383,24 @@ public class GLES31Pipeline
      *  C function void glGetProgramResourceiv ( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params )
 
      * */
-    public void glGetProgramResourceiv(int program, int programInterface, int index, int propCount, int[] props, int propsOffset, int bufSize, int[] length, int lengthOffset, int[] params, int paramsOffset) {
-        GLES31Pipeline.nGLGetProgramResourceiv(program, programInterface, index, propCount, props, propsOffset, bufSize, length, lengthOffset, params, paramsOffset);
+    public void glGetProgramResourceiv( int program, 
+                                        int programInterface, 
+                                        int index, 
+                                        int propCount, 
+                                        int[] props, int propsOffset, 
+                                        int bufSize, 
+                                        int[] length, int lengthOffset, 
+                                        int[] params, int paramsOffset) {
+        checkArray(props, propsOffset, 1, "props");
+        checkArray(length, lengthOffset, 1, "length");
+        checkArray(params, paramsOffset, 1, "params");
+        GLES31Pipeline.nGLGetProgramResourceiv( program, 
+                                                programInterface, 
+                                                index, 
+                                                propCount, 
+                                                props, propsOffset, bufSize, 
+                                                length, lengthOffset, 
+                                                params, paramsOffset);
     }
 
     /**
@@ -297,7 +410,22 @@ public class GLES31Pipeline
      *  C function void glGetProgramResourceiv ( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params )
 
      * */
-    private static native void nGLGetProgramResourceiv(int program, int programInterface, int index, int propCount, int[] props, int propsOffset, int bufSize, int[] length, int lengthOffset, int[] params, int paramsOffset);
+    private static native void nGLGetProgramResourceiv( int program, 
+                                                        int programInterface, 
+                                                        int index, int propCount, 
+                                                        int[] props, int propsOffset, 
+                                                        int bufSize, 
+                                                        int[] length, int lengthOffset, 
+                                                        int[] params, int paramsOffset);/*    
+        glGetProgramResourceiv( (GLuint)program,
+                                (GLenum)programInterface,
+                                (GLuint)index,
+                                (GLsizei)propCount,
+                                (GLenum *)(props + propsOffset) ,
+                                (GLsizei)bufSize,
+                                (GLsizei *)(length + lengthOffset) ,
+                                (GLint *)(params + paramsOffset) );                                                
+   */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -306,8 +434,47 @@ public class GLES31Pipeline
      *  C function void glGetProgramResourceiv ( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params )
 
      * */
-    public void glGetProgramResourceiv(int program, int programInterface, int index, int propCount, java.nio.IntBuffer props, int bufSize, java.nio.IntBuffer length, java.nio.IntBuffer params) {
-        GLES31Pipeline.nGLGetProgramResourceiv(program, programInterface, index, propCount, props, bufSize, length, params);
+    public void glGetProgramResourceiv( int program, 
+                                        int programInterface, 
+                                        int index, int propCount, 
+                                        java.nio.IntBuffer props, int bufSize, 
+                                        java.nio.IntBuffer length, 
+                                        java.nio.IntBuffer params) {
+        
+        checkBuffer(props, 1, "props");
+        checkBuffer(length, 1, "length");
+        checkBuffer(params, 1, "params");
+        
+        int propsOffset = getOffset(props);
+        int lengthOffset = getOffset(props);
+        int paramsOffset = getOffset(props);
+        
+        if(props.isDirect() && length.isDirect() && params.isDirect()){
+            GLES31Pipeline.nGLGetProgramResourceiv( program, 
+                    programInterface, 
+                    index, 
+                    propCount, 
+                    props, propsOffset,  
+                    bufSize, 
+                    length, lengthOffset,
+                    params, paramsOffset);
+        }else 
+         if(props.hasArray() && length.hasArray() && params.hasArray()){             
+             int[] propsArray = props.array();
+             int[] lenArray = length.array();
+             int[] paramArray = params.array();
+             
+             GLES31Pipeline.nGLGetProgramResourceiv( program, 
+                     programInterface, 
+                     index, 
+                     propCount, 
+                     propsArray, propsOffset,  
+                     bufSize, 
+                     lenArray, lengthOffset,
+                     paramArray, paramsOffset);
+         }else{
+             throw new IllegalArgumentException("inconsistent buffers. Please use all direct or all heap buffers.");
+         }
     }
 
     /**
@@ -317,7 +484,24 @@ public class GLES31Pipeline
      *  C function void glGetProgramResourceiv ( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params )
 
      * */
-    private static native void nGLGetProgramResourceiv(int program, int programInterface, int index, int propCount, java.nio.IntBuffer props, int bufSize, java.nio.IntBuffer length, java.nio.IntBuffer params);
+    private static native void nGLGetProgramResourceiv(int program, 
+                                                       int programInterface, 
+                                                       int index, 
+                                                       int propCount, 
+                                                       java.nio.IntBuffer props, int propsOffset, 
+                                                       int bufSize, 
+                                                       java.nio.IntBuffer length, int lengthOffset, 
+                                                       java.nio.IntBuffer params, int paramsOffset);/*
+        
+        glGetProgramResourceiv( (GLuint)program,
+                                (GLenum)programInterface,
+                                (GLuint)index,
+                                (GLsizei)propCount,
+                                (GLenum *)(props + propsOffset) ,
+                                (GLsizei)bufSize,
+                                (GLsizei *)(length + lengthOffset) ,
+                                (GLint *)(params + paramsOffset) );                                                
+   */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -327,6 +511,9 @@ public class GLES31Pipeline
 
      * */
     public int glGetProgramResourceLocation(int program, int programInterface, String name) {
+        if(null == name){
+            throw new IllegalArgumentException("name == null");
+        }
         return GLES31Pipeline.nGLGetProgramResourceLocation(program, programInterface, name);
     }
 
@@ -337,7 +524,13 @@ public class GLES31Pipeline
      *  C function GLint glGetProgramResourceLocation ( GLuint program, GLenum programInterface, const GLchar *name )
 
      * */
-    private static native int nGLGetProgramResourceLocation(int program, int programInterface, String name);
+    private static native int nGLGetProgramResourceLocation(int program, int programInterface, String name);/*
+        
+        return  glGetProgramResourceLocation( (GLuint)program, 
+                                              (GLenum)programInterface,
+                                              (GLchar *)name );
+        
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -357,7 +550,9 @@ public class GLES31Pipeline
      *  C function void glUseProgramStages ( GLuint pipeline, GLbitfield stages, GLuint program )
 
      * */
-    private static native void nGLUseProgramStages(int pipeline, int stages, int program);
+    private static native void nGLUseProgramStages(int pipeline, int stages, int program);/*
+           glUseProgramStages((GLuint)pipeline, (GLbitfield)stages, (GLuint)program );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -377,7 +572,9 @@ public class GLES31Pipeline
      *  C function void glActiveShaderProgram ( GLuint pipeline, GLuint program )
 
      * */
-    private static native void nGLActiveShaderProgram(int pipeline, int program);
+    private static native void nGLActiveShaderProgram(int pipeline, int program);/*
+           glActiveShaderProgram( (GLuint)pipeline, (GLuint)program );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -387,7 +584,10 @@ public class GLES31Pipeline
 
      * */
     public int glCreateShaderProgramv(int type, String[] strings) {
-        return GLES31Pipeline.nGLCreateShaderProgramv(type, strings);
+        if(null == strings){
+            throw new IllegalArgumentException("strings == null");
+        }
+        return GLES31Pipeline.nGLCreateShaderProgramv(type, strings.length, strings);
     }
 
     /**
@@ -397,7 +597,39 @@ public class GLES31Pipeline
      *  C function GLuint glCreateShaderProgramv ( GLenum type, GLsizei count, const GLchar *const *strings )
 
      * */
-    private static native int nGLCreateShaderProgramv(int type, String[] strings);
+    private static native int nGLCreateShaderProgramv(int type, int stringCount, String[] stringArray);/*
+    
+                      
+            std::vector<jstring> jstringVec(stringCount);
+            std::vector<char *>  charVec(stringCount); 
+             
+            for (int i=0; i<stringCount; i++) {
+                 jstring string = (jstring) GetObjectArrayElement(env, stringArray, i);
+                 const char *rawString = GetStringUTFChars(env, string, 0);             
+                 jstringVec.[i] = string;
+                 charVec.[i] = rawString;           
+            }
+            ////////////////////////////////////////
+             
+             char * strings[] = &charVec[0];
+             
+             GLint result = glCreateShaderProgramv ( (GLenum) type, (GLsizei) stringCount,  strings );
+            
+            //////////////////////////////////////
+            // Done
+            for (int i=0; i<stringCount; i++) {
+               jstring string = jstringVec.[i];
+               const char *rawString = charVec.[i];
+               
+                env->ReleaseStringUTFChars(string, rawString);
+            }
+            ///////////////////////////////////////////
+             
+             return result;
+            
+      
+    
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -417,7 +649,9 @@ public class GLES31Pipeline
      *  C function void glBindProgramPipeline ( GLuint pipeline )
 
      * */
-    private static native void nGLBindProgramPipeline(int pipeline);
+    private static native void nGLBindProgramPipeline(int pipeline);/*
+         glBindProgramPipeline( (GLuint) pipeline );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -427,6 +661,7 @@ public class GLES31Pipeline
 
      * */
     public void glDeleteProgramPipelines(int n, int[] pipelines, int offset) {
+        checkArray(pipelines, offset, 1, "pipelines");
         GLES31Pipeline.nGLDeleteProgramPipelines(n, pipelines, offset);
     }
 
@@ -437,7 +672,9 @@ public class GLES31Pipeline
      *  C function void glDeleteProgramPipelines ( GLsizei n, const GLuint *pipelines )
 
      * */
-    private static native void nGLDeleteProgramPipelines(int n, int[] pipelines, int offset);
+    private static native void nGLDeleteProgramPipelines(int n, int[] pipelines, int offset);/*
+       glDeleteProgramPipelines ( (GLsizei) n, (GLuint *) (pipelines + offset));
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -447,7 +684,14 @@ public class GLES31Pipeline
 
      * */
     public void glDeleteProgramPipelines(int n, java.nio.IntBuffer pipelines) {
-        GLES31Pipeline.nGLDeleteProgramPipelines(n, pipelines);
+        checkBuffer(pipelines, 0, "params");
+        int offset = getOffset(pipelines);
+        if (pipelines.isDirect()) {            
+            GLES31Pipeline.nGLDeleteProgramPipelines(n, pipelines, offset);
+        } else {           
+            int[] array = pipelines.array();
+            GLES31Pipeline.nGLDeleteProgramPipelines(n, array, offset);
+        }
     }
 
     /**
@@ -457,7 +701,9 @@ public class GLES31Pipeline
      *  C function void glDeleteProgramPipelines ( GLsizei n, const GLuint *pipelines )
 
      * */
-    private static native void nGLDeleteProgramPipelines(int n, java.nio.IntBuffer pipelines);
+    private static native void nGLDeleteProgramPipelines(int n, java.nio.IntBuffer pipelines, int offset);/*
+         glDeleteProgramPipelines ( (GLsizei) n, (GLuint *) (pipelines + offset));
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -467,6 +713,7 @@ public class GLES31Pipeline
 
      * */
     public void glGenProgramPipelines(int n, int[] pipelines, int offset) {
+        checkArray(pipelines, offset, 1, "pipelines");
         GLES31Pipeline.nGLGenProgramPipelines(n, pipelines, offset);
     }
 
@@ -477,7 +724,9 @@ public class GLES31Pipeline
      *  C function void glGenProgramPipelines ( GLsizei n, GLuint *pipelines )
 
      * */
-    private static native void nGLGenProgramPipelines(int n, int[] pipelines, int offset);
+    private static native void nGLGenProgramPipelines(int n, int[] pipelines, int offset);/*
+        glGenProgramPipelines ( (GLsizei) n, (GLuint *)(pipelines + offset) );
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !

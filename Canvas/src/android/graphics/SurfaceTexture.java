@@ -399,7 +399,7 @@ public class SurfaceTexture {
     private native void nativeInit(boolean isDetached, int texName,
                                    boolean singleBufferMode, 
                                    WeakReference<SurfaceTexture> weakSelf)
-                                   throws Exception;//Surface.OutOfResourcesException;
+                                   throws SurfaceTexture.OutOfResourcesException;
     private native void nativeFinalize();
     private native void nativeGetTransformMatrix(float[] mtx);
     private native long nativeGetTimestamp();
@@ -421,4 +421,8 @@ public class SurfaceTexture {
         // TODO Auto-generated method stub
         return 0;
     }
+    
+    
+   
+    
 }
