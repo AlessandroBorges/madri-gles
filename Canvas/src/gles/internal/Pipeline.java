@@ -6,8 +6,11 @@ package gles.internal;
  *
  */
 public interface Pipeline {
-	
-		
-	public Pipeline getPipelineInstance();
+
+    /**
+     * Get a Pipeline instance
+     * @return
+     */
+    public Pipeline getPipelineInstance();
 
 }
