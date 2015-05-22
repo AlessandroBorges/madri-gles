@@ -12,30 +12,35 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
 import android.opengl.GLES10;
+import android.opengl.GLES11;
+import android.opengl.GLES20;
 import gles.util.BufferInfo;
 
 public class GLES10Pipeline implements Pipeline {
-	
     
-        private static String PARAMS = "params";
     
-	/**
-	 * static & native initialization
-	 */
-	static{
-		
-	}
-	
-	/**
-	 * Private constructor
-	 */
-	protected GLES10Pipeline(){}
+    private static String PARAMS = "params";
+    private static String M = "m";
+    private static String POINTER = "pointer";
+    private static String DATA = "data";
+    
+    /**
+     * static & native initialization
+     */
+    static{
+        
+    }
+    
+    /**
+     * Private constructor
+     */
+    protected GLES10Pipeline(){}
 
-	/**
-	 * 
-	 */
-	private static Pipeline instance;
-	
+    /**
+     * 
+     */
+    private static Pipeline instance;
+    
     /**
      * Get a instance of this Pipeline implementation
      * 
@@ -411,7 +416,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glColorPointerBounds(int size, int type, int stride, java.nio.Buffer pointer, int remaining) {
-        checkBuffer(pointer, 0, "pointer");
+        checkBuffer(pointer, 0, POINTER);
         int offset = getOffset(pointer);
         if (pointer.isDirect()){
             GLES10Pipeline.nGLColorPointer(size, type, stride, pointer, offset);
@@ -464,7 +469,7 @@ public class GLES10Pipeline implements Pipeline {
                                        int imageSize, 
                                        java.nio.Buffer data) {
         
-        checkBuffer(data, 0, "pointer");
+        checkBuffer(data, 0, POINTER);
         int offset = getOffset(data);
         if (data.isDirect()){
             GLES10Pipeline.nGLCompressedTexImage2D( target, 
@@ -551,7 +556,7 @@ public class GLES10Pipeline implements Pipeline {
                                           int format,
                                           int imageSize,
                                           java.nio.Buffer data) {
-        checkBuffer(data, 0, "data");
+        checkBuffer(data, 0, DATA);
         int offset = getOffset(data);
         if (data.isDirect()){
             GLES10Pipeline.nGLCompressedTexSubImage2D(target,
@@ -1418,7 +1423,27 @@ public class GLES10Pipeline implements Pipeline {
               return (jnit)  glGetError ();
     */
 
-    
+    /**
+     * Get needed vector length for light 
+     * @param pname paramenter name
+     * @return needed vector length
+     */
+    protected int getNeededLight(int pname) {
+        int _needed = 1;
+        switch (pname) {
+
+        case GLES11.GL_SPOT_DIRECTION:
+            _needed = 3;
+            break;
+        case GLES11.GL_AMBIENT:
+        case GLES11.GL_DIFFUSE:
+        case GLES11.GL_SPECULAR:
+        case GLES11.GL_EMISSION:
+            _needed = 4;
+            break;        
+        }
+        return _needed;
+    }
     /*
      * returns the number of values glGet returns for a given pname.
      *
@@ -1430,62 +1455,64 @@ public class GLES10Pipeline implements Pipeline {
      * that unknown pname needs more than 1 value, then the validation check
      * is incomplete and the app may crash if it passed the wrong number params.
      */
-    private  int getNeededCount(int pname) {
+    protected  int getNeededCount(int pname) {
         int needed = 1;
-    //#ifdef GL_ES_VERSION_2_0
-        // GLES 2.x pnames
-        switch (pname) {
-            case GL_ALIASED_LINE_WIDTH_RANGE:
-            case GL_ALIASED_POINT_SIZE_RANGE:
-                needed = 2;
-                break;
-            case GL_BLEND_COLOR:
-            case GL_COLOR_CLEAR_VALUE:
-            case GL_COLOR_WRITEMASK:
-            case GL_SCISSOR_BOX:
-            case GL_VIEWPORT:
-                needed = 4;
-                break;
-            case GL_COMPRESSED_TEXTURE_FORMATS:
-                glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &needed);
-                break;
-            case GL_SHADER_BINARY_FORMATS:
-                glGetIntegerv(GL_NUM_SHADER_BINARY_FORMATS, &needed);
-                break;
-        }
-   // #endif
-  //  #ifdef GL_VERSION_ES_CM_1_1
-        // GLES 1.x pnames
+        int[] array;  
+//        switch (pname) {
+//            case GLES20.GL_ALIASED_LINE_WIDTH_RANGE:
+//            case GLES20.GL_ALIASED_POINT_SIZE_RANGE:
+//                needed = 2;
+//                break;
+//            case GLES20.GL_BLEND_COLOR:
+//            case GLES20.GL_COLOR_CLEAR_VALUE:
+//            case GLES20.GL_COLOR_WRITEMASK:
+//            case GLES20.GL_SCISSOR_BOX:
+//            case GLES20.GL_VIEWPORT:
+//                needed = 4;
+//                break;
+//            case GLES20.GL_COMPRESSED_TEXTURE_FORMATS:
+//                array = new int[1];
+//                glGetIntegerv(GLES20.GL_NUM_COMPRESSED_TEXTURE_FORMATS, array,0);
+//                return array[0];
+//                
+//            case GLES20.GL_SHADER_BINARY_FORMATS:
+//                array = new int[1];
+//                glGetIntegerv(GLES20.GL_NUM_SHADER_BINARY_FORMATS, array,0);
+//                return array[0];
+//               
+//        }
+   
         switch (pname) {
             case GLES10.GL_ALIASED_LINE_WIDTH_RANGE:
             case GLES10.GL_ALIASED_POINT_SIZE_RANGE:
-            case GLES10.GL_DEPTH_RANGE:
+            case GLES11.GL_DEPTH_RANGE:
             case GLES10.GL_SMOOTH_LINE_WIDTH_RANGE:
             case GLES10.GL_SMOOTH_POINT_SIZE_RANGE:
                 needed = 2;
                 break;
-            case GLES10.GL_CURRENT_NORMAL:
-            case GLES10.GL_POINT_DISTANCE_ATTENUATION:
+            case GLES11.GL_CURRENT_NORMAL:
+            case GLES11.GL_POINT_DISTANCE_ATTENUATION:
                 needed = 3;
                 break;
-            case GLES10.GL_COLOR_CLEAR_VALUE:
-            case GLES10.GL_COLOR_WRITEMASK:
-            case GLES10.GL_CURRENT_COLOR:
-            case GLES10.GL_CURRENT_TEXTURE_COORDS:
+            case GLES11.GL_COLOR_CLEAR_VALUE:
+            case GLES11.GL_COLOR_WRITEMASK:
+            case GLES11.GL_CURRENT_COLOR:
+            case GLES11.GL_CURRENT_TEXTURE_COORDS:
             case GLES10.GL_FOG_COLOR:
             case GLES10.GL_LIGHT_MODEL_AMBIENT:
-            case GLES10.GL_SCISSOR_BOX:
-            case GLES10.GL_VIEWPORT:
+            case GLES11.GL_SCISSOR_BOX:
+            case GLES11.GL_VIEWPORT:
                 needed = 4;
                 break;
-            case GLES10.GL_MODELVIEW_MATRIX:
-            case GLES10.GL_PROJECTION_MATRIX:
-            case GLES10.GL_TEXTURE_MATRIX:
+            case GLES11.GL_MODELVIEW_MATRIX:
+            case GLES11.GL_PROJECTION_MATRIX:
+            case GLES11.GL_TEXTURE_MATRIX:
                 needed = 16;
                 break;
-            case GLES10.GL_COMPRESSED_TEXTURE_FORMATS:
-                int[] array = new int[1];
-                glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, array, 0);
+            case GLES10.GL_COMPRESSED_TEXTURE_FORMATS:  
+                array = new int[1];
+                // direct call
+                nGLGetIntegerv(GLES11.GL_NUM_COMPRESSED_TEXTURE_FORMATS, array, 0);
                 needed = array[0];
                 break;
         }
@@ -1502,6 +1529,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glGetIntegerv(int pname, int[] params, int offset) {
+        int needed = getNeededCount(pname);
         checkArray(params, offset, needed, PARAMS);
         GLES10Pipeline.nGLGetIntegerv(pname, params, offset);
     }
@@ -1515,7 +1543,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glGetIntegerv( (GLenum)  pname, (GLint)  *params )
 
      * */
-    private static native void nGLGetIntegerv(int pname, int[] params, int offset);
+    private static native void nGLGetIntegerv(int pname, int[] params, int offset);/*
+         glGetIntegerv( (GLenum)  pname, (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1524,8 +1554,16 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glGetIntegerv( (GLenum)  pname, (GLint)  *params )
 
      * */
-    public void glGetIntegerv(int pname, java.nio.IntBuffer params) {
-        GLES10Pipeline.nGLGetIntegerv(pname, params);
+    public void glGetIntegerv(int pname, java.nio.IntBuffer params) {        
+        int needed = getNeededCount(pname);
+        checkBuffer(params, needed, "params");
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES10Pipeline.nGLGetIntegerv(pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES10Pipeline.nGLGetIntegerv(pname, array, offset);
+        }
     }
 
     /**
@@ -1535,7 +1573,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glGetIntegerv( (GLenum)  pname, (GLint)  *params )
 
      * */
-    private static native void nGLGetIntegerv(int pname, java.nio.IntBuffer params);
+    private static native void nGLGetIntegerv(int pname, java.nio.IntBuffer params, int offset);/*
+             glGetIntegerv( (GLenum)  pname, (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1555,7 +1595,10 @@ public class GLES10Pipeline implements Pipeline {
      *  C function const GLubyte * glGetString( (GLenum)  name )
 
      * */
-    private static native String nGLGetString(int name);
+    private static native String nGLGetString(int name);/*
+        const char* str = (const char*) glGetString((GLenum) name);
+        return env->NewStringUTF(str);
+    */
 
     /**
      * <pre>
@@ -1575,7 +1618,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glHint( (GLenum)  target, (GLenum)  mode )
 
      * */
-    private static native void nGLHint(int target, int mode);
+    private static native void nGLHint(int target, int mode);/*
+         glHint( (GLenum)  target, (GLenum)  mode );
+    */
 
     /**
      * <pre>
@@ -1595,7 +1640,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightModelf( (GLenum)  pname, (GLfloat)  param )
 
      * */
-    private static native void nGLLightModelf(int pname, float param);
+    private static native void nGLLightModelf(int pname, float param);/*
+        glLightModelf( (GLenum)  pname, (GLfloat)  param );
+    */
 
     /**
      * <pre>
@@ -1605,6 +1652,8 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightModelfv(int pname, float[] params, int offset) {
+        int needed = pname == GLES10.GL_LIGHT_MODEL_AMBIENT ? 4 : 1;
+        checkArray(params, offset, needed, PARAMS);
         GLES10Pipeline.nGLLightModelfv(pname, params, offset);
     }
 
@@ -1615,7 +1664,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightModelfv( (GLenum)  pname, const (GLfloat)  *params )
 
      * */
-    private static native void nGLLightModelfv(int pname, float[] params, int offset);
+    private static native void nGLLightModelfv(int pname, float[] params, int offset);/*
+          glLightModelfv( (GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1625,7 +1676,15 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightModelfv(int pname, java.nio.FloatBuffer params) {
-        GLES10Pipeline.nGLLightModelfv(pname, params);
+        int needed = pname == GLES10.GL_LIGHT_MODEL_AMBIENT ? 4 : 1;
+        checkBuffer(params, needed, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES10Pipeline.nGLLightModelfv(pname, params, offset);
+        }else{
+            float[] array = params.array();
+            GLES10Pipeline.nGLLightModelfv(pname, array, offset);
+        }        
     }
 
     /**
@@ -1635,7 +1694,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightModelfv( (GLenum)  pname, const (GLfloat)  *params )
 
      * */
-    private static native void nGLLightModelfv(int pname, java.nio.FloatBuffer params);
+    private static native void nGLLightModelfv(int pname, java.nio.FloatBuffer params, int offset);/*
+           glLightModelfv( (GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1655,7 +1716,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightModelx( (GLenum)  pname, (GLfixed)  param )
 
      * */
-    private static native void nGLLightModelx(int pname, int param);
+    private static native void nGLLightModelx(int pname, int param);/*
+      glLightModelx( (GLenum)  pname, (GLfixed)  param );
+    */
 
     /**
      * <pre>
@@ -1665,6 +1728,8 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightModelxv(int pname, int[] params, int offset) {
+        int needed = pname == GLES10.GL_LIGHT_MODEL_AMBIENT ? 4 : 1;
+        checkArray(params, offset, needed, PARAMS);
         GLES10Pipeline.nGLLightModelxv(pname, params, offset);
     }
 
@@ -1675,7 +1740,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightModelxv( (GLenum)  pname, (GLfixed *) params )
 
      * */
-    private static native void nGLLightModelxv(int pname, int[] params, int offset);
+    private static native void nGLLightModelxv(int pname, int[] params, int offset);/*
+        glLightModelxv( (GLenum)  pname, (GLfixed *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1685,7 +1752,15 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightModelxv(int pname, java.nio.IntBuffer params) {
-        GLES10Pipeline.nGLLightModelxv(pname, params);
+        int needed = pname == GLES10.GL_LIGHT_MODEL_AMBIENT ? 4 : 1;
+        checkBuffer(params, needed, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES10Pipeline.nGLLightModelxv(pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES10Pipeline.nGLLightModelxv(pname, array, offset);
+        }        
     }
 
     /**
@@ -1695,7 +1770,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightModelxv( (GLenum)  pname, (GLfixed *) params )
 
      * */
-    private static native void nGLLightModelxv(int pname, java.nio.IntBuffer params);
+    private static native void nGLLightModelxv(int pname, java.nio.IntBuffer params, int offset);/*
+         glLightModelxv( (GLenum)  pname, (GLfixed *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1715,8 +1792,12 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightf( (GLenum)  light, (GLenum)  pname, (GLfloat)  param )
 
      * */
-    private static native void nGLLightf(int light, int pname, float param);
+    private static native void nGLLightf(int light, int pname, float param);/*
+          glLightf( (GLenum)  light, (GLenum)  pname, (GLfloat)  param );
+    */
 
+    
+    
     /**
      * <pre>
      * Delegate Method generated from GLES10.glLightfv([int light, int pname, float[] params, int offset]);
@@ -1725,6 +1806,8 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightfv(int light, int pname, float[] params, int offset) {
+        int needed = getNeededLight(pname);
+        checkArray(params, offset, needed, PARAMS);
         GLES10Pipeline.nGLLightfv(light, pname, params, offset);
     }
 
@@ -1735,7 +1818,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightfv( (GLenum)  light, (GLenum)  pname, const (GLfloat)  *params )
 
      * */
-    private static native void nGLLightfv(int light, int pname, float[] params, int offset);
+    private static native void nGLLightfv(int light, int pname, float[] params, int offset);/*
+          glLightfv( (GLenum)  light, (GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1745,7 +1830,15 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightfv(int light, int pname, java.nio.FloatBuffer params) {
-        GLES10Pipeline.nGLLightfv(light, pname, params);
+        int needed = getNeededLight(pname);
+        checkBuffer(params, needed, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES10Pipeline.nGLLightfv(light, pname, params, offset);
+        }else{
+            float[] array = params.array();
+            GLES10Pipeline.nGLLightfv(light, pname, array, offset);
+        }
     }
 
     /**
@@ -1755,7 +1848,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightfv( (GLenum)  light, (GLenum)  pname, const (GLfloat)  *params )
 
      * */
-    private static native void nGLLightfv(int light, int pname, java.nio.FloatBuffer params);
+    private static native void nGLLightfv(int light, int pname, java.nio.FloatBuffer params, int offset);/*
+          glLightfv( (GLenum)  light, (GLenum)  pname, (GLfloat *)(params + offset));
+   */
 
     /**
      * <pre>
@@ -1775,7 +1870,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glLightx( (GLenum)  light, (GLenum)  pname, (GLfixed)  param )
 
      * */
-    private static native void nGLLightx(int light, int pname, int param);
+    private static native void nGLLightx(int light, int pname, int param);/*
+      glLightx( (GLenum)  light, (GLenum)  pname, (GLfixed)  param );
+    */
 
     /**
      * <pre>
@@ -1785,6 +1882,8 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLightxv(int light, int pname, int[] params, int offset) {
+        int needed = getNeededLight(pname);
+        checkArray(params, offset, needed, PARAMS);
         GLES10Pipeline.nGLLightxv(light, pname, params, offset);
     }
 
@@ -1796,7 +1895,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLLightxv(int light, int pname, int[] params, int offset);/*
-    
+       glLightxv( (GLenum)  light, (GLenum)  pname, (GLfixed *) (params + offset) );
     */
 
     /**
@@ -1891,7 +1990,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLLoadIdentity();/*
-      glLoadIdentity ();
+        glLoadIdentity ();
     */
 
     /**
@@ -1902,6 +2001,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLoadMatrixf(float[] m, int offset) {
+        checkArray(m, offset, 16, M);
         GLES10Pipeline.nGLLoadMatrixf(m, offset);
     }
 
@@ -1924,7 +2024,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLoadMatrixf(java.nio.FloatBuffer m) {
-        checkBuffer(m, 16, "m");
+        checkBuffer(m, 16, M);
         int offset = getOffset(m);
         if (m.isDirect()){
             GLES10Pipeline.nGLLoadMatrixf(m, offset);
@@ -1953,7 +2053,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLoadMatrixx(int[] m, int offset) {
-        checkArray(m, offset, 16, "m");
+        checkArray(m, offset, 16, M);
         GLES10Pipeline.nGLLoadMatrixx(m, offset);
     }
 
@@ -1976,7 +2076,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glLoadMatrixx(java.nio.IntBuffer m) {
-        checkBuffer(m, 16, "m");
+        checkBuffer(m, 16, M);
         int offset = getOffset(m);
         if (m.isDirect()){
             GLES10Pipeline.nGLLoadMatrixx(m, offset);
@@ -2242,7 +2342,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glMultMatrixf(java.nio.FloatBuffer m) {
-        checkBuffer(m, 16, "m");
+        checkBuffer(m, 16, M);
         int offset = getOffset(m);
         if (m.isDirect()){
             GLES10Pipeline.nGLMultMatrixf(m, offset);
@@ -2271,7 +2371,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glMultMatrixx(int[] m, int offset) {
-        checkArray(m, offset, 16, "m");
+        checkArray(m, offset, 16, M);
         GLES10Pipeline.nGLMultMatrixx(m, offset);
     }
 
@@ -2294,7 +2394,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glMultMatrixx(java.nio.IntBuffer m) {
-        checkBuffer(m, 16, "m");
+        checkBuffer(m, 16, M);
         int offset = getOffset(m);
         if (m.isDirect()){
             GLES10Pipeline.nGLMultMatrixx(m, offset);
@@ -2411,7 +2511,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glNormalPointerBounds(int type, int stride, java.nio.Buffer pointer, int remaining) {
-        checkBuffer(pointer, 0, "pointer");
+        checkBuffer(pointer, 0, POINTER);
         int offset = getOffset(pointer);
         if(pointer.isDirect()){
             GLES10Pipeline.nGLNormalPointerBounds(type, stride, pointer, offset, remaining);
@@ -2978,7 +3078,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glTexCoordPointerBounds(int size, int type, int stride, java.nio.Buffer pointer, int remaining) {
-        checkBuffer(pointer, 0, "pointer");
+        checkBuffer(pointer, 0, POINTER);
         int offset = getOffset(pointer);
         if (pointer.isDirect()){
             GLES10Pipeline.nGLTexCoordPointerBounds(size, type, stride, pointer, offset, remaining);
@@ -3598,7 +3698,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     public void glVertexPointerBounds(int size, int type, int stride, java.nio.Buffer pointer, int remaining) {
-        checkBuffer(pointer, remaining, "pointer");
+        checkBuffer(pointer, remaining, POINTER);
         int offset = getOffset(pointer);
         if(pointer.isDirect()){
             GLES10Pipeline.nGLVertexPointerBounds(size, type, stride, pointer, offset, remaining);
