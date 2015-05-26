@@ -19,10 +19,10 @@ import gles.util.BufferInfo;
 public class GLES10Pipeline implements Pipeline {
     
     
-    private static String PARAMS = "params";
-    private static String M = "m";
-    private static String POINTER = "pointer";
-    private static String DATA = "data";
+    protected static String PARAMS = "params";
+    protected static String M = "m";
+    protected static String POINTER = "pointer";
+    protected static String DATA = "data";
     
     /**
      * static & native initialization
@@ -1444,7 +1444,8 @@ public class GLES10Pipeline implements Pipeline {
         }
         return _needed;
     }
-    /*
+    
+    /**
      * returns the number of values glGet returns for a given pname.
      *
      * The code below is written such that pnames requiring only one values
@@ -1454,6 +1455,9 @@ public class GLES10Pipeline implements Pipeline {
      * This means that unknown pnames (e.g.: extensions) will default to 1. If
      * that unknown pname needs more than 1 value, then the validation check
      * is incomplete and the app may crash if it passed the wrong number params.
+     * 
+     * @param pname name os GL parameter
+     * @return minimum vector length 
      */
     protected  int getNeededCount(int pname) {
         int needed = 1;
@@ -1519,6 +1523,29 @@ public class GLES10Pipeline implements Pipeline {
     //#endif
         return needed;
     }
+    
+    /**
+     * Get material minimal available elements
+     * @param pname name of GL constant
+     * @return required length of vector
+     */
+    protected int getNeededMaterial(int pname){
+        int _needed;
+        switch (pname) {    
+            case GLES11.GL_AMBIENT:    
+            case GLES11.GL_DIFFUSE:    
+            case GLES11.GL_SPECULAR:    
+            case GLES11.GL_EMISSION:    
+            case GLES11.GL_AMBIENT_AND_DIFFUSE:    
+                _needed = 4;
+                break;
+            default:
+                _needed = 1;
+                break;
+        }        
+        return _needed;        
+    }
+    
     
     
     /**
