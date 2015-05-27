@@ -477,7 +477,7 @@ public class GLES11Pipeline
 
      * */
     private static native void nGLDrawElements(int mode, int count, int type, int offset);/*
-       glDrawElements((GLenum)  mode, (GLsizei)  count,  (GLenum)  type,  (GLint)  offset );
+       glDrawElements((GLenum)  mode, (GLsizei)  count,  (GLenum)  type,  reinterpret_cast<GLvoid *>(offset) );
     */
 
     /**
@@ -1101,7 +1101,15 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexEnvfv(int env, int pname, java.nio.FloatBuffer params) {
-        GLES11Pipeline.nGLGetTexEnvfv(env, pname, params);
+        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkBuffer(params, needed, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLGetTexEnvfv(env, pname, params, offset);
+        }else{
+            float[] array = params.array();
+            GLES11Pipeline.nGLGetTexEnvfv(env, pname, array, offset);
+        }        
     }
 
     /**
@@ -1111,7 +1119,9 @@ public class GLES11Pipeline
      *  C function void glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    private static native void nGLGetTexEnvfv(int env, int pname, java.nio.FloatBuffer params);
+    private static native void nGLGetTexEnvfv(int env, int pname, java.nio.FloatBuffer params, int offset);/*
+        glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1121,6 +1131,8 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexEnviv(int env, int pname, int[] params, int offset) {
+        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkArray(params, offset, needed, PARAMS);
         GLES11Pipeline.nGLGetTexEnviv(env, pname, params, offset);
     }
 
@@ -1131,7 +1143,9 @@ public class GLES11Pipeline
      *  C function void glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    private static native void nGLGetTexEnviv(int env, int pname, int[] params, int offset);
+    private static native void nGLGetTexEnviv(int env, int pname, int[] params, int offset);/*
+        glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1141,7 +1155,16 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexEnviv(int env, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLGetTexEnviv(env, pname, params);
+        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkBuffer(params, needed, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLGetTexEnviv(env, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLGetTexEnviv(env, pname, array, offset);
+        }    
+       // GLES11Pipeline.nGLGetTexEnviv(env, pname, params);
     }
 
     /**
@@ -1151,7 +1174,9 @@ public class GLES11Pipeline
      *  C function void glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    private static native void nGLGetTexEnviv(int env, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetTexEnviv(int env, int pname, java.nio.IntBuffer params, int offset);/*
+       glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1161,6 +1186,8 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexEnvxv(int env, int pname, int[] params, int offset) {
+        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkArray(params, offset, needed, PARAMS);
         GLES11Pipeline.nGLGetTexEnvxv(env, pname, params, offset);
     }
 
@@ -1171,7 +1198,9 @@ public class GLES11Pipeline
      *  C function void glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetTexEnvxv(int env, int pname, int[] params, int offset);
+    private static native void nGLGetTexEnvxv(int env, int pname, int[] params, int offset);/*
+        glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed *)(params + offset) );
+    */
 
     /**
      * <pre>
@@ -1181,7 +1210,16 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexEnvxv(int env, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLGetTexEnvxv(env, pname, params);
+        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkBuffer(params, needed, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLGetTexEnvxv(env, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLGetTexEnvxv(env, pname, array, offset);
+        }    
+       // GLES11Pipeline.nGLGetTexEnvxv(env, pname, params);
     }
 
     /**
@@ -1191,7 +1229,9 @@ public class GLES11Pipeline
      *  C function void glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetTexEnvxv(int env, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetTexEnvxv(int env, int pname, java.nio.IntBuffer params, int offset);/*
+             glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed *)(params + offset) );
+    */
 
     /**
      * <pre>
@@ -1200,7 +1240,8 @@ public class GLES11Pipeline
      *  C function void glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    public void glGetTexParameterfv(int target, int pname, float[] params, int offset) {
+    public void glGetTexParameterfv(int target, int pname, float[] params, int offset) {        
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLGetTexParameterfv(target, pname, params, offset);
     }
 
@@ -1211,7 +1252,9 @@ public class GLES11Pipeline
      *  C function void glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    private static native void nGLGetTexParameterfv(int target, int pname, float[] params, int offset);
+    private static native void nGLGetTexParameterfv(int target, int pname, float[] params, int offset);/*
+         glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)(params + offset));
+   */
 
     /**
      * <pre>
@@ -1220,8 +1263,16 @@ public class GLES11Pipeline
      *  C function void glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    public void glGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params) {
-        GLES11Pipeline.nGLGetTexParameterfv(target, pname, params);
+    public void glGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params) {        
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLGetTexParameterfv(target, pname, params, offset);
+        }else{
+            float[] array = params.array();
+            GLES11Pipeline.nGLGetTexParameterfv(target, pname, array, offset);
+        }  
+       // GLES11Pipeline.nGLGetTexParameterfv(target, pname, params);
     }
 
     /**
@@ -1231,7 +1282,9 @@ public class GLES11Pipeline
      *  C function void glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    private static native void nGLGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params);
+    private static native void nGLGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params, int offset);/*
+        glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1241,6 +1294,7 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexParameteriv(int target, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLGetTexParameteriv(target, pname, params, offset);
     }
 
@@ -1251,7 +1305,9 @@ public class GLES11Pipeline
      *  C function void glGetTexParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    private static native void nGLGetTexParameteriv(int target, int pname, int[] params, int offset);
+    private static native void nGLGetTexParameteriv(int target, int pname, int[] params, int offset);/*
+      glGetTexParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1261,7 +1317,15 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexParameteriv(int target, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLGetTexParameteriv(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLGetTexParameteriv(target, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLGetTexParameteriv(target, pname, array, offset);
+        }  
+       // GLES11Pipeline.nGLGetTexParameteriv(target, pname, params);
     }
 
     /**
@@ -1271,7 +1335,9 @@ public class GLES11Pipeline
      *  C function void glGetTexParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    private static native void nGLGetTexParameteriv(int target, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetTexParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
+           glGetTexParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1281,6 +1347,7 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexParameterxv(int target, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLGetTexParameterxv(target, pname, params, offset);
     }
 
@@ -1291,7 +1358,9 @@ public class GLES11Pipeline
      *  C function void glGetTexParameterxv((GLenum)  target,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetTexParameterxv(int target, int pname, int[] params, int offset);
+    private static native void nGLGetTexParameterxv(int target, int pname, int[] params, int offset);/*
+        glGetTexParameterxv((GLenum)  target,  (GLenum)  pname, (GLfixed *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1301,7 +1370,15 @@ public class GLES11Pipeline
 
      * */
     public void glGetTexParameterxv(int target, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLGetTexParameterxv(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLGetTexParameterxv(target, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLGetTexParameterxv(target, pname, array, offset);
+        }  
+        //GLES11Pipeline.nGLGetTexParameterxv(target, pname, params);
     }
 
     /**
@@ -1311,7 +1388,11 @@ public class GLES11Pipeline
      *  C function void glGetTexParameterxv((GLenum)  target,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetTexParameterxv(int target, int pname, java.nio.IntBuffer params);
+    private static native void nGLGetTexParameterxv(int target, int pname, java.nio.IntBuffer params, int offset);/*
+            glGetTexParameterxv( (GLenum)target,
+                    (GLenum)pname,
+                    (GLfixed *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1331,8 +1412,11 @@ public class GLES11Pipeline
      *  C function GLboolean glIsBuffer((GLuint ) buffer )
 
      * */
-    private static native boolean nGLIsBuffer(int buffer);
-
+    private static native boolean nGLIsBuffer(int buffer);/*
+      GLboolean _returnValue = glIsBuffer( (GLuint)buffer);
+      return (jboolean)_returnValue;
+    */
+    
     /**
      * <pre>
      * Delegate Method generated from GLES11.glIsEnabled([int cap]);
@@ -1351,7 +1435,10 @@ public class GLES11Pipeline
      *  C function GLboolean glIsEnabled((GLenum)  cap )
 
      * */
-    private static native boolean nGLIsEnabled(int cap);
+    private static native boolean nGLIsEnabled(int cap);/*
+       GLboolean _returnValue = glIsEnabled((GLenum)cap);
+       return (jboolean)_returnValue;
+    */
 
     /**
      * <pre>
@@ -1371,7 +1458,10 @@ public class GLES11Pipeline
      *  C function GLboolean glIsTexture((GLuint ) texture )
 
      * */
-    private static native boolean nGLIsTexture(int texture);
+    private static native boolean nGLIsTexture(int texture);/*
+      GLboolean val = glIsTexture( (GLuint)texture);
+      return (jboolean)val;
+    */
 
     /**
      * <pre>
@@ -1391,13 +1481,17 @@ public class GLES11Pipeline
      *  C function void glNormalPointer((GLenum)  type, (GLsizei)  stride,  (GLint)  offset )
 
      * */
-    private static native void nGLNormalPointer(int type, int stride, int offset);
+    private static native void nGLNormalPointer(int type, int stride, int offset);/*
+        glNormalPointer( (GLenum)  type, 
+                         (GLsizei)  stride,  
+                         reinterpret_cast<GLvoid *> offset );
+    */
 
     /**
      * <pre>
      * Delegate Method generated from GLES11.glPointParameterf([int pname, float param]);
      * 
-     *  C function void glPointParameterf((GLenum)  pname, GLfloat param )
+     *  C function void glPointParameterf((GLenum)  pname, (GLfloat) param )
 
      * */
     public void glPointParameterf(int pname, float param) {
@@ -1408,10 +1502,12 @@ public class GLES11Pipeline
      * <pre>
      * Native method generated from GLES11.glPointParameterf([int pname, float param]);
      * 
-     *  C function void glPointParameterf((GLenum)  pname, GLfloat param )
+     *  C function void glPointParameterf((GLenum)  pname, (GLfloat) param )
 
      * */
-    private static native void nGLPointParameterf(int pname, float param);
+    private static native void nGLPointParameterf(int pname, float param);/*
+         glPointParameterf((GLenum)  pname, (GLfloat) param );
+    */
 
     /**
      * <pre>
@@ -1421,6 +1517,7 @@ public class GLES11Pipeline
 
      * */
     public void glPointParameterfv(int pname, float[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLPointParameterfv(pname, params, offset);
     }
 
@@ -1431,7 +1528,9 @@ public class GLES11Pipeline
      *  C function void glPointParameterfv((GLenum)  pname,(GLfloat *) params )
 
      * */
-    private static native void nGLPointParameterfv(int pname, float[] params, int offset);
+    private static native void nGLPointParameterfv(int pname, float[] params, int offset);/*
+         glPointParameterfv((GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1441,7 +1540,15 @@ public class GLES11Pipeline
 
      * */
     public void glPointParameterfv(int pname, java.nio.FloatBuffer params) {
-        GLES11Pipeline.nGLPointParameterfv(pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLPointParameterfv(pname, params, offset);
+        }else{
+            float[] array = params.array();
+            GLES11Pipeline.nGLPointParameterfv(pname, array, offset);
+        }  
+        // GLES11Pipeline.nGLPointParameterfv(pname, params);
     }
 
     /**
@@ -1451,7 +1558,9 @@ public class GLES11Pipeline
      *  C function void glPointParameterfv((GLenum)  pname,(GLfloat *) params )
 
      * */
-    private static native void nGLPointParameterfv(int pname, java.nio.FloatBuffer params);
+    private static native void nGLPointParameterfv(int pname, java.nio.FloatBuffer params, int offset);/*
+         glPointParameterfv((GLenum)  pname, (GLfloat *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1471,7 +1580,9 @@ public class GLES11Pipeline
      *  C function void glPointParameterx((GLenum)  pname, (GLfixed)  param )
 
      * */
-    private static native void nGLPointParameterx(int pname, int param);
+    private static native void nGLPointParameterx(int pname, int param);/*
+         glPointParameterx((GLenum)  pname, (GLfixed)  param );
+    */
 
     /**
      * <pre>
@@ -1491,7 +1602,9 @@ public class GLES11Pipeline
      *  C function void glPointParameterxv((GLenum)  pname,  (GLfixed *) params )
 
      * */
-    private static native void nGLPointParameterxv(int pname, int[] params, int offset);
+    private static native void nGLPointParameterxv(int pname, int[] params, int offset);/*
+         glPointParameterxv((GLenum)  pname,  (GLfixed *) (params + offset));
+    */
 
     /**
      * <pre>
@@ -1501,7 +1614,15 @@ public class GLES11Pipeline
 
      * */
     public void glPointParameterxv(int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLPointParameterxv(pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLPointParameterxv(pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLPointParameterxv(pname, array, offset);
+        }         
+        // GLES11Pipeline.nGLPointParameterxv(pname, params);
     }
 
     /**
@@ -1511,7 +1632,9 @@ public class GLES11Pipeline
      *  C function void glPointParameterxv((GLenum)  pname,  (GLfixed *) params )
 
      * */
-    private static native void nGLPointParameterxv(int pname, java.nio.IntBuffer params);
+    private static native void nGLPointParameterxv(int pname, java.nio.IntBuffer params, int offset);/*
+       glPointParameterxv((GLenum)  pname,  (GLfixed *) (params + offset));
+    */
 
     /**
      * <pre>
@@ -1521,7 +1644,14 @@ public class GLES11Pipeline
 
      * */
     public void glPointSizePointerOESBounds(int type, int stride, java.nio.Buffer pointer, int remaining) {
-        GLES11Pipeline.nGLPointSizePointerOESBounds(type, stride, pointer, remaining);
+        checkBuffer(pointer, 1, POINTER);
+        int offset = getOffset(pointer);
+        if(pointer.isDirect()){
+            GLES11Pipeline.nGLPointSizePointerOESBounds(type, stride, pointer, offset, remaining);
+        }else{
+            throw new IllegalArgumentException("pointer is not direct buffer.");
+        }    
+       // GLES11Pipeline.nGLPointSizePointerOESBounds(type, stride, pointer, remaining);
     }
 
     /**
@@ -1531,7 +1661,9 @@ public class GLES11Pipeline
      *  C function void glPointSizePointerOES((GLenum)  type, (GLsizei)  stride,(GLvoid *)pointer )
 
      * */
-    private static native void nGLPointSizePointerOESBounds(int type, int stride, java.nio.Buffer pointer, int remaining);
+    private static native void nGLPointSizePointerOESBounds(int type, int stride, java.nio.Buffer pointer, int offset, int remaining);/*
+       glPointSizePointerOES((GLenum)  type, (GLsizei)  stride,(GLvoid *)(pointer + offset) );
+    */
 
     /**
      * <pre>
@@ -1551,7 +1683,9 @@ public class GLES11Pipeline
      *  C function void glTexCoordPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  (GLint)  offset )
 
      * */
-    private static native void nGLTexCoordPointer(int size, int type, int stride, int offset);
+    private static native void nGLTexCoordPointer(int size, int type, int stride, int offset);/*
+         glTexCoordPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,   reinterpret_cast<GLvoid *>(offset) );
+    */
 
     /**
      * <pre>
@@ -1571,7 +1705,9 @@ public class GLES11Pipeline
      *  C function void glTexEnvi((GLenum)  target,  (GLenum)  pname,  (GLint)  param )
 
      * */
-    private static native void nGLTexEnvi(int target, int pname, int param);
+    private static native void nGLTexEnvi(int target, int pname, int param);/*
+       glTexEnvi((GLenum)  target,  (GLenum)  pname,  (GLint)  param );
+    */
 
     /**
      * <pre>
@@ -1581,6 +1717,7 @@ public class GLES11Pipeline
 
      * */
     public void glTexEnviv(int target, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLTexEnviv(target, pname, params, offset);
     }
 
@@ -1591,7 +1728,9 @@ public class GLES11Pipeline
      *  C function void glTexEnviv((GLenum)  target,  (GLenum)  pname, const  (GLint)  *params )
 
      * */
-    private static native void nGLTexEnviv(int target, int pname, int[] params, int offset);
+    private static native void nGLTexEnviv(int target, int pname, int[] params, int offset);/*
+        glTexEnviv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1601,7 +1740,15 @@ public class GLES11Pipeline
 
      * */
     public void glTexEnviv(int target, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLTexEnviv(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLTexEnviv(target, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLTexEnviv(target, pname, array, offset);
+        }    
+        //GLES11Pipeline.nGLTexEnviv(target, pname, params);
     }
 
     /**
@@ -1611,7 +1758,9 @@ public class GLES11Pipeline
      *  C function void glTexEnviv((GLenum)  target,  (GLenum)  pname, const  (GLint)  *params )
 
      * */
-    private static native void nGLTexEnviv(int target, int pname, java.nio.IntBuffer params);
+    private static native void nGLTexEnviv(int target, int pname, java.nio.IntBuffer params, int offset);/*
+           glTexEnviv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1621,6 +1770,7 @@ public class GLES11Pipeline
 
      * */
     public void glTexParameterfv(int target, int pname, float[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLTexParameterfv(target, pname, params, offset);
     }
 
@@ -1631,7 +1781,9 @@ public class GLES11Pipeline
      *  C function void glTexParameterfv((GLenum)  target,  (GLenum)  pname,(GLfloat *) params )
 
      * */
-    private static native void nGLTexParameterfv(int target, int pname, float[] params, int offset);
+    private static native void nGLTexParameterfv(int target, int pname, float[] params, int offset);/*
+          glTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *) (params + offset));
+    */
 
     /**
      * <pre>
@@ -1641,7 +1793,15 @@ public class GLES11Pipeline
 
      * */
     public void glTexParameterfv(int target, int pname, java.nio.FloatBuffer params) {
-        GLES11Pipeline.nGLTexParameterfv(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLTexParameterfv(target, pname, params, offset);
+        }else{
+            float[] array = params.array();
+            GLES11Pipeline.nGLTexParameterfv(target, pname, array, offset);
+        }    
+        //GLES11Pipeline.nGLTexParameterfv(target, pname, params);
     }
 
     /**
@@ -1651,7 +1811,9 @@ public class GLES11Pipeline
      *  C function void glTexParameterfv((GLenum)  target,  (GLenum)  pname,(GLfloat *) params )
 
      * */
-    private static native void nGLTexParameterfv(int target, int pname, java.nio.FloatBuffer params);
+    private static native void nGLTexParameterfv(int target, int pname, java.nio.FloatBuffer params, int offset);/*
+        glTexParameterfv((GLenum)  target,  (GLenum)  pname,(GLfloat *) (params + offset));
+    */
 
     /**
      * <pre>
@@ -1671,7 +1833,9 @@ public class GLES11Pipeline
      *  C function void glTexParameteri((GLenum)  target,  (GLenum)  pname,  (GLint)  param )
 
      * */
-    private static native void nGLTexParameteri(int target, int pname, int param);
+    private static native void nGLTexParameteri(int target, int pname, int param);/*
+         glTexParameteri((GLenum)  target,  (GLenum)  pname,  (GLint)  param );
+    */
 
     /**
      * <pre>
@@ -1681,6 +1845,7 @@ public class GLES11Pipeline
 
      * */
     public void glTexParameteriv(int target, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLTexParameteriv(target, pname, params, offset);
     }
 
@@ -1691,7 +1856,9 @@ public class GLES11Pipeline
      *  C function void glTexParameteriv((GLenum)  target,  (GLenum)  pname, const  (GLint)  *params )
 
      * */
-    private static native void nGLTexParameteriv(int target, int pname, int[] params, int offset);
+    private static native void nGLTexParameteriv(int target, int pname, int[] params, int offset);/*
+            glTexParameteriv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1701,7 +1868,15 @@ public class GLES11Pipeline
 
      * */
     public void glTexParameteriv(int target, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLTexParameteriv(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLTexParameteriv(target, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLTexParameteriv(target, pname, array, offset);
+        }  
+        //GLES11Pipeline.nGLTexParameteriv(target, pname, params);
     }
 
     /**
@@ -1711,7 +1886,9 @@ public class GLES11Pipeline
      *  C function void glTexParameteriv((GLenum)  target,  (GLenum)  pname, const  (GLint)  *params )
 
      * */
-    private static native void nGLTexParameteriv(int target, int pname, java.nio.IntBuffer params);
+    private static native void nGLTexParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
+           glTexParameteriv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset) );
+    */
 
     /**
      * <pre>
@@ -1721,6 +1898,7 @@ public class GLES11Pipeline
 
      * */
     public void glTexParameterxv(int target, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES11Pipeline.nGLTexParameterxv(target, pname, params, offset);
     }
 
@@ -1731,7 +1909,9 @@ public class GLES11Pipeline
      *  C function void glTexParameterxv((GLenum)  target,  (GLenum)  pname,  (GLfixed *) params )
 
      * */
-    private static native void nGLTexParameterxv(int target, int pname, int[] params, int offset);
+    private static native void nGLTexParameterxv(int target, int pname, int[] params, int offset);/*
+        glTexParameterxv((GLenum)  target,  (GLenum)  pname,  (GLfixed *)(params + offset));
+    */
 
     /**
      * <pre>
@@ -1741,7 +1921,15 @@ public class GLES11Pipeline
 
      * */
     public void glTexParameterxv(int target, int pname, java.nio.IntBuffer params) {
-        GLES11Pipeline.nGLTexParameterxv(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            GLES11Pipeline.nGLTexParameterxv(target, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            GLES11Pipeline.nGLTexParameterxv(target, pname, array, offset);
+        }  
+       // GLES11Pipeline.nGLTexParameterxv(target, pname, params);
     }
 
     /**
@@ -1751,7 +1939,9 @@ public class GLES11Pipeline
      *  C function void glTexParameterxv((GLenum)  target,  (GLenum)  pname,  (GLfixed *) params )
 
      * */
-    private static native void nGLTexParameterxv(int target, int pname, java.nio.IntBuffer params);
+    private static native void nGLTexParameterxv(int target, int pname, java.nio.IntBuffer params, int offset);/*
+        glTexParameterxv((GLenum)  target,  (GLenum)  pname,  (GLfixed *) (params + offset) );
+    */
 
     /**
      * <pre>
@@ -1771,5 +1961,7 @@ public class GLES11Pipeline
      *  C function void glVertexPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  (GLint)  offset )
 
      * */
-    private static native void nGLVertexPointer(int size, int type, int stride, int offset);
+    private static native void nGLVertexPointer(int size, int type, int stride, int offset);/*
+         glVertexPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  reinterpret_cast<GLvoid *>(offset));
+    */
 }
