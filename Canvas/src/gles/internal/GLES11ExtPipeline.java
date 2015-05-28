@@ -9,6 +9,10 @@ import static gles.internal.GLES10Pipeline.checkArray;
 import static gles.internal.GLES10Pipeline.checkBuffer;
 import static gles.internal.GLES10Pipeline.getOffset;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 public class GLES11ExtPipeline 	
 	implements Pipeline {
 	
@@ -255,7 +259,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glDrawTexivOES(int[] coords, int offset) {
-        checkArray(coords, offset, 0, "coords");
+        checkArray(coords, offset, 5, "coords");
         GLES11ExtPipeline.nGLDrawTexivOES(coords, offset);
     }
 
@@ -278,7 +282,14 @@ public class GLES11ExtPipeline
 
      * */
     public void glDrawTexivOES(java.nio.IntBuffer coords) {
-        GLES11ExtPipeline.nGLDrawTexivOES(coords);
+        checkBuffer(coords, 5, "coords");
+        int offset = getOffset(coords);
+        if(coords.isDirect()){
+            GLES11ExtPipeline.nGLDrawTexivOES(coords, offset);
+        }else{
+            int[] array = coords.array();
+            GLES11ExtPipeline.nGLDrawTexivOES(array, offset);
+        }
     }
 
     /**
@@ -300,6 +311,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glDrawTexxvOES(int[] coords, int offset) {
+        checkArray(coords, offset, 5, "coords");
         GLES11ExtPipeline.nGLDrawTexxvOES(coords, offset);
     }
 
@@ -322,7 +334,15 @@ public class GLES11ExtPipeline
 
      * */
     public void glDrawTexxvOES(java.nio.IntBuffer coords) {
-        GLES11ExtPipeline.nGLDrawTexxvOES(coords);
+        checkBuffer(coords, 5, "coords");
+        int offset = getOffset(coords);
+        if(coords.isDirect()){
+            GLES11ExtPipeline.nGLDrawTexxvOES(coords, offset);
+        }else{
+            int[] array = coords.array();
+            GLES11ExtPipeline.nGLDrawTexxvOES(array, offset);
+        }
+        //GLES11ExtPipeline.nGLDrawTexxvOES(coords);
     }
 
     /**
@@ -366,6 +386,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glDrawTexfvOES(float[] coords, int offset) {
+        checkArray(coords, offset, 5, "coords");
         GLES11ExtPipeline.nGLDrawTexfvOES(coords, offset);
     }
 
@@ -388,7 +409,15 @@ public class GLES11ExtPipeline
 
      * */
     public void glDrawTexfvOES(java.nio.FloatBuffer coords) {
-        GLES11ExtPipeline.nGLDrawTexfvOES(coords);
+        checkBuffer(coords, 5, "coords");
+        int offset = getOffset(coords);
+        if (coords.isDirect()) {
+            GLES11ExtPipeline.nGLDrawTexfvOES(coords, offset);
+        } else {
+            float[] array = coords.array();
+            GLES11ExtPipeline.nGLDrawTexfvOES(array, offset);
+        }
+        // GLES11ExtPipeline.nGLDrawTexfvOES(coords);
     }
 
     /**
@@ -410,7 +439,36 @@ public class GLES11ExtPipeline
 
      * */
     public void glEGLImageTargetTexture2DOES(int target, java.nio.Buffer image) {
-        GLES11ExtPipeline.nGLEGLImageTargetTexture2DOES(target, image);
+        checkBuffer(image, 1, "image");       
+        if(image.isDirect()){
+            int offset = getOffset(image);
+            nGLEGLImageTargetTexture2DOES(target, image, offset);
+        }else{
+            if(image instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)image;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLEGLImageTargetTexture2DOES(target, array, offset);
+                return;
+            }
+            
+            if(image instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)image;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                nGLEGLImageTargetTexture2DOES(target, array, offset);
+                return;
+            }
+            
+            if(image instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)image;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                nGLEGLImageTargetTexture2DOES(target, array, offset);
+                return;
+            }            
+            throw new IllegalArgumentException("image has unsupported data format.");            
+        }
     }
 
     /**
@@ -448,7 +506,37 @@ public class GLES11ExtPipeline
 
      * */
     public void glEGLImageTargetRenderbufferStorageOES(int target, java.nio.Buffer image) {
-        GLES11ExtPipeline.nGLEGLImageTargetRenderbufferStorageOES(target, image);
+        checkBuffer(image, 0, "image");
+        if(image.isDirect()){
+            int offset = getOffset(image);
+            nGLEGLImageTargetRenderbufferStorageOES(target, image, offset);
+        }else{
+            if(image instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)image;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLEGLImageTargetRenderbufferStorageOES(target, array, offset);
+                return;
+            }
+            
+            if(image instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)image;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                nGLEGLImageTargetRenderbufferStorageOES(target, array, offset);
+                return;
+            }
+            
+            if(image instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)image;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                nGLEGLImageTargetRenderbufferStorageOES(target, array, offset);
+                return;
+            }            
+            throw new IllegalArgumentException("image has unsupported data format.");            
+        }
+        //GLES11ExtPipeline.nGLEGLImageTargetRenderbufferStorageOES(target, image);
     }
 
     /**
@@ -546,6 +634,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glClipPlanexOES(int plane, int[] equation, int offset) {
+        checkArray(equation, offset, 4, "equation");
         GLES11ExtPipeline.nGLClipPlanexOES(plane, equation, offset);
     }
 
@@ -566,7 +655,15 @@ public class GLES11ExtPipeline
      *  C function void glClipPlanexOES((GLenum)  plane, const (GLfixed *)equation )
      * */
     public void glClipPlanexOES(int plane, java.nio.IntBuffer equation) {
-        GLES11ExtPipeline.nGLClipPlanexOES(plane, equation);
+        checkBuffer(equation, 4, "equation");
+        int offset = getOffset(equation);
+        if(equation.isDirect()){
+            nGLClipPlanexOES(plane, equation, offset);
+        }else{
+            int[] array = equation.array();
+            nGLClipPlanexOES(plane, array, offset);
+        }
+       //  GLES11ExtPipeline.nGLClipPlanexOES(plane, equation);
     }
 
     /**
@@ -653,6 +750,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glFogxvOES(int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, "params");
         GLES11ExtPipeline.nGLFogxvOES(pname, params, offset);
     }
 
@@ -675,7 +773,15 @@ public class GLES11ExtPipeline
 
      * */
     public void glFogxvOES(int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLFogxvOES(pname, params);
+        checkBuffer(params, 1, "params");
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            nGLFogxvOES(pname, params, offset);
+        }else{
+            int[] array = params.array();
+            nGLFogxvOES(pname, array, offset);
+        }        
+       // GLES11ExtPipeline.nGLFogxvOES(pname, params);
     }
 
     /**
@@ -719,6 +825,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetClipPlanexOES(int pname, int[] eqn, int offset) {
+        checkArray(eqn, offset, 4, "eqn");
         GLES11ExtPipeline.nGLGetClipPlanexOES(pname, eqn, offset);
     }
 
@@ -741,7 +848,15 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetClipPlanexOES(int pname, java.nio.IntBuffer eqn) {
-        GLES11ExtPipeline.nGLGetClipPlanexOES(pname, eqn);
+        checkBuffer(eqn, 4, "eqn");
+        int offset = getOffset(eqn);
+        if(eqn.isDirect()){
+            nGLGetClipPlanexOES(pname, eqn, offset);
+        }else{
+            int[] array = eqn.array();
+            nGLGetClipPlanexOES(pname, array, offset);
+        }
+        //GLES11ExtPipeline.nGLGetClipPlanexOES(pname, eqn);
     }
 
     /**
@@ -763,6 +878,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetFixedvOES(int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, "params");
         GLES11ExtPipeline.nGLGetFixedvOES(pname, params, offset);
     }
 
@@ -785,7 +901,15 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetFixedvOES(int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetFixedvOES(pname, params);
+        checkBuffer(params, 1, "params");
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            nGLGetFixedvOES(pname, params, offset);
+        }else{
+            int[] array = params.array();
+            nGLGetFixedvOES(pname, array, offset);
+        }
+        //GLES11ExtPipeline.nGLGetFixedvOES(pname, params);
     }
 
     /**
@@ -807,6 +931,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetLightxvOES(int light, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, "params");
         GLES11ExtPipeline.nGLGetLightxvOES(light, pname, params, offset);
     }
 
@@ -829,7 +954,15 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetLightxvOES(int light, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetLightxvOES(light, pname, params);
+        checkBuffer(params, 1, "params");
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            nGLGetLightxvOES(light, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            nGLGetLightxvOES(light, pname, array, offset);
+        }
+        //GLES11ExtPipeline.nGLGetLightxvOES(light, pname, params);
     }
 
     /**
@@ -848,9 +981,10 @@ public class GLES11ExtPipeline
      * Delegate Method generated from GLES11Ext.glGetMaterialxvOES([int face, int pname, int[] params, int offset]);
      * 
      *  C function void glGetMaterialxvOES((GLenum)  face, (GLenum)  pname, (GLfixed *)params )
-
      * */
     public void glGetMaterialxvOES(int face, int pname, int[] params, int offset) {
+        int needed = (pname == android.opengl.GLES11.GL_SHININESS) ? 1 : 4;
+        checkArray(params, offset, needed, "params");
         GLES11ExtPipeline.nGLGetMaterialxvOES(face, pname, params, offset);
     }
 
@@ -859,7 +993,6 @@ public class GLES11ExtPipeline
      * Native method generated from GLES11Ext.glGetMaterialxvOES([int face, int pname, int[] params, int offset]);
      * 
      *  C function void glGetMaterialxvOES((GLenum)  face, (GLenum)  pname, (GLfixed *)params )
-
      * */
     private static native void nGLGetMaterialxvOES(int face, int pname, int[] params, int offset);/*
             glGetMaterialxvOES((GLenum)  face, (GLenum)  pname, (GLfixed *)(params + offset) );
@@ -870,10 +1003,19 @@ public class GLES11ExtPipeline
      * Delegate Method generated from GLES11Ext.glGetMaterialxvOES([int face, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetMaterialxvOES((GLenum)  face, (GLenum)  pname, (GLfixed *)params )
-
      * */
     public void glGetMaterialxvOES(int face, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetMaterialxvOES(face, pname, params);
+        int needed = (pname == android.opengl.GLES11.GL_SHININESS) ? 1 : 4;
+        checkBuffer(params, needed, "params");
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            nGLGetMaterialxvOES(face, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            nGLGetMaterialxvOES(face, pname, array, offset);
+        }
+        
+       // GLES11ExtPipeline.nGLGetMaterialxvOES(face, pname, params);
     }
 
     /**
