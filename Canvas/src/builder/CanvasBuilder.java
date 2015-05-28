@@ -5,8 +5,8 @@ import com.badlogic.gdx.jnigen.BuildTarget.TargetOs;
 
 public class CanvasBuilder {
 
-    static final boolean buildIt = true;
-    static final boolean createBuild = true;
+    static final boolean buildIt = false;
+    static final boolean createBuild = false;
     static final boolean generateCPP = true;
     static final boolean packIt = true;
     static final boolean buildLinux = false;
@@ -42,20 +42,28 @@ public class CanvasBuilder {
     public static SDKPath PowerVR_SDK = new SDKPath(PowerVR_INC, PowerVR_LIB_X86, PowerVR_LIB_X64);
     public static SDKPath MALI_SDK =  new SDKPath(MALI_INC, MALI_LIB_X86, MALI_LIB_X64);
     
+    
+    /**
+     * 
+     **/
     static public void main(String[] args) throws Exception {
-
+        System.out.println(System.getenv("PATH"));
+        
 	String src = "src",
 		bin = "bin",
 		jni = "jni";
 	
-	boolean genFFP = false;
+	boolean genFFP = true;
 	
 	SDK sdk = SDK.ANGLE;
       
-      String[]	ffpSrc = {	//"**/gles/opengl/GLES10.java", "**/gles/opengl/GLES10Ext.java", "**/gles/opengl/GLES11.java",
-			            //	"**/android/opengl/GLES11Ext.java",
-			            	"**/android/opengl/EGL14.java", 
-			            	"**/android/opengl/EGLExt.java"};
+      String[]	ffpSrc = { "**/gles/internal/GLES10Pipeline.java", 
+                           "**/gles/internal/GLES10ExtPipeline.java", 
+                            "**/gles/internal/GLES11Pipeline.java",
+			            	"**/gles/internal/GLES11ExtPipeline.java",
+			            //	"**/android/opengl/EGL14.java", 
+			            //	"**/android/opengl/EGLExt.java"
+			            	};
       
       String[]  ppSrc =  {    //    "**/gles/opengl/GLES20.java", 	"**/gles/opengl/GLES30.java",	"**/gles/opengl/GLES31.java",
 				//	"**/gles/opengl/GLES31Ext.java", //	"**/gles/opengl/EGL14.java",
@@ -65,6 +73,8 @@ public class CanvasBuilder {
 					//"**/gles/internal/EGL14Pipeline.java",
 					"**/gles/internal/GLES20Pipeline.java",
 					"**/gles/internal/GLES30Pipeline.java",
+					"**/gles/internal/GLES31Pipeline.java",
+					"**/gles/internal/GLES31ExtPipeline.java",
 					//"**/gles/internal/TesteGL.java",
 					//"**/android/opengl/EGL14.java", 
 			            	// "**/android/opengl/EGLExt.java"
