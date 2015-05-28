@@ -5,6 +5,10 @@
 
 package gles.internal;
 
+import static gles.internal.GLES10Pipeline.checkArray;
+import static gles.internal.GLES10Pipeline.checkBuffer;
+import static gles.internal.GLES10Pipeline.getOffset;
+
 public class GLES10ExtPipeline implements Pipeline {
 	
 	/**
@@ -53,7 +57,9 @@ public class GLES10ExtPipeline implements Pipeline {
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
 
      * */
-    private static native void nGLES10ExtClassInit();
+    private static native void nGLES10ExtClassInit();/*
+     // no op
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -63,6 +69,8 @@ public class GLES10ExtPipeline implements Pipeline {
 
      * */
     public int glQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset) {
+        checkArray(mantissa,mantissaOffset,16,"mantissa");
+        checkArray(exponent, exponentOffset, 16, "exponent");
         return GLES10ExtPipeline.nGLQueryMatrixxOES(mantissa, mantissaOffset, exponent, exponentOffset);
     }
 
@@ -73,7 +81,9 @@ public class GLES10ExtPipeline implements Pipeline {
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
 
      * */
-    private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);
+    private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);/*
+    return (jint) glQueryMatrixxOES ( (GLfixed *)(mantissa + mantissaOffset), (GLint *)(exponent + exponentOffset));
+ */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -83,7 +93,17 @@ public class GLES10ExtPipeline implements Pipeline {
 
      * */
     public int glQueryMatrixxOES(java.nio.IntBuffer mantissa, java.nio.IntBuffer exponent) {
-       return GLES10ExtPipeline.nGLQueryMatrixxOES(mantissa, exponent);
+       checkBuffer(mantissa, 16, "mantissa");
+       checkBuffer(exponent, 16, "exponent");
+       int mantissaOffset = getOffset(mantissa);
+       int exponentOffset = getOffset(exponent);
+       if(mantissa.isDirect() && exponent.isDirect()){
+           return GLES10ExtPipeline.nGLQueryMatrixxOES(mantissa, mantissaOffset, exponent, exponentOffset);
+       }else{
+           int[] array = mantissa.array();
+           int[] array2 = exponent.array();
+           return GLES10ExtPipeline.nGLQueryMatrixxOES(array, mantissaOffset, array2, exponentOffset);
+       }
     }
 
     /**
@@ -93,5 +113,7 @@ public class GLES10ExtPipeline implements Pipeline {
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
 
      * */
-    private static native int nGLQueryMatrixxOES(java.nio.IntBuffer mantissa, java.nio.IntBuffer exponent);
+    private static native int nGLQueryMatrixxOES(java.nio.IntBuffer mantissa, int mantissaOffset, java.nio.IntBuffer exponent, int exponentOffset);/*
+       return (jint) glQueryMatrixxOES ( (GLfixed *)(mantissa + mantissaOffset), (GLint *)(exponent + exponentOffset));
+    */
 }
