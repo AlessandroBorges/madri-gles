@@ -65,7 +65,10 @@ public class GLES11Pipeline
      *  
 
      * */
-    private static native void nGLES11ClassInit();
+    private static native void nGLES11ClassInit();/*
+      // no op
+     */
+    
 
     /**
      * <pre>
