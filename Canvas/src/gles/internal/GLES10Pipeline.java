@@ -71,7 +71,9 @@ public class GLES10Pipeline implements Pipeline {
      *  C function void glActiveTexture( (GLenum)  texture )
 
      * */
-    private static native void nGLES10ClassInit();
+    private static native void nGLES10ClassInit();/*
+      // no op
+    */
 
     /**
      * <pre>
@@ -225,7 +227,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLClearColor(float red, float green, float blue, float alpha);/*
-            glClearColor ( (GLclampf) red, (GLclampf) green, (GLclampf) blue, (GLclampf) alpha );
+            glClearColor((GLclampf) red, (GLclampf) green, (GLclampf) blue, (GLclampf) alpha );
     */
 
     /**
@@ -3206,8 +3208,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLTexEnvfv(int target, int pname, java.nio.FloatBuffer params, int offset);/*
-             glTexEnvfv( (GLenum)  target, (GLenum)  pname, (GLfloat  *)(params + offset) );
-    
+             glTexEnvfv( (GLenum)  target, (GLenum)  pname, (GLfloat  *)(params + offset) );    
     */
 
     /**
@@ -3261,7 +3262,9 @@ public class GLES10Pipeline implements Pipeline {
 
     /**
      * <pre>
-     * Delegate Method generated from GLES10.glTexEnvxv([int target, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES10.glTexEnvxv([int target, 
+     *                                                   int pname, 
+     *                                                   java.nio.IntBuffer params]);
      * 
      *  C function void glTexEnvxv( (GLenum)  target, (GLenum)  pname, (GLfixed *) params )
 
@@ -3294,9 +3297,18 @@ public class GLES10Pipeline implements Pipeline {
 
     /**
      * <pre>
-     * Delegate Method generated from GLES10.glTexImage2D([int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.Buffer pixels]);
+     * Delegate Method generated from GLES10.glTexImage2D([int target, int level, 
+     * int internalformat, int width, int height, int border, 
+     * int format, int type, java.nio.Buffer pixels]);
      * 
-     *  C function void glTexImage2D( (GLenum)  target, (GLint)  level, (GLint)  internalformat, (GLsizei) width, (GLsizei) height, (GLint)  border, (GLenum)  format, (GLenum)  type, const (GLvoid *) pixels )
+     *  C function void glTexImage2D( (GLenum)  target, 
+     *                                (GLint)  level, 
+     *                                (GLint)  internalformat, 
+     *                                (GLsizei) width, (GLsizei) height, 
+     *                                (GLint)  border, 
+     *                                (GLenum)  format, 
+     *                                (GLenum)  type, 
+     *                                const (GLvoid *) pixels )
 
      * */
     public void glTexImage2D(int target,
@@ -3476,7 +3488,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLTexParameterf(int target, int pname, float param);/*
-       glTexParameterf( (GLenum)  target, (GLenum)  pname, (GLfloat)  param );
+       glTexParameterf((GLenum)  target, (GLenum)  pname, (GLfloat)  param );
     */
 
     /**
@@ -3798,6 +3810,27 @@ public class GLES10Pipeline implements Pipeline {
             throw new IllegalArgumentException(arrayName + ".length - offset < needed = " + needed);
     }
 
+    
+    /**
+     * Check a parameter array
+     * 
+     * @param array - array to check
+     * @param offset - array offset
+     * @param needed - count elements required
+     * @param arrayName - array name to print exception
+     * 
+     * @throws IllegalArgumentException in following cases: <li>if array is null; <li>if
+     *         offset < 0; <li>if array.length - offset < needed.
+     */
+    protected static void checkArray(short[] array, int offset, int needed, String arrayName) {
+        if (null == array) throw new IllegalArgumentException(arrayName + " == null");
+        if (offset < 0) throw new IllegalArgumentException(arrayName + "offset < 0");
+        if (array.length - offset < needed)
+            throw new IllegalArgumentException(arrayName + ".length - offset < needed = " + needed);
+    }
+
+    
+    
     /**
      * Check a parameter array
      * 
@@ -3895,6 +3928,22 @@ public class GLES10Pipeline implements Pipeline {
      *         offset < 0; <li>if array length < 1.
      */
     protected static void checkBuffer(java.nio.IntBuffer values, int needed, String bufferName) {
+        if (null == values) throw new IllegalArgumentException(bufferName + " == null");
+        if (values.remaining() < needed)
+            throw new IllegalArgumentException(bufferName + " remaining() < needed = " + needed);
+    }
+    
+    /**
+     * Check a parameter buffer
+     * 
+     * @param values buffer with values to check
+     * @param needed
+     * @param bufferName
+     * 
+     * @throws IllegalArgumentException in following cases: <li>if values is null; <li>if
+     *         offset < 0; <li>if array length < 1.
+     */
+    protected static void checkBuffer(java.nio.ShortBuffer values, int needed, String bufferName) {
         if (null == values) throw new IllegalArgumentException(bufferName + " == null");
         if (values.remaining() < needed)
             throw new IllegalArgumentException(bufferName + " remaining() < needed = " + needed);
