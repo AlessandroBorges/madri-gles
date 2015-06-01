@@ -5,6 +5,10 @@
 
 package gles.internal;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 import gles.util.BufferInfo;
 
 /** OpenGL ES 3.0
@@ -90,19 +94,46 @@ public class GLES30Pipeline
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glDrawRangeElements([int mode, int start, int end, int count, int type, java.nio.Buffer indices]);
+     * Delegate Method generated from GLES30.glDrawRangeElements(
+     * [int mode, int start, int end, int count, int type, java.nio.Buffer indices]);
      * 
-     *  C function void glDrawRangeElements((GLenum) mode, (GLuint)  start, (GLuint)  end, (GLsizei) count, (GLenum) type, const GLvoid *indices)
+     *  C function void glDrawRangeElements((GLenum) mode, 
+     *                                      (GLuint)  start, 
+     *                                      (GLuint)  end, 
+     *                                      (GLsizei) count, 
+     *                                      (GLenum) type, 
+     *                                      const GLvoid *indices)
 
      **/
-    public void glDrawRangeElements(int mode, int start, int end, int count,
-            int type, java.nio.Buffer indices) {
-        checkBuffer(indices, 1, "indices");   
+    public void glDrawRangeElements(int mode, 
+                                    int start, int end, int count,
+                                    int type, java.nio.Buffer indices) {
+        
+        checkBuffer(indices, 1, INDICES);   
         int offsetBytes = getOffset(indices);
         if (indices.isDirect()) {
-            GLES30Pipeline.nGLDrawRangeElements(mode, start, end, count, type, indices, offsetBytes);
+            nGLDrawRangeElements(mode, start, end, count, type, indices, offsetBytes);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            if(indices instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)indices;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLDrawRangeElements(mode, start, end, count, type, array, offset);
+                return;
+            }else if(indices instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)indices;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                nGLDrawRangeElements(mode, start, end, count, type, array, offset);
+                return;
+            }else if(indices instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)indices;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                nGLDrawRangeElements(mode, start, end, count, type, array, offset);
+                return;
+            }else 
+            throw new RuntimeException("Invalid buffer.");
         }
 
     }
@@ -118,18 +149,64 @@ public class GLES30Pipeline
     						    int start, int end, 
     						    int count, 
     						    int type, 
-    					            java.nio.Buffer indices, int offset);/*
-    
-          char * indices0 = (char *) (indices + offset); 
-          glDrawRangeElements(  (GLenum) mode, 
-          		        (GLuint) start, 
-          		        (GLuint)  end, 
-          			(GLsizei) count, 
-          			(GLenum) type, 
-          			(const GLvoid *) indices0);
+    					            java.nio.Buffer indices, int offset);/*    
+          //char * indices0 = (char *) (indices + offset); 
+          glDrawRangeElements((GLenum) mode, 
+          		              (GLuint) start, 
+          		              (GLuint)  end,
+          		              (GLsizei) count, 
+          			          (GLenum) type, 
+          			          ( GLvoid *)( indices + offset));
     
     
     */
+    
+    private static native void nGLDrawRangeElements(int mode, 
+                                                    int start, int end, 
+                                                    int count, 
+                                                    int type, 
+                                                    byte[] indices, int offset);/*    
+                              //char * indices0 = (char *) (indices + offset); 
+                              glDrawRangeElements((GLenum) mode, 
+                                                  (GLuint) start, 
+                                                  (GLuint)  end,
+                                                  (GLsizei) count, 
+                                                  (GLenum) type, 
+                                                  ( GLvoid *)( indices + offset));
+                        
+                        
+      */
+    
+    private static native void nGLDrawRangeElements(int mode, 
+                                                    int start, int end, 
+                                                    int count, 
+                                                    int type, 
+                                                    short[] indices, int offset);/*   
+                              
+                              glDrawRangeElements((GLenum) mode, 
+                                                  (GLuint) start, 
+                                                  (GLuint)  end,
+                                                  (GLsizei) count, 
+                                                  (GLenum) type, 
+                                                  ( GLvoid *)( indices + offset));
+                        
+                        
+      */
+    private static native void nGLDrawRangeElements(int mode, 
+                                                    int start, int end, 
+                                                    int count, 
+                                                    int type, 
+                                                    int[] indices, int offset);/*    
+                              //char * indices0 = (char *) (indices + offset); 
+                              glDrawRangeElements((GLenum) mode, 
+                                                  (GLuint) start, 
+                                                  (GLuint)  end,
+                                                  (GLsizei) count, 
+                                                  (GLenum) type, 
+                                                  ( GLvoid *)( indices + offset));
+                        
+                        
+      */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -171,20 +248,29 @@ public class GLES30Pipeline
      *  C function void glTexImage3D((GLenum) target, (GLint) level, (GLint) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLint) border, (GLenum) format, (GLenum) type, const GLvoid *pixels)
 
      **/
-    public void glTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border,
-	    int format, int type, java.nio.Buffer pixels) {
+    public void glTexImage3D(int target, int level, 
+                             int internalformat, 
+                             int width, int height, int depth, 
+                             int border,
+                             int format, int type, 
+                             java.nio.Buffer pixels) {
 
-	if (pixels == null)
-	    throw new IllegalArgumentException(BUFFER_NULL);
+	checkBuffer(pixels, 1, PIXELS);
 
-	// now, the offset...
 	if (pixels.isDirect()) {
-	    int offsetBytes = BufferInfo.getOffsetInBytes(pixels);
-	    GLES30Pipeline.nGLTexImage3D(target, level, internalformat, width, height, depth, border, format, type,
+	    int offsetBytes = getOffset(pixels);
+	    nGLTexImage3D(target, level, internalformat, width, height, depth, border, format, type,
 		    pixels, offsetBytes);
-	} else {
-	    throw new IllegalArgumentException(BUFFER_ND);
-	}
+	} else {	    
+	    if(pixels instanceof ByteBuffer){
+	        ByteBuffer bb = (ByteBuffer)pixels;
+            byte[] array = bb.array();
+            int offset = getOffset(bb); 
+            nGLTexImage3D(target, level, internalformat, width, height, depth, border, format, type, array, offset);
+            return;
+        }else	    
+            throw new IllegalArgumentException("invalid buffer");
+	    }
 
     }
 
@@ -202,9 +288,8 @@ public class GLES30Pipeline
     					     int border,
     					     int format,
     					     int type,
-    					     java.nio.Buffer pixels, int offset);/*
-    					
-    				char * pixels0 = (char *) (pixels + offset);						
+    					     java.nio.Buffer pixels, int offset);/*    					
+    									
     				glTexImage3D((GLenum) target, 
     								(GLint) level, 
     								(GLint) internalformat, 
@@ -213,18 +298,62 @@ public class GLES30Pipeline
     								(GLint) border, 
     								(GLenum) format, 
     								(GLenum) type, 
-    							    (const GLvoid *) pixels0);						
+    							    (GLvoid *) (pixels + offset));						
     	*/
+    
+    private static native void nGLTexImage3D(int target, 
+                                             int level, 
+                                             int internalformat,
+                                             int width, int height, 
+                                             int depth,
+                                             int border,
+                                             int format,
+                                             int type,
+                                             byte[] pixels, int offset);/*                     
+                                                        
+                                    glTexImage3D((GLenum) target, 
+                                                    (GLint) level, 
+                                                    (GLint) internalformat, 
+                                                    (GLsizei) width, (GLsizei) height, 
+                                                    (GLsizei) depth, 
+                                                    (GLint) border, 
+                                                    (GLenum) format, 
+                                                    (GLenum) type, 
+                                                    (GLvoid *) (pixels + offset));                      
+                        */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glTexImage3D([int target, int level, int internalformat, int width, int height, int depth, int border, int format, int type, int offset]);
+     * Delegate Method generated from GLES30.glTexImage3D([int target, int level, 
+     * int internalformat, int width, int height, int depth, int border, int format, int type, int offset]);
      * 
-     *  C function void glTexImage3D((GLenum) target, (GLint) level, (GLint) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLint) border, (GLenum) format, (GLenum) type, (GLsizei) offset)
-
+     *  C function void glTexImage3D((GLenum) target, 
+     *                               (GLint) level, 
+     *                               (GLint) internalformat, 
+     *                               (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+     *                               (GLint) border, 
+     *                               (GLenum) format, 
+     *                               (GLenum) type, 
+     *                               (GLsizei) offset);
      **/
-    public void glTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int format, int type, int offset) {
-        GLES30Pipeline.nGLTexImage3D(target, level, internalformat, width, height, depth, border, format, type, offset);
+    public void glTexImage3D(int target,
+                             int level,
+                             int internalformat,
+                             int width, int height,
+                             int depth,
+                             int border,
+                             int format,
+                             int type,
+                             int offset) {
+        GLES30Pipeline.nGLTexImage3D(target,
+                level,
+                internalformat,
+                width, height,
+                depth,
+                border,
+                format,
+                type,
+                offset);
     }
 
     /**
@@ -277,15 +406,31 @@ public class GLES30Pipeline
     		int type, 
     		java.nio.Buffer pixels) {
 
-		if (pixels == null)
-			throw new IllegalArgumentException(BUFFER_NULL);
-
-		// now, the offset...
+		checkBuffer(pixels, 1, PIXELS);
 		if (pixels.isDirect()) {
-			int offsetBytes = BufferInfo.getOffset(pixels);
-			GLES30Pipeline.nGLTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels, offsetBytes);
+			int offsetBytes = getOffset(pixels);
+			nGLTexSubImage3D(target, level, 
+			                                xoffset, yoffset, zoffset, 
+			                                width, height, depth, 
+			                                format, 
+			                                type, 
+			                                pixels, offsetBytes);
 		} else {
-			throw new IllegalArgumentException(BUFFER_ND);
+		    int offset = 0;
+	        if(pixels instanceof ByteBuffer){
+	            ByteBuffer bb = (ByteBuffer)pixels;
+	            byte[] array = bb.array();
+	            offset = getOffset(bb); 
+	          
+	            nGLTexSubImage3D(target, level, 
+                        xoffset, yoffset, zoffset, 
+                        width, height, depth, 
+                        format, 
+                        type, 
+                        array, offset);
+	            return;
+	        }else       
+	            throw new IllegalArgumentException("invalid buffer");			
 		}
     }
 
@@ -305,23 +450,43 @@ public class GLES30Pipeline
     		int width, int height, int depth, 
     		int format, 
     		int type, 
-    		java.nio.Buffer pixels,int offset);/*
+    		java.nio.Buffer pixels, int offset);/*  		
     		
-    	char * pixels0 = (char *) (pixels + offset);	
     	glTexSubImage3D((GLenum) target, (GLint) level, 
     						(GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
     						(GLsizei) width, (GLsizei) height, (GLsizei) depth, 
     						(GLenum) format, 
     						(GLenum) type, 
-    						(const GLvoid *)pixels0)	;
-    		
+    						(GLvoid *)(pixels + offset));    		
+    */
+    
+    private static native void nGLTexSubImage3D(int target, 
+                                                int level, 
+                                                int xoffset, int yoffset, int zoffset, 
+                                                int width, int height, int depth, 
+                                                int format, 
+                                                int type, 
+                                                byte[] pixels, int offset);/*
+        glTexSubImage3D((GLenum) target, (GLint) level, 
+                        (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
+                        (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+                        (GLenum) format, 
+                        (GLenum) type, 
+                        (GLvoid *)(pixels + offset));
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glTexSubImage3D([int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, int offset]);
+     * Delegate Method generated from GLES30.glTexSubImage3D([int target, int level, 
+     *  int xoffset, int yoffset, int zoffset, 
+     *  int width, int height, int depth, 
+     *  int format, int type, int offset]);
      * 
-     *  C function void glTexSubImage3D((GLenum) target, (GLint) level, (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLenum) format, (GLenum) type, (GLsizei) offset)
+     *  C function void glTexSubImage3D((GLenum) target, 
+     *                                  (GLint) level, 
+     *                                  (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
+     *                                  (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+     *                                  (GLenum) format, (GLenum) type, (GLsizei) offset)
 
      **/
     public void glTexSubImage3D(int target, int level, 
@@ -371,18 +536,24 @@ public class GLES30Pipeline
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glCopyTexSubImage3D([int target, int level, int xoffset, int yoffset, int zoffset, int x, int y, int width, int height]);
+     * Native method generated from GLES30.glCopyTexSubImage3D([int target, int level, 
+     * int xoffset, int yoffset, int zoffset, int x, int y, int width, int height]);
      * 
-     *  C function void glCopyTexSubImage3D((GLenum) target, (GLint) level, (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height)
+     *  C function void glCopyTexSubImage3D((GLenum) target, 
+     *                                      (GLint) level, 
+     *                                      (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
+     *                                      (GLint) x, (GLint) y, 
+     *                                      (GLsizei) width, (GLsizei) height);
 
      **/
     private static native void nGLCopyTexSubImage3D(int target, int level, 
     						    int xoffset, int yoffset, int zoffset, 
-    						    int x, int y, int width, int height);/*
-    
+    						    int x, int y, 
+    						    int width, int height);/*    
     	glCopyTexSubImage3D((GLenum) target, (GLint) level, 
-    							(GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
-    							(GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height);
+    						(GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
+    						(GLint) x, (GLint) y, 
+    						(GLsizei) width, (GLsizei) height);
     
     */
 
@@ -399,16 +570,36 @@ public class GLES30Pipeline
                                     int border, int imageSize, 
                                     java.nio.Buffer data) {
         
-        if (data == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
+        checkBuffer(data, 0, DATA);
         // now, the offset...
         if (data.isDirect()) {
-            int offsetBytes = BufferInfo.getOffsetInBytes(data);
-            GLES30Pipeline.nGLCompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, data, offsetBytes);            
+            int offsetBytes = getOffset(data);
+            nGLCompressedTexImage3D(target,
+                    level,
+                    internalformat,
+                    width, height, depth,
+                    border,
+                    imageSize,
+                    data,
+                    offsetBytes);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
-    }
+            if(data instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)data;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLCompressedTexImage3D(target,
+                        level,
+                        internalformat,
+                        width, height, depth,
+                        border,
+                        imageSize,
+                        array,
+                        offset);
+                return;
+            }
+            
+
+        }
     }
 
     /**
@@ -422,26 +613,56 @@ public class GLES30Pipeline
     												int level, int internalformat, 
     												int width, int height, int depth, 
     												int border, int imageSize, 
-    												java.nio.Buffer data, int offset);/*
-    					
-    				char * data0 = (char *) (data + offset);								
+    												java.nio.Buffer data, int offset);/*    					
+    				//char * data0 = (char *) (data + offset);								
     				glCompressedTexImage3D((GLenum) target, 
     				                        (GLint) level, (GLenum) internalformat, 
     				                        (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
     				                        (GLint) border, 
     				                        (GLsizei) imageSize, 
-    				                        (const GLvoid *)data0);
+    				                        ( GLvoid *)(data + offset));
     	*/
+    private static native void nGLCompressedTexImage3D(int target, 
+                                                       int level, int internalformat, 
+                                                       int width, int height, int depth, 
+                                                       int border, int imageSize, 
+                                                       byte[] data, int offset);/*                        
+                       //char * data0 = (char *) (data + offset);                              
+                       glCompressedTexImage3D((GLenum) target, 
+                                               (GLint) level, (GLenum) internalformat, 
+                                               (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+                                               (GLint) border, 
+                                               (GLsizei) imageSize, 
+                                               ( GLvoid *)(data + offset));
+           */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glCompressedTexImage3D([int target, int level, int internalformat, int width, int height, int depth, int border, int imageSize, int offset]);
+     * Delegate Method generated from GLES30.glCompressedTexImage3D([int target, 
+     *  int level, int internalformat, int width, int height, int depth, int border, int imageSize, int offset]);
      * 
-     *  C function void glCompressedTexImage3D((GLenum) target, (GLint) level, (GLenum) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLint) border, (GLsizei) imageSize, (GLsizei) offset)
+     *  C function void glCompressedTexImage3D((GLenum) target, 
+     *                                          (GLint) level, 
+     *                                          (GLenum) internalformat, 
+     *                                          (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+     *                                          (GLint) border, 
+     *                                          (GLsizei) imageSize, (GLsizei) offset)
 
      **/
-    public void glCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int imageSize, int offset) {
-        GLES30Pipeline.nGLCompressedTexImage3D(target, level, internalformat, width, height, depth, border, imageSize, offset);
+    public void glCompressedTexImage3D(int target,
+                                       int level,
+                                       int internalformat,
+                                       int width, int height, int depth,
+                                       int border,
+                                       int imageSize,
+                                       int offset) {
+        GLES30Pipeline.nGLCompressedTexImage3D(target,
+                level,
+                internalformat,
+                width, height, depth,
+                border,
+                imageSize,
+                offset);
     }
 
     /**
@@ -451,7 +672,13 @@ public class GLES30Pipeline
      *  C function void glCompressedTexImage3D((GLenum) target, (GLint) level, (GLenum) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLint) border, (GLsizei) imageSize, (GLsizei) offset)
 
      **/
-    private static native void nGLCompressedTexImage3D(int target, int level, int internalformat, int width, int height, int depth, int border, int imageSize, int offset);/*
+    private static native void nGLCompressedTexImage3D(int target, 
+                                                       int level, 
+                                                       int internalformat, 
+                                                       int width, int height, int depth, 
+                                                       int border, 
+                                                       int imageSize, 
+                                                       int offset);/*
          glCompressedTexImage3D((GLenum) target, 
                                  (GLint) level, (GLenum) internalformat, 
                                  (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
@@ -475,27 +702,48 @@ public class GLES30Pipeline
             int format, int imageSize, 
             java.nio.Buffer data) {
         
-        if (data == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
+        checkBuffer(data, 0, DATA);
+        
         if (data.isDirect()) {
-            int offsetBytes = BufferInfo.getOffset(data);
-            GLES30Pipeline.nGLCompressedTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data, offsetBytes);    
-        } else {
-            throw new IllegalArgumentException(BUFFER_ND);
-    }
-        
-        
-        
+            int offsetBytes = getOffset(data);
+            GLES30Pipeline.nGLCompressedTexSubImage3D(target, level,
+                    xoffset,  yoffset,  zoffset,
+                    width, height, depth,
+                    format,
+                    imageSize,
+                    data, offsetBytes);
+            
+        } else if(data instanceof ByteBuffer){
+            ByteBuffer bb = (ByteBuffer)data;
+            int offset = getOffset(bb);
+            byte[] array = bb.array();
+            GLES30Pipeline.nGLCompressedTexSubImage3D(target, level,
+                    xoffset,  yoffset,  zoffset,
+                    width, height, depth,
+                    format,
+                    imageSize,
+                    array, offset);
+            return;
+        }else{
+            throw new IllegalArgumentException("Invalid buffer.");
+        }
+
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glCompressedTexSubImage3D([int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int imageSize, java.nio.Buffer data]);
+     * Native method generated from GLES30.glCompressedTexSubImage3D([int target, int level, 
+     *                              int xoffset, int yoffset, int zoffset, 
+     *                              int width, int height, int depth, 
+     *                              int format, int imageSize, java.nio.Buffer data]);
      * 
-     *  C function void glCompressedTexSubImage3D((GLenum) target, (GLint) level, (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLenum) format, (GLsizei) imageSize, const GLvoid *data)
-
+     *  C function void glCompressedTexSubImage3D((GLenum) target, 
+     *                                            (GLint) level, 
+     *                                            (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
+     *                                            (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+     *                                            (GLenum) format, 
+     *                                            (GLsizei) imageSize, 
+     *                                            const GLvoid *data)
      **/
     private static native void nGLCompressedTexSubImage3D(int target, 
                                                           int level, 
@@ -503,12 +751,27 @@ public class GLES30Pipeline
                                                           int width, int height, int depth, 
                                                           int format, int imageSize, 
                                                           java.nio.Buffer data, int offset);/*
-    char * data0 = (char *) (data + offset);
+    //char * data0 = (char *) (data + offset);
     glCompressedTexSubImage3D((GLenum) target, (GLint) level, 
                                  (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
                                  (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
                                  (GLenum) format, (GLsizei) imageSize, 
-                                 reinterpret_cast<GLvoid *>(data0));
+                                 (GLvoid *)(data + offset));
+    
+    */
+    
+    private static native void nGLCompressedTexSubImage3D(int target, 
+                                                          int level, 
+                                                          int xoffset, int yoffset, int zoffset, 
+                                                          int width, int height, int depth, 
+                                                          int format, int imageSize, 
+                                                          byte[] data, int offset);/*
+    //char * data0 = (char *) (data + offset);
+    glCompressedTexSubImage3D((GLenum) target, (GLint) level, 
+                                 (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, 
+                                 (GLsizei) width, (GLsizei) height, (GLsizei) depth, 
+                                 (GLenum) format, (GLsizei) imageSize, 
+                                 (GLvoid *)(data + offset));
     
     */
 
@@ -519,7 +782,7 @@ public class GLES30Pipeline
      *  C function void glCompressedTexSubImage3D((GLenum) target, (GLint) level, (GLint) xoffset, (GLint) yoffset, (GLint) zoffset, (GLsizei) width, (GLsizei) height, (GLsizei) depth, (GLenum) format, (GLsizei) imageSize, (GLsizei) offset)
 
      **/
-    public void glCompressedTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int imageSize, int offset) {
+    public void glCompressedTexSubImage3D( int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int imageSize, int offset) {
         GLES30Pipeline.nGLCompressedTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, offset);
     }
 
@@ -562,8 +825,7 @@ public class GLES30Pipeline
      *  C function void glGenQueries((GLsizei) n, (GLuint *) ids)
 
      **/
-    private static native void nGLGenQueries(int n, int[] ids, int offset);/*
-    
+    private static native void nGLGenQueries(int n, int[] ids, int offset);/*    
            glGenQueries((GLsizei) n, (GLuint *)(ids + offset));
     */
 
@@ -575,19 +837,14 @@ public class GLES30Pipeline
 
      **/
     public void glGenQueries(int n, java.nio.IntBuffer ids) {
-        
-        if (ids == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (ids.isDirect()) {
-            int offset = BufferInfo.getOffset(ids);
+        checkBuffer(ids, n, "ids");
+        int offset = getOffset(ids);
+        if (ids.isDirect()) {            
             GLES30Pipeline.nGLGenQueries(n, ids, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
-    }
-        
-        
+            int[] array = ids.array();
+            GLES30Pipeline.nGLGenQueries(n, array, offset);
+        }
     }
 
     /**
@@ -609,6 +866,7 @@ public class GLES30Pipeline
 
      **/
     public void glDeleteQueries(int n, int[] ids, int offset) {
+        checkArray(ids, offset, n, "ids");
         GLES30Pipeline.nGLDeleteQueries(n, ids, offset);
     }
 
@@ -620,7 +878,7 @@ public class GLES30Pipeline
 
      **/
     private static native void nGLDeleteQueries(int n, int[] ids, int offset);/*    
-               glDeleteQueries((GLsizei) n, (const GLuint  *) (ids + offset));    
+            glDeleteQueries((GLsizei) n, (GLuint  *) (ids + offset));    
     */
 
     /**
@@ -631,17 +889,14 @@ public class GLES30Pipeline
 
      **/
     public void glDeleteQueries(int n, java.nio.IntBuffer ids) {
-        if (ids == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (ids.isDirect()) {
-            int offset = BufferInfo.getOffset(ids);
+        checkBuffer(ids, n, "ids");
+        int offset = getOffset(ids);
+        if (ids.isDirect()) {            
             GLES30Pipeline.nGLDeleteQueries(n, ids, offset);            
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            int[] array = ids.array();
+            GLES30Pipeline.nGLDeleteQueries(n, array, offset);  
         }
-        
     }
 
     /**
@@ -651,10 +906,8 @@ public class GLES30Pipeline
      *  C function void glDeleteQueries((GLsizei) n, (const GLuint *) ids)
 
      **/
-    private static native void nGLDeleteQueries(int n, java.nio.IntBuffer ids, int offset);/*
-    
-          glDeleteQueries((GLsizei) n, (const GLuint  *) (ids + offset));
-    
+    private static native void nGLDeleteQueries(int n, java.nio.IntBuffer ids, int offset);/*    
+          glDeleteQueries((GLsizei) n, ( GLuint  *) (ids + offset));    
     */
 
     /**
@@ -752,19 +1005,15 @@ public class GLES30Pipeline
      *  C function void glGetQueryiv((GLenum) target, (GLenum) pname, (GLint) *params)
 
      **/
-    public void glGetQueryiv(int target, int pname, java.nio.IntBuffer params) {
-        
-        if (params == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
-            GLES30Pipeline.nGLGetQueryiv(target, pname, params, offset);
+    public void glGetQueryiv(int target, int pname, java.nio.IntBuffer params) {        
+        checkBuffer(params,1,PARAMS);
+        int offset = getOffset(params);
+        if (params.isDirect()) {        
+            nGLGetQueryiv(target, pname, params, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            int[] array = params.array();
+            nGLGetQueryiv(target, pname, array, offset);
         }
-        
     }
 
     /**
@@ -774,8 +1023,7 @@ public class GLES30Pipeline
      *  C function void glGetQueryiv((GLenum) target, (GLenum) pname, (GLint) *params)
 
      **/
-    private static native void nGLGetQueryiv(int target, int pname, java.nio.IntBuffer params, int offset);/*
-    
+    private static native void nGLGetQueryiv(int target, int pname, java.nio.IntBuffer params, int offset);/*    
             glGetQueryiv((GLenum) target, (GLenum) pname, (GLint *) (params + offset));
     */
 
@@ -787,6 +1035,7 @@ public class GLES30Pipeline
 
      **/
     public void glGetQueryObjectuiv(int id, int pname, int[] params, int offset) {
+        checkArray(params, offset, 1, PARAMS);
         GLES30Pipeline.nGLGetQueryObjectuiv(id, pname, params, offset);
     }
 
@@ -797,8 +1046,7 @@ public class GLES30Pipeline
      *  C function void glGetQueryObjectuiv((GLuint)  id, (GLenum) pname, (GLuint *) params)
 
      **/
-    private static native void nGLGetQueryObjectuiv(int id, int pname, int[] params, int offset);/*
-    
+    private static native void nGLGetQueryObjectuiv(int id, int pname, int[] params, int offset);/*    
          glGetQueryObjectuiv((GLuint)  id, (GLenum) pname, (GLuint  *)(params + offset));
     */
 
@@ -810,18 +1058,15 @@ public class GLES30Pipeline
 
      **/
     public void glGetQueryObjectuiv(int id, int pname, java.nio.IntBuffer params) {
-
-        if (params == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
-            GLES30Pipeline.nGLGetQueryObjectuiv(id, pname, params, offset);
+        checkBuffer(params,1,PARAMS);
+        int offset = getOffset(params);
+       
+        if (params.isDirect()) {        
+            nGLGetQueryObjectuiv(id, pname, params, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            int[] array = params.array();
+            nGLGetQueryObjectuiv(id, pname, array, offset);
         }
-
     }
 
     /**
@@ -853,8 +1098,7 @@ public class GLES30Pipeline
      *  C function (GLboolean) glUnmapBuffer((GLenum) target)
 
      **/
-    private static native boolean nGLUnmapBuffer(int target);/*
-    
+    private static native boolean nGLUnmapBuffer(int target);/*    
           return (jboolean)glUnmapBuffer((GLenum) target);
     */
 
@@ -863,7 +1107,6 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glGetBufferPointerv([int target, int pname]);
      * 
      *  C function void glGetBufferPointerv((GLenum) target, (GLenum) pname, GLvoid** params)
-
      **/
     public java.nio.Buffer glGetBufferPointerv(int target, int pname) {
         return GLES30Pipeline.nGLGetBufferPointerv(target, pname);
@@ -874,15 +1117,14 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glGetBufferPointerv([int target, int pname]);
      * 
      *  C function void glGetBufferPointerv((GLenum) target, (GLenum) pname, GLvoid** params)
-
      **/
-    private static native java.nio.Buffer nGLGetBufferPointerv(int target, int pname);/*
-        
+    private static native java.nio.Buffer nGLGetBufferPointerv(int target, int pname);/*        
         // from android.googlesource.com
-        GLint64 _mapLength;
+        GLint64 _mapLength = 0;
         GLvoid* _p; // &_p works like GLvoid** _p
         
         glGetBufferParameteri64v((GLenum)target, GL_BUFFER_MAP_LENGTH, &_mapLength);
+        
         glGetBufferPointerv((GLenum)target, (GLenum)pname, &_p);
         return env->NewDirectByteBuffer(_p, _mapLength);
     */
@@ -892,9 +1134,9 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glDrawBuffers([int n, int[] bufs, int offset]);
      * 
      *  C function void glDrawBuffers((GLsizei) n, const (GLenum) *bufs)
-
      **/
     public void glDrawBuffers(int n, int[] bufs, int offset) {
+        checkArray(bufs, offset, n, "bufs");
         GLES30Pipeline.nGLDrawBuffers(n, bufs, offset);
     }
 
@@ -903,11 +1145,9 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glDrawBuffers([int n, int[] bufs, int offset]);
      * 
      *  C function void glDrawBuffers((GLsizei) n, const (GLenum) *bufs)
-
      **/
-    private static native void nGLDrawBuffers(int n, int[] bufs, int offset);/*
-    
-            glDrawBuffers((GLsizei) n, (const GLenum *)(bufs + offset));
+    private static native void nGLDrawBuffers(int n, int[] bufs, int offset);/*    
+            glDrawBuffers((GLsizei) n, (GLenum *)(bufs + offset));
     */
 
     /**
@@ -915,19 +1155,15 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glDrawBuffers([int n, java.nio.IntBuffer bufs]);
      * 
      *  C function void glDrawBuffers((GLsizei) n, const (GLenum) *bufs)
-
      **/
-    public void glDrawBuffers(int n, java.nio.IntBuffer bufs) {
-        
-        if (bufs == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
-        // now, the offset...
-        if (bufs.isDirect()) {
-            int offset = BufferInfo.getOffset(bufs);
-            GLES30Pipeline.nGLDrawBuffers(n, bufs, offset);
+    public void glDrawBuffers(int n, java.nio.IntBuffer bufs) {        
+        checkBuffer(bufs,1,PARAMS);
+        int offset = getOffset(bufs);
+        if (bufs.isDirect()) {           
+            nGLDrawBuffers(n, bufs, offset);
         } else {
-            throw new IllegalArgumentException(INTBUFFER_ND);
+            int[] array = bufs.array();
+            nGLDrawBuffers(n, array, offset);
         }
     }
 
@@ -938,9 +1174,8 @@ public class GLES30Pipeline
      *  C function void glDrawBuffers((GLsizei) n, const (GLenum) *bufs)
 
      **/
-    private static native void nGLDrawBuffers(int n, java.nio.IntBuffer bufs, int offset);/*
-    
-         glDrawBuffers((GLsizei) n, (const GLenum *)(bufs + offset));
+    private static native void nGLDrawBuffers(int n, java.nio.IntBuffer bufs, int offset);/*    
+         glDrawBuffers((GLsizei) n, (GLenum *)(bufs + offset));
     */
 
     /**
@@ -951,6 +1186,7 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix2x3fv(int location, int count, boolean transpose, float[] value, int offset) {
+        checkArray(value, offset, 6, VALUES);
         GLES30Pipeline.nGLUniformMatrix2x3fv(location, count, transpose, value, offset);
     }
 
@@ -961,9 +1197,8 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix2x3fv(int location, int count, boolean transpose, float[] value, int offset);/*
-    
-                glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value+offset));
+    private static native void nGLUniformMatrix2x3fv(int location, int count, boolean transpose, float[] value, int offset);/*    
+                glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (GLfloat *)(value+offset));
     */
 
     /**
@@ -973,18 +1208,19 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    public void glUniformMatrix2x3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {
-        
-        if (value == null)
-            throw new IllegalArgumentException(FLOATBUFFER_NULL);
-
+    public void glUniformMatrix2x3fv(int location,
+                                     int count,
+                                     boolean transpose,
+                                     java.nio.FloatBuffer value) {
+        checkBuffer(value, 6, VALUES);
+        int offset = getOffset(value);
         // now, the offset...
         if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
-            GLES30Pipeline.nGLUniformMatrix2x3fv(location, count, transpose, value, offset);
+            nGLUniformMatrix2x3fv(location, count, transpose, value, offset);
         } else {
-            throw new IllegalArgumentException(FLOATBUFFER_ND);
-    }
+            float[] array = value.array();
+            nGLUniformMatrix2x3fv(location, count, transpose, array, offset);
+        }
     }
 
     /**
@@ -994,9 +1230,8 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix2x3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    
-         glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value+offset));
+    private static native void nGLUniformMatrix2x3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*    
+         glUniformMatrix2x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, ( GLfloat *)(value+offset));
     */
 
     /**
@@ -1007,6 +1242,7 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix3x2fv(int location, int count, boolean transpose, float[] value, int offset) {
+        checkArray(value, offset, 6, PARAMS);
         GLES30Pipeline.nGLUniformMatrix3x2fv(location, count, transpose, value, offset);
     }
 
@@ -1017,8 +1253,7 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix3x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix3x2fv(int location, int count, boolean transpose, float[] value, int offset);/*
-    
+    private static native void nGLUniformMatrix3x2fv(int location, int count, boolean transpose, float[] value, int offset);/*    
             glUniformMatrix3x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value + offset));
     */
 
@@ -1030,18 +1265,14 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix3x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {
-
-        if (value == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
+        checkBuffer(value,6,VALUES);
+        int offset = getOffset(value);
+        if (value.isDirect()) {           
             GLES30Pipeline.nGLUniformMatrix3x2fv(location, count, transpose, value, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
-        }
-       
+            float[] array = value.array();
+            nGLUniformMatrix3x2fv(location, count, transpose, array, offset);
+        }       
     }
 
     /**
@@ -1051,10 +1282,8 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix3x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix3x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    
-            glUniformMatrix3x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value + offset));
-    
+    private static native void nGLUniformMatrix3x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*    
+            glUniformMatrix3x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value + offset));    
     */
 
     /**
@@ -1065,6 +1294,7 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix2x4fv(int location, int count, boolean transpose, float[] value, int offset) {
+        checkArray(value, offset, 8, VALUES);
         GLES30Pipeline.nGLUniformMatrix2x4fv(location, count, transpose, value, offset);
     }
 
@@ -1089,15 +1319,14 @@ public class GLES30Pipeline
      **/
     public void glUniformMatrix2x4fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {
         
-        if (value == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
+        checkBuffer(value,8,VALUES);
+        int offset = getOffset(value);
+        
+        if (value.isDirect()) {           
             GLES30Pipeline.nGLUniformMatrix2x4fv(location, count, transpose, value, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            float[] array = value.array();
+            GLES30Pipeline.nGLUniformMatrix2x4fv(location, count, transpose, array, offset);
         }        
     }
 
@@ -1106,10 +1335,8 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glUniformMatrix2x4fv([int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glUniformMatrix2x4fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
-
      **/
-    private static native void nGLUniformMatrix2x4fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    
+    private static native void nGLUniformMatrix2x4fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*    
              glUniformMatrix2x4fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value + offset));
     */
 
@@ -1118,9 +1345,9 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glUniformMatrix4x2fv([int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glUniformMatrix4x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
-
      **/
     public void glUniformMatrix4x2fv(int location, int count, boolean transpose, float[] value, int offset) {
+        checkArray(value, offset, 8, VALUES);
         GLES30Pipeline.nGLUniformMatrix4x2fv(location, count, transpose, value, offset);
     }
 
@@ -1129,10 +1356,8 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glUniformMatrix4x2fv([int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glUniformMatrix4x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
-
      **/
-    private static native void nGLUniformMatrix4x2fv(int location, int count, boolean transpose, float[] value, int offset);/*
-    
+    private static native void nGLUniformMatrix4x2fv(int location, int count, boolean transpose, float[] value, int offset);/*    
             glUniformMatrix4x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value + offset));
     */
 
@@ -1143,18 +1368,14 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix4x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    public void glUniformMatrix4x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {
-        
-        if (value == null)
-            throw new IllegalArgumentException(FLOATBUFFER_NULL);
-
-        // now, the offset...
-        if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
+    public void glUniformMatrix4x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {        
+        checkBuffer(value,8,VALUES);
+        int offset = getOffset(value);
+        if (value.isDirect()) {           
             GLES30Pipeline.nGLUniformMatrix4x2fv(location, count, transpose, value, offset);
         } else {
-            throw new IllegalArgumentException(FLOATBUFFER_ND);
-    }
+            GLES30Pipeline.nGLUniformMatrix4x2fv(location, count, transpose, value.array(), offset);
+            }
     }
 
     /**
@@ -1164,11 +1385,8 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix4x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix4x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    
+    private static native void nGLUniformMatrix4x2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*    
              glUniformMatrix4x2fv((GLint) location, (GLsizei) count, (GLboolean) transpose, (const GLfloat *)(value + offset));    
-    
-    
     */
 
     /**
@@ -1179,6 +1397,7 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix3x4fv(int location, int count, boolean transpose, float[] value, int offset) {
+        checkArray(value, offset, 12, VALUES);
         GLES30Pipeline.nGLUniformMatrix3x4fv(location, count, transpose, value, offset);
     }
 
@@ -1189,13 +1408,11 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix3x4fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix3x4fv(int location, int count, boolean transpose, float[] value, int offset);/*
-    
+    private static native void nGLUniformMatrix3x4fv(int location, int count, boolean transpose, float[] value, int offset);/*    
     					glUniformMatrix3x4fv((GLint) location, 
     											(GLsizei) count, 
     											(GLboolean) transpose, 
-    											(const GLfloat *) &value[offset]);
-    
+    											( GLfloat *) &value[offset]);    
     */
 
     /**
@@ -1206,15 +1423,13 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix3x4fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {
-        if (value == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
+        checkBuffer(value,12,VALUES);
+        int offset = getOffset(value); 
         // now, the offset...
         if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
             GLES30Pipeline.nGLUniformMatrix3x4fv(location, count, transpose, value, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            GLES30Pipeline.nGLUniformMatrix3x4fv(location, count, transpose, value.array(), offset);
         }     
     }
 
@@ -1225,12 +1440,11 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix3x4fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix3x4fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    
+    private static native void nGLUniformMatrix3x4fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*    
     					glUniformMatrix3x4fv((GLint) location, 
     											(GLsizei) count, 
     											(GLboolean) transpose, 
-    											(const GLfloat *) (value + offset));
+    											(GLfloat *) (value + offset));
     
     */
 
@@ -1242,6 +1456,7 @@ public class GLES30Pipeline
 
      **/
     public void glUniformMatrix4x3fv(int location, int count, boolean transpose, float[] value, int offset) {
+        checkArray(value, offset, 12, VALUES);
         GLES30Pipeline.nGLUniformMatrix4x3fv(location, count, transpose, value, offset);
     }
 
@@ -1252,51 +1467,45 @@ public class GLES30Pipeline
      *  C function void glUniformMatrix4x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
 
      **/
-    private static native void nGLUniformMatrix4x3fv(int location, int count, boolean transpose, float[] value, int offset);/*
-    
+    private static native void nGLUniformMatrix4x3fv(int location, int count, boolean transpose, float[] value, int offset);/*    
     						glUniformMatrix4x3fv((GLint) location, 
     											(GLsizei) count, 
     											(GLboolean) transpose, 
-    											(const GLfloat *) &value[offset]);
-    
-    
+    											(GLfloat *) &value[offset]);
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glUniformMatrix4x3fv([int location, int count, boolean transpose, java.nio.FloatBuffer value]);
+     * Delegate Method generated from GLES30.glUniformMatrix4x3fv([int location, 
+     * int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
-     *  C function void glUniformMatrix4x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
-
+     *  C function void glUniformMatrix4x3fv((GLint) location, 
+     *                                        (GLsizei) count, 
+     *                                        (GLboolean) transpose, 
+     *                                        const (GLfloat) *value)
      **/
     public void glUniformMatrix4x3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value) {
-        if (value == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
+        checkBuffer(value,12,VALUES);
+        int offset = getOffset(value);
+        if (value.isDirect()) {            
             GLES30Pipeline.nGLUniformMatrix4x3fv(location, count, transpose, value, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            GLES30Pipeline.nGLUniformMatrix4x3fv(location, count, transpose, value.array(), offset);
         }       
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glUniformMatrix4x3fv([int location, int count, boolean transpose, java.nio.FloatBuffer value]);
+     * Native method generated from GLES30.glUniformMatrix4x3fv([int location, 
+     * int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glUniformMatrix4x3fv((GLint) location, (GLsizei) count, (GLboolean) transpose, const (GLfloat) *value)
-
      **/
-    private static native void nGLUniformMatrix4x3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
-    
+    private static native void nGLUniformMatrix4x3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*    
     						glUniformMatrix4x3fv((GLint) location, 
     											(GLsizei) count, 
     											(GLboolean) transpose, 
-    											(const GLfloat *) (value + offset));    
-    
-    
+    											(GLfloat *) (value + offset));    
     */
 
     /**
@@ -1361,14 +1570,12 @@ public class GLES30Pipeline
      *  C function void glRenderbufferStorageMultisample((GLenum) target, (GLsizei) samples, (GLenum) internalformat, (GLsizei) width, (GLsizei) height)
 
      **/
-    private static native void nGLRenderbufferStorageMultisample(int target, int samples, int internalformat, int width, int height);/*
-    			
+    private static native void nGLRenderbufferStorageMultisample(int target, int samples, int internalformat, int width, int height);/*    			
     			glRenderbufferStorageMultisample(   (GLenum) target, 
     												(GLsizei) samples, 
     												(GLenum) internalformat, 
     												(GLsizei) width, 
-    												(GLsizei) height);
-    
+    												(GLsizei) height);    
     */
 
     /**
@@ -1453,7 +1660,7 @@ public class GLES30Pipeline
 
      **/
     private static native void nGLFlushMappedBufferRange(int target, int offset, int length);/*
-    			glFlushMappedBufferRange((GLenum) target, (GLintptr) offset, (GLsizeiptr) length);
+    	glFlushMappedBufferRange((GLenum) target, (GLintptr) offset, (GLsizeiptr) length);
     */
 
     /**
@@ -1486,6 +1693,7 @@ public class GLES30Pipeline
 
      **/
     public void glDeleteVertexArrays(int n, int[] arrays, int offset) {
+        checkArray(arrays, offset, n,"arrays");
         GLES30Pipeline.nGLDeleteVertexArrays(n, arrays, offset);
     }
 
@@ -1507,17 +1715,14 @@ public class GLES30Pipeline
      *  C function void glDeleteVertexArrays((GLsizei) n, (const GLuint *) arrays)
 
      **/
-    public void glDeleteVertexArrays(int n, java.nio.IntBuffer arrays) {
-        
-        if (arrays == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
+    public void glDeleteVertexArrays(int n, java.nio.IntBuffer arrays) {        
+        checkBuffer(arrays,n,"arrays");
+        int offset = getOffset(arrays);
         // now, the offset...
-        if (arrays.isDirect()) {
-            int offset = BufferInfo.getOffset(arrays);
+        if (arrays.isDirect()) {           
             GLES30Pipeline.nGLDeleteVertexArrays(n, arrays, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
+            GLES30Pipeline.nGLDeleteVertexArrays(n, arrays.array(), offset);
         }      
     }
 
@@ -1540,6 +1745,7 @@ public class GLES30Pipeline
 
      **/
     public void glGenVertexArrays(int n, int[] arrays, int offset) {
+        checkArray(arrays, offset, n, "arrays");
         GLES30Pipeline.nGLGenVertexArrays(n, arrays, offset);
     }
 
@@ -1563,17 +1769,14 @@ public class GLES30Pipeline
      **/
     public void glGenVertexArrays(int n, java.nio.IntBuffer arrays) {
         
-        if (arrays == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
-
-        // now, the offset...
-        if (arrays.isDirect()) {
-            int offset = BufferInfo.getOffset(arrays);
+        checkBuffer(arrays ,n,"arrays");
+        int offset = getOffset(arrays);
+       
+        if (arrays.isDirect()) {           
             GLES30Pipeline.nGLGenVertexArrays(n, arrays, offset);
         } else {
-            throw new IllegalArgumentException(BUFFER_ND);
-        }
-        
+            GLES30Pipeline.nGLGenVertexArrays(n, arrays.array(), offset);
+        }        
     }
 
     /**
@@ -1617,6 +1820,7 @@ public class GLES30Pipeline
 
      **/
     public void glGetIntegeri_v(int target, int index, int[] data, int offset) {
+        checkArray(data, offset, 1, DATA);
         GLES30Pipeline.nGLGetIntegeriv(target, index, data, offset);
     }
 
@@ -1625,7 +1829,6 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glGetIntegeri_v([int target, int index, int[] data, int offset]);
      * 
      *  C function void glGetIntegeri_v((GLenum) target, (GLuint)  index, (GLint) *data)
-
      **/
     private static native void nGLGetIntegeriv(int target, 
 	    					 int index, 
@@ -1642,19 +1845,15 @@ public class GLES30Pipeline
      *  C function void glGetIntegeri_v((GLenum) target, (GLuint)  index, (GLint) *data)
 
      */
-    public void glGetIntegeri_v(int target, int index, java.nio.IntBuffer data) {
-                
-        if (data == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
+    public void glGetIntegeri_v(int target, int index, java.nio.IntBuffer data) {                
+        checkBuffer(data,1,DATA);
+        int offset = getOffset(data); 
         // now, the offset...
-        if (data.isDirect()) {
-            int offset = BufferInfo.getOffset(data);
+        if (data.isDirect()) {           
             GLES30Pipeline.nGLGetIntegeriv0(target, index, data, offset);
         } else {
-            throw new IllegalArgumentException(INTBUFFER_ND);
-    }
-        
+            GLES30Pipeline.nGLGetIntegeriv0(target, index, data.array(), offset);
+            }        
     }
 
     /**
@@ -1669,6 +1868,12 @@ public class GLES30Pipeline
 	    java.nio.IntBuffer data, int offset);/*    
             glGetIntegeri_v((GLenum) target, (GLuint)  index, (GLint *)(data + offset));             
     */
+    
+    private static native void nGLGetIntegeriv0(int target, 
+                                                int index, 
+                                                int[] data, int offset);/*    
+        glGetIntegeri_v((GLenum) target, (GLuint)  index, (GLint *)(data + offset));             
+     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -1697,7 +1902,6 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glEndTransformFeedback();
      * 
      *  C function void glEndTransformFeedback(void)
-
      **/
     public void glEndTransformFeedback() {
         GLES30Pipeline.nGLEndTransformFeedback();
@@ -1708,7 +1912,6 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glEndTransformFeedback();
      * 
      *  C function void glEndTransformFeedback(void)
-
      **/
     private static native void nGLEndTransformFeedback();/*
             glEndTransformFeedback();
@@ -1719,7 +1922,6 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glBindBufferRange([int target, int index, int buffer, int offset, int size]);
      * 
      *  C function void glBindBufferRange((GLenum) target, (GLuint)  index, (GLuint)  buffer, (GLintptr) offset, GLsizeiptr size)
-
      **/
     public void glBindBufferRange(int target, int index, int buffer, int offset, int size) {
         GLES30Pipeline.nGLBindBufferRange(target, index, buffer, offset, size);
@@ -1774,6 +1976,9 @@ public class GLES30Pipeline
 
      **/
     public void glTransformFeedbackVaryings(int program, String[] varyings, int bufferMode) {
+        if(varyings==null){
+            throw new IllegalArgumentException("varyings == null");
+        }
         GLES30Pipeline.nGLTransformFeedbackVaryings(program, varyings, varyings.length, bufferMode);
     }
 
@@ -1835,7 +2040,17 @@ public class GLES30Pipeline
                                               int[] size, int sizeOffset, 
                                               int[] type, int typeOffset, 
                                               byte[] name, int nameOffset) {
-        GLES30Pipeline.nGLGetTransformFeedbackVarying(program, index, bufsize, length, lengthOffset, size, sizeOffset, type, typeOffset, name, nameOffset);
+        checkArray(length, lengthOffset, 1, "length");
+        checkArray(size, sizeOffset, 1, "size");
+        checkArray(type, typeOffset, 1, "type");
+        checkArray(name, nameOffset, 1, "name");
+        nGLGetTransformFeedbackVarying(program, 
+                index, 
+                bufsize, 
+                length, lengthOffset, 
+                size, sizeOffset, 
+                type, typeOffset, 
+                name, nameOffset);
     }
 
     /**
@@ -1925,7 +2140,11 @@ public class GLES30Pipeline
      *  C function void glGetTransformFeedbackVarying((GLuint)  program, (GLuint)  index, (GLsizei) bufSize, (GLsizei) *length, (GLint) *size, (GLenum) *type, GLchar *name)
 
      **/
-    public String glGetTransformFeedbackVarying(int program, int index, int[] size, int sizeOffset, int[] type, int typeOffset) {
+    public String glGetTransformFeedbackVarying(int program, int index, 
+                                                int[] size, int sizeOffset, 
+                                                int[] type, int typeOffset) {
+        checkArray(size, sizeOffset, 1, "size");
+        checkArray(type, typeOffset, 1, "type");
         return GLES30Pipeline.nGLGetTransformFeedbackVarying(program, index, size, sizeOffset, type, typeOffset);
     }
 
@@ -1990,30 +2209,24 @@ public class GLES30Pipeline
 	    int index, 
 	    java.nio.IntBuffer size, 
 	    java.nio.IntBuffer type) {
-        if (size == null || type ==null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
+        
+        checkBuffer(type, 1, "type");
+        checkBuffer(size, 1, "size");
+        
+        int sizeOffset = getOffset(size);
+        int typeOffset = getOffset(type);
+        
         // now, the offset...
-        if (size.isDirect()) {
-            int sizeOffset = BufferInfo.getOffset(size);
-            int typeOffset = BufferInfo.getOffset(type);
+        if (size.isDirect() && type.isDirect()) {            
             return GLES30Pipeline.nGLGetTransformFeedbackVarying(program, 
                     index, 
                     size, sizeOffset, 
                     type, typeOffset);
-        } else {
-            if(!size.hasArray() || !type.hasArray()){
-                throw new IllegalArgumentException(INTBUFFER_ND);
-            }
-            int[] arraySize = size.array();            
-            int sizeOffset =  BufferInfo.getOffset(size);
-            
-            int[] arrayType = type.array();            
-            int typeOffset =  BufferInfo.getOffset(size);
+        } else {            
             return GLES30Pipeline.nGLGetTransformFeedbackVarying(program, index, 
-                    arraySize, sizeOffset, 
-                    arrayType, typeOffset);
-         }        
+                    size.array(), sizeOffset, 
+                    type.array(), typeOffset);
+         }      
       
        //GLES30Pipeline.nGLGetTransformFeedbackVarying(program, index, size, sizeOffset, type, typeOffset);
     }
@@ -2075,16 +2288,34 @@ public class GLES30Pipeline
 	    int size, 
 	    int type, 
 	    int stride, 
-	    java.nio.Buffer pointer, int remaining) {
-	
-        if (pointer == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
+	    java.nio.Buffer pointer, int remaining) {	
+        checkBuffer(pointer,1,"pointer");
+        
         // now, the offset...
-        if (pointer.isDirect()) {
-            int offset = BufferInfo.getOffset(pointer);
-            GLES30Pipeline.nGLVertexAttribIPointerBounds(index, size, type, stride, pointer, offset);
+        if (pointer.isDirect()) { 
+            int offset = getOffset(pointer);
+            nGLVertexAttribIPointerBounds(index, size, type, stride, pointer, offset);
         } else {
-            throw new IllegalArgumentException("Must use a native order direct Buffer");
+            if(pointer instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)pointer;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLVertexAttribIPointerBounds(index, size, type, stride, array, offset);
+                return;
+            }else if(pointer instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)pointer;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                nGLVertexAttribIPointerBounds(index, size, type, stride, array, offset);
+                return;
+            }else if(pointer instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)pointer;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                nGLVertexAttribIPointerBounds(index, size, type, stride, array, offset);
+                return;
+            }else 
+            throw new RuntimeException("Invalid buffer.");
         }
     }
 
@@ -2099,13 +2330,47 @@ public class GLES30Pipeline
 	    int size, 
 	    int type, 
 	    int stride, 
-	    java.nio.Buffer pointer, int offset);/*
-	    
+	    java.nio.Buffer pointer, int offset);/*	    
 	    glVertexAttribIPointer((GLuint)  index, 
 	    (GLint) size, 
 	    (GLenum) type, 
 	    (GLsizei) stride, 
 	    (const GLvoid *)(pointer + offset));	    
+*/
+    
+    private static native void nGLVertexAttribIPointerBounds(int index, 
+                                                             int size, 
+                                                             int type, 
+                                                             int stride, 
+                                                             byte[] pointer, int offset);/*   
+            glVertexAttribIPointer((GLuint)  index, 
+                                   (GLint) size, 
+                                   (GLenum) type, 
+                                   (GLsizei) stride, 
+                                   (const GLvoid *)(pointer + offset));        
+*/
+    private static native void nGLVertexAttribIPointerBounds(int index, 
+                                                             int size, 
+                                                             int type, 
+                                                             int stride, 
+                                                             short[] pointer, int offset);/*   
+            glVertexAttribIPointer((GLuint)  index, 
+                                   (GLint) size, 
+                                   (GLenum) type, 
+                                   (GLsizei) stride, 
+                                   (const GLvoid *)(pointer + offset));        
+*/
+    
+    private static native void nGLVertexAttribIPointerBounds(int index, 
+                                                             int size, 
+                                                             int type, 
+                                                             int stride, 
+                                                             int[] pointer, int offset);/*   
+            glVertexAttribIPointer((GLuint)  index, 
+                                   (GLint) size, 
+                                   (GLenum) type, 
+                                   (GLsizei) stride, 
+                                   (const GLvoid *)(pointer + offset));        
 */
 
     /**
@@ -2179,14 +2444,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (params.isDirect()) {
-	            int offset = BufferInfo.getOffset(params);
+	            int offset = getOffset(params);
 	            GLES30Pipeline.nGLGetVertexAttribIiv(index, pname, params, offset);
 	        } else {
 	            if(!params.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = params.array();            
-	            int offset =  BufferInfo.getOffset(params); 
+	            int offset =  getOffset(params); 
 	            GLES30Pipeline.nGLGetVertexAttribIiv(index, pname, array, offset);
 	         }       
     }
@@ -2241,14 +2506,14 @@ public class GLES30Pipeline
 	    throw new IllegalArgumentException(INTBUFFER_NULL);
 	// now, the offset...
 	if (params.isDirect()) {
-	    int offset = BufferInfo.getOffset(params);
+	    int offset = getOffset(params);
 	    GLES30Pipeline.nGLGetVertexAttribIuiv(index, pname, params, offset);
 	} else {
 	    if (!params.hasArray()) {
 		throw new IllegalArgumentException(INTBUFFER_ND);
 	    }
 	    int[] array = params.array();
-	    int offset = BufferInfo.getOffset(params);
+	    int offset = getOffset(params);
 	    GLES30Pipeline.nGLGetVertexAttribIuiv(index, pname, array, offset);
 	}
     }
@@ -2346,14 +2611,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (values.isDirect()) {
-	            int offset = BufferInfo.getOffset(values);
+	            int offset = getOffset(values);
 	            GLES30Pipeline.nGLVertexAttribI4iv(index, values, offset);
 	        } else {
 	            if(!values.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = values.array();            
-	            int offset =  BufferInfo.getOffset(values); 
+	            int offset =  getOffset(values); 
 	            GLES30Pipeline.nGLVertexAttribI4iv(index, array, offset);
 	         }	
     }
@@ -2404,14 +2669,14 @@ public class GLES30Pipeline
 
 	// now, the offset...
 	if (values.isDirect()) {
-	    int offset = BufferInfo.getOffset(values);
+	    int offset = getOffset(values);
 	    GLES30Pipeline.nGLVertexAttribI4uiv(index, values, offset);
 	} else {
 	    if (!values.hasArray()) {
 		throw new IllegalArgumentException(INTBUFFER_ND);
 	    }
 	    int[] array = values.array();
-	    int offset = BufferInfo.getOffset(values);
+	    int offset = getOffset(values);
 	    GLES30Pipeline.nGLVertexAttribI4uiv(index, array, offset);
 	}	
     }
@@ -2465,14 +2730,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (params.isDirect()) {
-	            int offset = BufferInfo.getOffset(params);
+	            int offset = getOffset(params);
 	            GLES30Pipeline.nGLGetUniformuiv(program, location, params, offset);
 	        } else {
 	            if(!params.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = params.array();            
-	            int offset =  BufferInfo.getOffset(params); 
+	            int offset =  getOffset(params); 
 	            GLES30Pipeline.nGLGetUniformuiv(program, location, array, offset);
 	         }
     }
@@ -2642,14 +2907,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (value.isDirect()) {
-	            int offset = BufferInfo.getOffset(value);
+	            int offset = getOffset(value);
 	            GLES30Pipeline.nGLUniform1uiv(location, count, value, offset);
 	        } else {
 	            if(!value.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = value.array();            
-	            int offset =  BufferInfo.getOffset(value); 
+	            int offset =  getOffset(value); 
 	            GLES30Pipeline.nGLUniform1uiv(location, count, array, offset);
 	         }       
     }
@@ -2707,14 +2972,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (value.isDirect()) {
-	            int offset = BufferInfo.getOffset(value);
+	            int offset = getOffset(value);
 	            GLES30Pipeline.nGLUniform2uiv(location, count, value, offset);
 	        } else {
 	            if(!value.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = value.array();            
-	            int offset =  BufferInfo.getOffset(value); 
+	            int offset =  getOffset(value); 
 	            GLES30Pipeline.nGLUniform2uiv(location, count, array, offset);
 	         }
        
@@ -2770,7 +3035,7 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (value.isDirect()) {
-	            int offset = BufferInfo.getOffset(value);
+	            int offset = getOffset(value);
 	            GLES30Pipeline.nGLUniform3uiv(location, count, value, offset);
 	            
 	        } else {
@@ -2778,7 +3043,7 @@ public class GLES30Pipeline
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = value.array();            
-	            int offset =  BufferInfo.getOffset(value); 
+	            int offset =  getOffset(value); 
 	            GLES30Pipeline.nGLUniform3uiv(location, count, array, offset);	           
 	         }        
     }
@@ -2831,14 +3096,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (value.isDirect()) {
-	            int offset = BufferInfo.getOffset(value);
+	            int offset = getOffset(value);
 	            GLES30Pipeline.nGLUniform4uiv(location, count, value, offset);
 	        } else {
 	            if(!value.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = value.array();            
-	            int offset =  BufferInfo.getOffset(value); 
+	            int offset =  getOffset(value); 
 	            GLES30Pipeline.nGLUniform4uiv(location, count, array, offset);
 	         }
     }
@@ -2895,14 +3160,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (value.isDirect()) {
-	            int offset = BufferInfo.getOffset(value);
+	            int offset = getOffset(value);
 	            GLES30Pipeline.nGLClearBufferiv(buffer, drawbuffer, value, offset);
 	        } else {
 	            if(!value.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = value.array();            
-	            int offset =  BufferInfo.getOffset(value); 
+	            int offset =  getOffset(value); 
 	            GLES30Pipeline.nGLClearBufferiv(buffer, drawbuffer, array, offset);
 	         }       
     }
@@ -2957,7 +3222,7 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
+            int offset = getOffset(value);
             GLES30Pipeline.nGLClearBufferuiv(buffer, drawbuffer, value, offset);
             
         } else {
@@ -2965,7 +3230,7 @@ public class GLES30Pipeline
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             int[] array = value.array();            
-            int offset =  BufferInfo.getOffset(value); 
+            int offset =  getOffset(value); 
             GLES30Pipeline.nGLClearBufferuiv(buffer, drawbuffer, array, offset);
          }
        
@@ -3017,19 +3282,18 @@ public class GLES30Pipeline
      **/
     public void glClearBufferfv(int buffer, int drawbuffer, java.nio.FloatBuffer value) {
 	
-	if (value == null)
-            throw new IllegalArgumentException(FLOATBUFFER_NULL);
+        checkBuffer(value,1,VALUES);
 
         // now, the offset...
         if (value.isDirect()) {
-            int offset = BufferInfo.getOffset(value);
+            int offset = getOffset(value);
             GLES30Pipeline.nGLClearBufferfv(buffer, drawbuffer, value, offset);
         } else {
             if(!value.hasArray()){
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             float[] array = value.array();            
-            int offset =  BufferInfo.getOffset(value); 
+            int offset =  getOffset(value); 
             GLES30Pipeline.nGLClearBufferfv(buffer, drawbuffer, array, offset);
          }
     }
@@ -3205,7 +3469,7 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (uniformIndices.isDirect()) {
-            int offset = BufferInfo.getOffset(uniformIndices);
+            int offset = getOffset(uniformIndices);
             GLES30Pipeline.nGLGetUniformIndices(program, 
                     uniformNames, 
                     uniformIndices, 
@@ -3213,7 +3477,7 @@ public class GLES30Pipeline
         } else {
             if (!uniformIndices.hasArray()) { throw new IllegalArgumentException(INTBUFFER_ND); }
             int[] array = uniformIndices.array();
-            int offset = BufferInfo.getOffset(uniformIndices);
+            int offset = getOffset(uniformIndices);
             GLES30Pipeline.nGLGetUniformIndices(program, uniformNames, array, offset);
         }
 
@@ -3318,8 +3582,8 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (uniformIndices.isDirect() && params.isDirect()) {
-            int uniformIndicesOffset = BufferInfo.getOffset(uniformIndices);
-            int paramsOffset = BufferInfo.getOffset(params);
+            int uniformIndicesOffset = getOffset(uniformIndices);
+            int paramsOffset = getOffset(params);
             
             GLES30Pipeline.nGLGetActiveUniformsiv(program, 
                     uniformCount, 
@@ -3332,8 +3596,8 @@ public class GLES30Pipeline
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
                         
-            int uniformIndicesOffset = BufferInfo.getOffset(uniformIndices);
-            int paramsOffset = BufferInfo.getOffset(params);
+            int uniformIndicesOffset = getOffset(uniformIndices);
+            int paramsOffset = getOffset(params);
             
             int[] uniformArray = uniformIndices.array();
             int[] paramArray = uniformIndices.array();
@@ -3440,14 +3704,14 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
+            int offset = getOffset(params);
             GLES30Pipeline.nGLGetActiveUniformBlockiv(program, uniformBlockIndex, pname, params, offset);
         } else {
             if(!params.hasArray()){
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             int[] array = params.array();            
-            int offset =  BufferInfo.getOffset(params); 
+            int offset =  getOffset(params); 
             GLES30Pipeline.nGLGetActiveUniformBlockiv(program, uniformBlockIndex, pname, array, offset);
          }
     }
@@ -3520,13 +3784,13 @@ public class GLES30Pipeline
                                             int uniformBlockIndex, 
                                             java.nio.Buffer length, 
                                             java.nio.Buffer uniformBlockName) {
-        if (length == null || uniformBlockName == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
+        checkBuffer(length,1,"length");
+        checkBuffer(uniformBlockName,1,"uniformBlockName");
 
         // now, the offset...
         if (length.isDirect() && uniformBlockName.isDirect()) {
-            int lenOffset = BufferInfo.getOffset(length);
-            int uniOffset = BufferInfo.getOffset(uniformBlockName);
+            int lenOffset = getOffset(length);
+            int uniOffset = getOffset(uniformBlockName);
             int bufSize = uniformBlockName.remaining();
             
             GLES30Pipeline.nGLGetActiveUniformBlockName(program, 
@@ -3556,10 +3820,7 @@ public class GLES30Pipeline
     							    int bufSize,
     							    java.nio.Buffer length, int lenOffset,
     							    java.nio.Buffer uniformBlockName, int uniOffset);/*
-          				
-          			
-          			// assume length is int*	
-           	
+          // assume length is int*           	
           glGetActiveUniformBlockName ((GLuint)  program, 
     					(GLuint)  uniformBlockIndex,
     					(GLsizei) bufSize, // get the size of buffer from Buffer
@@ -3666,12 +3927,11 @@ public class GLES30Pipeline
 	    				int count, 
 	    				int type, 
 	    				java.nio.Buffer indices, int instanceCount) {
-        if (indices == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
+        checkBuffer(indices,1,INDICES);
 
         // now, the offset...
         if (indices.isDirect()) {
-            int offset = BufferInfo.getOffset(indices);
+            int offset = getOffset(indices);
             GLES30Pipeline.nGLDrawElementsInstanced(mode, count, type, indices, offset, instanceCount);
         } else {
             throw new IllegalArgumentException(BUFFER_ND);
@@ -3875,12 +4135,12 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
+            int offset = getOffset(params);
             GLES30Pipeline.nGLGetInteger64v(pname, params, offset);
         } else {
             if (!params.hasArray()) { throw new IllegalArgumentException(LONGBUFFER_ND); }
             long[] array = params.array();
-            int offset = BufferInfo.getOffset(params);
+            int offset = getOffset(params);
             GLES30Pipeline.nGLGetInteger64v(pname, array, offset);
         }
     }
@@ -3953,8 +4213,8 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (values.isDirect() && length.isDirect()) {
-            int offsetValues = BufferInfo.getOffset(values);
-            int offsetLen = BufferInfo.getOffset(length);
+            int offsetValues = getOffset(values);
+            int offsetLen = getOffset(length);
             GLES30Pipeline.nGLGetSynciv(sync, 
         	    pname, 
         	    bufSize, 
@@ -3966,8 +4226,8 @@ public class GLES30Pipeline
             }
             int[] valuesArray = values.array();
             int[] lenArray = length.array();
-            int offsetValues =  BufferInfo.getOffset(values); 
-            int offsetLen =  BufferInfo.getOffset(values); 
+            int offsetValues =  getOffset(values); 
+            int offsetLen =  getOffset(values); 
             
             GLES30Pipeline.nGLGetSynciv(sync, 
         	    pname, 
@@ -4036,14 +4296,14 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (data.isDirect()) {
-            int offset = BufferInfo.getOffset(data);
+            int offset = getOffset(data);
             GLES30Pipeline.nGLGetInteger64iv(target, index, data, offset);            
         } else {
             if(!data.hasArray()){
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             long[] array = data.array();            
-            int offset =  BufferInfo.getOffset(data); 
+            int offset =  getOffset(data); 
             GLES30Pipeline.nGLGetInteger64iv(target, index, array, offset); 
          }       
     }
@@ -4103,14 +4363,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (params.isDirect()) {
-	            int offset = BufferInfo.getOffset(params);
+	            int offset = getOffset(params);
 	            GLES30Pipeline.nGLGetBufferParameteri64v(target, pname, params,offset);
 	        } else {
 	            if(!params.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            long[] array = params.array();            
-	            int offset =  BufferInfo.getOffset(params); 
+	            int offset =  getOffset(params); 
 	            GLES30Pipeline.nGLGetBufferParameteri64v(target, pname, array, offset);
 	         }
        
@@ -4166,14 +4426,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (samplers.isDirect()) {
-	            int offset = BufferInfo.getOffset(samplers);
+	            int offset = getOffset(samplers);
 	            GLES30Pipeline.nGLGenSamplers(count, samplers, offset);
 	        } else {
 	            if(!samplers.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = samplers.array();            
-	            int offset =  BufferInfo.getOffset(samplers); 
+	            int offset =  getOffset(samplers); 
 	            GLES30Pipeline.nGLGenSamplers(count, array, offset);
 	         }
         
@@ -4227,14 +4487,14 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (samplers.isDirect()) {
-            int offset = BufferInfo.getOffset(samplers);
+            int offset = getOffset(samplers);
             GLES30Pipeline.nGLDeleteSamplers(count, samplers, offset);
         } else {
             if(!samplers.hasArray()){
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             int[] array = samplers.array();            
-            int offset =  BufferInfo.getOffset(samplers); 
+            int offset =  getOffset(samplers); 
             GLES30Pipeline.nGLDeleteSamplers(count, array, offset);
            
          }        
@@ -4358,14 +4618,14 @@ public class GLES30Pipeline
 
 	        // now, the offset...
 	        if (param.isDirect()) {
-	            int offset = BufferInfo.getOffset(param);
+	            int offset = getOffset(param);
 	            GLES30Pipeline.nGLSamplerParameteriv(sampler, pname, param, offset);
 	        } else {
 	            if(!param.hasArray()){
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	            }
 	            int[] array = param.array();            
-	            int offset = BufferInfo.getOffset(param);
+	            int offset = getOffset(param);
 	            GLES30Pipeline.nGLSamplerParameteriv(sampler, pname, array, offset);
 	         }
         
@@ -4446,7 +4706,7 @@ public class GLES30Pipeline
 
 	 // now, the offset...
 	 if (param.isDirect()) {
-	       int offset = BufferInfo.getOffset(param);
+	       int offset = getOffset(param);
 	       GLES30Pipeline.nGLSamplerParameterfv(sampler, pname, param, offset);
 	 } else 
 	    {
@@ -4454,7 +4714,7 @@ public class GLES30Pipeline
 	                throw new IllegalArgumentException(INTBUFFER_ND);
 	        }
 	       float[] array = param.array();            
-	       int offset = BufferInfo.getOffset(param);
+	       int offset = getOffset(param);
 	       GLES30Pipeline.nGLSamplerParameterfv(sampler, pname, array, offset);	           
 	    }
         
@@ -4513,14 +4773,14 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
+            int offset = getOffset(params);
             GLES30Pipeline.nGLGetSamplerParameteriv(sampler, pname, params, offset);
         } else {
             if(!params.hasArray()){
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             int[] array = params.array();            
-            int offset =  BufferInfo.getOffset(params);
+            int offset =  getOffset(params);
             GLES30Pipeline.nGLGetSamplerParameteriv(sampler, pname, array, offset);
          }        
     }
@@ -4571,16 +4831,15 @@ public class GLES30Pipeline
      **/
     public void glGetSamplerParameterfv(int sampler, int pname, java.nio.FloatBuffer params) {
 
-        if (params == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
+        checkBuffer(params ,1,PARAMS);
 
         // now, the offset...
         if (params.isDirect()) {
-            int offset = BufferInfo.getOffset(params);
+            int offset = getOffset(params);
             GLES30Pipeline.nGLGetSamplerParameterfv(sampler, pname, params,offset);
         } else {
             float[] array = params.array();            
-            int offset =  BufferInfo.getOffset(params);
+            int offset =  getOffset(params);
             GLES30Pipeline.nGLGetSamplerParameterfv(sampler, pname, array,offset);
         }
     }
@@ -4678,14 +4937,14 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (ids.isDirect()) {
-            int offset = BufferInfo.getOffset(ids);
+            int offset = getOffset(ids);
             GLES30Pipeline.nGLDeleteTransformFeedbacks(n, ids, offset);            
         } else {
             if(!ids.hasArray()){
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             int[] array = ids.array();            
-            int offset =  BufferInfo.getOffset(ids); 
+            int offset =  getOffset(ids); 
             GLES30Pipeline.nGLDeleteTransformFeedbacks(n, array, offset);
          }      
     }
@@ -4737,7 +4996,7 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (ids.isDirect()) {
-            int offset = BufferInfo.getOffset(ids);
+            int offset = getOffset(ids);
             GLES30Pipeline.nGLGenTransformFeedbacks(n, ids, offset);
             
         } else {
@@ -4745,7 +5004,7 @@ public class GLES30Pipeline
                 throw new IllegalArgumentException(INTBUFFER_ND);
             }
             int[] array = ids.array();            
-            int offset =  BufferInfo.getOffset(ids);
+            int offset =  getOffset(ids);
             GLES30Pipeline.nGLGenTransformFeedbacks(n, array, offset);
          }
         
@@ -4845,7 +5104,7 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (binary.isDirect()) {
-            int binaryOffset = BufferInfo.getOffset(binary);
+            int binaryOffset = getOffset(binary);
             GLES30Pipeline.nGLGetProgramBinary(program, 
         	    				bufSize, 
         	    				length, lengthOffset, 
@@ -4896,9 +5155,9 @@ public class GLES30Pipeline
         // now, the offset...
         if (binary.isDirect()) {
             
-            int lengthOffset 	   = BufferInfo.getOffset(length);
-            int binaryFormatOffset = BufferInfo.getOffset(binaryFormat);
-            int binaryOffset       = BufferInfo.getOffset(binary);
+            int lengthOffset 	   = getOffset(length);
+            int binaryFormatOffset = getOffset(binaryFormat);
+            int binaryOffset       = getOffset(binary);
             
             GLES30Pipeline.nGLGetProgramBinary(program, 
         	    				bufSize,
@@ -4943,12 +5202,11 @@ public class GLES30Pipeline
      **/
     public void glProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int length) {	
 
-        if (binary == null)
-            throw new IllegalArgumentException(BUFFER_NULL);
+        checkBuffer(binary,1,"binary");
 
         // now, the offset...
         if (binary.isDirect()) {
-            int offset = BufferInfo.getOffset(binary);
+            int offset = getOffset(binary);
             GLES30Pipeline.nGLProgramBinary(program, binaryFormat, binary, offset, length);
         } else {          
             throw new IllegalArgumentException(BUFFER_ND);
@@ -5033,7 +5291,7 @@ public class GLES30Pipeline
 
         // now, the offset...
         if (attachments.isDirect()) {
-            int offset = BufferInfo.getOffset(attachments);
+            int offset = getOffset(attachments);
             GLES30Pipeline.nGLInvalidateFramebuffer(target, numAttachments, attachments, offset);
         } else {
             if(!attachments.hasArray()){
@@ -5053,9 +5311,8 @@ public class GLES30Pipeline
      *  C function void glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments)
 
      **/
-    private static native void nGLInvalidateFramebuffer(int target, int numAttachments, java.nio.IntBuffer attachments, int offset);/*
-    
-    					glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, (const GLenum *) (attachments + offset));
+    private static native void nGLInvalidateFramebuffer(int target, int numAttachments, java.nio.IntBuffer attachments, int offset);/*    
+            glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, (const GLenum *) (attachments + offset));
     */
 
     /**
@@ -5111,14 +5368,14 @@ public class GLES30Pipeline
     	
         checkBuffer(attachments, 1, "attachments");
         int offset = getOffset(attachments);       
-        if (attachments.isDirect()) {
+        if (attachments.isDirect()) {           
             GLES30Pipeline.nGLInvalidateSubFramebuffer(target, 
                     numAttachments, 
                     attachments, offset, 
                     x, y, 
                     width, height);            
-        } else {
-            int[] array = attachments.array();            
+        } else {            
+            int[] array = attachments.array();
             GLES30Pipeline.nGLInvalidateSubFramebuffer(target, numAttachments, array, offset, x, y, width, height);            
         }
     }
@@ -5134,8 +5391,7 @@ public class GLES30Pipeline
     														int numAttachments, 
     														java.nio.IntBuffer attachments, int offset,
     														int x, int y, 
-    														int width, int height);/*
-    														
+    														int width, int height);/*    														
     															
     							glInvalidateSubFramebuffer( (GLenum) target, 
     														(GLsizei) numAttachments, 
@@ -5236,7 +5492,7 @@ public class GLES30Pipeline
     			glGetInternalformativ((GLenum) target, 
     					      (GLenum) internalformat, 
     					      (GLenum) pname, 
-    				              (GLsizei) bufSize, 
+    				          (GLsizei) bufSize, 
     					      (GLint *) &params[offset]);
     */
 
@@ -5250,7 +5506,7 @@ public class GLES30Pipeline
     public void glGetInternalformativ(int target, int internalformat, int pname, int bufSize, java.nio.IntBuffer params) {
         checkBuffer(params, 1, "params");
         int offset = getOffset(params);
-        if (params.isDirect()) {
+        if (params.isDirect()) {            
             GLES30Pipeline.nGLGetInternalformativ(target, internalformat, pname, bufSize, params, offset);            
         } else {
             int[] array = params.array();
