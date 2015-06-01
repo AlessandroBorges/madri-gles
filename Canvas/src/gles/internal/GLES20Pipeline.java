@@ -6,6 +6,11 @@
 package gles.internal;
 
 import static android.opengl.GLES20.*;
+
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 import gles.util.BufferInfo;
 
 /** OpenGL ES 2.0
@@ -13,24 +18,31 @@ import gles.util.BufferInfo;
 public class GLES20Pipeline implements Pipeline {
 
 
-   protected static String FLOATBUFFER_NULL = " java.nio.FloatBuffer param is null.";
-   protected static String FLOATBUFFER_ND = " java.nio.FloatBuffer param is non-direct.";
+  // protected static String FLOATBUFFER_NULL = " java.nio.FloatBuffer param is null.";
+ //  protected static String FLOATBUFFER_ND = " java.nio.FloatBuffer param is non-direct.";
    
-   protected static String INTBUFFER_NULL = " java.nio.IntBuffer param is null.";
-   protected static String INTBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
+  // protected static String INTBUFFER_NULL = " java.nio.IntBuffer param is null.";
+  // protected static String INTBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
    
    protected static String LONGBUFFER_NULL = " java.nio.IntBuffer param is null.";
    protected static String LONGBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
    
-   protected static String BUFFER_NULL = " java.nio.Buffer param  is null.";
-   protected static String BUFFER_ND = " java.nio.Buffer param is non-direct.";
+  // protected static String BUFFER_NULL = " java.nio.Buffer param  is null.";
+  // protected static String BUFFER_ND = " java.nio.Buffer param is non-direct.";
    
-   protected static String OFFSET_0 = "offset < 0";
-   protected static String ARRAY_INT_0 = "int[] == null";
-   protected static String ARRAY_FLOAT_0 = "float[] == null";
-   protected static String ARRAY_0 = "array == null";
+  // protected static String OFFSET_0 = "offset < 0";
+ //  protected static String ARRAY_INT_0 = "int[] == null";
+ //  protected static String ARRAY_FLOAT_0 = "float[] == null";
+  // protected static String ARRAY_0 = "array == null";
    
    protected static String PARAMS = "params";
+   protected static String INDICES = "indices";
+   protected static String DATA = "data";
+   protected static String FRAMEBUFFER = "framebuffer";
+   protected static String RENDERBUFFER = "renderbuffer";
+   protected static String TEXTURES = "textures";
+   protected static String VALUES = "values";
+   protected static String PIXELS = "pixels";
         
         /** Includes **/
         //@off
@@ -370,20 +382,40 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glBufferData ( (GLenum) target, GLsizeiptr size, const GLvoid *data, (GLenum) usage )
 
      * */
-    public void glBufferData(int target, int size, java.nio.Buffer data, int usage) {
-    
-                if(data == null) 
-                                throw new RuntimeException(BUFFER_NULL);
-                                
-                // now, the offset...                
-                if(data.isDirect()){
-                                int offsetBytes = BufferInfo.getOffsetInBytes(data);
-                                 GLES20Pipeline.nGLBufferData(target, size, data, offsetBytes, usage);                                
-                }else{
-                                throw new RuntimeException(BUFFER_ND);
-    }
-    
-       
+    public void glBufferData(int target,
+                             int size,
+                             java.nio.Buffer data,
+                             int usage) {
+
+        checkBuffer(data, 1, "data");
+
+        // now, the offset...
+        if (data.isDirect()) {
+            int offsetBytes = getOffset(data);
+            nGLBufferData(target, size, data, offsetBytes, usage);
+        } else {
+            if(data instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)data;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLBufferData(target, size, array, offset, usage);
+                return;
+            }else if(data instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)data;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                nGLBufferData(target, size, array, offset, usage);
+                return;
+            }else if(data instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)data;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                nGLBufferData(target, size, array, offset, usage);
+                return;
+            }else 
+            throw new RuntimeException("Invalid buffer.");
+        }
+
     }
 
     /**
@@ -394,10 +426,20 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLBufferData(int target, int size, java.nio.Buffer data, int offsetBytes, int usage);/*
-                   // native code        
-            char * data0 = (char *) (data + offsetBytes);                            
-                    glBufferData ( (GLenum) target, (GLsizeiptr) size, (const GLvoid *)data0, (GLenum) usage );
+         glBufferData ( (GLenum) target, (GLsizeiptr) size, (GLvoid *)(data + offsetBytes), (GLenum) usage );
     */
+    
+    private static native void nGLBufferData(int target, int size, byte[] data, int offsetBytes, int usage);/*
+        glBufferData ( (GLenum) target, (GLsizeiptr) size, (GLvoid *)(data + offsetBytes), (GLenum) usage );
+    */
+  
+    private static native void nGLBufferData(int target, int size, short[] data, int offsetBytes, int usage);/*
+        glBufferData ( (GLenum) target, (GLsizeiptr) size, (GLvoid *)(data + offsetBytes), (GLenum) usage );
+    */
+    
+    private static native void nGLBufferData(int target, int size, int[] data, int offsetBytes, int usage);/*
+       glBufferData ( (GLenum) target, (GLsizeiptr) size, (GLvoid *)(data + offsetBytes), (GLenum) usage );
+      */
 
     /**
      *<pre>
@@ -406,20 +448,45 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glBufferSubData ( (GLenum) target, GLintptr offset, GLsizeiptr size, const GLvoid *data )
 
      * */
-    public void glBufferSubData(int target, int offset, int size, java.nio.Buffer data) {
-    
-            if(data == null) 
-                                throw new RuntimeException(BUFFER_NULL);
-                                
-                // now, the offset...                
-                if(data.isDirect()){
-                                int offsetBytes =  BufferInfo.getOffsetInBytes(data);
-                                 GLES20Pipeline.nGLBufferSubData(target, offset, size, data, offsetBytes);                                
-                }else{
-                                throw new RuntimeException(BUFFER_ND);
-                }        
-    
-       
+    public void glBufferSubData(int target,
+                                int offset,
+                                int size,
+                                java.nio.Buffer data) {
+        checkBuffer(data, 1, "data");
+        // now, the offset...
+        if (data.isDirect()) {
+            int offsetBytes = getOffset(data);
+            GLES20Pipeline.nGLBufferSubData(target,
+                    offset, size,
+                    data, offsetBytes);
+        } else {
+           if(data instanceof ByteBuffer){
+               ByteBuffer bb = (ByteBuffer) data;
+               byte[] array = bb.array();
+               int offsetBuf = getOffset(bb);
+               GLES20Pipeline.nGLBufferSubData(target,
+                       offset, size,
+                       array, offsetBuf);
+               return;               
+           }else if(data instanceof IntBuffer){
+               IntBuffer bb = (IntBuffer) data;
+               int[] array = bb.array();
+               int offsetBuf = getOffset(bb);
+               GLES20Pipeline.nGLBufferSubData(target,
+                       offset, size,
+                       array, offsetBuf);
+               return;               
+           }else if(data instanceof ShortBuffer){
+               ShortBuffer bb = (ShortBuffer) data;
+               short[] array = bb.array();
+               int offsetBuf = getOffset(bb);
+               GLES20Pipeline.nGLBufferSubData(target,
+                       offset, size,
+                       array, offsetBuf);
+               return;               
+           }else throw new IllegalArgumentException("Invalid buffer.");
+        }
+
     }
 
     /**
@@ -430,15 +497,32 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLBufferSubData(int target, int offset, int size, java.nio.Buffer data, int offsetBytes);/*
-                    
-                    char * data0 = (char *) (data + offsetBytes); 
-                    
-                    
                     glBufferSubData ( (GLenum) target, 
-                                                      (GLintptr) offset, 
-                                                      (GLsizeiptr) size, 
-                                                      (const GLvoid *)data0 );
+                                      (GLintptr) offset, 
+                                      (GLsizeiptr) size, 
+                                      (GLvoid *)(data + offsetBytes));
     */
+    
+    private static native void nGLBufferSubData(int target, int offset, int size, byte[] data, int offsetBytes);/*
+    glBufferSubData ( (GLenum) target, 
+                      (GLintptr) offset, 
+                      (GLsizeiptr) size, 
+                      (GLvoid *)(data + offsetBytes));
+   */
+    
+    private static native void nGLBufferSubData(int target, int offset, int size, short[] data, int offsetBytes);/*
+    glBufferSubData ( (GLenum) target, 
+                      (GLintptr) offset, 
+                      (GLsizeiptr) size, 
+                      (GLvoid *)(data + offsetBytes));
+   */
+    
+    private static native void nGLBufferSubData(int target, int offset, int size, int[] data, int offsetBytes);/*
+    glBufferSubData ( (GLenum) target, 
+                      (GLintptr) offset, 
+                      (GLsizeiptr) size, 
+                      (GLvoid *)(data + offsetBytes));
+   */
 
     /**
      *<pre>
@@ -602,31 +686,55 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glCompressedTexImage2D ( (GLenum) target, (GLint) level, (GLenum) internalformat, (GLsizei) width, (GLsizei) height, (GLint) border, (GLsizei) imageSize, const GLvoid *data )
 
      * */
-    public void glCompressedTexImage2D(int target, 
-                                                                            int level, 
-                                                                            int internalformat, 
-                                                                            int width, int height, 
-                                                                            int border, 
-                                                                            int imageSize, 
-                                                                            java.nio.Buffer data) {
-            
-             
-                if(data == null) 
-                                throw new RuntimeException(BUFFER_NULL);
-                                
-                // now, the offset...                
-                if(data.isDirect()){
-                    int offsetBytes =  BufferInfo.getOffsetInBytes(data);
-                    GLES20Pipeline.nGLCompressedTexImage2D(target, 
-                                                                                                    level, 
-                                                                                                    internalformat, 
-                                                                                                    width, height, 
-                                                                                                    border, 
-                                                                                                    imageSize, 
-                                                                                                    data, offsetBytes);
-            }else{
-                        throw new RuntimeException(BUFFER_ND);
-                }
+    public void glCompressedTexImage2D(int target,
+                                       int level,
+                                       int internalformat,
+                                       int width,  int height,
+                                       int border,
+                                       int imageSize,
+                                       java.nio.Buffer data) {
+
+        checkBuffer(data,1,"data");        
+        if (data.isDirect()) {
+            int offsetBytes = BufferInfo.getOffsetInBytes(data);
+            nGLCompressedTexImage2D(target, level,
+                    internalformat,
+                    width, height,
+                    border,  imageSize,
+                    data,  offsetBytes);
+        } else {
+            if(data instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer) data;
+                byte[] array = bb.array();
+                int offsetBuf = getOffset(bb);
+                nGLCompressedTexImage2D(target, level,
+                        internalformat,
+                        width, height,
+                        border,  imageSize,
+                        array,  offsetBuf);
+                return;               
+            }else if(data instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer) data;
+                int[] array = bb.array();
+                int offsetBuf = getOffset(bb);
+                nGLCompressedTexImage2D(target, level,
+                        internalformat,
+                        width, height,
+                        border,  imageSize,
+                        array,  offsetBuf);
+                return;               
+            }else if(data instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer) data;
+                short[] array = bb.array();
+                int offsetBuf = getOffset(bb);
+                nGLCompressedTexImage2D(target, level,
+                        internalformat,
+                        width, height,
+                        border,  imageSize,
+                        array,  offsetBuf);
+                return;               
+            }else throw new IllegalArgumentException("Invalid buffer.");
+        }
     }
 
     /**
@@ -649,20 +757,67 @@ public class GLES20Pipeline implements Pipeline {
                     int width,        int height, 
                     int border, 
                     int imageSize, 
-                    java.nio.Buffer data,         int offsetBytes);/*
-            // native code        
-               char * data0 = (char *) (data + offsetBytes);
-               
-               // raw java.nio.Buffer is translated as (char *)
+                    java.nio.Buffer data, int offsetBytes);/*            
+            // raw java.nio.Buffer is translated as (char *)
            glCompressedTexImage2D((GLenum) target, 
-                                     (GLint) level,
-                                                                                                          (GLenum) internalformat,
-                                                                     (GLsizei) width,
-                                                                     (GLsizei) height,
-                                                                     (GLint) border,
-                                                                     (GLsizei) imageSize,
-                                                                     (const GLvoid *) data0);
+                                  (GLint) level,
+                                  (GLenum) internalformat,
+                                  (GLsizei) width, (GLsizei) height,
+                                  (GLint) border,
+                                  (GLsizei) imageSize,
+                                  ( GLvoid *) (data + offsetBytes));
     */
+    
+    private static native void nGLCompressedTexImage2D(int target, 
+                                                       int level, 
+                                                       int internalformat, 
+                                                       int width,        int height, 
+                                                       int border, 
+                                                       int imageSize, 
+                                                       byte[] data, int offsetBytes);/*            
+                                               // raw java.nio.Buffer is translated as (char *)
+        glCompressedTexImage2D((GLenum) target, 
+                               (GLint) level,
+                               (GLenum) internalformat,
+                               (GLsizei) width, (GLsizei) height,
+                               (GLint) border,
+                               (GLsizei) imageSize,
+                               ( GLvoid *) (data + offsetBytes));
+                                       */
+    
+    private static native void nGLCompressedTexImage2D(int target, 
+                                                       int level, 
+                                                       int internalformat, 
+                                                       int width,        int height, 
+                                                       int border, 
+                                                       int imageSize, 
+                                                       short[] data, int offsetBytes);/*            
+                                               // raw java.nio.Buffer is translated as (char *)
+        glCompressedTexImage2D((GLenum) target, 
+                               (GLint) level,
+                               (GLenum) internalformat,
+                               (GLsizei) width, (GLsizei) height,
+                               (GLint) border,
+                               (GLsizei) imageSize,
+                               ( GLvoid *) (data + offsetBytes));
+                                       */
+    
+    private static native void nGLCompressedTexImage2D(int target, 
+                                                       int level, 
+                                                       int internalformat, 
+                                                       int width,        int height, 
+                                                       int border, 
+                                                       int imageSize, 
+                                                       int[] data, int offsetBytes);/*            
+                                               // raw java.nio.Buffer is translated as (char *)
+        glCompressedTexImage2D((GLenum) target, 
+                               (GLint) level,
+                               (GLenum) internalformat,
+                               (GLsizei) width, (GLsizei) height,
+                               (GLint) border,
+                               (GLsizei) imageSize,
+                               ( GLvoid *) (data + offsetBytes));
+       */
 
     /**
      *<pre>
@@ -671,22 +826,56 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glCompressedTexSubImage2D ( (GLenum) target, (GLint) level, (GLint) xoffset, (GLint) yoffset, (GLsizei) width, (GLsizei) height, (GLenum) format, (GLsizei) imageSize, const GLvoid *data )
 
      * */
-    public void glCompressedTexSubImage2D(int target, 
-                                                                              int level, 
-                                                                              int xoffset, int yoffset, 
-                                                                              int width, int height, 
-                                                                              int format, 
-                                                                              int imageSize, 
-                                                                              java.nio.Buffer data) {
+    public void glCompressedTexSubImage2D(int target,
+                                          int level,
+                                          int xoffset, int yoffset,
+                                          int width,   int height,
+                                          int format,
+                                          int imageSize,
+                                          java.nio.Buffer data) {            
+        checkBuffer(data, 1, "data");
+        if (data.isDirect()) {
+            int offsetBytes = BufferInfo.getOffsetInBytes(data);
+            nGLCompressedTexSubImage2D( target, level,
+                    xoffset, yoffset,
+                    width,   height,
+                    format,  imageSize,
+                    data,   offsetBytes);
+        } else {
+            if(data instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer) data;
+                byte[] array = bb.array();
+                int offsetBuf = getOffset(bb);
+                nGLCompressedTexSubImage2D( target, level,
+                        xoffset, yoffset,
+                        width,   height,
+                        format,  imageSize,
+                        array,   offsetBuf);
+                return;               
+            }else if(data instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer) data;
+                int[] array = bb.array();
+                int offsetBuf = getOffset(bb);
+                nGLCompressedTexSubImage2D( target, level,
+                        xoffset, yoffset,
+                        width,   height,
+                        format,  imageSize,
+                        array,   offsetBuf);
+                return;               
+            }else if(data instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer) data;
+                short[] array = bb.array();
+                int offsetBuf = getOffset(bb);
+                nGLCompressedTexSubImage2D( target, level,
+                        xoffset, yoffset,
+                        width,   height,
+                        format,  imageSize,
+                        array,   offsetBuf);
+                return;               
+            }else throw new IllegalArgumentException("Invalid buffer.");
             
-            if(data == null) throw new RuntimeException("java.nio.Buffer data is null");
-            if(data.isDirect()){
-                    int offsetBytes = BufferInfo.getOffsetInBytes(data);
-                    GLES20Pipeline.nGLCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, imageSize, data, offsetBytes);
-            }else{
-                    
-                    throw new RuntimeException("Unsupported non-direct java.nio.Buffer ");
-            }
+
+        }
     }
 
     /**
@@ -713,8 +902,7 @@ public class GLES20Pipeline implements Pipeline {
                     int format, 
                     int imageSize, 
                     java.nio.Buffer data, int offsetBytes);/*
-                    //native code
-                    char * data0 = (char *) (data + offsetBytes);
+                    //native code                    
                     glCompressedTexSubImage2D ( 
                                             (GLenum) target,
                                             (GLint) level, 
@@ -724,9 +912,58 @@ public class GLES20Pipeline implements Pipeline {
                                             (GLsizei) height, 
                                             (GLenum) format, 
                                             (GLsizei) imageSize, 
-                                            (const GLvoid *) data0 );
-                    
+                                            (GLvoid *) (data + offsetBytes) );                    
     */
+    
+    private static native void nGLCompressedTexSubImage2D( int target, 
+                                                          int level, 
+                                                          int xoffset,         int yoffset, 
+                                                          int width,         int height, 
+                                                          int format, 
+                                                          int imageSize, 
+                                                          byte[] data, int offsetBytes);/*                                                                       
+         glCompressedTexSubImage2D ((GLenum) target,
+                                    (GLint) level, 
+                                    (GLint) xoffset, 
+                                    (GLint) yoffset, 
+                                    (GLsizei) width, 
+                                    (GLsizei) height, 
+                                    (GLenum) format, 
+                                    (GLsizei) imageSize, 
+                                    (GLvoid *) (data + offsetBytes) );                    
+      */
+    
+    private static native void nGLCompressedTexSubImage2D( int target, 
+                                                           int level, 
+                                                           int xoffset, int yoffset, 
+                                                           int width,   int height, 
+                                                           int format, 
+                                                           int imageSize, 
+                                                           short[] data, int offsetBytes);/*                                                                       
+          glCompressedTexSubImage2D ((GLenum) target,
+                                     (GLint) level, 
+                                     (GLint) xoffset, (GLint) yoffset, 
+                                     (GLsizei) width, (GLsizei) height, 
+                                     (GLenum) format, 
+                                     (GLsizei) imageSize, 
+                                     (GLvoid *) (data + offsetBytes) );                    
+       */
+    
+    private static native void nGLCompressedTexSubImage2D( int target, 
+                                                           int level, 
+                                                           int xoffset, int yoffset, 
+                                                           int width,   int height, 
+                                                           int format, 
+                                                           int imageSize, 
+                                                           int[] data, int offsetBytes);/*                                                                       
+          glCompressedTexSubImage2D ((GLenum) target,
+                                     (GLint) level, 
+                                     (GLint) xoffset, (GLint) yoffset, 
+                                     (GLsizei) width, (GLsizei) height, 
+                                     (GLenum) format, 
+                                     (GLsizei) imageSize, 
+                                     (GLvoid *) (data + offsetBytes) );                    
+       */
 
     /**
      *<pre>
@@ -966,19 +1203,14 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glDeleteFramebuffers(int n, java.nio.IntBuffer framebuffers) {
-    
-            if(framebuffers == null) 
-                                throw new RuntimeException(INTBUFFER_NULL);
-                                
-                // now, the offset...                
-                if(framebuffers.isDirect()){
-                                int offset = framebuffers.position();
-                                GLES20Pipeline.nGLDeleteFramebuffers(n, framebuffers, offset);
-                                
-                }else{
-                                throw new RuntimeException(INTBUFFER_ND);
-    }
-        
+        checkBuffer(framebuffers, n, FRAMEBUFFER);
+        int offset = getOffset(framebuffers);
+        // now, the offset...
+        if (framebuffers.isDirect()) {
+            nGLDeleteFramebuffers(n, framebuffers, offset);
+        } else {
+            nGLDeleteFramebuffers(n, framebuffers.array(), offset);
+        }
     }
 
     /**
@@ -1011,7 +1243,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDeleteProgram(int program);/*
-                       glDeleteProgram ( (GLuint) program );
+      glDeleteProgram ( (GLuint) program );
     */
 
     /**
@@ -1022,6 +1254,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glDeleteRenderbuffers(int n, int[] renderbuffers, int offset) {
+        checkArray(renderbuffers, offset, n, RENDERBUFFER);
         GLES20Pipeline.nGLDeleteRenderbuffers(n, renderbuffers, offset);
     }
 
@@ -1032,9 +1265,8 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glDeleteRenderbuffers ( (GLsizei) n, const (GLuint) *renderbuffers )
 
      * */
-    private static native void nGLDeleteRenderbuffers(int n, int[] renderbuffers, int offset);/*
-    
-                   glDeleteRenderbuffers ( (GLsizei) n, (const GLuint *) &renderbuffers[offset] );
+    private static native void nGLDeleteRenderbuffers(int n, int[] renderbuffers, int offset);/*    
+          glDeleteRenderbuffers ( (GLsizei) n, (const GLuint *) &renderbuffers[offset] );
     */
 
     /**
@@ -1045,20 +1277,14 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glDeleteRenderbuffers(int n, java.nio.IntBuffer renderbuffers) {
-    
-       
-                if(renderbuffers == null) 
-                                throw new RuntimeException(INTBUFFER_NULL);
-                                
-                // now, the offset...                
-                if(renderbuffers.isDirect()){
-                                int offset = renderbuffers.position();
-                                GLES20Pipeline.nGLDeleteRenderbuffers(n, renderbuffers, offset);
-                }else{
-                                throw new RuntimeException(INTBUFFER_ND);
-    }
-    
-        
+        checkBuffer(renderbuffers, n, RENDERBUFFER);
+        int offset = getOffset(renderbuffers);
+        // now, the offset...
+        if (renderbuffers.isDirect()) {
+            GLES20Pipeline.nGLDeleteRenderbuffers(n, renderbuffers, offset);
+        } else {
+            GLES20Pipeline.nGLDeleteRenderbuffers(n, renderbuffers.array(), offset);
+        }
     }
 
     /**
@@ -1068,9 +1294,8 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glDeleteRenderbuffers ( (GLsizei) n, const (GLuint) *renderbuffers )
 
      * */
-    private static native void nGLDeleteRenderbuffers(int n, java.nio.IntBuffer renderbuffers, int offset);/*
-                            
-                            glDeleteRenderbuffers ( (GLsizei) n,(const GLuint *) (renderbuffers + offset) );
+    private static native void nGLDeleteRenderbuffers(int n, java.nio.IntBuffer renderbuffers, int offset);/*                            
+           glDeleteRenderbuffers ( (GLsizei) n,(const GLuint *) (renderbuffers + offset) );
     */
 
     /**
@@ -1089,7 +1314,6 @@ public class GLES20Pipeline implements Pipeline {
      * Native method generated from GLES20.glDeleteShader([int shader]);
      * 
      *  C function void glDeleteShader ( (GLuint) shader )
-
      * */
     private static native void nGLDeleteShader(int shader);/*
          glDeleteShader ( (GLuint) shader );
@@ -1103,6 +1327,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glDeleteTextures(int n, int[] textures, int offset) {
+        checkArray(textures, offset, n, TEXTURES);
         GLES20Pipeline.nGLDeleteTextures(n, textures, offset);
     }
 
@@ -1114,11 +1339,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDeleteTextures(int n, int[] textures, int offset);/*
-    
-     
-      glDeleteTextures ( (GLsizei) n,
-                                              (const GLuint *) &textures[offset] );
-                                              
+      glDeleteTextures ( (GLsizei) n,(GLuint *) &textures[offset] );                                              
     */
 
     /**
@@ -1128,19 +1349,14 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glDeleteTextures ( (GLsizei) n, const (GLuint) *textures )
 
      * */
-    public void glDeleteTextures(int n, java.nio.IntBuffer textures) {
-    
-                if(textures == null) 
-                                throw new RuntimeException(INTBUFFER_NULL);
-                                
-                // now, the offset...                
+    public void glDeleteTextures(int n, java.nio.IntBuffer textures) {    
+                checkBuffer(textures, n, TEXTURES);   
+                int offset = getOffset(textures);
                 if(textures.isDirect()){
-                                int offset = textures.position();
-                                GLES20Pipeline.nGLDeleteTextures(n, textures, offset);                                
+                    GLES20Pipeline.nGLDeleteTextures(n, textures, offset);                                
                 }else{
-                                throw new RuntimeException(INTBUFFER_ND);
-    }
-        
+                    GLES20Pipeline.nGLDeleteTextures(n, textures.array(), offset);
+                    }   
     }
 
     /**
@@ -1151,8 +1367,6 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDeleteTextures(int n, java.nio.IntBuffer textures, int offset);/*
-    
-         
          glDeleteTextures ( (GLsizei) n, (const GLuint *)(textures + offset) );
     */
 
@@ -1241,7 +1455,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDetachShader(int program, int shader);/*
-                            glDetachShader ( (GLuint) program, (GLuint) shader );
+             glDetachShader ( (GLuint) program, (GLuint) shader );
     */
 
     /**
@@ -1263,7 +1477,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDisable(int cap);/*
-                            glDisable ( (GLenum) cap );
+        glDisable ( (GLenum) cap );
     */
 
     /**
@@ -1285,7 +1499,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDisableVertexAttribArray(int index);/*
-                                    glDisableVertexAttribArray ( (GLuint) index );
+         glDisableVertexAttribArray ( (GLuint) index );
     */
 
     /**
@@ -1307,7 +1521,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLDrawArrays(int mode, int first, int count);/*
-                      glDrawArrays ( (GLenum) mode, (GLint) first, (GLsizei) count );    
+       glDrawArrays ( (GLenum) mode, (GLint) first, (GLsizei) count );    
     */
 
     /**
@@ -1332,7 +1546,7 @@ public class GLES20Pipeline implements Pipeline {
                             glDrawElements ( (GLenum) mode, 
                                              (GLsizei) count, 
                                              (GLenum) type, 
-                                              reinterpret_cast<GLvoid *>(offset) );
+                                             reinterpret_cast<GLvoid *>(offset) );
     */
 
     /**
@@ -1343,18 +1557,32 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glDrawElements(int mode, int count, int type, java.nio.Buffer indices) {
-    
-            if(indices == null) 
-                                throw new RuntimeException(BUFFER_NULL);
-                                
-                // now, the offset...                
-                if(indices.isDirect()){
-                                int offsetBytes =  BufferInfo.getOffsetInBytes(indices);
-                                GLES20Pipeline.nGLDrawElements(mode, count, type, indices, offsetBytes);                                
-                }else{
-                                throw new RuntimeException(BUFFER_ND);
-                }        
-       
+        checkBuffer(indices, 1, INDICES);
+        if (indices.isDirect()) {
+            int offset = getOffset(indices);
+            nGLDrawElements(mode, count, type, indices, offset);
+        } else {
+            if(indices instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)indices;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                nGLDrawElements(mode, count, type, array, offset);
+                return;
+            }else if(indices instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)indices;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                nGLDrawElements(mode, count, type, array, offset);
+                return;
+            }else if(indices instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)indices;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                nGLDrawElements(mode, count, type, array, offset);
+                return;
+            }else 
+            throw new RuntimeException("Invalid buffer.");
+        }
     }
 
     /**
@@ -1364,12 +1592,23 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, const GLvoid *indices )
 
      * */
-    private static native void nGLDrawElements(int mode, int count, int type, java.nio.Buffer indices, int offset);/*
-
-                        char * indices0 = (char *) (indices + offset);  
-                                            glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, (const GLvoid *) indices0 );
+    private static native void nGLDrawElements(int mode, int count, int type, java.nio.Buffer indices, int offset);/*    
+          glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, ( GLvoid *) (indices + offset) );
     */
-
+    
+    private static native void nGLDrawElements(int mode, int count, int type, byte[] indices, int offset);/*    
+           glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, ( GLvoid *) (indices + offset) );
+     */
+    
+    private static native void nGLDrawElements(int mode, int count, int type, short[] indices, int offset);/*    
+           glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, ( GLvoid *) (indices + offset) );
+     */
+    
+    private static native void nGLDrawElements(int mode, int count, int type, int[] indices, int offset);/*    
+           glDrawElements ( (GLenum) mode, (GLsizei) count, (GLenum) type, ( GLvoid *) (indices + offset) );
+    */
+    
+   
     /**
      *<pre>
      * Delegate Method generated from GLES20.glEnable([int cap]);
@@ -1389,7 +1628,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLEnable(int cap);/*
-                            glEnable ( (GLenum) cap );
+        glEnable ( (GLenum) cap );
     */
 
     /**
@@ -1411,7 +1650,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLEnableVertexAttribArray(int index);/*
-                                    glEnableVertexAttribArray ( (GLuint) index );
+         glEnableVertexAttribArray ( (GLuint) index );
     */
 
     /**
@@ -1433,7 +1672,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLFinish();/*
-                                    glFinish ( );
+       glFinish();
     */
 
     /**
@@ -1441,7 +1680,6 @@ public class GLES20Pipeline implements Pipeline {
      * Delegate Method generated from GLES20.glFlush();
      * 
      *  C function void glFlush ( void )
-
      * */
     public void glFlush() {
         GLES20Pipeline.nGLFlush();
@@ -1452,11 +1690,9 @@ public class GLES20Pipeline implements Pipeline {
      * Native method generated from GLES20.glFlush();
      * 
      *  C function void glFlush ( void )
-
      * */
-    private static native void nGLFlush();/*
-       // simple call
-            glFlush ();
+    private static native void nGLFlush();/*      
+         glFlush ();
     */
 
     /**
@@ -1464,7 +1700,6 @@ public class GLES20Pipeline implements Pipeline {
      * Delegate Method generated from GLES20.glFramebufferRenderbuffer([int target, int attachment, int renderbuffertarget, int renderbuffer]);
      * 
      *  C function void glFramebufferRenderbuffer ( (GLenum) target, (GLenum) attachment, (GLenum) renderbuffertarget, (GLuint) renderbuffer )
-
      * */
     public void glFramebufferRenderbuffer(int target, int attachment, int renderbuffertarget, int renderbuffer) {
         GLES20Pipeline.nGLFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
@@ -1475,7 +1710,6 @@ public class GLES20Pipeline implements Pipeline {
      * Native method generated from GLES20.glFramebufferRenderbuffer([int target, int attachment, int renderbuffertarget, int renderbuffer]);
      * 
      *  C function void glFramebufferRenderbuffer ( (GLenum) target, (GLenum) attachment, (GLenum) renderbuffertarget, (GLuint) renderbuffer )
-
      * */
     private static native void nGLFramebufferRenderbuffer(int target, int attachment, int renderbuffertarget, int renderbuffer);/*
             glFramebufferRenderbuffer ( (GLenum) target, (GLenum) attachment, (GLenum) renderbuffertarget, (GLuint) renderbuffer );
@@ -1500,7 +1734,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level);/*
-                    glFramebufferTexture2D ( (GLenum) target, (GLenum) attachment, (GLenum) textarget, (GLuint) texture, (GLint) level );
+        glFramebufferTexture2D ( (GLenum) target, (GLenum) attachment, (GLenum) textarget, (GLuint) texture, (GLint) level );
     */
 
     /**
@@ -1522,7 +1756,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLFrontFace(int mode);/*
-                                            glFrontFace ( (GLenum) mode );    
+       glFrontFace ( (GLenum) mode );    
     */
 
     /**
@@ -1543,9 +1777,8 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glGenBuffers ( (GLsizei) n, (GLuint) *buffers )
 
      * */
-    private static native void nGLGenBuffers(int n, int[] buffers, int offset);/*                                            
-                                                    
-                                                    glGenBuffers ( (GLsizei) n, (GLuint *) &buffers[offset] );
+    private static native void nGLGenBuffers(int n, int[] buffers, int offset);/* 
+       glGenBuffers ( (GLsizei) n, (GLuint *) &buffers[offset] );
     */
 
     /**
@@ -1556,15 +1789,13 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glGenBuffers(int n, java.nio.IntBuffer buffers) {
-    
-        int offset = getOffset(buffers);        
-                if(buffers.isDirect()){
-                                 GLES20Pipeline.nGLGenBuffers(n, buffers, offset);
-                }else{
+        int offset = getOffset(buffers);
+        if (buffers.isDirect()) {
+            GLES20Pipeline.nGLGenBuffers(n, buffers, offset);
+        } else {
             int[] array = buffers.array();
             GLES20Pipeline.nGLGenBuffers(n, array, offset);
-    }
-       
+        }
     }
 
     /**
@@ -1575,7 +1806,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLGenBuffers(int n, java.nio.IntBuffer buffers, int offset);/*
-                             glGenBuffers ( (GLsizei) n, (GLuint *)(buffers+offset) );
+        glGenBuffers ( (GLsizei) n, (GLuint *)(buffers+offset) );
     */
 
     /**
@@ -1608,6 +1839,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glGenFramebuffers(int n, int[] framebuffers, int offset) {
+        checkArray(framebuffers, offset, n, FRAMEBUFFER);
         GLES20Pipeline.nGLGenFramebuffers(n, framebuffers, offset);
     }
 
@@ -1629,10 +1861,10 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glGenFramebuffers ( (GLsizei) n, (GLuint) *framebuffers )
      */
     public void glGenFramebuffers(int n, java.nio.IntBuffer framebuffers) {
+        checkBuffer(framebuffers, n, FRAMEBUFFER);
         int offset = getOffset(framebuffers);
         if (framebuffers.isDirect()) {
             GLES20Pipeline.nGLGenFramebuffers(n, framebuffers, offset);
-
         } else {
             int[] array = framebuffers.array();
             GLES20Pipeline.nGLGenFramebuffers(n, array, offset);
@@ -1644,10 +1876,9 @@ public class GLES20Pipeline implements Pipeline {
      * Native method generated from GLES20.glGenFramebuffers([int n, java.nio.IntBuffer framebuffers]);
      * 
      *  C function void glGenFramebuffers ( (GLsizei) n, (GLuint) *framebuffers )
-
      * */
     private static native void nGLGenFramebuffers(int n, java.nio.IntBuffer framebuffers, int offset);/*
-          glGenFramebuffers ( (GLsizei) n, (GLuint*)(framebuffers + offset) );
+          glGenFramebuffers((GLsizei) n, (GLuint *)(framebuffers + offset) );
     */
 
     /**
@@ -1658,6 +1889,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glGenRenderbuffers(int n, int[] renderbuffers, int offset) {
+        checkArray(renderbuffers, offset, n, RENDERBUFFER);
         GLES20Pipeline.nGLGenRenderbuffers(n, renderbuffers, offset);
     }
 
@@ -1665,19 +1897,18 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGenRenderbuffers([int n, int[] renderbuffers, int offset]);
      * 
-     *  C function void glGenRenderbuffers ( (GLsizei) n, (GLuint) *renderbuffers )
+     *  C function void glGenRenderbuffers ( (GLsizei) n, (GLuint *) renderbuffers )
 
      * */
     private static native void nGLGenRenderbuffers(int n, int[] renderbuffers, int offset);/*
-            glGenRenderbuffers ( (GLsizei) n, (GLuint*) renderbuffers );
+            glGenRenderbuffers ( (GLsizei) n, (GLuint *) (renderbuffers + offset));
     */
 
     /**
      *<pre>
      * Delegate Method generated from GLES20.glGenRenderbuffers([int n, java.nio.IntBuffer renderbuffers]);
      * 
-     *  C function void glGenRenderbuffers ( (GLsizei) n, (GLuint) *renderbuffers )
-
+     *  C function void glGenRenderbuffers ( (GLsizei) n, (GLuint *) renderbuffers )
      * */
     public void glGenRenderbuffers(int n, java.nio.IntBuffer renderbuffers) {
         int offset = getOffset(renderbuffers); 
@@ -1697,7 +1928,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLGenRenderbuffers(int n, java.nio.IntBuffer renderbuffers, int offset);/*
-            glGenRenderbuffers ( (GLsizei) n, (GLuint*) (renderbuffers + offset) );
+            glGenRenderbuffers ( (GLsizei) n, (GLuint *) (renderbuffers + offset) );
     */
 
     /**
@@ -1708,6 +1939,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glGenTextures(int n, int[] textures, int offset) {
+        checkArray(textures, offset, n, TEXTURES);
         GLES20Pipeline.nGLGenTextures(n, textures, offset);
     }
 
@@ -1719,7 +1951,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native void nGLGenTextures(int n, int[] textures, int offset);/*
-            glGenTextures ( (GLsizei) n, (GLuint *) &textures[offset] );
+            glGenTextures ( (GLsizei) n, (GLuint *) (textures + offset));
     */
 
     /**
@@ -1730,6 +1962,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glGenTextures(int n, java.nio.IntBuffer textures) {
+        checkBuffer(textures, n, TEXTURES);
         int offset = getOffset(textures); 
         if(textures.isDirect()){
             GLES20Pipeline.nGLGenTextures(n, textures, offset);
@@ -1754,7 +1987,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetActiveAttrib([int program, int index, int bufsize, int[] length, int lengthOffset, int[] size, int sizeOffset, int[] type, int typeOffset, byte[] name, int nameOffset]);
      * 
-     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     public void glGetActiveAttrib(
@@ -1765,6 +1998,10 @@ public class GLES20Pipeline implements Pipeline {
                     int[] size,   int sizeOffset, 
                     int[] type,   int typeOffset, 
                     byte[] name,  int nameOffset) {
+        checkArray(length, lengthOffset, 1, "length");
+        checkArray(size, sizeOffset, 1, "size");
+        checkArray(type, typeOffset, 1, "type");
+        checkArray(name, nameOffset, 1, "name");
         GLES20Pipeline.nGLGetActiveAttrib(program, index, bufsize, length, lengthOffset, size, sizeOffset, type, typeOffset, name, nameOffset);
     }
 
@@ -1772,7 +2009,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetActiveAttrib([int program, int index, int bufsize, int[] length, int lengthOffset, int[] size, int sizeOffset, int[] type, int typeOffset, byte[] name, int nameOffset]);
      * 
-     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     private static native void nGLGetActiveAttrib(int program,
@@ -1795,7 +2032,7 @@ public class GLES20Pipeline implements Pipeline {
                                             (GLsizei *) &length[lengthOffset], 
                                             (GLint *) &size[sizeOffset], 
                                             (GLenum *) &type[typeOffset], 
-                                            (char*) &name[nameOffset]);
+                                            (char *) &name[nameOffset]);
                     
                     */
 
@@ -1835,29 +2072,32 @@ public class GLES20Pipeline implements Pipeline {
                     java.nio.IntBuffer size, 
                     java.nio.IntBuffer type,
                     byte name);/*
-                    
-              glGetActiveAttrib ((GLuint) program,
-                                 (GLuint) index, 
-                                 (GLsizei) bufsize, 
-                                 (GLsizei *) length, 
-                                 (GLint *) size, 
-                                 (GLenum *) type, 
-                                 (char *) &name );
+                    //no op
+//              glGetActiveAttrib ((GLuint) program,
+//                                 (GLuint) index, 
+//                                 (GLsizei) bufsize, 
+//                                 (GLsizei *) length, 
+//                                 (GLint *) size, 
+//                                 (GLenum *) type, 
+//                                 (char *) &name );
             */
 
     /**
      *<pre>
      * Delegate Method generated from GLES20.glGetActiveAttrib([int program, int index, int[] size, int sizeOffset, int[] type, int typeOffset]);
      * 
-     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
-    public String glGetActiveAttrib(int program, int index, int[] size, int sizeOffset, int[] type, int typeOffset) {
-        String res = GLES20Pipeline.nGLGetActiveAttrib(program, index, size, sizeOffset, type, typeOffset);
-
+    public String glGetActiveAttrib(int program, int index, 
+                                    int[] size, int sizeOffset, 
+                                    int[] type, int typeOffset) 
+    {        
+        checkArray(size, sizeOffset, 1, "size");
+        checkArray(type, typeOffset, 1, "type");        
+        String res = nGLGetActiveAttrib(program, index, size, sizeOffset, type, typeOffset);
         if (res != null)
             res = res.trim();
-
         return res;
     }
 
@@ -1865,15 +2105,14 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetActiveAttrib([int program, int index, int[] size, int sizeOffset, int[] type, int typeOffset]);
      * 
-     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     private static native String nGLGetActiveAttrib(int program,
                                                     int index,
                                                     int[] size, int sizeOffset,
                                                     int[] type, int typeOffset);/*
-    GLint  max_length = 0;                                                                                                                                                                       
-    
+    GLint  max_length = 0; 
     //get max length of attribute
     glGetProgramiv((GLuint) program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &max_length);
     
@@ -1883,10 +2122,10 @@ public class GLES20Pipeline implements Pipeline {
     // gles call
     glGetActiveAttrib ((GLuint) program,
                        (GLuint) index,
-                       max_length + 1, 
-                       &max_length, // not used after call
-                       (GLint *)(size + sizeOffset), 
-                       (GLenum *)(type + typeOffset), 
+                       max_length + 1,  // bufSize
+                       &max_length,     // length - not used after call
+                       (GLint *)(size + sizeOffset),   // size 
+                       (GLenum *)(type + typeOffset),  // type
                        &name[0]);
      
      jstring result = env->NewStringUTF(&name[0]);
@@ -1897,7 +2136,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetActiveAttrib([int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type]);
      * 
-     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     public String glGetActiveAttrib(int program, 
@@ -1905,6 +2144,8 @@ public class GLES20Pipeline implements Pipeline {
                                     java.nio.IntBuffer size, 
                                     java.nio.IntBuffer type) 
     {
+        checkBuffer(type, 1, "type");
+        checkBuffer(size, 1, "size");
         int sizeOffset = getOffset(size);
         int typeOffset = getOffset(type);
 
@@ -1921,7 +2162,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetActiveAttrib([int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type]);
      * 
-     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveAttrib ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     private static native String nGLGetActiveAttrib(int program,
@@ -1955,7 +2196,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetActiveUniform([int program, int index, int bufsize, int[] length, int lengthOffset, int[] size, int sizeOffset, int[] type, int typeOffset, byte[] name, int nameOffset]);
      * 
-     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     public void glGetActiveUniform(
@@ -1971,8 +2212,7 @@ public class GLES20Pipeline implements Pipeline {
         checkArray(length, lengthOffset, needed, "length");
         checkArray(size, sizeOffset, needed, "size");
         checkArray(type, typeOffset, needed, "type");
-        checkArray(name, nameOffset, needed, "size");
-        
+        checkArray(name, nameOffset, needed, "size");        
         
         GLES20Pipeline.nGLGetActiveUniform(program, index, bufsize, 
                                             length, lengthOffset, 
@@ -1991,7 +2231,7 @@ public class GLES20Pipeline implements Pipeline {
      *                                    (GLuint) index,
      *                                    (GLsizei) bufsize,
      *                                    (GLsizei) *length,
-     *                                    (GLint) *size,
+     *                                    (GLint *) size,
      *                                    (GLenum) *type,
      *                                     char *name )
      * 
@@ -2045,8 +2285,7 @@ public class GLES20Pipeline implements Pipeline {
                     java.nio.IntBuffer length, 
                     java.nio.IntBuffer size, 
                     java.nio.IntBuffer type, 
-                    byte name) {
-            
+                    byte name) {            
         
             Exception exc = new UnsupportedOperationException("Method "
                             + " void glGetActiveUniform(int, int, int, java.nio.IntBuffer, java.nio.IntBuffer, java.nio.IntBuffer, byte) is broken. "
@@ -2100,7 +2339,7 @@ public class GLES20Pipeline implements Pipeline {
      *                                      (GLuint) index, 
      *                                      (GLsizei) bufsize, 
      *                                      (GLsizei) *length, 
-     *                                      (GLint) *size, 
+     *                                      (GLint *) size, 
      *                                      (GLenum) *type, 
      *                                      char *name )
      *</pre>
@@ -2118,7 +2357,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetActiveUniform([int program, int index, int[] size, int sizeOffset, int[] type, int typeOffset]);
      * 
-     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     private static native String nGLGetActiveUniform(int program,
@@ -2150,7 +2389,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetActiveUniform([int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type]);
      * 
-     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     public String glGetActiveUniform(int program, 
@@ -2158,6 +2397,8 @@ public class GLES20Pipeline implements Pipeline {
                                      java.nio.IntBuffer size, 
                                      java.nio.IntBuffer type) {
         
+        checkBuffer(type, 1, "size");
+        checkBuffer(size, 1, "type");
         int sizeOffset = getOffset(size);
         int typeOffset = getOffset(type);
 
@@ -2174,7 +2415,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetActiveUniform([int program, int index, java.nio.IntBuffer size, java.nio.IntBuffer type]);
      * 
-     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint) *size, (GLenum) *type, char *name )
+     *  C function void glGetActiveUniform ( (GLuint) program, (GLuint) index, (GLsizei) bufsize, (GLsizei) *length, (GLint *) size, (GLenum) *type, char *name )
 
      * */
     private static native String nGLGetActiveUniform(int program, 
@@ -2215,7 +2456,8 @@ public class GLES20Pipeline implements Pipeline {
                                      int maxcount,
                                      int[] count, int countOffset,
                                      int[] shaders, int shadersOffset) {
-
+        checkArray(count, countOffset, 1, "count");
+        checkArray(shaders, shadersOffset, maxcount, "shaders");
         GLES20Pipeline.nGLGetAttachedShaders(program, maxcount, count, countOffset, shaders, shadersOffset);
     }
 
@@ -2249,8 +2491,11 @@ public class GLES20Pipeline implements Pipeline {
                                      java.nio.IntBuffer count, 
                                      java.nio.IntBuffer shaders) 
     {
+        checkBuffer(count, 1, "count");
+        checkBuffer(shaders, maxcount, "shaders");        
         int countOffset = getOffset(count);
         int shadersOffset = getOffset(shaders);
+        
         if (count.isDirect() && shaders.isDirect()) {
             GLES20Pipeline.nGLGetAttachedShaders(program, maxcount, count, countOffset, shaders, shadersOffset);
         } else {
@@ -2318,8 +2563,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetBooleanv([int pname, boolean[] params, int offset]);
      * 
-     *  C function void glGetBooleanv ( (GLenum) pname, (GLboolean)  *params )
-
+     *  C function void glGetBooleanv ( (GLenum) pname, (GLboolean *)params )
      * */
     private static native void nGLGetBooleanv(int pname, boolean[] params, int offset);/*
             glGetBooleanv((GLenum) pname, (GLboolean *) (params + offset) );
@@ -2370,7 +2614,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetBufferParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetBufferParameteriv(int target, int pname, int[] params, int offset) {
@@ -2382,7 +2626,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetBufferParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetBufferParameteriv(int target, int pname, int[] params, int offset);/*
@@ -2395,10 +2639,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetBufferParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetBufferParameteriv(int target, int pname, java.nio.IntBuffer params) {
+        checkBuffer(params, 1, PARAMS);
         int offset = getOffset(params); 
         if(params.isDirect()){
             GLES20Pipeline.nGLGetBufferParameteriv(target, pname, params, offset);
@@ -2412,7 +2657,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetBufferParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetBufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetBufferParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*                    
@@ -2452,7 +2697,7 @@ public class GLES20Pipeline implements Pipeline {
      * */
     public void glGetFloatv(int pname, float[] params, int offset) {
         int needed = getNeededCount(pname);
-        checkArray(params, offset, needed, "params"); 
+        checkArray(params, offset, needed, PARAMS); 
         GLES20Pipeline.nGLGetFloatv(pname, params, offset);
     }
 
@@ -2476,7 +2721,7 @@ public class GLES20Pipeline implements Pipeline {
      * */
     public void glGetFloatv(int pname, java.nio.FloatBuffer values) {
         int needed = getNeededCount(pname);
-        checkBuffer(values, needed, "values");
+        checkBuffer(values, needed, VALUES); 
         int offset = getOffset(values);
 
         if (values.isDirect()) {
@@ -2500,9 +2745,13 @@ public class GLES20Pipeline implements Pipeline {
 
     /**
      *<pre>
-     * Delegate Method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, int attachment, int pname, int[] params, int offset]);
+     * Delegate Method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, 
+     *  int attachment, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetFramebufferAttachmentParameteriv ( (GLenum) target, (GLenum) attachment, (GLenum) pname, (GLint) *params )
+     *  C function void glGetFramebufferAttachmentParameteriv ( (GLenum) target, 
+     *                                                          (GLenum) attachment, 
+     *                                                          (GLenum) pname, 
+     *                                                          (GLint *) params )
 
      * */
     public void glGetFramebufferAttachmentParameteriv(int target,
@@ -2510,14 +2759,18 @@ public class GLES20Pipeline implements Pipeline {
                                                       int pname,
                                                       int[] params, int offset) {
         checkArray(params, offset, 1, "params");
-        GLES20Pipeline.nGLGetFramebufferAttachmentParameteriv(target, attachment, pname, params, offset);
+        nGLGetFramebufferAttachmentParameteriv(target, attachment, pname, params, offset);
     }
 
     /**
      *<pre>
-     * Native method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, int attachment, int pname, int[] params, int offset]);
+     * Native method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, 
+     * int attachment, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetFramebufferAttachmentParameteriv ( (GLenum) target, (GLenum) attachment, (GLenum) pname, (GLint) *params )
+     *  C function void glGetFramebufferAttachmentParameteriv ( (GLenum) target, 
+     *                                                           (GLenum) attachment, 
+     *                                                           (GLenum) pname, 
+     *                                                           (GLint *) params )
 
      * */
     private static native void nGLGetFramebufferAttachmentParameteriv(int target,
@@ -2532,29 +2785,44 @@ public class GLES20Pipeline implements Pipeline {
 
     /**
      *<pre>
-     * Delegate Method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, int attachment, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, 
+     * int attachment, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetFramebufferAttachmentParameteriv ( (GLenum) target, (GLenum) attachment, (GLenum) pname, (GLint) *params )
+     *  C function void glGetFramebufferAttachmentParameteriv((GLenum) target, 
+     *                                                        (GLenum) attachment, 
+     *                                                        (GLenum) pname, 
+     *                                                        (GLint *) params )
 
      * */
-    public void glGetFramebufferAttachmentParameteriv(int target, int attachment, int pname, java.nio.IntBuffer params) {
+    public void glGetFramebufferAttachmentParameteriv(int target, 
+                                                      int attachment, 
+                                                      int pname, 
+                                                      java.nio.IntBuffer params) {
+        checkBuffer(params, 1, PARAMS);
         int offset = getOffset(params); 
         if(params.isDirect()){
-            GLES20Pipeline.nGLGetFramebufferAttachmentParameteriv(target, attachment, pname, params, offset);
+            nGLGetFramebufferAttachmentParameteriv(target, attachment, pname, params, offset);
         }else{
             int[] array = params.array();
-            GLES20Pipeline.nGLGetFramebufferAttachmentParameteriv(target, attachment, pname, array, offset);
+            nGLGetFramebufferAttachmentParameteriv(target, attachment, pname, array, offset);
         }       
     }
 
     /**
      *<pre>
-     * Native method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, int attachment, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES20.glGetFramebufferAttachmentParameteriv([int target, 
+     * int attachment, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetFramebufferAttachmentParameteriv ( (GLenum) target, (GLenum) attachment, (GLenum) pname, (GLint) *params )
-
+     *  C function void glGetFramebufferAttachmentParameteriv((GLenum) target, 
+     *                                                        (GLenum) attachment, 
+     *                                                        (GLenum) pname, 
+     *                                                        (GLint *) params )
      * */
-    private static native void nGLGetFramebufferAttachmentParameteriv(int target, int attachment, int pname, java.nio.IntBuffer params, int offset);/*
+    private static native void nGLGetFramebufferAttachmentParameteriv( int target, 
+                                                                       int attachment, 
+                                                                       int pname, 
+                                                                       java.nio.IntBuffer params, 
+                                                                       int offset);/*
             glGetFramebufferAttachmentParameteriv( (GLenum) target, 
                                                    (GLenum) attachment, 
                                                    (GLenum) pname, 
@@ -2565,12 +2833,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetIntegerv([int pname, int[] params, int offset]);
      * 
-     *  C function void glGetIntegerv ( (GLenum) pname, (GLint) *params )
-
+     *  C function void glGetIntegerv ( (GLenum) pname, (GLint *) params )
      * */
     public void glGetIntegerv(int pname, int[] params, int offset) {
         int needed = getNeededCount(pname);
-        checkArray(params, offset, needed, "params"); 
+        checkArray(params, offset, needed, PARAMS); 
         GLES20Pipeline.nGLGetIntegerv(pname, params, offset);
     }
 
@@ -2578,7 +2845,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetIntegerv([int pname, int[] params, int offset]);
      * 
-     *  C function void glGetIntegerv ( (GLenum) pname, (GLint) *params )
+     *  C function void glGetIntegerv ( (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetIntegerv(int pname, int[] params, int offset);/*    
@@ -2589,12 +2856,12 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetIntegerv([int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetIntegerv ( (GLenum) pname, (GLint) *params )
+     *  C function void glGetIntegerv ( (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetIntegerv(int pname, java.nio.IntBuffer params) {
         int needed = getNeededCount(pname);
-        checkBuffer(params, needed, "params");        
+        checkBuffer(params, needed, PARAMS);        
         int offset = getOffset(params);         
         if (params.isDirect()) {            
             GLES20Pipeline.nGLGetIntegerv(pname, params, offset);
@@ -2608,7 +2875,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetIntegerv([int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetIntegerv ( (GLenum) pname, (GLint) *params )
+     *  C function void glGetIntegerv ( (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetIntegerv(int pname, java.nio.IntBuffer params, int offset);/*    
@@ -2620,11 +2887,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetProgramiv([int program, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint) *params )
+     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetProgramiv(int program, int pname, int[] params, int offset) {
-        checkArray(params, offset, 1, "params");
+        checkArray(params, offset, 1, PARAMS);
         GLES20Pipeline.nGLGetProgramiv(program, pname, params, offset);
     }
 
@@ -2632,7 +2899,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetProgramiv([int program, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint) *params )
+     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetProgramiv(int program, int pname, int[] params, int offset);/*
@@ -2645,16 +2912,17 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetProgramiv([int program, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint) *params )
+     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetProgramiv(int program, int pname, java.nio.IntBuffer params) {
+        checkBuffer(params, 1, PARAMS);
         int offset = getOffset(params); 
         if(params.isDirect()){
-            GLES20Pipeline.nGLGetProgramiv(program, pname, params, offset);
+            nGLGetProgramiv(program, pname, params, offset);
         }else{
             int[] array = params.array();
-            GLES20Pipeline.nGLGetProgramiv(program, pname, array, offset);
+            nGLGetProgramiv(program, pname, array, offset);
         }
     }
 
@@ -2662,7 +2930,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetProgramiv([int program, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint) *params )
+     *  C function void glGetProgramiv ( (GLuint) program, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetProgramiv(int program, int pname, java.nio.IntBuffer params, int offset);/*    
@@ -2719,11 +2987,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetRenderbufferParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetRenderbufferParameteriv(int target, int pname, int[] params, int offset) {
-        checkArray(params, offset, 1, "params");
+        checkArray(params, offset, 1, PARAMS);
         GLES20Pipeline.nGLGetRenderbufferParameteriv(target, pname, params, offset);
     }
 
@@ -2731,7 +2999,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetRenderbufferParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetRenderbufferParameteriv(int target, int pname, int[] params, int offset);/*        
@@ -2744,10 +3012,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetRenderbufferParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetRenderbufferParameteriv(int target, int pname, java.nio.IntBuffer params) {
+        checkBuffer(params, 1, PARAMS);
         int offset = getOffset(params);
         if (params.isDirect()) {
             GLES20Pipeline.nGLGetRenderbufferParameteriv(target, pname, params, offset);
@@ -2761,7 +3030,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetRenderbufferParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetRenderbufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetRenderbufferParameteriv(int target,
@@ -2776,7 +3045,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetShaderiv([int shader, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint) *params )
+     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetShaderiv(int shader, int pname, int[] params, int offset) {
@@ -2788,7 +3057,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetShaderiv([int shader, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint) *params )
+     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetShaderiv(int shader, int pname, int[] params, int offset);/*
@@ -2800,12 +3069,16 @@ public class GLES20Pipeline implements Pipeline {
 
     /**
      *<pre>
-     * Delegate Method generated from GLES20.glGetShaderiv([int shader, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES20.glGetShaderiv([int shader, 
+     * int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint) *params )
+     *  C function void glGetShaderiv( (GLuint) shader, 
+     *                                 (GLenum) pname, 
+     *                                 (GLint *) params );
 
      * */
     public void glGetShaderiv(int shader, int pname, java.nio.IntBuffer params) {
+        checkBuffer(params, 1, PARAMS);
         int offset = getOffset(params); 
         if(params.isDirect()){
             GLES20Pipeline.nGLGetShaderiv(shader, pname, params, offset);
@@ -2819,10 +3092,12 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetShaderiv([int shader, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint) *params )
+     *  C function void glGetShaderiv ( (GLuint) shader, (GLenum) pname, (GLint *) params )
 
      * */
-    private static native void nGLGetShaderiv(int shader, int pname, java.nio.IntBuffer params, int offset);/*    
+    private static native void nGLGetShaderiv( int shader, 
+                                               int pname, 
+                                               java.nio.IntBuffer params, int offset);/*    
              glGetShaderiv( (GLuint) shader, 
                             (GLenum) pname, 
                             (GLint *)(params + offset) );    
@@ -2857,8 +3132,7 @@ public class GLES20Pipeline implements Pipeline {
      *                           GLchar * infoLog);
      * </pre>
      **/
-    private static native String nGLGetShaderInfoLog(int shader);/*
-    
+    private static native String nGLGetShaderInfoLog(int shader);/*    
             // get string length
             GLint maxLength = 0;    
             glGetShaderiv( (GLuint) shader, (GLenum) GL_INFO_LOG_LENGTH, &maxLength);
@@ -2876,9 +3150,13 @@ public class GLES20Pipeline implements Pipeline {
 
     /**
      *<pre>
-     * Delegate Method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, int precisiontype, int[] range, int rangeOffset, int[] precision, int precisionOffset]);
+     * Delegate Method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, 
+     * int precisiontype, int[] range, int rangeOffset, int[] precision, int precisionOffset]);
      * 
-     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint) *range, (GLint) *precision )
+     *  C function void glGetShaderPrecisionFormat((GLenum) shadertype, 
+     *                                              (GLenum) precisiontype, 
+     *                                              (GLint *) range, 
+     *                                              (GLint *) precision )
 
      * */
     public void glGetShaderPrecisionFormat(int shadertype, 
@@ -2887,14 +3165,14 @@ public class GLES20Pipeline implements Pipeline {
                                            int[] precision, int precisionOffset) {
         checkArray(range, rangeOffset, 1, "range");
         checkArray(precision, precisionOffset, 1, "precision");
-        GLES20Pipeline.nGLGetShaderPrecisionFormat(shadertype, precisiontype, range, rangeOffset, precision, precisionOffset);
+        nGLGetShaderPrecisionFormat(shadertype, precisiontype, range, rangeOffset, precision, precisionOffset);
     }
 
     /**
      *<pre>
      * Native method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, int precisiontype, int[] range, int rangeOffset, int[] precision, int precisionOffset]);
      * 
-     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint) *range, (GLint) *precision )
+     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint *) range, (GLint *) precision )
 
      * */
     private static native void nGLGetShaderPrecisionFormat(int shadertype,
@@ -2911,22 +3189,30 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, int precisiontype, java.nio.IntBuffer range, java.nio.IntBuffer precision]);
      * <pre>
-     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint) *range, (GLint) *precision )
+     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint *) range, (GLint *) precision )
       * </pre>
      * */
     public void glGetShaderPrecisionFormat(int shadertype, 
                                            int precisiontype, 
                                            java.nio.IntBuffer range,
                                            java.nio.IntBuffer precision) {
+        checkBuffer(range, 1, "range");
+        checkBuffer(precision, 1, "precision");
         int rangeOffset = getOffset(range);
         int precisionOffset = getOffset(precision);
         
         if(range.isDirect() && precision.isDirect()){
-            GLES20Pipeline.nGLGetShaderPrecisionFormat(shadertype, precisiontype, range, rangeOffset, precision, precisionOffset); 
+            nGLGetShaderPrecisionFormat(shadertype, 
+                                        precisiontype, 
+                                        range, rangeOffset, 
+                                        precision, precisionOffset); 
         }else{
             int[] rangeArray = range.array();
             int[] preArray = precision.array();
-            GLES20Pipeline.nGLGetShaderPrecisionFormat(shadertype, precisiontype, rangeArray, rangeOffset, preArray, precisionOffset);
+            nGLGetShaderPrecisionFormat(shadertype, 
+                                        precisiontype, 
+                                        rangeArray, rangeOffset, 
+                                        preArray, precisionOffset);
         }
     }
 
@@ -2934,7 +3220,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, int precisiontype, java.nio.IntBuffer range, java.nio.IntBuffer precision]);
      * 
-     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint) *range, (GLint) *precision )
+     *  C function void glGetShaderPrecisionFormat ( (GLenum) shadertype, (GLenum) precisiontype, (GLint *) range, (GLint *) precision )
 
      * */
     private static native void nGLGetShaderPrecisionFormat(int shadertype, 
@@ -2958,7 +3244,7 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glGetShaderSource ( (GLuint) shader, (GLsizei) bufsize, (GLsizei) *length, char *source )
 
      * */
-    public void glGetShaderSource(int shader, int bufsize, 
+    public void glGetShaderSource( int shader, int bufsize, 
                                    int[] length, int lengthOffset, 
                                    byte[] source, int sourceOffset) {
         
@@ -2995,13 +3281,10 @@ public class GLES20Pipeline implements Pipeline {
     public void glGetShaderSource(int shader, int bufsize, java.nio.IntBuffer length, byte source) {
        // GLES20Pipeline.nGLGetShaderSource(shader, bufsize, length, source);
             
-            Exception exc = new UnsupportedOperationException("Method "
+            throw new UnsupportedOperationException("Method "
                             + " void glGetShaderSource(int, int, java.nio.IntBuffer, java.nio.IntBuffer, byte) is broken. "
                             + "Use: \n"
                             + " String glGetShaderSource(int )");
-            
-             exc.printStackTrace();
-            
     }
 
     /**
@@ -3062,8 +3345,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     private static native String nGLGetString(int name);/*
-            const GLubyte* value;
-             value = glGetString( (GLenum) name);
+             const GLubyte* value = glGetString( (GLenum) name);
              const char * valueCast = reinterpret_cast<const char*>(value);
              jstring result = env->NewStringUTF( valueCast );
              return result;    
@@ -3085,12 +3367,10 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetTexParameterfv([int target, int pname, float[] params, int offset]);
      * 
-     *  C function void glGetTexParameterfv ( (GLenum) target, (GLenum) pname, (GLfloat) *params )
-
+     *  C function void glGetTexParameterfv ( (GLenum) target, (GLenum) pname, (GLfloat *)params )
      * */
     private static native void nGLGetTexParameterfv(int target, int pname, float[] params, int offset);/*
-            glGetTexParameterfv ( (GLenum) target, (GLenum) pname,  (GLfloat *)  &params[offset]);
-    
+            glGetTexParameterfv ( (GLenum) target, (GLenum) pname,  (GLfloat *)  &params[offset]);    
     */
 
     /**
@@ -3098,15 +3378,15 @@ public class GLES20Pipeline implements Pipeline {
      * Delegate Method generated from GLES20.glGetTexParameterfv([int target, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetTexParameterfv ( (GLenum) target, (GLenum) pname, (GLfloat) *params )
-
      * */
     public void glGetTexParameterfv(int target, int pname, java.nio.FloatBuffer params) {
+        checkBuffer(params, 1, PARAMS);
         int offset = getOffset(params);
         if (params.isDirect()) {
-            GLES20Pipeline.nGLGetTexParameterfv(target, pname, params, offset);
+            nGLGetTexParameterfv(target, pname, params, offset);
         } else {
             float[] array = params.array();
-            GLES20Pipeline.nGLGetTexParameterfv(target, pname, array, offset);
+            nGLGetTexParameterfv(target, pname, array, offset);
         }
     }
 
@@ -3125,7 +3405,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetTexParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetTexParameteriv(int target, int pname, int[] params, int offset) {
@@ -3137,7 +3417,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetTexParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetTexParameteriv(int target, int pname, int[] params, int offset);/*
@@ -3148,7 +3428,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetTexParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetTexParameteriv(int target, int pname, java.nio.IntBuffer params) {
@@ -3166,7 +3446,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetTexParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
+     *  C function void glGetTexParameteriv ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetTexParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
@@ -3229,7 +3509,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetUniformiv([int program, int location, int[] params, int offset]);
      * 
-     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint) *params )
+     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint *) params )
 
      * */
     public void glGetUniformiv(int program, int location, int[] params, int offset) {
@@ -3241,7 +3521,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetUniformiv([int program, int location, int[] params, int offset]);
      * 
-     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint) *params )
+     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint *) params )
 
      * */
     private static native void nGLGetUniformiv(int program, int location, int[] params, int offset);/*
@@ -3252,8 +3532,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetUniformiv([int program, int location, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint) *params )
-
+     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint *) params )
      * */
     public void glGetUniformiv(int program, int location, java.nio.IntBuffer params) {
         checkBuffer(params, 1, PARAMS);
@@ -3270,8 +3549,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetUniformiv([int program, int location, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint) *params )
-
+     *  C function void glGetUniformiv ( (GLuint) program, (GLint) location, (GLint *) params )
      * */
     private static native void nGLGetUniformiv(int program, int location, java.nio.IntBuffer params, int offset);/*
             glGetUniformiv ( (GLuint) program, (GLint) location, (GLint *) (params + offset) );
@@ -3359,7 +3637,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetVertexAttribiv([int index, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint) *params )
+     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetVertexAttribiv(int index, int pname, int[] params, int offset) {
@@ -3372,7 +3650,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetVertexAttribiv([int index, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint) *params )
+     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetVertexAttribiv(int index, int pname, int[] params, int offset);/*
@@ -3383,7 +3661,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glGetVertexAttribiv([int index, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint) *params )
+     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetVertexAttribiv(int index, int pname, java.nio.IntBuffer params) {
@@ -3402,7 +3680,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glGetVertexAttribiv([int index, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint) *params )
+     *  C function void glGetVertexAttribiv ( (GLuint) index, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetVertexAttribiv(int index, int pname, java.nio.IntBuffer params, int offset);/*
@@ -3998,7 +4276,6 @@ public class GLES20Pipeline implements Pipeline {
      * Delegate Method generated from GLES20.glStencilMaskSeparate([int face, int mask]);
      * 
      *  C function void glStencilMaskSeparate ( (GLenum) face, (GLuint) mask )
-
      * */
     public void glStencilMaskSeparate(int face, int mask) {
         GLES20Pipeline.nGLStencilMaskSeparate(face, mask);
@@ -4009,7 +4286,6 @@ public class GLES20Pipeline implements Pipeline {
      * Native method generated from GLES20.glStencilMaskSeparate([int face, int mask]);
      * 
      *  C function void glStencilMaskSeparate ( (GLenum) face, (GLuint) mask )
-
      * */
     private static native void nGLStencilMaskSeparate(int face, int mask);/*
             glStencilMaskSeparate( (GLenum) face, (GLuint) mask );
@@ -4020,7 +4296,6 @@ public class GLES20Pipeline implements Pipeline {
      * Delegate Method generated from GLES20.glStencilOp([int fail, int zfail, int zpass]);
      * 
      *  C function void glStencilOp ( (GLenum) fail, (GLenum) zfail, (GLenum) zpass )
-
      * */
     public void glStencilOp(int fail, int zfail, int zpass) {
         GLES20Pipeline.nGLStencilOp(fail, zfail, zpass);
@@ -4063,7 +4338,13 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glTexImage2D([int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.Buffer pixels]);
      * 
-     *  C function void glTexImage2D ( (GLenum) target, (GLint) level, (GLint) internalformat, (GLsizei) width, (GLsizei) height, (GLint) border, (GLenum) format, (GLenum) type, const GLvoid *pixels )
+     *  C function void glTexImage2D ( (GLenum) target, 
+     *                                 (GLint) level, 
+     *                                 (GLint) internalformat, 
+     *                                 (GLsizei) width, (GLsizei) height, 
+     *                                 (GLint) border, 
+     *                                 (GLenum) format, 
+     *                                 (GLenum) type, const GLvoid *pixels )
 
      * */
     public void glTexImage2D(int target, 
@@ -4075,8 +4356,9 @@ public class GLES20Pipeline implements Pipeline {
                     java.nio.Buffer pixels) 
     {
         checkBuffer(pixels, 1, "pixels");
-        int offsetBytes = getOffset(pixels);
+        
         if (pixels.isDirect()) {
+            int offsetBytes = getOffset(pixels);
             GLES20Pipeline.nGLTexImage2D(target, 
                     level, 
                     internalformat, 
@@ -4085,13 +4367,51 @@ public class GLES20Pipeline implements Pipeline {
                     type, 
                     pixels, offsetBytes);
         } else {
-            throw new RuntimeException(BUFFER_ND);
+            if(pixels instanceof ByteBuffer){
+                ByteBuffer bb = (ByteBuffer)pixels;
+                int offset = getOffset(bb);
+                byte[] array = bb.array();
+                GLES20Pipeline.nGLTexImage2D(target, 
+                        level, 
+                        internalformat, 
+                        width, height, 
+                        border, format, 
+                        type, 
+                        array, offset);
+                return;
+            }else if(pixels instanceof ShortBuffer){
+                ShortBuffer bb = (ShortBuffer)pixels;
+                int offset = getOffset(bb);
+                short[] array = bb.array();
+                GLES20Pipeline.nGLTexImage2D(target, 
+                        level, 
+                        internalformat, 
+                        width, height, 
+                        border, format, 
+                        type, 
+                        array, offset);
+                return;
+            } else if(pixels instanceof IntBuffer){
+                IntBuffer bb = (IntBuffer)pixels;
+                int offset = getOffset(bb);
+                int[] array = bb.array();
+                GLES20Pipeline.nGLTexImage2D(target, 
+                        level, 
+                        internalformat, 
+                        width, height, 
+                        border, format, 
+                        type, 
+                        array, offset);
+                return;
+            }else       
+            throw new RuntimeException("Invalid Buffer!");
         }
     }
 
     /**
      *<pre>
-     * Native method generated from GLES20.glTexImage2D([int target, int level, int internalformat, int width, int height, int border, int format, int type, java.nio.Buffer pixels]);
+     * Native method generated from GLES20.glTexImage2D([int target, int level, 
+     *   int internalformat, int width, int height, int border, int format, int type, java.nio.Buffer pixels]);
      * 
      *  C function void glTexImage2D ( (GLenum) target, 
      *                                 (GLint) level, 
@@ -4126,6 +4446,61 @@ public class GLES20Pipeline implements Pipeline {
                            (GLvoid *) pixels0 );
                                                     
       */
+    
+    private static native void nGLTexImage2D(int target, 
+                                             int level, 
+                                             int internalformat, 
+                                             int width,  int height, 
+                                             int border, int format, 
+                                             int type, 
+                                             byte[] pixels, int offset);/*
+           glTexImage2D( (GLenum) target, 
+                         (GLint) level, 
+                         (GLint) internalformat, 
+                         (GLsizei) width, 
+                         (GLsizei) height,
+                         (GLint) border,
+                         (GLenum) format, 
+                         (GLenum) type, 
+                         (GLvoid *) (pixels + offset));
+    */
+    
+    private static native void nGLTexImage2D(int target, 
+                                             int level, 
+                                             int internalformat, 
+                                             int width,  int height, 
+                                             int border, int format, 
+                                             int type, 
+                                             short[] pixels, int offset);/*
+           glTexImage2D( (GLenum) target, 
+                         (GLint) level, 
+                         (GLint) internalformat, 
+                         (GLsizei) width, 
+                         (GLsizei) height,
+                         (GLint) border,
+                         (GLenum) format, 
+                         (GLenum) type, 
+                         (GLvoid *) (pixels + offset));
+    */
+    
+    private static native void nGLTexImage2D(int target, 
+                                             int level, 
+                                             int internalformat, 
+                                             int width,  int height, 
+                                             int border, int format, 
+                                             int type, 
+                                             int[] pixels, int offset);/*
+           glTexImage2D( (GLenum) target, 
+                         (GLint) level, 
+                         (GLint) internalformat, 
+                         (GLsizei) width, 
+                         (GLsizei) height,
+                         (GLint) border,
+                         (GLenum) format, 
+                         (GLenum) type, 
+                         (GLvoid *) (pixels + offset));
+    */
+   
 
     /**
      *<pre>
@@ -4221,7 +4596,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glTexParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint) *params )
+     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     public void glTexParameteriv(int target, int pname, int[] params, int offset) {
@@ -4233,7 +4608,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glTexParameteriv([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint) *params )
+     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     private static native void nGLTexParameteriv(int target, int pname, int[] params, int offset);/*                            
@@ -4244,7 +4619,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glTexParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint) *params )
+     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     public void glTexParameteriv(int target, int pname, java.nio.IntBuffer params) {
@@ -4257,7 +4632,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glTexParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint) *params )
+     *  C function void glTexParameteriv ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     private static native void nGLTexParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
@@ -4279,16 +4654,44 @@ public class GLES20Pipeline implements Pipeline {
                                 int type,
                                 java.nio.Buffer pixels) 
     {
-        checkBuffer(pixels, 1, "pixels");
-        int offsetBytes = getOffset(pixels);
-        // now, the offset...
+        checkBuffer(pixels, 1,  "pixels");
         if (pixels.isDirect()) {
-            GLES20Pipeline.nGLTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels,
-                    offsetBytes);
-        } else {
-            throw new RuntimeException(BUFFER_ND);
-        }
-
+            int offsetBytes = getOffset(pixels);
+            GLES20Pipeline.nGLTexSubImage2D(target, level, 
+                                            xoffset, yoffset, 
+                                            width, height, 
+                                            format, type, pixels, offsetBytes);
+        } else {           
+                if(pixels instanceof ByteBuffer){
+                    ByteBuffer bb = (ByteBuffer)pixels;
+                    int offset = getOffset(bb);
+                    byte[] array = bb.array();
+                    nGLTexSubImage2D(target, level, 
+                            xoffset, yoffset, 
+                            width, height, 
+                            format, type, pixels, offset);
+                    return;
+                }else if(pixels instanceof ShortBuffer){
+                    ShortBuffer bb = (ShortBuffer)pixels;
+                    int offset = getOffset(bb);
+                    short[] array = bb.array();
+                    nGLTexSubImage2D(target, level, 
+                            xoffset, yoffset, 
+                            width, height, 
+                            format, type, pixels, offset);
+                    return;
+                } else if(pixels instanceof IntBuffer){
+                    IntBuffer bb = (IntBuffer)pixels;
+                    int offset = getOffset(bb);
+                    int[] array = bb.array();
+                    nGLTexSubImage2D(target, level, 
+                            xoffset, yoffset, 
+                            width, height, 
+                            format, type, pixels, offset);
+                    return;
+                }else       
+                throw new RuntimeException("Invalid Buffer!");
+            }        
     }
 
     /**
@@ -4318,6 +4721,62 @@ public class GLES20Pipeline implements Pipeline {
                             (GLvoid *) pixels0 );  
     */
 
+    
+    private static native void nGLTexSubImage2D(int target,
+                                                int level,
+                                                int xoffset, int yoffset,
+                                                int width, int height,
+                                                int format,
+                                                int type,
+                                                byte[] pixels, int offset);/*           
+            glTexSubImage2D((GLenum) target, 
+                            (GLint) level, 
+                            (GLint) xoffset, 
+                            (GLint) yoffset, 
+                            (GLsizei) width, 
+                            (GLsizei) height, 
+                            (GLenum) format, 
+                            (GLenum) type, 
+                            (GLvoid *) (pixels + offset));  
+    */
+    
+    private static native void nGLTexSubImage2D(int target,
+                                                int level,
+                                                int xoffset, int yoffset,
+                                                int width, int height,
+                                                int format,
+                                                int type,
+                                                short[] pixels, int offset);/*
+            glTexSubImage2D((GLenum) target, 
+                            (GLint) level, 
+                            (GLint) xoffset, 
+                            (GLint) yoffset, 
+                            (GLsizei) width, 
+                            (GLsizei) height, 
+                            (GLenum) format, 
+                            (GLenum) type, 
+                            (GLvoid *) (pixels + offset));  
+    */
+    
+    private static native void nGLTexSubImage2D(int target,
+                                                int level,
+                                                int xoffset, int yoffset,
+                                                int width, int height,
+                                                int format,
+                                                int type,
+                                                int[] pixels, int offset);/*
+            glTexSubImage2D((GLenum) target, 
+                            (GLint) level, 
+                            (GLint) xoffset, 
+                            (GLint) yoffset, 
+                            (GLsizei) width, 
+                            (GLsizei) height, 
+                            (GLenum) format, 
+                            (GLenum) type, 
+                            (GLvoid *) (pixels + offset));  
+    */
+
+    
     /**
      *<pre>
      * Delegate Method generated from GLES20.glUniform1f([int location, float x]);
@@ -4349,7 +4808,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniform1fv(int location, int count, float[] v, int offset) {
-        checkArray(v, offset, count, "v");
+        checkArray(v, offset, count, VALUES);
         GLES20Pipeline.nGLUniform1fv(location, count, v, offset);
     }
 
@@ -4358,11 +4817,9 @@ public class GLES20Pipeline implements Pipeline {
      * Native method generated from GLES20.glUniform1fv([int location, int count, float[] v, int offset]);
      * 
      *  C function void glUniform1fv ( (GLint) location, (GLsizei) count, (const (GLfloat) *)v )
-
      * */
     private static native void nGLUniform1fv(int location, int count, float[] v, int offset);/*
-            glUniform1fv( (GLint) location, (GLsizei) count, (const GLfloat *) &v[offset] );
-                                    
+            glUniform1fv( (GLint) location, (GLsizei) count, (const GLfloat *) &v[offset] );                                    
     */
 
     /**
@@ -4370,10 +4827,9 @@ public class GLES20Pipeline implements Pipeline {
      * Delegate Method generated from GLES20.glUniform1fv([int location, int count, java.nio.FloatBuffer v]);
      * 
      *  C function void glUniform1fv ( (GLint) location, (GLsizei) count, (const (GLfloat) *)v )
-
      * */
     public void glUniform1fv(int location, int count, java.nio.FloatBuffer v) {
-        checkBuffer(v, count, "v");
+        checkBuffer(v, count, VALUES);
         int offset = getOffset(v);
         if(v.isDirect()){
             GLES20Pipeline.nGLUniform1fv(location, count, v, offset);
@@ -4420,11 +4876,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform1iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform1iv(int location, int count, int[] v, int offset) {
-        checkArray(v, offset, count, "v");       
+        checkArray(v, offset, count, VALUES);       
         GLES20Pipeline.nGLUniform1iv(location, count, v, offset);
     }
 
@@ -4432,7 +4888,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform1iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform1iv(int location, int count, int[] v, int offset);/*
@@ -4443,11 +4899,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform1iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform1iv(int location, int count, java.nio.IntBuffer v) {
-        checkBuffer(v, count, "v");
+        checkBuffer(v, count, VALUES);
         int offset = getOffset(v);
         GLES20Pipeline.nGLUniform1iv(location, count, v, offset);
     }
@@ -4456,7 +4912,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform1iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform1iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform1iv(int location, int count, java.nio.IntBuffer v, int offset);/*
@@ -4493,7 +4949,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniform2fv(int location, int count, float[] v, int offset) {
-        checkArray(v, offset,2*count, "v");
+        checkArray(v, offset,2*count, VALUES);
         GLES20Pipeline.nGLUniform2fv(location, count, v, offset);
     }
 
@@ -4516,7 +4972,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniform2fv(int location, int count, java.nio.FloatBuffer values) {
-        checkBuffer(values,2*count, "values");
+        checkBuffer(values,2*count, VALUES);
         int offset = getOffset(values);
         if (values.isDirect()) {
             GLES20Pipeline.nGLUniform2fv(location, count, values, offset);
@@ -4564,11 +5020,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform2iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform2iv(int location, int count, int[] v, int offset) {
-        checkArray(v, offset, 2*count, "v");
+        checkArray(v, offset, 2*count, VALUES);
         GLES20Pipeline.nGLUniform2iv(location, count, v, offset);
     }
 
@@ -4576,7 +5032,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform2iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform2iv(int location, int count, int[] v, int offset);/*
@@ -4587,11 +5043,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform2iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform2iv(int location, int count, java.nio.IntBuffer values) {
-        checkBuffer(values, 2*count, "values");
+        checkBuffer(values, 2*count,VALUES);
         int offset = getOffset(values);
 
         if (values.isDirect()) {
@@ -4606,7 +5062,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform2iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform2iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform2iv(int location, int count, java.nio.IntBuffer values, int offset);/*
@@ -4643,7 +5099,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniform3fv(int location, int count, float[] value, int offset) {
-        checkArray(value, offset, 3*count, "value");
+        checkArray(value, offset, 3*count, VALUES);
         GLES20Pipeline.nGLUniform3fv(location, count, value, offset);
     }
 
@@ -4666,7 +5122,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniform3fv(int location, int count, java.nio.FloatBuffer values) {
-        checkBuffer(values, 3 * count, "values");
+        checkBuffer(values, 3 * count, VALUES);
         int offset = getOffset(values);
         if (values.isDirect()) {
             GLES20Pipeline.nGLUniform3fv(location, count, values, offset);
@@ -4713,11 +5169,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform3iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform3iv(int location, int count, int[] value, int offset) {
-        checkArray(value, offset, 4*count, "value");
+        checkArray(value, offset, 4*count, VALUES);
         GLES20Pipeline.nGLUniform3iv(location, count, value, offset);
     }
 
@@ -4725,7 +5181,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform3iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform3iv(int location, int count, int[] value, int offset);/*    
@@ -4736,11 +5192,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform3iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform3iv(int location, int count, java.nio.IntBuffer values) {
-        checkBuffer(values, 4 * count, "values");
+        checkBuffer(values, 4 * count, VALUES);
         int offset = BufferInfo.getOffset(values);
         if (values.isDirect()) {
             GLES20Pipeline.nGLUniform3iv(location, count, values, offset);
@@ -4756,7 +5212,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform3iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform3iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform3iv(int location, int count, java.nio.IntBuffer values, int offset);/*
@@ -4815,7 +5271,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniform4fv(int location, int count, java.nio.FloatBuffer values) {
-        checkBuffer(values, 4 * count, "values");
+        checkBuffer(values, 4 * count, VALUES);
         int offset = getOffset(values);
         if (values.isDirect()) {
             GLES20Pipeline.nGLUniform4fv(location, count, values, offset);
@@ -4863,11 +5319,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform4iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform4iv(int location, int count, int[] v, int offset) {
-        checkArray(v, offset, 4*count, "v");
+        checkArray(v, offset, 4*count, VALUES);
         GLES20Pipeline.nGLUniform4iv(location, count, v, offset);
     }
 
@@ -4875,7 +5331,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform4iv([int location, int count, int[] v, int offset]);
      * 
-     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     private static native void nGLUniform4iv(int location, int count, int[] v, int offset);/*
@@ -4886,11 +5342,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniform4iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
+     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
 
      * */
     public void glUniform4iv(int location, int count, java.nio.IntBuffer values) {
-        checkBuffer(values, 4 * count, "values");
+        checkBuffer(values, 4 * count, VALUES);
         int offset = getOffset(values);
         if (values.isDirect()) {
             GLES20Pipeline.nGLUniform4iv(location, count, values, offset);
@@ -4904,8 +5360,7 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniform4iv([int location, int count, java.nio.IntBuffer v]);
      * 
-     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint) *v )
-
+     *  C function void glUniform4iv ( (GLint) location, (GLsizei) count, const (GLint *) v )
      * */
     private static native void nGLUniform4iv(int location, int count, java.nio.IntBuffer values, int offset);/*
             glUniform4iv ( (GLint) location, (GLsizei) count, (GLint *) (values + offset) );    
@@ -4915,12 +5370,18 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniformMatrix2fv([int location, int count, boolean transpose, float[] value, int offset]);
      * 
-     *  C function void glUniformMatrix2fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const (GLfloat) *)value )
+     *  C function void glUniformMatrix2fv ( (GLint) location, 
+     *                                       (GLsizei) count, 
+     *                                       (GLboolean)  transpose, 
+     *                                       (GLfloat *)value )
 
      * */
-    public void glUniformMatrix2fv(int location, int count, boolean transpose, float[] value, int offset) {
-        checkArray(value, offset, 4*count, "value");
-        GLES20Pipeline.nGLUniformMatrix2fv(location, count, transpose, value, offset);
+    public void glUniformMatrix2fv(int location,
+                                   int count,
+                                   boolean transpose,
+                                   float[] value,  int offset) {
+        checkArray(value, offset, 4 * count, VALUES);
+        nGLUniformMatrix2fv(location, count, transpose, value, offset);
     }
 
     /**
@@ -4942,7 +5403,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniformMatrix2fv(int location, int count, boolean transpose, java.nio.FloatBuffer values) {
-        checkBuffer(values, 4 * count, "values");
+        checkBuffer(values, 4 * count, VALUES);
         int offset = getOffset(values);
         if (values.isDirect()) {
             nGLUniformMatrix2fv(location, count, transpose, values, offset);
@@ -4954,12 +5415,20 @@ public class GLES20Pipeline implements Pipeline {
 
     /**
      *<pre>
-     * Native method generated from GLES20.glUniformMatrix2fv([int location, int count, boolean transpose, java.nio.FloatBuffer value]);
+     * Native method generated from GLES20.glUniformMatrix2fv([int location, 
+     * int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
-     *  C function void glUniformMatrix2fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const (GLfloat) *)value )
+     *  C function void glUniformMatrix2fv( (GLint) location, 
+     *                                      (GLsizei) count, 
+     *                                      (GLboolean)  transpose, 
+     *                                      (GLfloat *)value )
 
      * */
-    private static native void nGLUniformMatrix2fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
+    private static native void nGLUniformMatrix2fv(int location,
+                                                   int count,
+                                                   boolean transpose,
+                                                   java.nio.FloatBuffer value,
+                                                   int offset);/*
              glUniformMatrix2fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (GLfloat *) (value + offset) );    
     
     */
@@ -4972,7 +5441,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glUniformMatrix3fv(int location, int count, boolean transpose, float[] value, int offset) {
-        checkArray(value, offset, 9*count, "value");
+        checkArray(value, offset, 9*count, VALUES);
         GLES20Pipeline.nGLUniformMatrix3fv(location, count, transpose, value, offset);
     }
 
@@ -4994,9 +5463,10 @@ public class GLES20Pipeline implements Pipeline {
      *  C function void glUniformMatrix3fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const (GLfloat) *)value )
 
      * */
-    public void glUniformMatrix3fv(int location, int count, boolean transpose,
-            java.nio.FloatBuffer value) {
-        checkBuffer(value, 9 * count, "values");
+    public void glUniformMatrix3fv(int location, 
+                                   int count, boolean transpose,
+                                   java.nio.FloatBuffer value) {
+        checkBuffer(value, 9 * count, VALUES);
         int offset = getOffset(value);
 
         if (value.isDirect()) {
@@ -5011,10 +5481,15 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniformMatrix3fv([int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
-     *  C function void glUniformMatrix3fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const (GLfloat) *)value )
-
+     *  C function void glUniformMatrix3fv ( (GLint) location, 
+     *                                       (GLsizei) count, 
+     *                                       (GLboolean)  transpose, 
+     *                                       (const (GLfloat) *)value )
      * */
-    private static native void nGLUniformMatrix3fv(int location, int count, boolean transpose, java.nio.FloatBuffer value, int offset);/*
+    private static native void nGLUniformMatrix3fv(int location, 
+                                                   int count, 
+                                                   boolean transpose, 
+                                                   java.nio.FloatBuffer value, int offset);/*
             glUniformMatrix3fv( (GLint) location, 
                                 (GLsizei) count, 
                                 (GLboolean)  transpose, 
@@ -5026,11 +5501,14 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glUniformMatrix4fv([int location, int count, boolean transpose, float[] value, int offset]);
      * 
-     *  C function void glUniformMatrix4fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const (GLfloat) *)value )
+     *  C function void glUniformMatrix4fv((GLint) location, 
+     *                                     (GLsizei) count, 
+     *                                     (GLboolean)  transpose, 
+     *                                     (const (GLfloat) *)value )
 
      * */
     public void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset) {
-        checkArray(value, offset, 16*count, "value");
+        checkArray(value, offset, 16*count, VALUES);
         GLES20Pipeline.nGLUniformMatrix4fv(location, count, transpose, value, offset);
     }
 
@@ -5038,10 +5516,16 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Native method generated from GLES20.glUniformMatrix4fv([int location, int count, boolean transpose, float[] value, int offset]);
      * 
-     *  C function void glUniformMatrix4fv ( (GLint) location, (GLsizei) count, (GLboolean)  transpose, (const (GLfloat) *)value )
+     *  C function void glUniformMatrix4fv((GLint) location, 
+     *                                     (GLsizei) count, 
+     *                                     (GLboolean) transpose, 
+     *                                     (GLfloat *) value )
 
      * */
-    private static native void nGLUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset);/*
+    private static native void nGLUniformMatrix4fv(int location, 
+                                                   int count, 
+                                                   boolean transpose, 
+                                                   float[] value, int offset);/*
             glUniformMatrix4fv((GLint) location, 
                                (GLsizei) count, 
                                (GLboolean)  transpose, 
@@ -5154,7 +5638,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glVertexAttrib1fv(int indx, float[] values, int offset) {
-        checkArray(values, offset, 1, "values");
+        checkArray(values, offset, 1, VALUES);
         GLES20Pipeline.nGLVertexAttrib1fv(indx, values, offset);
     }
 
@@ -5177,7 +5661,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glVertexAttrib1fv(int indx, java.nio.FloatBuffer values) {
-        checkBuffer(values, 1, "values");
+        checkBuffer(values, 1, VALUES);
         int offset = getOffset(values);
         if (values.isDirect()) {
             GLES20Pipeline.nGLVertexAttrib1fv(indx, values, offset);
@@ -5224,11 +5708,11 @@ public class GLES20Pipeline implements Pipeline {
      *<pre>
      * Delegate Method generated from GLES20.glVertexAttrib2fv([int indx, float[] values, int offset]);
      * 
-     *  C function void glVertexAttrib2fv ( (GLuint) indx, (const (GLfloat) *)values )
+     *  C function void glVertexAttrib2fv ( (GLuint) indx, (const GLfloat *)values )
 
      * */
     public void glVertexAttrib2fv(int indx, float[] values, int offset) {
-        checkArray(values, offset, 2, "values");
+        checkArray(values, offset, 2, VALUES);
         GLES20Pipeline.nGLVertexAttrib2fv(indx, values, offset);
     }
 
@@ -5251,7 +5735,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glVertexAttrib2fv(int indx, java.nio.FloatBuffer values) {
-        checkBuffer(values, 2, "values");
+        checkBuffer(values, 2, VALUES);
         int offset = getOffset(values);
 
         if (values.isDirect()) {
@@ -5304,7 +5788,7 @@ public class GLES20Pipeline implements Pipeline {
 
      * */
     public void glVertexAttrib3fv(int indx, float[] values, int offset) {
-        checkArray(values, offset, 3, "values");
+        checkArray(values, offset, 3, VALUES);
         GLES20Pipeline.nGLVertexAttrib3fv(indx, values, offset);
     }
 
@@ -5457,10 +5941,14 @@ public class GLES20Pipeline implements Pipeline {
 
     /**
      *<pre>
-     * Delegate Method generated from GLES20.glVertexAttribPointerBounds([int indx, int size, int type, boolean normalized, int stride, java.nio.Buffer ptr, int remaining]);
+     * Delegate Method generated from GLES20.glVertexAttribPointerBounds([int indx, int size, int type, 
+     * boolean normalized, int stride, java.nio.Buffer ptr, int remaining]);
      * 
-     *  C function void glVertexAttribPointer ( (GLuint) indx, (GLint) size, (GLenum) type, (GLboolean)  normalized, (GLsizei) stride, const GLvoid *ptr )
-
+     *  C function void glVertexAttribPointer( (GLuint) indx, 
+     *                                         (GLint) size, 
+     *                                         (GLenum) type, 
+     *                                         (GLboolean)  normalized, 
+     *                                         (GLsizei) stride, const GLvoid *ptr )
      * */
     public void glVertexAttribPointerBounds( int indx,
                                              int size, 
@@ -5473,10 +5961,9 @@ public class GLES20Pipeline implements Pipeline {
         int offsetBytes = getOffset(ptr);
         if (ptr.isDirect()) {
             // parameter int remaining is unused
-            GLES20Pipeline.nGLVertexAttribPointerBounds(indx, size, type,
-                    normalized, stride, ptr, offsetBytes);
+            GLES20Pipeline.nGLVertexAttribPointerBounds(indx, size, type,  normalized, stride, ptr, offsetBytes);
         } else {
-            throw new RuntimeException(BUFFER_ND);
+            throw new RuntimeException("Invalid buffer.");
         }
     }
 
@@ -5796,4 +6283,16 @@ public class GLES20Pipeline implements Pipeline {
         if (null == values) throw new IllegalArgumentException("Buffer == null");       
         return BufferInfo.getOffset(values);       
     }
+    
+    /**
+     * 
+     * @param values Buffer values
+     * @return offset
+     */
+    protected static int getOffset(java.nio.ByteBuffer values){
+        if (null == values) throw new IllegalArgumentException("Buffer == null");       
+        return BufferInfo.getOffset(values);       
+    }
+    
+    
 }
