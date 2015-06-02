@@ -1430,7 +1430,7 @@ public class GLES10Pipeline implements Pipeline {
      * @param pname paramenter name
      * @return needed vector length
      */
-    protected int getNeededLight(int pname) {
+    protected static int getNeededLight(int pname) {
         int _needed = 1;
         switch (pname) {
 
@@ -1461,7 +1461,7 @@ public class GLES10Pipeline implements Pipeline {
      * @param pname name os GL parameter
      * @return minimum vector length 
      */
-    protected  int getNeededCount(int pname) {
+    protected static int getNeededCount(int pname) {
         int needed = 1;
         int[] array;  
 //        switch (pname) {
@@ -1531,7 +1531,7 @@ public class GLES10Pipeline implements Pipeline {
      * @param pname name of GL constant
      * @return required length of vector
      */
-    protected int getNeededMaterial(int pname){
+    protected static int getNeededMaterial(int pname){
         int _needed;
         switch (pname) {    
             case GLES11.GL_AMBIENT:    
