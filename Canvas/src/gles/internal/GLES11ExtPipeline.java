@@ -8,6 +8,9 @@ package gles.internal;
 import static gles.internal.GLES10Pipeline.checkArray;
 import static gles.internal.GLES10Pipeline.checkBuffer;
 import static gles.internal.GLES10Pipeline.getOffset;
+import static gles.internal.GLES10Pipeline.PARAMS;
+import static gles.internal.GLES10Pipeline.DATA;
+import static gles.internal.GLES10Pipeline.;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -931,6 +934,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetLightxvOES(int light, int pname, int[] params, int offset) {
+        int needed = 
         checkArray(params, offset, 1, "params");
         GLES11ExtPipeline.nGLGetLightxvOES(light, pname, params, offset);
     }
@@ -1013,8 +1017,7 @@ public class GLES11ExtPipeline
         }else{
             int[] array = params.array();
             nGLGetMaterialxvOES(face, pname, array, offset);
-        }
-        
+        }        
        // GLES11ExtPipeline.nGLGetMaterialxvOES(face, pname, params);
     }
 
@@ -1037,6 +1040,8 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetTexEnvxvOES(int env, int pname, int[] params, int offset) {
+        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkArray(params, offset, needed, PARAMS);
         GLES11ExtPipeline.nGLGetTexEnvxvOES(env, pname, params, offset);
     }
 
@@ -1058,7 +1063,16 @@ public class GLES11ExtPipeline
      *  C function void glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)params )
      * */
     public void glGetTexEnvxvOES(int env, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetTexEnvxvOES(env, pname, params);
+       int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
+        checkBuffer(params, needed, "params");
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            nGLGetTexEnvxvOES(env, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            nGLGetTexEnvxvOES(env, pname, array, offset);
+        }    
+        //GLES11ExtPipeline.nGLGetTexEnvxvOES(env, pname, params);
     }
 
     /**
@@ -1932,7 +1946,15 @@ public class GLES11ExtPipeline
      *  C function void glGetRenderbufferParameterivOES((GLenum)  target, (GLenum)  pname, (GLint *)params )
      * */
     public void glGetRenderbufferParameterivOES(int target, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetRenderbufferParameterivOES(target, pname, params);
+        checkBuffer(params, 1, PARAMS);
+        int offset = getOffset(params);
+        if(params.isDirect()){
+            nGLGetRenderbufferParameterivOES(target, pname, params, offset);
+        }else{
+            int[] array = params.array();
+            nGLGetRenderbufferParameterivOES(target, pname, array, offset);
+        }
+        //GLES11ExtPipeline.nGLGetRenderbufferParameterivOES(target, pname, params);
     }
 
     /**
@@ -2012,7 +2034,17 @@ public class GLES11ExtPipeline
      *  C function void glDeleteFramebuffersOES((GLsizei) n, const (GLuint)  *framebuffers )
      * */
     public void glDeleteFramebuffersOES(int n, java.nio.IntBuffer framebuffers) {
-        GLES11ExtPipeline.nGLDeleteFramebuffersOES(n, framebuffers);
+        checkBuffer(framebuffers, n, "framebuffers");
+        int offset = getOffset(framebuffers);
+        if(framebuffers.isDirect()){
+            nGLDeleteFramebuffersOES(n, framebuffers, offset);
+        }else{
+            int[] array = framebuffers.array();
+            nGLDeleteFramebuffersOES(n, array, offset);
+        }
+        
+        
+        //GLES11ExtPipeline.nGLDeleteFramebuffersOES(n, framebuffers);
     }
 
     /**
@@ -2032,6 +2064,7 @@ public class GLES11ExtPipeline
      *  C function void glGenFramebuffersOES((GLsizei) n, (GLuint)  *framebuffers )
      * */
     public void glGenFramebuffersOES(int n, int[] framebuffers, int offset) {
+        checkArray(framebuffers, offset, n, "framebuffer");
         GLES11ExtPipeline.nGLGenFramebuffersOES(n, framebuffers, offset);
     }
 
@@ -2052,7 +2085,14 @@ public class GLES11ExtPipeline
      *  C function void glGenFramebuffersOES((GLsizei) n, (GLuint)  *framebuffers )
      * */
     public void glGenFramebuffersOES(int n, java.nio.IntBuffer framebuffers) {
-        GLES11ExtPipeline.nGLGenFramebuffersOES(n, framebuffers);
+        checkBuffer(framebuffers, 1, "framebuffers");
+        int offset = getOffset(framebuffers);
+        if(framebuffers.isDirect()){
+            GLES11ExtPipeline.nGLGenFramebuffersOES(n, framebuffers, offset);
+        }else{
+            int[] array = framebuffers.array();
+            GLES11ExtPipeline.nGLGenFramebuffersOES(n, array, offset);
+        }
     }
 
     /**
