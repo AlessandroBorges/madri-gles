@@ -83,7 +83,7 @@ public class BufferInfo {
      */
     public static int getElementSizeShift(Buffer b) {
         // sanity check
-        if (b == null || !b.isDirect()) { return 0; }
+        if (b == null /*|| !b.isDirect()*/) { return 0; }
         // LongBuffer & DoubleBuffer case - 8 bytes
         int elementSizeShift = 4;
         // other values
@@ -135,7 +135,8 @@ public class BufferInfo {
         } else if(buffer.hasArray()){
             int offset = buffer.arrayOffset();
             int position = buffer.position();
-            return offset + position;
+            int elementSizeShift = getElementSizeShift(buffer);
+            return (offset + position) << elementSizeShift;
         }else{
             throw new IllegalArgumentException("Buffer" + NDARRAY);
         }
