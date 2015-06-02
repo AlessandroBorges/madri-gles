@@ -6174,6 +6174,26 @@ public class GLES20Pipeline implements Pipeline {
      *  <li>if offset < 0;
      *  <li>if array.length - offset < needed.
      */
+    protected static void checkArray(long[] array, int offset, int needed, String arrayName){
+        if (null == array) throw new IllegalArgumentException(arrayName + " == null");
+        if (offset < 0) throw new IllegalArgumentException(arrayName + "offset < 0");
+        if (array.length - offset < needed)
+            throw new IllegalArgumentException(arrayName+".length - offset < needed = " + needed);        
+    }
+    
+    /**
+     * Check a parameter array
+     * 
+     * @param array - array to check
+     * @param offset - array offset
+     * @param needed -  count elements required
+     * @param arrayName - array name to print exception
+     * 
+     *  @throws IllegalArgumentException in following cases:
+     *  <li>if array is null;
+     *  <li>if offset < 0;
+     *  <li>if array.length - offset < needed.
+     */
     protected static void checkArray(boolean[] array, int offset, int needed, String arrayName){
         if (null == array) throw new IllegalArgumentException(arrayName + " == null");
         if (offset < 0) throw new IllegalArgumentException(arrayName + "offset < 0");
