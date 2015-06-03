@@ -1,10 +1,64 @@
 package gles.util;
 
 import java.nio.*;
+import java.nio.ByteBuffer;
+import static gles.util.BufferInfo.*;
 
 public class BufferInfoTest {
+    
 	public static void main(String[] args) {
+	    //test1();
+	    test2();
+	}
+	
+	
+    public static void test2(){
+	
+        boolean direct = true;
+        int size = 100;
+        IntBuffer ib = direct ? ByteBuffer.allocateDirect(size*4).asIntBuffer() : IntBuffer.allocate(size);
+        
+        for (int i = 0; i < size; i++) {
+            ib.put(i);   
+        }        
+        ib.flip();
+        ib.position(16);
+        
+        IntBuffer ib2 = ib.slice();
+        ib2.position(10);
+        
+        //DirectIntBufferS db = null;
+        
+        Buffer wrapBuffer = ib2;
+        
+        print("ib:   " + ib);
+        print("ib2:  " + ib2);
+        print("wrap: " + wrapBuffer);
+        
+        print("-----------");
+        print("ib   @add " + getAddress(ib));
+        print("ib2  @add " + getAddress(ib2));
+        print("wrap @add " + getAddress(wrapBuffer));
+        print("-----------");
+        
+        print("-----------");
+        print("ib   @ptr " + getPointer(ib));
+        print("ib2  @ptr " + getPointer(ib2));
+        print("wrap @ptr " + getPointer(wrapBuffer));
+        print("-----------");
+        
+        print("ib2  offset:" + getOffset(ib2));
+        print("ib2 arrayOffset:" + (ib2.hasArray() ? ib2.arrayOffset() : " n/a"));
+        print("wrap offset:" + getOffset(wrapBuffer));
+        
+        
+	}
+    
+    private static void print(Object s){
+        System.out.println(s);
+    }
 		
+	public static void test1(){
 		int count =  20 ;
 		int typeSize = 4;
 		int capacity = count * typeSize;
