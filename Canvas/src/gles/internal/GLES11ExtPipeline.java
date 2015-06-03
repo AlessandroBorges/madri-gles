@@ -1441,8 +1441,7 @@ public class GLES11ExtPipeline
         }else{
          int[] array = m.array();
          nGLMultMatrixxOES(array, offset);
-        }
-        
+        }        
         //GLES11ExtPipeline.nGLMultMatrixxOES(m);
     }
 
@@ -1568,7 +1567,8 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glPointParameterxvOES([int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11Ext.glPointParameterxvOES(
+     * [int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glPointParameterxvOES((GLenum)  pname, const (GLfixed *)params )
      * */
@@ -1578,11 +1578,13 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glPointParameterxvOES([int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11Ext.glPointParameterxvOES(
+     * [int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glPointParameterxvOES((GLenum)  pname, const (GLfixed *)params )
      * */
-    private static native void nGLPointParameterxvOES(int pname, java.nio.IntBuffer params, int offset);/*
+    private static native void nGLPointParameterxvOES(int pname, 
+                                                      java.nio.IntBuffer params, int offset);/*
        glPointParameterxvOES((GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
@@ -2870,10 +2872,10 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetTexGenivOES([int coord, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11Ext.glGetTexGenivOES(
+     * [int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexGenivOES((GLenum)  coord, (GLenum)  pname, (GLint *)params )
-
      * */
     public void glGetTexGenivOES(int coord, int pname, java.nio.IntBuffer params) {
         GLES11ExtPipeline.nGLGetTexGenivOES(coord, pname, params);
@@ -2892,45 +2894,60 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetTexGenxvOES([int coord, int pname, int[] params, int offset]);
+     * Delegate Method generated from GLES11Ext.glGetTexGenxvOES(
+     * [int coord, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)params )
-
      * */
     public void glGetTexGenxvOES(int coord, int pname, int[] params, int offset) {
+        
         GLES11ExtPipeline.nGLGetTexGenxvOES(coord, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glGetTexGenxvOES([int coord, int pname, int[] params, int offset]);
+     * Native method generated from GLES11Ext.glGetTexGenxvOES(
+     * [int coord, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)params )
-
      * */
-    private static native void nGLGetTexGenxvOES(int coord, int pname, int[] params, int offset);/*
+    private static native void nGLGetTexGenxvOES(int coord, 
+                                                 int pname, 
+                                                 int[] params, 
+                                                 int offset);/*
        glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetTexGenxvOES([int coord, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11Ext.glGetTexGenxvOES(
+     * [int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)params )
-
      * */
     public void glGetTexGenxvOES(int coord, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetTexGenxvOES(coord, pname, params);
+        checkBuffer(params, 1, "params");
+        int offset = getOffset(params);
+        if (params.isDirect()){
+            nGLGetTexGenxvOES(coord, pname, params, offset);
+        }else{
+         int[] array = params.array();
+         nGLGetTexGenxvOES(coord, pname, array, offset);
+        }
+      //  GLES11ExtPipeline.nGLGetTexGenxvOES(coord, pname, params);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glGetTexGenxvOES([int coord, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11Ext.glGetTexGenxvOES(
+     * [int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)params )
-
      * */
-    private static native void nGLGetTexGenxvOES(int coord, int pname, java.nio.IntBuffer params);/*
+    private static native void nGLGetTexGenxvOES(int coord, 
+                                                 int pname, 
+                                                 java.nio.IntBuffer params, 
+                                                 int offset);/*
        glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)(params + offset));
     */
 }
