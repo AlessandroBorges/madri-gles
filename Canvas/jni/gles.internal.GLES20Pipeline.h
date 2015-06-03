@@ -116,16 +116,64 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBlendFuncSeparate
  * Method:    nGLBufferData
  * Signature: (IILjava/nio/Buffer;II)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferData
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferData__IILjava_nio_Buffer_2II
   (JNIEnv *, jclass, jint, jint, jobject, jint, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLBufferData
+ * Signature: (II[BII)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferData__II_3BII
+  (JNIEnv *, jclass, jint, jint, jbyteArray, jint, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLBufferData
+ * Signature: (II[SII)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferData__II_3SII
+  (JNIEnv *, jclass, jint, jint, jshortArray, jint, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLBufferData
+ * Signature: (II[III)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferData__II_3III
+  (JNIEnv *, jclass, jint, jint, jintArray, jint, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
  * Method:    nGLBufferSubData
  * Signature: (IIILjava/nio/Buffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferSubData
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferSubData__IIILjava_nio_Buffer_2I
   (JNIEnv *, jclass, jint, jint, jint, jobject, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLBufferSubData
+ * Signature: (III[BI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferSubData__III_3BI
+  (JNIEnv *, jclass, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLBufferSubData
+ * Signature: (III[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferSubData__III_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLBufferSubData
+ * Signature: (III[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLBufferSubData__III_3II
+  (JNIEnv *, jclass, jint, jint, jint, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
@@ -188,16 +236,64 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompileShader
  * Method:    nGLCompressedTexImage2D
  * Signature: (IIIIIIILjava/nio/Buffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexImage2D
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexImage2D__IIIIIIILjava_nio_Buffer_2I
   (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jobject, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLCompressedTexImage2D
+ * Signature: (IIIIIII[BI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexImage2D__IIIIIII_3BI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLCompressedTexImage2D
+ * Signature: (IIIIIII[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexImage2D__IIIIIII_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLCompressedTexImage2D
+ * Signature: (IIIIIII[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexImage2D__IIIIIII_3II
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
  * Method:    nGLCompressedTexSubImage2D
  * Signature: (IIIIIIIILjava/nio/Buffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexSubImage2D
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexSubImage2D__IIIIIIIILjava_nio_Buffer_2I
   (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jobject, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLCompressedTexSubImage2D
+ * Signature: (IIIIIIII[BI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexSubImage2D__IIIIIIII_3BI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLCompressedTexSubImage2D
+ * Signature: (IIIIIIII[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexSubImage2D__IIIIIIII_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLCompressedTexSubImage2D
+ * Signature: (IIIIIIII[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLCompressedTexSubImage2D__IIIIIIII_3II
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
@@ -390,6 +486,30 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLDrawElements__IIII
  */
 JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLDrawElements__IIILjava_nio_Buffer_2I
   (JNIEnv *, jclass, jint, jint, jint, jobject, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLDrawElements
+ * Signature: (III[BI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLDrawElements__III_3BI
+  (JNIEnv *, jclass, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLDrawElements
+ * Signature: (III[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLDrawElements__III_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLDrawElements
+ * Signature: (III[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLDrawElements__III_3II
+  (JNIEnv *, jclass, jint, jint, jint, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
@@ -1116,8 +1236,32 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLStencilOpSeparate
  * Method:    nGLTexImage2D
  * Signature: (IIIIIIIILjava/nio/Buffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexImage2D
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexImage2D__IIIIIIIILjava_nio_Buffer_2I
   (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jobject, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLTexImage2D
+ * Signature: (IIIIIIII[BI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexImage2D__IIIIIIII_3BI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLTexImage2D
+ * Signature: (IIIIIIII[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexImage2D__IIIIIIII_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLTexImage2D
+ * Signature: (IIIIIIII[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexImage2D__IIIIIIII_3II
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
@@ -1162,18 +1306,42 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexParameteriv__II_3
 /*
  * Class:     gles_internal_GLES20Pipeline
  * Method:    nGLTexParameteriv
- * Signature: (IILjava/nio/IntBuffer;)V
+ * Signature: (IILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexParameteriv__IILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexParameteriv__IILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
  * Method:    nGLTexSubImage2D
  * Signature: (IIIIIIIILjava/nio/Buffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexSubImage2D
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexSubImage2D__IIIIIIIILjava_nio_Buffer_2I
   (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jobject, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLTexSubImage2D
+ * Signature: (IIIIIIII[BI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexSubImage2D__IIIIIIII_3BI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLTexSubImage2D
+ * Signature: (IIIIIIII[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexSubImage2D__IIIIIIII_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES20Pipeline
+ * Method:    nGLTexSubImage2D
+ * Signature: (IIIIIIII[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLTexSubImage2D__IIIIIIII_3II
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
@@ -1194,10 +1362,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLUniform1fv__II_3FI
 /*
  * Class:     gles_internal_GLES20Pipeline
  * Method:    nGLUniform1fv
- * Signature: (IILjava/nio/FloatBuffer;)V
+ * Signature: (IILjava/nio/FloatBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLUniform1fv__IILjava_nio_FloatBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLUniform1fv__IILjava_nio_FloatBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
@@ -1218,10 +1386,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLUniform1iv__II_3II
 /*
  * Class:     gles_internal_GLES20Pipeline
  * Method:    nGLUniform1iv
- * Signature: (IILjava/nio/IntBuffer;)V
+ * Signature: (IILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLUniform1iv__IILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES20Pipeline_nGLUniform1iv__IILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES20Pipeline
