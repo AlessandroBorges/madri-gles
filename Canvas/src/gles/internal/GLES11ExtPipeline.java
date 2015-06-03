@@ -10,7 +10,9 @@ import static gles.internal.GLES10Pipeline.checkBuffer;
 import static gles.internal.GLES10Pipeline.getOffset;
 import static gles.internal.GLES10Pipeline.PARAMS;
 import static gles.internal.GLES10Pipeline.DATA;
-import static gles.internal.GLES10Pipeline.;
+import static gles.internal.GLES10Pipeline.getNeededLight;
+import static gles.internal.GLES10Pipeline.getNeededCount;
+import static gles.internal.GLES10Pipeline.getNeededMaterial;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -933,8 +935,7 @@ public class GLES11ExtPipeline
      *  C function void glGetLightxvOES((GLenum)  light, (GLenum)  pname, (GLfixed *)params )
 
      * */
-    public void glGetLightxvOES(int light, int pname, int[] params, int offset) {
-        int needed = 
+    public void glGetLightxvOES(int light, int pname, int[] params, int offset) {      
         checkArray(params, offset, 1, "params");
         GLES11ExtPipeline.nGLGetLightxvOES(light, pname, params, offset);
     }
@@ -1112,7 +1113,15 @@ public class GLES11ExtPipeline
      *  C function void glGetTexParameterxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)params )
      * */
     public void glGetTexParameterxvOES(int target, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetTexParameterxvOES(target, pname, params);
+        checkBuffer(params, 1, "params");
+        int offset = getOffset(params);
+        if (params.isDirect()){
+            nGLGetTexParameterxvOES(target, pname, params, offset);
+        }else{
+         int[] array = params.array();
+         nGLGetTexParameterxvOES(target, pname, array, offset);
+        }
+       // GLES11ExtPipeline.nGLGetTexParameterxvOES(target, pname, params);
     }
 
     /**
@@ -1152,6 +1161,8 @@ public class GLES11ExtPipeline
      *  C function void glLightModelxvOES((GLenum)  pname, const (GLfixed *)params )
      * */
     public void glLightModelxvOES(int pname, int[] params, int offset) {
+        int needed = getNeededLight(pname);
+        checkArray(params, offset, needed, PARAMS);
         GLES11ExtPipeline.nGLLightModelxvOES(pname, params, offset);
     }
 
@@ -1232,7 +1243,16 @@ public class GLES11ExtPipeline
      *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname, const (GLfixed *)params )
      * */
     public void glLightxvOES(int light, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLLightxvOES(light, pname, params);
+        
+        checkBuffer(params, getNeededLight(pname), "params");
+        int offset = getOffset(params);
+        if (params.isDirect()){
+            nGLLightxvOES(light, pname, params, offset);
+        }else{
+         int[] array = params.array();
+         nGLLightxvOES(light, pname, array, offset);
+        }
+        //GLES11ExtPipeline.nGLLightxvOES(light, pname, params);
     }
 
     /**
@@ -1272,6 +1292,7 @@ public class GLES11ExtPipeline
      *  C function void glLoadMatrixxOES(const (GLfixed *)m )
      * */
     public void glLoadMatrixxOES(int[] m, int offset) {
+        checkArray(m, offset, 16, "m");
         GLES11ExtPipeline.nGLLoadMatrixxOES(m, offset);
     }
 
@@ -1292,7 +1313,16 @@ public class GLES11ExtPipeline
      *  C function void glLoadMatrixxOES(const (GLfixed *)m )
      * */
     public void glLoadMatrixxOES(java.nio.IntBuffer m) {
-        GLES11ExtPipeline.nGLLoadMatrixxOES(m);
+        
+        checkBuffer(m, 16, "m");
+        int offset = getOffset(m);
+        if (m.isDirect()){
+            nGLLoadMatrixxOES(m, offset);
+        }else{
+         int[] array = m.array();
+         nGLLoadMatrixxOES(array, offset);
+        }
+        //GLES11ExtPipeline.nGLLoadMatrixxOES(m, offset);
     }
 
     /**
@@ -1332,6 +1362,8 @@ public class GLES11ExtPipeline
      *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname, const (GLfixed *)params )
      * */
     public void glMaterialxvOES(int face, int pname, int[] params, int offset) {
+        int needed = getNeededMaterial(pname);
+        checkArray(params, offset, needed, PARAMS);
         GLES11ExtPipeline.nGLMaterialxvOES(face, pname, params, offset);
     }
 
@@ -1352,7 +1384,16 @@ public class GLES11ExtPipeline
      *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname, const (GLfixed *)params )
      * */
     public void glMaterialxvOES(int face, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLMaterialxvOES(face, pname, params);
+        int needed = getNeededMaterial(pname);
+        checkBuffer(params, needed, "params");
+        int offset = getOffset(params);
+        if (params.isDirect()){
+            nGLMaterialxvOES(face, pname, params, offset);
+        }else{
+         int[] array = params.array();
+         nGLMaterialxvOES(face, pname, array, offset);
+        }
+        //GLES11ExtPipeline.nGLMaterialxvOES(face, pname, params);
     }
 
     /**
@@ -1372,6 +1413,7 @@ public class GLES11ExtPipeline
      *  C function void glMultMatrixxOES(const (GLfixed *)m )
      * */
     public void glMultMatrixxOES(int[] m, int offset) {
+        checkArray(m, offset, 16, "m");
         GLES11ExtPipeline.nGLMultMatrixxOES(m, offset);
     }
 
@@ -1392,7 +1434,16 @@ public class GLES11ExtPipeline
      *  C function void glMultMatrixxOES(const (GLfixed *)m )
      * */
     public void glMultMatrixxOES(java.nio.IntBuffer m) {
-        GLES11ExtPipeline.nGLMultMatrixxOES(m);
+        checkBuffer(m, 16, "m");
+        int offset = getOffset(m);
+        if (m.isDirect()){
+            nGLMultMatrixxOES(m, offset);
+        }else{
+         int[] array = m.array();
+         nGLMultMatrixxOES(array, offset);
+        }
+        
+        //GLES11ExtPipeline.nGLMultMatrixxOES(m);
     }
 
     /**

@@ -4854,19 +4854,12 @@ public class GLES30Pipeline
      *  C function void glDeleteTransformFeedbacks((GLsizei) n, (const GLuint *) ids)
      **/
     public void glDeleteTransformFeedbacks(int n, java.nio.IntBuffer ids) {
-	if (ids == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
-        // now, the offset...
-        if (ids.isDirect()) {
-            int offset = getOffset(ids);
+        checkBuffer(ids, n, "ids");
+        int offset = getOffset(ids);
+        if (ids.isDirect()) {            
             GLES30Pipeline.nGLDeleteTransformFeedbacks(n, ids, offset);            
-        } else {
-            if(!ids.hasArray()){
-                throw new IllegalArgumentException(INTBUFFER_ND);
-            }
-            int[] array = ids.array();            
-            int offset =  getOffset(ids); 
+        } else {           
+            int[] array = ids.array();
             GLES30Pipeline.nGLDeleteTransformFeedbacks(n, array, offset);
          }      
     }
@@ -4879,7 +4872,7 @@ public class GLES30Pipeline
 
      **/
     private static native void nGLDeleteTransformFeedbacks(int n, java.nio.IntBuffer ids, int offset);/*
-    		glDeleteTransformFeedbacks( (GLsizei) n, (const GLuint *) (ids + offset));    
+    	glDeleteTransformFeedbacks( (GLsizei) n, (const GLuint *) (ids + offset));    
     */
 
     /**
@@ -4887,9 +4880,9 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glGenTransformFeedbacks([int n, int[] ids, int offset]);
      * 
      *  C function void glGenTransformFeedbacks((GLsizei) n, (GLuint *) ids)
-
      **/
     public void glGenTransformFeedbacks(int n, int[] ids, int offset) {
+        checkArray(ids, offset, n, "ids");
         GLES30Pipeline.nGLGenTransformFeedbacks(n, ids, offset);
     }
 
@@ -4898,7 +4891,6 @@ public class GLES30Pipeline
      * Native method generated from GLES30.glGenTransformFeedbacks([int n, int[] ids, int offset]);
      * 
      *  C function void glGenTransformFeedbacks((GLsizei) n, (GLuint *) ids)
-
      **/
     private static native void nGLGenTransformFeedbacks(int n, int[] ids, int offset);/*    
     		glGenTransformFeedbacks((GLsizei) n, (GLuint *) &ids[offset]);    
@@ -4909,27 +4901,17 @@ public class GLES30Pipeline
      * Delegate Method generated from GLES30.glGenTransformFeedbacks([int n, java.nio.IntBuffer ids]);
      * 
      *  C function void glGenTransformFeedbacks((GLsizei) n, (GLuint *) ids)
-
      **/
     public void glGenTransformFeedbacks(int n, java.nio.IntBuffer ids) {
-	
-	if (ids == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
-        // now, the offset...
-        if (ids.isDirect()) {
-            int offset = getOffset(ids);
-            GLES30Pipeline.nGLGenTransformFeedbacks(n, ids, offset);
-            
-        } else {
-            if(!ids.hasArray()){
-                throw new IllegalArgumentException(INTBUFFER_ND);
-            }
-            int[] array = ids.array();            
-            int offset =  getOffset(ids);
+	checkBuffer(ids, n, "ids");
+        int offset = getOffset(ids);
+        
+        if (ids.isDirect()) {            
+            GLES30Pipeline.nGLGenTransformFeedbacks(n, ids, offset);            
+        } else {            
+            int[] array = ids.array();
             GLES30Pipeline.nGLGenTransformFeedbacks(n, array, offset);
          }
-        
     }
 
     /**
@@ -4940,7 +4922,7 @@ public class GLES30Pipeline
 
      **/
     private static native void nGLGenTransformFeedbacks(int n, java.nio.IntBuffer ids, int offset);/*
-    			glGenTransformFeedbacks((GLsizei) n, (GLuint *) (ids + offset));
+    	glGenTransformFeedbacks((GLsizei) n, (GLuint *) (ids + offset));
     */
 
     /**
@@ -5021,19 +5003,28 @@ public class GLES30Pipeline
     				   int[] length, int lengthOffset, 
     				   int[] binaryFormat, int binaryFormatOffset, 
     				   java.nio.Buffer binary) {
-	if (binary == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
+	checkArray(length, lengthOffset, 1, "length");
+	checkArray(binaryFormat, binaryFormatOffset, 1, "binaryFormat");
+	checkBuffer(binary, 1, "binary");
 
         // now, the offset...
         if (binary.isDirect()) {
             int binaryOffset = getOffset(binary);
-            GLES30Pipeline.nGLGetProgramBinary(program, 
-        	    				bufSize, 
-        	    				length, lengthOffset, 
-        	    				binaryFormat, binaryFormatOffset, 
-        	    				binary, binaryOffset);
-        } else {          
-                throw new IllegalArgumentException(INTBUFFER_ND);          
+            nGLGetProgramBinary(program,
+                    bufSize,
+                    length, lengthOffset,
+                    binaryFormat, binaryFormatOffset,
+                    binary, binaryOffset);
+        } else {   
+            ByteBuffer bb = ((ByteBuffer)binary);
+            byte[] array = bb.array();
+            int binaryOffset = getOffset(bb); 
+            nGLGetProgramBinary(program,
+                    bufSize,
+                    length, lengthOffset,
+                    binaryFormat, binaryFormatOffset,
+                    array, binaryOffset);
+                       
          }
        
     }
@@ -5058,6 +5049,20 @@ public class GLES30Pipeline
     					    (GLvoid *)  &binary[binaryOffset]);
     												
     	*/
+    
+    private static native void nGLGetProgramBinary(int program, 
+                                                   int bufSize, 
+                                                   int[] length, int lengthOffset, 
+                                                   int[] binaryFormat, int binaryFormatOffset, 
+                                                   byte[] binary, int binaryOffset);/*
+                                                                                                
+                        glGetProgramBinary( (GLuint)  program, 
+                                            (GLsizei) bufSize,
+                                            (GLsizei *) &length[lengthOffset], 
+                                            (GLenum *)  &binaryFormat[binaryFormatOffset], 
+                                            (GLvoid *)  &binary[binaryOffset]);
+                                                                                                
+        */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -5071,16 +5076,15 @@ public class GLES30Pipeline
     				   java.nio.IntBuffer length,
     				   java.nio.IntBuffer binaryFormat,
     				   java.nio.Buffer binary) {
-	if (binary == null || length==null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
+        checkBuffer(length, 1, "length");
+        checkBuffer(binaryFormat, 1, "binaryFormat");
+        checkBuffer(binary, 1, "binary");
+        
+        int lengthOffset  = getOffset(length);
+        int binaryFormatOffset = getOffset(binaryFormat);
         // now, the offset...
-        if (binary.isDirect()) {
-            
-            int lengthOffset 	   = getOffset(length);
-            int binaryFormatOffset = getOffset(binaryFormat);
-            int binaryOffset       = getOffset(binary);
-            
+        if (binary.isDirect()) { 
+            int binaryOffset = getOffset(binary);            
             GLES30Pipeline.nGLGetProgramBinary(program, 
         	    				bufSize,
         	    				length, lengthOffset,
@@ -5088,7 +5092,7 @@ public class GLES30Pipeline
         	    				binary, binaryOffset);
             
         } else {
-            throw new IllegalArgumentException(INTBUFFER_ND);   
+          throw new IllegalArgumentException("invalid buffer format binary: " + binary);
          }
     }
 
@@ -5122,16 +5126,15 @@ public class GLES30Pipeline
      *  				const GLvoid *binary, 
      *  				(GLsizei) length);
      **/
-    public void glProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int length) {	
-
+    public void glProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int length) {
         checkBuffer(binary,1,"binary");
-
         // now, the offset...
         if (binary.isDirect()) {
             int offset = getOffset(binary);
-            GLES30Pipeline.nGLProgramBinary(program, binaryFormat, binary, offset, length);
-        } else {          
-            throw new IllegalArgumentException(BUFFER_ND);
+            nGLProgramBinary(program, binaryFormat, binary, offset, length);
+        } else { 
+            int offset = getOffset((ByteBuffer)binary);
+            nGLProgramBinary(program, binaryFormat,(byte[])binary.array(), offset, length);
          }
     }
 
@@ -5142,12 +5145,26 @@ public class GLES30Pipeline
      *  C function void glProgramBinary((GLuint)  program, (GLenum) binaryFormat, const GLvoid *binary, (GLsizei) length)
 
      **/
-    private static native void nGLProgramBinary(int program, int binaryFormat, java.nio.Buffer binary, int offset, int length);/*
+    private static native void nGLProgramBinary(int program, 
+                                                int binaryFormat, 
+                                                java.nio.Buffer binary, int offset, 
+                                                int length);/*
     
     					glProgramBinary((GLuint)  program, 
     							(GLenum) binaryFormat, 
-    							(const GLvoid *) (binary + offset), 
+    							(GLvoid *) (binary + offset), 
     							(GLsizei) length);    
+    */
+    
+    private static native void nGLProgramBinary(int program, 
+                                                int binaryFormat, 
+                                                byte[] binary, int offset, 
+                                                int length);/*
+    
+                                        glProgramBinary((GLuint)  program, 
+                                                        (GLenum) binaryFormat, 
+                                                        (GLvoid *) (binary + offset), 
+                                                        (GLsizei) length);    
     */
 
     /**
@@ -5168,73 +5185,86 @@ public class GLES30Pipeline
      *  C function void glProgramParameteri((GLuint)  program, (GLenum) pname, (GLint) value)
 
      **/
-    private static native void nGLProgramParameteri(int program, int pname, int value);/*
-    
-    					glProgramParameteri((GLuint)  program, (GLenum) pname, (GLint) value);
+    private static native void nGLProgramParameteri(int program, int pname, int value);/*    
+           glProgramParameteri((GLuint)  program, (GLenum) pname, (GLint) value);
     
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glInvalidateFramebuffer([int target, int numAttachments, int[] attachments, int offset]);
+     * Delegate Method generated from GLES30.glInvalidateFramebuffer([int target,
+     *  int numAttachments, int[] attachments, int offset]);
      * 
-     *  C function void glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments)
-
+     *  C function void glInvalidateFramebuffer((GLenum) target, 
+     *                                          (GLsizei) numAttachments, 
+     *                                          const (GLenum) *attachments)
      **/
-    public void glInvalidateFramebuffer(int target, int numAttachments, int[] attachments, int offset) {
+    public void glInvalidateFramebuffer(int target, 
+                                        int numAttachments, 
+                                        int[] attachments, 
+                                        int offset) {
+        checkArray(attachments, offset, numAttachments, "attachments");
         GLES30Pipeline.nGLInvalidateFramebuffer(target, numAttachments, attachments, offset);
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glInvalidateFramebuffer([int target, int numAttachments, int[] attachments, int offset]);
+     * Native method generated from GLES30.glInvalidateFramebuffer([int target, 
+     * int numAttachments, int[] attachments, int offset]);
      * 
-     *  C function void glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments)
-
+     *  C function void glInvalidateFramebuffer((GLenum) target, 
+     *                                          (GLsizei) numAttachments, 
+     *                                          const (GLenum) *attachments)
      **/
-    private static native void nGLInvalidateFramebuffer(int target, int numAttachments, int[] attachments, int offset);/*
-    				
-    				glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, (const GLenum *) (attachments + offset));
+    private static native void nGLInvalidateFramebuffer(int target, 
+                                                        int numAttachments, 
+                                                        int[] attachments, int offset);/*
+        glInvalidateFramebuffer((GLenum) target, 
+                                (GLsizei) numAttachments, 
+                                (GLenum *) (attachments + offset));
     
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glInvalidateFramebuffer([int target, int numAttachments, java.nio.IntBuffer attachments]);
+     * Delegate Method generated from GLES30.glInvalidateFramebuffer(
+     * [int target, int numAttachments, java.nio.IntBuffer attachments]);
      * 
-     *  C function void glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments)
+     *  C function void glInvalidateFramebuffer((GLenum) target, 
+     *                                          (GLsizei) numAttachments, 
+     *                                          const (GLenum) *attachments)
 
      **/
-    public void glInvalidateFramebuffer(int target, int numAttachments, java.nio.IntBuffer attachments) {
-        
-
-        if (attachments == null)
-            throw new IllegalArgumentException(INTBUFFER_NULL);
-
+    public void glInvalidateFramebuffer(int target, 
+                                        int numAttachments, 
+                                        java.nio.IntBuffer attachments) {
+       checkBuffer(attachments, numAttachments, "attachments");
+       int offset = getOffset(attachments);
         // now, the offset...
-        if (attachments.isDirect()) {
-            int offset = getOffset(attachments);
+        if (attachments.isDirect()) {           
             GLES30Pipeline.nGLInvalidateFramebuffer(target, numAttachments, attachments, offset);
-        } else {
-            if(!attachments.hasArray()){
-                throw new IllegalArgumentException(INTBUFFER_ND);
-            }
-            int[] array = attachments.array();            
-            int offset = attachments.arrayOffset(); 
+        } else {            
+            int[] array = attachments.array();
             GLES30Pipeline.nGLInvalidateFramebuffer(target, numAttachments, array, offset);
          }
-        
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glInvalidateFramebuffer([int target, int numAttachments, java.nio.IntBuffer attachments]);
+     * Native method generated from GLES30.glInvalidateFramebuffer(
+     * [int target, int numAttachments, java.nio.IntBuffer attachments]);
      * 
-     *  C function void glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments)
-
+     *  C function void glInvalidateFramebuffer((GLenum) target, 
+     *                                          (GLsizei) numAttachments, 
+     *                                          const (GLenum) *attachments)
      **/
-    private static native void nGLInvalidateFramebuffer(int target, int numAttachments, java.nio.IntBuffer attachments, int offset);/*    
-            glInvalidateFramebuffer((GLenum) target, (GLsizei) numAttachments, (const GLenum *) (attachments + offset));
+    private static native void nGLInvalidateFramebuffer(int target, 
+                                                        int numAttachments, 
+                                                        java.nio.IntBuffer attachments, 
+                                                        int offset);/*    
+            glInvalidateFramebuffer((GLenum) target, 
+                                    (GLsizei) numAttachments, 
+                                    (GLenum *) (attachments + offset));
     */
 
     /**
@@ -5244,13 +5274,13 @@ public class GLES30Pipeline
      *  C function void glInvalidateSubFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments, (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height)
 
      **/
-    public void glInvalidateSubFramebuffer(int target, 
-    										int numAttachments, 
-    										int[] attachments, int offset, 
-    										int x, int y, 
-    										int width, int height) {
-    	
-        GLES30Pipeline.nGLInvalidateSubFramebuffer(target, numAttachments, attachments, offset, x, y, width, height);
+    public void glInvalidateSubFramebuffer(int target,
+                                           int numAttachments,
+                                           int[] attachments, int offset,
+                                           int x, int y,
+                                           int width, int height) {
+       checkArray(attachments, offset, numAttachments, "attachments"); 
+        nGLInvalidateSubFramebuffer(target, numAttachments, attachments, offset, x, y, width, height);
     }
 
     /**
@@ -5260,20 +5290,17 @@ public class GLES30Pipeline
      *  C function void glInvalidateSubFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments, (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height)
 
      **/
-    private static native void nGLInvalidateSubFramebuffer(int target, 
-    														int numAttachments, 
-    														int[] attachments, int offset, 
-    														int x, int y, 
-    														int width, int height);/*
-    										
-    							glInvalidateSubFramebuffer( (GLenum) target, 
-    														(GLsizei) numAttachments, 
-    														(const GLenum *) &attachments[offset], 
-    														(GLint) x, (GLint) y, 
-    														(GLsizei) width, (GLsizei) height);
-    														
-    
-    */
+    private static native void nGLInvalidateSubFramebuffer(int target,
+                                                           int numAttachments,
+                                                           int[] attachments, int offset,
+                                                           int x, int y,
+                                                           int width, int height);/*
+        glInvalidateSubFramebuffer( (GLenum) target, 
+                                    (GLsizei) numAttachments, 
+                                    (GLenum *) &attachments[offset], 
+                                    (GLint) x, (GLint) y, 
+                                    (GLsizei) width, (GLsizei) height);
+   */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -5282,53 +5309,63 @@ public class GLES30Pipeline
      *  C function void glInvalidateSubFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments, (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height)
 
      **/
-    public void glInvalidateSubFramebuffer(int target, 
-    										int numAttachments, 
-    										java.nio.IntBuffer attachments, 
-    										int x, int y, 
-    										int width, int height) {
-    	
-        checkBuffer(attachments, 1, "attachments");
-        int offset = getOffset(attachments);       
-        if (attachments.isDirect()) {           
-            GLES30Pipeline.nGLInvalidateSubFramebuffer(target, 
-                    numAttachments, 
-                    attachments, offset, 
-                    x, y, 
-                    width, height);            
-        } else {            
+    public void glInvalidateSubFramebuffer(int target,
+                                           int numAttachments,
+                                           java.nio.IntBuffer attachments,
+                                           int x, int y,
+                                           int width, int height) {
+
+        checkBuffer(attachments, numAttachments, "attachments");
+        int offset = getOffset(attachments);
+        if (attachments.isDirect()) {
+            nGLInvalidateSubFramebuffer(target,
+                    numAttachments,
+                    attachments, offset,
+                    x, y,
+                    width, height);
+        } else {
             int[] array = attachments.array();
-            GLES30Pipeline.nGLInvalidateSubFramebuffer(target, numAttachments, array, offset, x, y, width, height);            
+            nGLInvalidateSubFramebuffer(target, 
+                    numAttachments, 
+                    array, offset, 
+                    x, y, 
+                    width, height);
         }
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glInvalidateSubFramebuffer([int target, int numAttachments, java.nio.IntBuffer attachments, int x, int y, int width, int height]);
+     * Native method generated from GLES30.glInvalidateSubFramebuffer(
+     * [int target, int numAttachments, java.nio.IntBuffer attachments, int x, int y, int width, int height]);
      * 
-     *  C function void glInvalidateSubFramebuffer((GLenum) target, (GLsizei) numAttachments, const (GLenum) *attachments, (GLint) x, (GLint) y, (GLsizei) width, (GLsizei) height)
-
+     *  C function void glInvalidateSubFramebuffer((GLenum) target, 
+     *                                             (GLsizei) numAttachments, 
+     *                                             const (GLenum) *attachments, 
+     *                                             (GLint) x, (GLint) y, 
+     *                                             (GLsizei) width, (GLsizei) height)
      **/
-    private static native void nGLInvalidateSubFramebuffer(int target, 
-    														int numAttachments, 
-    														java.nio.IntBuffer attachments, int offset,
-    														int x, int y, 
-    														int width, int height);/*    														
-    															
-    							glInvalidateSubFramebuffer( (GLenum) target, 
-    														(GLsizei) numAttachments, 
-    														(const GLenum *) (attachments  + offset), 
-    														(GLint) x, (GLint) y, 
-    														(GLsizei) width, (GLsizei) height);						
-    														
+    private static native void nGLInvalidateSubFramebuffer(int target,
+                                                           int numAttachments,
+                                                           java.nio.IntBuffer attachments, int offset,
+                                                           int x, int y,
+                                                           int width, int height);/*
+    							glInvalidateSubFramebuffer( (GLenum) target,
+    								(GLsizei) numAttachments,
+    								(const GLenum *) (attachments  + offset),
+    								(GLint) x, (GLint) y,
+    								(GLsizei) width, (GLsizei) height);	
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES30.glTexStorage2D([int target, int levels, int internalformat, int width, int height]);
+     * Delegate Method generated from GLES30.glTexStorage2D(
+     * [int target, int levels, int internalformat, int width, int height]);
      * 
-     *  C function void glTexStorage2D((GLenum) target, (GLsizei) levels, (GLenum) internalformat, (GLsizei) width, (GLsizei) height)
-
+     *  C function void glTexStorage2D((GLenum) target, 
+     *                                 (GLsizei) levels, 
+     *                                 (GLenum) internalformat, 
+     *                                 (GLsizei) width, 
+     *                                 (GLsizei) height);
      **/
     public void glTexStorage2D(int target, int levels, int internalformat, int width, int height) {
         GLES30Pipeline.nGLTexStorage2D(target, levels, internalformat, width, height);
@@ -5336,9 +5373,13 @@ public class GLES30Pipeline
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES30.glTexStorage2D([int target, int levels, int internalformat, int width, int height]);
+     * Native method generated from GLES30.glTexStorage2D(
+     * [int target, int levels, int internalformat, int width, int height]);
      * 
-     *  C function void glTexStorage2D((GLenum) target, (GLsizei) levels, (GLenum) internalformat, (GLsizei) width, (GLsizei) height)
+     *  C function void glTexStorage2D((GLenum) target, 
+     *                                 (GLsizei) levels, 
+     *                                 (GLenum) internalformat,
+     *                                  (GLsizei) width, (GLsizei) height)
 
      **/
     private static native void nGLTexStorage2D(int target, 
@@ -5356,14 +5397,19 @@ public class GLES30Pipeline
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES30.glTexStorage3D([int target, int levels, int internalformat, int width, int height, int depth]);
      * 
-     *  C function void glTexStorage3D((GLenum) target, (GLsizei) levels, (GLenum) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth)
+     *  C function void glTexStorage3D((GLenum) target, 
+     *                                 (GLsizei) levels,
+     *                                  (GLenum) internalformat,
+     *                                   (GLsizei) width, (GLsizei) height, (GLsizei) depth)
 
      **/
     public void glTexStorage3D(int target, 
                                int levels, 
                                int internalformat, 
                                int width, int height, int depth) {
-        GLES30Pipeline.nGLTexStorage3D(target, levels, internalformat, width, height, depth);
+        GLES30Pipeline.nGLTexStorage3D(target, levels, 
+                internalformat, 
+                width, height, depth);
     }
 
     /**
