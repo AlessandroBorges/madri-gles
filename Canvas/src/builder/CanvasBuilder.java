@@ -53,7 +53,7 @@ public class CanvasBuilder {
 		bin = "bin",
 		jni = "jni";
 	
-	boolean genFFP = true;
+	boolean genFFP = false;
 	
 	SDK sdk = SDK.ANGLE;
       

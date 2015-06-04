@@ -8,7 +8,10 @@ package gles.internal;
 import static android.opengl.GLES20.*;
 
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
 import gles.util.BufferInfo;
@@ -6312,6 +6315,187 @@ public class GLES20Pipeline implements Pipeline {
     protected static int getOffset(java.nio.ByteBuffer values){
         if (null == values) throw new IllegalArgumentException("Buffer == null");       
         return BufferInfo.getOffset(values);       
+    }
+    
+    /**
+     * Copy remaining buffer values to a array.
+     * Position is preserved. 
+     * Mark value is undefined.
+     * @param src - source buffer to be copied
+     * @return array with buffer values
+     */
+    protected static int[] copyToArray(IntBuffer src){
+        int len = src.remaining();
+        int[] dst = new int[len];
+        src.mark();
+        src.get(dst);
+        src.reset();
+        return dst;
+    }
+    
+    /**
+     * Copy remaining buffer values to a array.<br>
+     * Position is preserved. <br>    
+     * 
+     * @param src - source buffer to be copied
+     * @param len - length of int[] to copy to
+     * 
+     * @return array with buffer values
+     */
+    protected static int[] copyToArray(IntBuffer src, int len){       
+        int[] dst = new int[len];
+        src.mark();
+        src.get(dst,0,len);
+        src.reset();
+        return dst;
+    }
+    
+    /**
+     * Commit, or put back, an array of values to buffer.<br>
+     * Position is preserved.<br>
+     *      
+     * @param src - source array with values to copy to buff 
+     * @param dst - dst buffer to receive values.
+     */
+    protected static void copyFromArray(int[] src, IntBuffer dst){
+        dst.mark();
+        dst.put(src);
+        dst.reset();
+    }
+    
+    /**
+     * Convert a generic Buffer to ByteBuffer.<br>
+     * To be used on heap Buffer, as direct Buffer are treated as 
+     *  (char *) on native side.
+     * 
+     * @param src - Source of generic Buffer type
+     * @return a ByteBuffer instance
+     */
+    protected static ByteBuffer toByteBuffer(java.nio.Buffer src){        
+        // best case
+        if(src instanceof ByteBuffer){
+            return (ByteBuffer)src;
+        }    
+        
+        int shift = BufferInfo.getElementSizeShift(src);
+        int capacity = src.remaining() << shift;
+        boolean isDirect = src.isDirect();  
+        
+        ByteBuffer dst = isDirect ? ByteBuffer.allocateDirect(capacity)
+                                  : ByteBuffer.allocate(capacity);
+        src.mark();
+        dst.mark();
+        // IntBuffer case
+        if(src instanceof IntBuffer){
+            if(isDirect){
+                dst.order(((IntBuffer) src).order());
+            }
+            IntBuffer srcM = (IntBuffer)src;            
+            while(srcM.hasRemaining()){             
+                dst.putInt(srcM.get());
+            }
+        } 
+        // ShortBuffer case
+        else if(src instanceof ShortBuffer){
+            if(isDirect){
+                dst.order(((ShortBuffer) src).order());
+            }
+            ShortBuffer srcM = (ShortBuffer)src;            
+            while(srcM.hasRemaining()){               
+                dst.putShort(srcM.get());
+            }
+        }
+        
+     // FloatBuffer case
+        else if(src instanceof FloatBuffer){
+            if(isDirect){
+                dst.order(((FloatBuffer) src).order());
+            }
+            FloatBuffer srcM = (FloatBuffer)src;           
+            while(srcM.hasRemaining()){               
+                dst.putFloat(srcM.get());
+            }
+        }
+        //LongBuffer case
+        else if(src instanceof LongBuffer){
+            if(isDirect){
+                dst.order(((LongBuffer) src).order());
+            }
+            LongBuffer srcM = (LongBuffer)src;          
+            while(srcM.hasRemaining()){                
+                dst.putLong(srcM.get());
+            }
+        }
+        //CharBuffer case
+        else if(src instanceof CharBuffer){
+            if(isDirect){
+                dst.order(((CharBuffer) src).order());
+            }
+            CharBuffer srcM = (CharBuffer)src;          
+            while(srcM.hasRemaining()){               
+                dst.putChar(srcM.get());
+            }
+        }
+        
+        src.reset();
+        dst.reset();
+        return dst;
+    }
+    
+    /**
+     * Put values from src ByteBuffer to dst Buffer
+     * @param dst - destiny generic Buffer to copy to.
+     * @param src - source bytebuffer to copy from.
+     */
+    protected static void putByteBuffer(java.nio.Buffer dst, ByteBuffer src){
+        dst.mark();
+        src.mark();
+        if(dst instanceof ByteBuffer){
+            ByteBuffer dstM = (ByteBuffer)dst;
+            while(src.hasRemaining()){
+                dstM.put(src.get());
+            }
+        }
+        
+        else if(dst instanceof ShortBuffer){
+            ShortBuffer dst2 = (ShortBuffer)dst;
+            ShortBuffer src2 = src.asShortBuffer();
+            while(src2.hasRemaining()){
+                dst2.put(src2.get());
+            }
+        }
+        
+        else if(dst instanceof IntBuffer){
+            IntBuffer dst2 = (IntBuffer)dst;
+            IntBuffer src2 = src.asIntBuffer();
+            while(src2.hasRemaining()){
+                dst2.put(src2.get());
+            }
+        }
+        
+        else if(dst instanceof FloatBuffer){
+            FloatBuffer dst2 = (FloatBuffer)dst;
+            FloatBuffer src2 = src.asFloatBuffer();
+            while(src2.hasRemaining()){
+                dst2.put(src2.get());
+            }
+        }
+        else if(dst instanceof LongBuffer){
+            LongBuffer dst2 = (LongBuffer)dst;
+            LongBuffer src2 = src.asLongBuffer();
+            while(src2.hasRemaining()){
+                dst2.put(src2.get());
+            }
+        }  
+        else if(dst instanceof CharBuffer){
+            CharBuffer dst2 = (CharBuffer)dst;
+            CharBuffer src2 = src.asCharBuffer();
+            while(src2.hasRemaining()){
+                dst2.put(src2.get());
+            }
+        }    
+        dst.reset();
+        src.reset();
     }
     
     

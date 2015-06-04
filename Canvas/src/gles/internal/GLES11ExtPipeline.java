@@ -936,6 +936,7 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetLightxvOES(int light, int pname, int[] params, int offset) {      
+        int needed = getNeededLight(pname);
         checkArray(params, offset, 1, "params");
         GLES11ExtPipeline.nGLGetLightxvOES(light, pname, params, offset);
     }

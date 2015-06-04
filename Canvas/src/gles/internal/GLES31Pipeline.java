@@ -61,7 +61,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDispatchCompute ( (GLuint) num_groups_x, (GLuint) num_groups_y, (GLuint) num_groups_z )
 
-     * */
+     **/
     public void GLES31ClassInit() {
         GLES31Pipeline.nGLES31ClassInit();
     }
@@ -72,8 +72,10 @@ public class GLES31Pipeline
      * 
      *  C function void glDispatchCompute ( (GLuint) num_groups_x, (GLuint) num_groups_y, (GLuint) num_groups_z )
 
-     * */
-    private static native void nGLES31ClassInit();
+     **/
+    private static  void nGLES31ClassInit(){}/*
+     //no op
+    */
 
     /**
      * <pre>
@@ -81,7 +83,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDispatchCompute ( (GLuint) num_groups_x, (GLuint) num_groups_y, (GLuint) num_groups_z )
 
-     * */
+     **/
     public void glDispatchCompute(int num_groups_x, int num_groups_y, int num_groups_z) {
         GLES31Pipeline.nGLDispatchCompute(num_groups_x, num_groups_y, num_groups_z);
     }
@@ -92,7 +94,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDispatchCompute ( (GLuint) num_groups_x, (GLuint) num_groups_y, (GLuint) num_groups_z )
 
-     * */
+     **/
     private static native void nGLDispatchCompute(int num_groups_x, int num_groups_y, int num_groups_z);/*
        glDispatchCompute(
         (GLuint)num_groups_x,
@@ -107,7 +109,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDispatchComputeIndirect (  (GLintptr) indirect );
 
-     * */
+     **/
     public void glDispatchComputeIndirect(long indirect) {
         GLES31Pipeline.nGLDispatchComputeIndirect(indirect);
     }
@@ -118,7 +120,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDispatchComputeIndirect (  (GLintptr) indirect );
 
-     * */
+     **/
     private static native void nGLDispatchComputeIndirect(long indirect);/*
        glDispatchComputeIndirect((GLintptr)indirect);
     */
@@ -129,7 +131,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDrawArraysIndirect ( (GLenum) mode, const void *indirect );
 
-     * */
+     **/
     public void glDrawArraysIndirect(int mode, long indirect) {
         GLES31Pipeline.nGLDrawArraysIndirect(mode, indirect);
     }
@@ -140,7 +142,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDrawArraysIndirect ( (GLenum) mode, const void *indirect );
 
-     * */
+     **/
     private static native void nGLDrawArraysIndirect(int mode, long indirect);/*
        glDrawArraysIndirect(mode, (const void*)indirect);
     */
@@ -151,7 +153,7 @@ public class GLES31Pipeline
      * 
      *  C function glDrawElementsIndirect ( (GLenum) mode, (GLenum) type, const void *indirect );
 
-     * */
+     **/
     public void glDrawElementsIndirect(int mode, int type, long indirect) {
         GLES31Pipeline.nGLDrawElementsIndirect(mode, type, indirect);
     }
@@ -162,7 +164,7 @@ public class GLES31Pipeline
      * 
      *  C function glDrawElementsIndirect ( (GLenum) mode, (GLenum) type, const void *indirect );
 
-     * */
+     **/
     private static native void nGLDrawElementsIndirect(int mode, int type, long indirect);/*
        glDrawElementsIndirect(mode, type, (const void*)indirect);
     */
@@ -173,7 +175,7 @@ public class GLES31Pipeline
      * 
      *  C function void glFramebufferParameteri ( (GLenum) target, (GLenum) pname, (GLint) param )
 
-     * */
+     **/
     public void glFramebufferParameteri(int target, int pname, int param) {
         GLES31Pipeline.nGLFramebufferParameteri(target, pname, param);
     }
@@ -184,7 +186,7 @@ public class GLES31Pipeline
      * 
      *  C function void glFramebufferParameteri ( (GLenum) target, (GLenum) pname, (GLint) param )
 
-     * */
+     **/
     private static native void nGLFramebufferParameteri(int target, int pname, int param);/*
              glFramebufferParameteri( (GLenum)target, (GLenum)pname, (GLint)param );
     */
@@ -195,7 +197,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetFramebufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetFramebufferParameteriv(int target, int pname, int[] params, int offset) {
         checkArray(params, offset, 1, "params");
         GLES31Pipeline.nGLGetFramebufferParameteriv(target, pname, params, offset);
@@ -207,7 +209,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetFramebufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetFramebufferParameteriv(int target, int pname, int[] params, int offset);/*
       glGetFramebufferParameteriv(
         (GLenum)target,
@@ -222,7 +224,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetFramebufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetFramebufferParameteriv(int target, int pname, java.nio.IntBuffer params) {
         checkBuffer(params, 0, "params");
         int offset = getOffset(params);
@@ -240,7 +242,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetFramebufferParameteriv ( (GLenum) target, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetFramebufferParameteriv(int target, int pname, java.nio.IntBuffer params, int offset);/*
            glGetFramebufferParameteriv(
         (GLenum)target,
@@ -254,7 +256,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramInterfaceiv ( (GLuint) program, (GLenum) programInterface, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetProgramInterfaceiv( int program, int programInterface, int pname, int[] params, int offset) {
         checkArray(params, offset, 1, "params");
         GLES31Pipeline.nGLGetProgramInterfaceiv(program, programInterface, pname, params, offset);
@@ -266,7 +268,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramInterfaceiv ( (GLuint) program, (GLenum) programInterface, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetProgramInterfaceiv( int program, 
                                                          int programInterface, 
                                                          int pname, 
@@ -284,7 +286,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramInterfaceiv ( (GLuint) program, (GLenum) programInterface, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetProgramInterfaceiv(int program, int programInterface, int pname, java.nio.IntBuffer params) {
         checkBuffer(params, 0, "params");
         int offset = getOffset(params);
@@ -302,7 +304,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramInterfaceiv ( (GLuint) program, (GLenum) programInterface, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetProgramInterfaceiv( int program, 
                                                          int programInterface, 
                                                          int pname, 
@@ -319,7 +321,7 @@ public class GLES31Pipeline
      * 
      *  C function (GLuint) glGetProgramResourceIndex ( (GLuint) program, (GLenum) programInterface, const  (GLchar *) name )
 
-     * */
+     **/
     public int glGetProgramResourceIndex(int program, int programInterface, String name) {
         if(null == name){
             throw new IllegalArgumentException("name==null");
@@ -333,7 +335,7 @@ public class GLES31Pipeline
      * 
      *  C function (GLuint) glGetProgramResourceIndex ( (GLuint) program, (GLenum) programInterface, const  (GLchar *) name )
 
-     * */
+     **/
     private static native int nGLGetProgramResourceIndex(int program, int programInterface, String name);/*
          return (jint) glGetProgramResourceIndex( (GLuint)program,  (GLenum)programInterface, ( (GLchar *) )name);
     */
@@ -344,7 +346,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramResourceName ( (GLuint) program, (GLenum) programInterface, (GLuint) index, (GLsizei) bufSize, (GLsizei) *length,  (GLchar *) name )
 
-     * */
+     **/
     public String glGetProgramResourceName(int program, int programInterface, int index) {        
        return GLES31Pipeline.nGLGetProgramResourceName(program, programInterface, index);
     }
@@ -355,7 +357,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramResourceName ( (GLuint) program, (GLenum) programInterface, (GLuint) index, (GLsizei) bufSize, (GLsizei) *length,  (GLchar *) name )
 
-     * */
+     **/
     private static native String nGLGetProgramResourceName(int program, int programInterface, int index);/*
       // based on code from 
       // http://people.freedesktop.org/~idr/OpenGL_tutorials/05-attributes.html
@@ -384,7 +386,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramResourceiv ( (GLuint) program, (GLenum) programInterface, (GLuint) index, (GLsizei) propCount, const (GLenum) *props, (GLsizei) bufSize, (GLsizei) *length, (GLint) *params )
 
-     * */
+     **/
     public void glGetProgramResourceiv( int program, 
                                         int programInterface, 
                                         int index, 
@@ -411,7 +413,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramResourceiv ( (GLuint) program, (GLenum) programInterface, (GLuint) index, (GLsizei) propCount, const (GLenum) *props, (GLsizei) bufSize, (GLsizei) *length, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetProgramResourceiv( int program, 
                                                         int programInterface, 
                                                         int index, int propCount, 
@@ -435,7 +437,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramResourceiv ( (GLuint) program, (GLenum) programInterface, (GLuint) index, (GLsizei) propCount, const (GLenum) *props, (GLsizei) bufSize, (GLsizei) *length, (GLint) *params )
 
-     * */
+     **/
     public void glGetProgramResourceiv( int program, 
                                         int programInterface, 
                                         int index, int propCount, 
@@ -485,7 +487,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramResourceiv ( (GLuint) program, (GLenum) programInterface, (GLuint) index, (GLsizei) propCount, const (GLenum) *props, (GLsizei) bufSize, (GLsizei) *length, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetProgramResourceiv(int program, 
                                                        int programInterface, 
                                                        int index, 
@@ -511,7 +513,7 @@ public class GLES31Pipeline
      * 
      *  C function (GLint) glGetProgramResourceLocation ( (GLuint) program, (GLenum) programInterface, const  (GLchar *) name )
 
-     * */
+     **/
     public int glGetProgramResourceLocation(int program, int programInterface, String name) {
         if(null == name){
             throw new IllegalArgumentException("name == null");
@@ -525,7 +527,7 @@ public class GLES31Pipeline
      * 
      *  C function (GLint) glGetProgramResourceLocation ( (GLuint) program, (GLenum) programInterface, const  (GLchar *) name )
 
-     * */
+     **/
     private static native int nGLGetProgramResourceLocation(int program, int programInterface, String name);/*
         
         return  glGetProgramResourceLocation( (GLuint)program, 
@@ -540,7 +542,7 @@ public class GLES31Pipeline
      * 
      *  C function void glUseProgramStages ( (GLuint) pipeline,  (GLbitfield)  stages, (GLuint) program )
 
-     * */
+     **/
     public void glUseProgramStages(int pipeline, int stages, int program) {
         GLES31Pipeline.nGLUseProgramStages(pipeline, stages, program);
     }
@@ -551,7 +553,7 @@ public class GLES31Pipeline
      * 
      *  C function void glUseProgramStages ( (GLuint) pipeline,  (GLbitfield)  stages, (GLuint) program )
 
-     * */
+     **/
     private static native void nGLUseProgramStages(int pipeline, int stages, int program);/*
            glUseProgramStages((GLuint)pipeline, ( (GLbitfield) )stages, (GLuint)program );
     */
@@ -562,7 +564,7 @@ public class GLES31Pipeline
      * 
      *  C function void glActiveShaderProgram ( (GLuint) pipeline, (GLuint) program )
 
-     * */
+     **/
     public void glActiveShaderProgram(int pipeline, int program) {
         GLES31Pipeline.nGLActiveShaderProgram(pipeline, program);
     }
@@ -573,7 +575,7 @@ public class GLES31Pipeline
      * 
      *  C function void glActiveShaderProgram ( (GLuint) pipeline, (GLuint) program )
 
-     * */
+     **/
     private static native void nGLActiveShaderProgram(int pipeline, int program);/*
            glActiveShaderProgram( (GLuint)pipeline, (GLuint)program );
     */
@@ -584,7 +586,7 @@ public class GLES31Pipeline
      * 
      *  C function (GLuint) glCreateShaderProgramv ( (GLenum) type, (GLsizei) count, const  (GLchar *) const *strings )
 
-     * */
+     **/
     public int glCreateShaderProgramv(int type, String[] strings) {
         if(null == strings){
             throw new IllegalArgumentException("strings == null");
@@ -598,7 +600,7 @@ public class GLES31Pipeline
      * 
      *  C function (GLuint) glCreateShaderProgramv ( (GLenum) type, (GLsizei) count, const  (GLchar *) const *strings )
 
-     * */
+     **/
     private static native int nGLCreateShaderProgramv(int type, int stringCount, String[] stringArray);/*
     
                       
@@ -639,7 +641,7 @@ public class GLES31Pipeline
      * 
      *  C function void glBindProgramPipeline ( (GLuint) pipeline )
 
-     * */
+     **/
     public void glBindProgramPipeline(int pipeline) {
         GLES31Pipeline.nGLBindProgramPipeline(pipeline);
     }
@@ -650,7 +652,7 @@ public class GLES31Pipeline
      * 
      *  C function void glBindProgramPipeline ( (GLuint) pipeline )
 
-     * */
+     **/
     private static native void nGLBindProgramPipeline(int pipeline);/*
          glBindProgramPipeline( (GLuint) pipeline );
     */
@@ -661,7 +663,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDeleteProgramPipelines ( (GLsizei) n, const (GLuint) *pipelines )
 
-     * */
+     **/
     public void glDeleteProgramPipelines(int n, int[] pipelines, int offset) {
         checkArray(pipelines, offset, 1, "pipelines");
         GLES31Pipeline.nGLDeleteProgramPipelines(n, pipelines, offset);
@@ -673,7 +675,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDeleteProgramPipelines ( (GLsizei) n, const (GLuint) *pipelines )
 
-     * */
+     **/
     private static native void nGLDeleteProgramPipelines(int n, int[] pipelines, int offset);/*
        glDeleteProgramPipelines ( (GLsizei) n, (GLuint *) (pipelines + offset));
     */
@@ -684,7 +686,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDeleteProgramPipelines ( (GLsizei) n, const (GLuint) *pipelines )
 
-     * */
+     **/
     public void glDeleteProgramPipelines(int n, java.nio.IntBuffer pipelines) {
         checkBuffer(pipelines, 0, "params");
         int offset = getOffset(pipelines);
@@ -702,7 +704,7 @@ public class GLES31Pipeline
      * 
      *  C function void glDeleteProgramPipelines ( (GLsizei) n, const (GLuint) *pipelines )
 
-     * */
+     **/
     private static native void nGLDeleteProgramPipelines(int n, java.nio.IntBuffer pipelines, int offset);/*
          glDeleteProgramPipelines ( (GLsizei) n, (GLuint *) (pipelines + offset));
     */
@@ -713,7 +715,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGenProgramPipelines ( (GLsizei) n, (GLuint) *pipelines )
 
-     * */
+     **/
     public void glGenProgramPipelines(int n, int[] pipelines, int offset) {
         checkArray(pipelines, offset, 1, "pipelines");
         GLES31Pipeline.nGLGenProgramPipelines(n, pipelines, offset);
@@ -724,8 +726,7 @@ public class GLES31Pipeline
      * Native method generated from GLES31.glGenProgramPipelines([int n, int[] pipelines, int offset]);
      * 
      *  C function void glGenProgramPipelines ( (GLsizei) n, (GLuint) *pipelines )
-
-     * */
+     **/
     private static native void nGLGenProgramPipelines(int n, int[] pipelines, int offset);/*
         glGenProgramPipelines ( (GLsizei) n, (GLuint *)(pipelines + offset) );
     */
@@ -736,7 +737,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGenProgramPipelines ( (GLsizei) n, (GLuint) *pipelines )
 
-     * */
+     **/
     public void glGenProgramPipelines(int n, java.nio.IntBuffer pipelines) {
         GLES31Pipeline.nGLGenProgramPipelines(n, pipelines);
     }
@@ -747,7 +748,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGenProgramPipelines ( (GLsizei) n, (GLuint) *pipelines )
 
-     * */
+     **/
     private static native void nGLGenProgramPipelines(int n, java.nio.IntBuffer pipelines);
 
     /**
@@ -756,7 +757,7 @@ public class GLES31Pipeline
      * 
      *  C function  (GLboolean) glIsProgramPipeline ( (GLuint) pipeline )
 
-     * */
+     **/
     public boolean glIsProgramPipeline(int pipeline) {
         return GLES31Pipeline.nGLIsProgramPipeline(pipeline);
     }
@@ -767,7 +768,7 @@ public class GLES31Pipeline
      * 
      *  C function  (GLboolean) glIsProgramPipeline ( (GLuint) pipeline )
 
-     * */
+     **/
     private static native boolean nGLIsProgramPipeline(int pipeline);
 
     /**
@@ -776,7 +777,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramPipelineiv ( (GLuint) pipeline, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetProgramPipelineiv(int pipeline, int pname, int[] params, int offset) {
         GLES31Pipeline.nGLGetProgramPipelineiv(pipeline, pname, params, offset);
     }
@@ -787,7 +788,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramPipelineiv ( (GLuint) pipeline, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetProgramPipelineiv(int pipeline, int pname, int[] params, int offset);
 
     /**
@@ -796,7 +797,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramPipelineiv ( (GLuint) pipeline, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetProgramPipelineiv(int pipeline, int pname, java.nio.IntBuffer params) {
         GLES31Pipeline.nGLGetProgramPipelineiv(pipeline, pname, params);
     }
@@ -807,7 +808,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramPipelineiv ( (GLuint) pipeline, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetProgramPipelineiv(int pipeline, int pname, java.nio.IntBuffer params);
 
     /**
@@ -816,7 +817,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1i ( (GLuint) program, (GLint) location, (GLint) v0 )
 
-     * */
+     **/
     public void glProgramUniform1i(int program, int location, int v0) {
         GLES31Pipeline.nGLProgramUniform1i(program, location, v0);
     }
@@ -827,7 +828,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1i ( (GLuint) program, (GLint) location, (GLint) v0 )
 
-     * */
+     **/
     private static native void nGLProgramUniform1i(int program, int location, int v0);
 
     /**
@@ -836,7 +837,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2i ( (GLuint) program, (GLint) location, (GLint) v0, (GLint) v1 )
 
-     * */
+     **/
     public void glProgramUniform2i(int program, int location, int v0, int v1) {
         GLES31Pipeline.nGLProgramUniform2i(program, location, v0, v1);
     }
@@ -847,7 +848,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2i ( (GLuint) program, (GLint) location, (GLint) v0, (GLint) v1 )
 
-     * */
+     **/
     private static native void nGLProgramUniform2i(int program, int location, int v0, int v1);
 
     /**
@@ -856,7 +857,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3i ( (GLuint) program, (GLint) location, (GLint) v0, (GLint) v1, (GLint) v2 )
 
-     * */
+     **/
     public void glProgramUniform3i(int program, int location, int v0, int v1, int v2) {
         GLES31Pipeline.nGLProgramUniform3i(program, location, v0, v1, v2);
     }
@@ -867,7 +868,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3i ( (GLuint) program, (GLint) location, (GLint) v0, (GLint) v1, (GLint) v2 )
 
-     * */
+     **/
     private static native void nGLProgramUniform3i(int program, int location, int v0, int v1, int v2);
 
     /**
@@ -876,7 +877,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4i ( (GLuint) program, (GLint) location, (GLint) v0, (GLint) v1, (GLint) v2, (GLint) v3 )
 
-     * */
+     **/
     public void glProgramUniform4i(int program, int location, int v0, int v1, int v2, int v3) {
         GLES31Pipeline.nGLProgramUniform4i(program, location, v0, v1, v2, v3);
     }
@@ -887,7 +888,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4i ( (GLuint) program, (GLint) location, (GLint) v0, (GLint) v1, (GLint) v2, (GLint) v3 )
 
-     * */
+     **/
     private static native void nGLProgramUniform4i(int program, int location, int v0, int v1, int v2, int v3);
 
     /**
@@ -896,7 +897,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1ui ( (GLuint) program, (GLint) location, (GLuint) v0 )
 
-     * */
+     **/
     public void glProgramUniform1ui(int program, int location, int v0) {
         GLES31Pipeline.nGLProgramUniform1ui(program, location, v0);
     }
@@ -907,7 +908,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1ui ( (GLuint) program, (GLint) location, (GLuint) v0 )
 
-     * */
+     **/
     private static native void nGLProgramUniform1ui(int program, int location, int v0);
 
     /**
@@ -916,7 +917,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1 )
 
-     * */
+     **/
     public void glProgramUniform2ui(int program, int location, int v0, int v1) {
         GLES31Pipeline.nGLProgramUniform2ui(program, location, v0, v1);
     }
@@ -927,7 +928,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1 )
 
-     * */
+     **/
     private static native void nGLProgramUniform2ui(int program, int location, int v0, int v1);
 
     /**
@@ -936,7 +937,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1, (GLuint) v2 )
 
-     * */
+     **/
     public void glProgramUniform3ui(int program, int location, int v0, int v1, int v2) {
         GLES31Pipeline.nGLProgramUniform3ui(program, location, v0, v1, v2);
     }
@@ -947,7 +948,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1, (GLuint) v2 )
 
-     * */
+     **/
     private static native void nGLProgramUniform3ui(int program, int location, int v0, int v1, int v2);
 
     /**
@@ -956,7 +957,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1, (GLuint) v2, (GLuint) v3 )
 
-     * */
+     **/
     public void glProgramUniform4ui(int program, int location, int v0, int v1, int v2, int v3) {
         GLES31Pipeline.nGLProgramUniform4ui(program, location, v0, v1, v2, v3);
     }
@@ -967,7 +968,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1, (GLuint) v2, (GLuint) v3 )
 
-     * */
+     **/
     private static native void nGLProgramUniform4ui(int program, int location, int v0, int v1, int v2, int v3);/*
              glProgramUniform4ui ( (GLuint) program, (GLint) location, (GLuint) v0, (GLuint) v1, (GLuint) v2, (GLuint) v3 );
     */
@@ -978,7 +979,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1f ( (GLuint) program, (GLint) location, (GLFloat)  v0 )
 
-     * */
+     **/
     public void glProgramUniform1f(int program, int location, float v0) {
         GLES31Pipeline.nGLProgramUniform1f(program, location, v0);
     }
@@ -989,7 +990,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1f ( (GLuint) program, (GLint) location, (GLFloat)  v0 )
 
-     * */
+     **/
     private static native void nGLProgramUniform1f(int program, int location, float v0);/*
             glProgramUniform1f ( (GLuint) program, (GLint) location, (GLFloat)  v0 );
     */
@@ -1000,7 +1001,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1 )
 
-     * */
+     **/
     public void glProgramUniform2f(int program, int location, float v0, float v1) {
         GLES31Pipeline.nGLProgramUniform2f(program, location, v0, v1);
     }
@@ -1011,7 +1012,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1 )
 
-     * */
+     **/
     private static native void nGLProgramUniform2f(int program, int location, float v0, float v1);/*
             glProgramUniform2f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1 );
     */
@@ -1022,7 +1023,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1, (GLFloat)  v2 )
 
-     * */
+     **/
     public void glProgramUniform3f(int program, int location, float v0, float v1, float v2) {
         GLES31Pipeline.nGLProgramUniform3f(program, location, v0, v1, v2);
     }
@@ -1033,7 +1034,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1, (GLFloat)  v2 )
 
-     * */
+     **/
     private static native void nGLProgramUniform3f(int program, int location, float v0, float v1, float v2);/*
             glProgramUniform3f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1, (GLFloat)  v2 );
     */
@@ -1044,7 +1045,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1, (GLFloat)  v2, (GLFloat)  v3 )
 
-     * */
+     **/
     public void glProgramUniform4f(int program, int location, float v0, float v1, float v2, float v3) {
         GLES31Pipeline.nGLProgramUniform4f(program, location, v0, v1, v2, v3);
     }
@@ -1055,7 +1056,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1, (GLFloat)  v2, (GLFloat)  v3 )
 
-     * */
+     **/
     private static native void nGLProgramUniform4f(int program, int location, float v0, float v1, float v2, float v3);/*
             glProgramUniform4f ( (GLuint) program, (GLint) location, (GLFloat)  v0, (GLFloat)  v1, (GLFloat)  v2, (GLFloat)  v3 ); 
     */
@@ -1066,7 +1067,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform1iv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform1iv(program, location, count, value, offset);
@@ -1078,7 +1079,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform1iv(int program, int location, int count, int[] value, int offset);/*
     glProgramUniform1iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset));
     
@@ -1090,10 +1091,18 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform1iv(int program, int location, int count, java.nio.IntBuffer value) {
         
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+        
         GLES31Pipeline.nGLProgramUniform1iv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform1iv(program, location, count, array, offset);
+        }
     }
 
     /**
@@ -1102,8 +1111,10 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
-    private static native void nGLProgramUniform1iv(int program, int location, int count, java.nio.IntBuffer value, int offset);
+     **/
+    private static native void nGLProgramUniform1iv(int program, int location, int count, java.nio.IntBuffer value, int offset);/*
+           glProgramUniform1iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset) );
+    */
 
     /**
      * <pre>
@@ -1111,7 +1122,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform2iv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform2iv(program, location, count, value, offset);
@@ -1123,7 +1134,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform2iv(int program, int location, int count, int[] value, int offset);/*
            glProgramUniform2iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset) );
     */
@@ -1134,9 +1145,17 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform2iv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform2iv(program, location, count, value);
+
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform2iv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform2iv(program, location, count, array, offset);
+        }     
     }
 
     /**
@@ -1145,7 +1164,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform2iv(int program, int location, int count, java.nio.IntBuffer value, int offset);/*
     glProgramUniform2iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset) );
 */
@@ -1156,7 +1175,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform3iv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform3iv(program, location, count, value, offset);
@@ -1168,7 +1187,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform3iv(int program, int location, int count, int[] value, int offset);/*
            glProgramUniform3iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset));
     */
@@ -1179,9 +1198,16 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform3iv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform3iv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform3iv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform3iv(program, location, count, array, offset);
+        }
     }
 
     /**
@@ -1190,7 +1216,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform3iv(int program, int location, int count, java.nio.IntBuffer value, int offset);/*
             glProgramUniform3iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset));
     */
@@ -1201,7 +1227,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform4iv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform4iv(program, location, count, value, offset);
@@ -1213,8 +1239,10 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
-    private static native void nGLProgramUniform4iv(int program, int location, int count, int[] value, int offset);
+     **/
+    private static native void nGLProgramUniform4iv(int program, int location, int count, int[] value, int offset);/*
+        glProgramUniform4iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset) )
+    */
 
     /**
      * <pre>
@@ -1222,9 +1250,16 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
+     **/
     public void glProgramUniform4iv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform4iv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform4iv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform4iv(program, location, count, array, offset);
+    }
     }
 
     /**
@@ -1233,8 +1268,10 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4iv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLint) *value )
 
-     * */
-    private static native void nGLProgramUniform4iv(int program, int location, int count, java.nio.IntBuffer value, int offset);
+     **/
+    private static native void nGLProgramUniform4iv(int program, int location, int count, java.nio.IntBuffer value, int offset);/*
+       glProgramUniform4iv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset));
+    */
 
     /**
      * <pre>
@@ -1242,7 +1279,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform1uiv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform1uiv(program, location, count, value, offset);
@@ -1254,7 +1291,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform1uiv(int program, int location, int count, int[] value, int offset);
 
     /**
@@ -1263,9 +1300,16 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform1uiv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform1uiv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform1uiv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform1uiv(program, location, count, array, offset);
+        }
     }
 
     /**
@@ -1274,7 +1318,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform1uiv(int program, int location, int count, java.nio.IntBuffer value, int offset);
 
     /**
@@ -1283,7 +1327,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform2uiv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform2uiv(program, location, count, value, offset);
@@ -1295,7 +1339,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform2uiv(int program, int location, int count, int[] value, int offset);
 
     /**
@@ -1304,9 +1348,17 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform2uiv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform2uiv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform2uiv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform2uiv(program, location, count, array, offset);
+        }
+        
     }
 
     /**
@@ -1315,7 +1367,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform2uiv(int program, int location, int count, java.nio.IntBuffer value, int offset);
 
     /**
@@ -1324,7 +1376,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform3uiv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform3uiv(program, location, count, value, offset);
@@ -1336,7 +1388,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform3uiv(int program, int location, int count, int[] value, int offset);
 
     /**
@@ -1345,9 +1397,16 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform3uiv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform3uiv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform3uiv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform3uiv(program, location, count, array, offset);
+        }        
     }
 
     /**
@@ -1356,7 +1415,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform3uiv(int program, int location, int count, java.nio.IntBuffer value, int offset);
 
     /**
@@ -1365,7 +1424,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform4uiv(int program, int location, int count, int[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform4uiv(program, location, count, value, offset);
@@ -1377,8 +1436,10 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
-    private static native void nGLProgramUniform4uiv(int program, int location, int count, int[] value, int offset);
+     **/
+    private static native void nGLProgramUniform4uiv(int program, int location, int count, int[] value, int offset);/*
+         glProgramUniform4uiv ( (GLuint) program, (GLint) location, (GLsizei) count, (GLuint *) (value + offset) );
+    */
 
     /**
      * <pre>
@@ -1386,9 +1447,16 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     public void glProgramUniform4uiv(int program, int location, int count, java.nio.IntBuffer value) {
-        GLES31Pipeline.nGLProgramUniform4uiv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform4uiv(program, location, count, value, offset);
+        }else{
+            int[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform4uiv(program, location, count, array, offset);
+    }
     }
 
     /**
@@ -1397,7 +1465,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform4uiv ( (GLuint) program, (GLint) location, (GLsizei) count, const (GLuint) *value )
 
-     * */
+     **/
     private static native void nGLProgramUniform4uiv(int program, int location, int count, java.nio.IntBuffer value, int offset);
 
     /**
@@ -1406,7 +1474,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniform1fv(int program, int location, int count, float[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform1fv(program, location, count, value, offset);
@@ -1421,7 +1489,7 @@ public class GLES31Pipeline
      * C function void glProgramUniform1fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     private static native void nGLProgramUniform1fv(int program, int location, int count, float[] value, int offset);/*
     
                 glProgramUniform1fv ( (GLuint) program, 
@@ -1436,9 +1504,16 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniform1fv(int program, int location, int count, java.nio.FloatBuffer value) {
-        GLES31Pipeline.nGLProgramUniform1fv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform1fv(program, location, count, value, offset);
+        }else{
+            float[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform1fv(program, location, count, array, offset);
+        }        
     }
 
     /**
@@ -1447,7 +1522,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform1fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniform1fv(int program, int location, int count, java.nio.FloatBuffer value, int offset);/*
   
                 glProgramUniform1fv ( (GLuint) program, 
@@ -1465,7 +1540,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniform2fv(int program, int location, int count, float[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform2fv(program, location, count, value, offset);
@@ -1477,7 +1552,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniform2fv(int program, int location, int count, float[] value, int offset);/*
     glProgramUniform2fv ( (GLuint) program, 
                           (GLint) location,
@@ -1492,9 +1567,28 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
-    public void glProgramUniform2fv(int program, int location, int count, java.nio.FloatBuffer value) {
-        GLES31Pipeline.nGLProgramUniform2fv(program, location, count, value);
+     **/
+    public void glProgramUniform2fv(int program,
+                                    int location,
+                                    int count,
+                                    java.nio.FloatBuffer value) {
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if (value.isDirect()) {
+            GLES31Pipeline.nGLProgramUniform2fv(program,
+                    location,
+                    count,
+                    value,
+                    offset);
+        } else {
+            float[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform2fv(program,
+                    location,
+                    count,
+                    array,
+                    offset);
+    }
+
     }
 
     /**
@@ -1503,7 +1597,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform2fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniform2fv(int program, int location, int count, java.nio.FloatBuffer value, int offset);/*
                 glProgramUniform2fv ( (GLuint) program, 
                                       (GLint) location, 
@@ -1518,7 +1612,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniform3fv(int program, int location, int count, float[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform3fv(program, location, count, value, offset);
@@ -1530,7 +1624,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniform3fv ( (GLuint) program, (GLint) location, (GLsizei) count, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniform3fv(int program, int location, int count, float[] value, int offset);/*
               glProgramUniform3fv ( (GLuint) program, 
                                   (GLint) location, 
@@ -1548,9 +1642,16 @@ public class GLES31Pipeline
      * C function void glProgramUniform3fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     public void glProgramUniform3fv(int program, int location, int count, java.nio.FloatBuffer value) {
-        GLES31Pipeline.nGLProgramUniform3fv(program, location, count, value);
+        checkBuffer(value, count, "value");
+        int offset = getOffset(value);
+        if(value.isDirect()){
+            GLES31Pipeline.nGLProgramUniform3fv(program, location, count, value, offset);
+        }else{
+            float[] array = value.array();
+            GLES31Pipeline.nGLProgramUniform3fv(program, location, count, array, offset);
+        }
     }
 
     /**
@@ -1562,7 +1663,7 @@ public class GLES31Pipeline
      * C function void glProgramUniform3fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     private static native void nGLProgramUniform3fv(int program,
                                                     int location,
                                                     int count,
@@ -1583,7 +1684,7 @@ public class GLES31Pipeline
      * C function void glProgramUniform4fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     public void glProgramUniform4fv(int program, int location, int count, float[] value, int offset) {
         checkArray(value, offset, count, VALUE);
         GLES31Pipeline.nGLProgramUniform4fv(program, location, count, value, offset);
@@ -1598,7 +1699,7 @@ public class GLES31Pipeline
      * C function void glProgramUniform4fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     private static native void nGLProgramUniform4fv(int program,
                                                     int location,
                                                     int count,
@@ -1620,7 +1721,7 @@ public class GLES31Pipeline
      * C function void glProgramUniform4fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     public void glProgramUniform4fv(int program, int location, int count, java.nio.FloatBuffer value) {
         checkBuffer(value, count, VALUE);
         int offset = getOffset(value);
@@ -1641,7 +1742,7 @@ public class GLES31Pipeline
      * C function void glProgramUniform4fv ( (GLuint) program, (GLint) location,
      * (GLsizei) count, const (GLfloat *) value )
      * 
-     * */
+     **/
     private static native void nGLProgramUniform4fv(int program,
                                                     int location,
                                                     int count,
@@ -1663,7 +1764,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix2fv(int program,
                                           int location,
                                           int count,
@@ -1684,7 +1785,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix2fv(int program,
                                                           int location,
                                                           int count,
@@ -1707,7 +1808,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix2fv(int program,
                                           int location,
                                           int count,
@@ -1734,7 +1835,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void   nGLProgramUniformMatrix2fv(int program,
                                        int location,
                                        int count,
@@ -1759,7 +1860,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix3fv(int program,
                                           int location,
                                           int count,
@@ -1781,7 +1882,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix3fv(int program,
                                                           int location,
                                                           int count,
@@ -1807,7 +1908,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix3fv(int program, int location, int count, boolean transpose, java.nio.FloatBuffer value) {
         checkBuffer(value, count, VALUE);
         int offset = getOffset(value);
@@ -1830,7 +1931,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix3fv(int program,
                                        int location,
                                        int count,
@@ -1854,7 +1955,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix4fv(int program,
                                           int location,
                                           int count,
@@ -1876,7 +1977,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix4fv(int program,
                                                           int location,
                                                           int count,
@@ -1901,7 +2002,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix4fv(int program, int location, int count, boolean transpose, java.nio.FloatBuffer value) {
         checkBuffer(value, count, VALUE);
         int offset = getOffset(value);
@@ -1924,7 +2025,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix4fv(int program,
                                        int location,
                                        int count,
@@ -1947,7 +2048,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix2x3fv(int program,
                                             int location,
                                             int count,
@@ -1964,7 +2065,7 @@ public class GLES31Pipeline
      *  </br></br>
      *  C function void glProgramUniformMatrix2x3fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix2x3fv(int program,
                                                             int location,
                                                             int count,
@@ -1987,7 +2088,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix2x3fv(int program,
                                             int location,
                                             int count,
@@ -2010,7 +2111,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix2x3fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void  nGLProgramUniformMatrix2x3fv(int program,
                                          int location,
                                          int count,
@@ -2029,7 +2130,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix3x2fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniformMatrix3x2fv(int program,
                                             int location,
                                             int count,
@@ -2049,7 +2150,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix3x2fv(int program,
                                                             int location,
                                                             int count,
@@ -2072,7 +2173,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix3x2fv(int program,
                                             int location,
                                             int count,
@@ -2097,7 +2198,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void  nGLProgramUniformMatrix3x2fv(int program,
                                          int location,
                                          int count,
@@ -2119,7 +2220,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix2x4fv(int program,
                                             int location,
                                             int count,
@@ -2139,7 +2240,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix2x4fv(int program,
                                                             int location,
                                                             int count,
@@ -2162,7 +2263,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix2x4fv(int program,
                                             int location,
                                             int count,
@@ -2184,7 +2285,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix2x4fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix2x4fv(int program,
                                          int location,
                                          int count,
@@ -2203,7 +2304,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix4x2fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniformMatrix4x2fv(int program,
                                             int location,
                                             int count,
@@ -2223,7 +2324,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix4x2fv(int program,
                                                             int location,
                                                             int count,
@@ -2246,7 +2347,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix4x2fv(int program,
                                             int location,
                                             int count,
@@ -2269,7 +2370,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix4x2fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix4x2fv(int program,
                                          int location,
                                          int count,
@@ -2291,7 +2392,7 @@ public class GLES31Pipeline
      * location, (GLsizei) count, (GLboolean) transpose, const (GLfloat *) value
      * )
      * 
-     * */
+     **/
     public void glProgramUniformMatrix3x4fv(int program,
                                             int location,
                                             int count,
@@ -2317,7 +2418,7 @@ public class GLES31Pipeline
      *                                                (GLboolean) transpose, 
      *                                                const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix3x4fv(int program,
                                                             int location,
                                                             int count,
@@ -2338,7 +2439,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix3x4fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniformMatrix3x4fv(int program,
                                             int location,
                                             int count,
@@ -2364,7 +2465,7 @@ public class GLES31Pipeline
      *                                                (GLboolean) transpose, 
      *                                                const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix3x4fv( int program, 
                                                              int location, 
                                                              int count, 
@@ -2383,7 +2484,7 @@ public class GLES31Pipeline
      * 
      *  C function void glProgramUniformMatrix4x3fv ( (GLuint) program, (GLint) location, (GLsizei) count,  (GLboolean) transpose, const  (GLfloat *) value )
 
-     * */
+     **/
     public void glProgramUniformMatrix4x3fv(int program,
                                             int location,
                                             int count,
@@ -2403,7 +2504,7 @@ public class GLES31Pipeline
      *                                                (GLboolean) transpose, 
      *                                                const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix4x3fv( int program, 
                                                              int location, 
                                                              int count, 
@@ -2430,7 +2531,7 @@ public class GLES31Pipeline
      *                                                (GLboolean) transpose, 
      *                                                const  (GLfloat *) value )
      *
-     * */
+     **/
     public void glProgramUniformMatrix4x3fv( int program, 
                                              int location, 
                                              int count, 
@@ -2456,7 +2557,7 @@ public class GLES31Pipeline
      *                                                (GLboolean) transpose, 
      *                                                const  (GLfloat *) value )
 
-     * */
+     **/
     private static native void nGLProgramUniformMatrix4x3fv( int program, 
                                                              int location, 
                                                              int count, 
@@ -2475,7 +2576,7 @@ public class GLES31Pipeline
      * 
      *  C function void glValidateProgramPipeline ( (GLuint) pipeline )
 
-     * */
+     **/
     public void glValidateProgramPipeline(int pipeline) {
         GLES31Pipeline.nGLValidateProgramPipeline(pipeline);
     }
@@ -2486,7 +2587,7 @@ public class GLES31Pipeline
      * 
      *  C function void glValidateProgramPipeline ( (GLuint) pipeline )
 
-     * */
+     **/
     private static native void nGLValidateProgramPipeline(int pipeline);/*
       glValidateProgramPipeline ( (GLuint) pipeline );
     */
@@ -2497,7 +2598,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetProgramPipelineInfoLog( (GLuint) program, (GLsizei) maxLength, (GLsizei) * length,  (GLchar *)  infoLog);
 
-     * */
+     **/
     public String glGetProgramPipelineInfoLog(int program) {
        return GLES31Pipeline.nGLGetProgramPipelineInfoLog(program);
     }
@@ -2511,7 +2612,7 @@ public class GLES31Pipeline
      *                                               (GLsizei) * length,  
      *                                               (GLchar *)  infoLog);
 
-     * */
+     **/
     private static native String nGLGetProgramPipelineInfoLog(int program);/*
     
        // based on code from 
@@ -2541,7 +2642,7 @@ public class GLES31Pipeline
      * 
      *  C function void glBindImageTexture ( (GLuint) unit, (GLuint) texture, (GLint) level,  (GLboolean) layered, (GLint) layer, (GLenum) access, (GLenum) format )
 
-     * */
+     **/
     public void glBindImageTexture(int unit, int texture, int level, boolean layered, int layer, int access, int format) {
         GLES31Pipeline.nGLBindImageTexture(unit, texture, level, layered, layer, access, format);
     }
@@ -2552,7 +2653,7 @@ public class GLES31Pipeline
      * 
      *  C function void glBindImageTexture ( (GLuint) unit, (GLuint) texture, (GLint) level,  (GLboolean) layered, (GLint) layer, (GLenum) access, (GLenum) format )
 
-     * */
+     **/
     private static native void nGLBindImageTexture(int unit, int texture, int level, boolean layered, int layer, int access, int format);
 
     /**
@@ -2561,7 +2662,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetBooleani_v ( (GLenum) target, (GLuint) index,  (GLboolean) *data )
 
-     * */
+     **/
     public void glGetBooleani_v(int target, int index, boolean[] data, int offset) {
         GLES31Pipeline.nGLGetBooleani_v(target, index, data, offset);
     }
@@ -2572,7 +2673,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetBooleani_v ( (GLenum) target, (GLuint) index,  (GLboolean) *data )
 
-     * */
+     **/
     private static native void nGLGetBooleani_v(int target, int index, boolean[] data, int offset);
 
     /**
@@ -2581,7 +2682,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetBooleani_v ( (GLenum) target, (GLuint) index,  (GLboolean) *data )
 
-     * */
+     **/
     public void glGetBooleani_v(int target, int index, java.nio.IntBuffer data) {
         GLES31Pipeline.nGLGetBooleani_v(target, index, data);
     }
@@ -2592,7 +2693,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetBooleani_v ( (GLenum) target, (GLuint) index,  (GLboolean) *data )
 
-     * */
+     **/
     private static native void nGLGetBooleani_v(int target, int index, java.nio.IntBuffer data);
 
     /**
@@ -2601,7 +2702,7 @@ public class GLES31Pipeline
      * 
      *  C function void glMemoryBarrier (  (GLbitfield)  barriers )
 
-     * */
+     **/
     public void glMemoryBarrier(int barriers) {
         GLES31Pipeline.nGLMemoryBarrier(barriers);
     }
@@ -2612,7 +2713,7 @@ public class GLES31Pipeline
      * 
      *  C function void glMemoryBarrier (  (GLbitfield)  barriers )
 
-     * */
+     **/
     private static native void nGLMemoryBarrier(int barriers);
 
     /**
@@ -2621,7 +2722,7 @@ public class GLES31Pipeline
      * 
      *  C function void glMemoryBarrierByRegion (  (GLbitfield)  barriers )
 
-     * */
+     **/
     public void glMemoryBarrierByRegion(int barriers) {
         GLES31Pipeline.nGLMemoryBarrierByRegion(barriers);
     }
@@ -2632,18 +2733,32 @@ public class GLES31Pipeline
      * 
      *  C function void glMemoryBarrierByRegion (  (GLbitfield)  barriers )
 
-     * */
-    private static native void nGLMemoryBarrierByRegion(int barriers);
+     **/
+    private static native void nGLMemoryBarrierByRegion(int barriers);/*
+          glMemoryBarrierByRegion (  (GLbitfield)  barriers );
+    */
 
     /**
      * <pre>
      * Delegate Method generated from GLES31.glTexStorage2DMultisample([int target, int samples, int internalformat, int width, int height, boolean fixedsamplelocations]);
      * 
-     *  C function void glTexStorage2DMultisample ( (GLenum) target, (GLsizei) samples, (GLenum) internalformat, (GLsizei) width, (GLsizei) height,  (GLboolean) fixedsamplelocations )
+     *  C function void glTexStorage2DMultisample ( (GLenum) target, 
+     *                                              (GLsizei) samples, 
+     *                                              (GLenum) internalformat, (GLsizei) width, (GLsizei) height,  (GLboolean) fixedsamplelocations )
 
-     * */
-    public void glTexStorage2DMultisample(int target, int samples, int internalformat, int width, int height, boolean fixedsamplelocations) {
-        GLES31Pipeline.nGLTexStorage2DMultisample(target, samples, internalformat, width, height, fixedsamplelocations);
+     **/
+    public void glTexStorage2DMultisample(int target,
+                                          int samples,
+                                          int internalformat,
+                                          int width,
+                                          int height,
+                                          boolean fixedsamplelocations) {
+        GLES31Pipeline.nGLTexStorage2DMultisample(target,
+                samples,
+                internalformat,
+                width,
+                height,
+                fixedsamplelocations);
     }
 
     /**
@@ -2652,7 +2767,7 @@ public class GLES31Pipeline
      * 
      *  C function void glTexStorage2DMultisample ( (GLenum) target, (GLsizei) samples, (GLenum) internalformat, (GLsizei) width, (GLsizei) height,  (GLboolean) fixedsamplelocations )
 
-     * */
+     **/
     private static native void nGLTexStorage2DMultisample(int target, int samples, int internalformat, int width, int height, boolean fixedsamplelocations);
 
     /**
@@ -2661,8 +2776,9 @@ public class GLES31Pipeline
      * 
      *  C function void glGetMultisamplefv ( (GLenum) pname, (GLuint) index,  (GLfloat *) val )
 
-     * */
+     **/
     public void glGetMultisamplefv(int pname, int index, float[] val, int offset) {
+        checkArray(val, offset, 2, "val");
         GLES31Pipeline.nGLGetMultisamplefv(pname, index, val, offset);
     }
 
@@ -2672,8 +2788,10 @@ public class GLES31Pipeline
      * 
      *  C function void glGetMultisamplefv ( (GLenum) pname, (GLuint) index,  (GLfloat *) val )
 
-     * */
-    private static native void nGLGetMultisamplefv(int pname, int index, float[] val, int offset);
+     **/
+    private static native void nGLGetMultisamplefv(int pname, int index, float[] val, int offset);/*
+        glGetMultisamplefv ( (GLenum) pname, (GLuint) index,  (GLfloat *) (val + offset) );
+    */
 
     /**
      * <pre>
@@ -2681,9 +2799,16 @@ public class GLES31Pipeline
      * 
      *  C function void glGetMultisamplefv ( (GLenum) pname, (GLuint) index,  (GLfloat *) val )
 
-     * */
+     **/
     public void glGetMultisamplefv(int pname, int index, java.nio.FloatBuffer val) {
-        GLES31Pipeline.nGLGetMultisamplefv(pname, index, val);
+        checkBuffer(val, 2, "val");
+        int offset = getOffset(val);
+        if(val.isDirect()){
+            GLES31Pipeline.nGLGetMultisamplefv(pname, index, val, offset);
+        }else{
+            float[] array = val.array();
+            GLES31Pipeline.nGLGetMultisamplefv(pname, index, array, offset);
+        }
     }
 
     /**
@@ -2692,8 +2817,10 @@ public class GLES31Pipeline
      * 
      *  C function void glGetMultisamplefv ( (GLenum) pname, (GLuint) index,  (GLfloat *) val )
 
-     * */
-    private static native void nGLGetMultisamplefv(int pname, int index, java.nio.FloatBuffer val);
+     **/
+    private static native void nGLGetMultisamplefv(int pname, int index, java.nio.FloatBuffer val, int offset);/*
+            glGetMultisamplefv ( (GLenum) pname, (GLuint) index,  (GLfloat *) (val + offset) );
+   */
 
     /**
      * <pre>
@@ -2701,7 +2828,7 @@ public class GLES31Pipeline
      * 
      *  C function void glSampleMaski ( (GLuint) maskNumber,  (GLbitfield)  mask )
 
-     * */
+     **/
     public void glSampleMaski(int maskNumber, int mask) {
         GLES31Pipeline.nGLSampleMaski(maskNumber, mask);
     }
@@ -2712,8 +2839,10 @@ public class GLES31Pipeline
      * 
      *  C function void glSampleMaski ( (GLuint) maskNumber,  (GLbitfield)  mask )
 
-     * */
-    private static native void nGLSampleMaski(int maskNumber, int mask);
+     **/
+    private static native void nGLSampleMaski(int maskNumber, int mask);/*
+       glSampleMaski ( (GLuint) maskNumber,  (GLbitfield)  mask );
+    */
 
     /**
      * <pre>
@@ -2721,7 +2850,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameteriv ( (GLenum) target, (GLint) level, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetTexLevelParameteriv(int target, int level, int pname, int[] params, int offset) {
         GLES31Pipeline.nGLGetTexLevelParameteriv(target, level, pname, params, offset);
     }
@@ -2732,7 +2861,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameteriv ( (GLenum) target, (GLint) level, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetTexLevelParameteriv(int target, int level, int pname, int[] params, int offset);
 
     /**
@@ -2741,7 +2870,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameteriv ( (GLenum) target, (GLint) level, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     public void glGetTexLevelParameteriv(int target, int level, int pname, java.nio.IntBuffer params) {
         GLES31Pipeline.nGLGetTexLevelParameteriv(target, level, pname, params);
     }
@@ -2752,7 +2881,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameteriv ( (GLenum) target, (GLint) level, (GLenum) pname, (GLint) *params )
 
-     * */
+     **/
     private static native void nGLGetTexLevelParameteriv(int target, int level, int pname, java.nio.IntBuffer params);
 
     /**
@@ -2761,7 +2890,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameterfv ( (GLenum) target, (GLint) level, (GLenum) pname,  (GLfloat *) params )
 
-     * */
+     **/
     public void glGetTexLevelParameterfv(int target, int level, int pname, float[] params, int offset) {
         GLES31Pipeline.nGLGetTexLevelParameterfv(target, level, pname, params, offset);
     }
@@ -2772,7 +2901,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameterfv ( (GLenum) target, (GLint) level, (GLenum) pname,  (GLfloat *) params )
 
-     * */
+     **/
     private static native void nGLGetTexLevelParameterfv(int target, int level, int pname, float[] params, int offset);
 
     /**
@@ -2781,7 +2910,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameterfv ( (GLenum) target, (GLint) level, (GLenum) pname,  (GLfloat *) params )
 
-     * */
+     **/
     public void glGetTexLevelParameterfv(int target, int level, int pname, java.nio.FloatBuffer params) {
         GLES31Pipeline.nGLGetTexLevelParameterfv(target, level, pname, params);
     }
@@ -2792,7 +2921,7 @@ public class GLES31Pipeline
      * 
      *  C function void glGetTexLevelParameterfv ( (GLenum) target, (GLint) level, (GLenum) pname,  (GLfloat *) params )
 
-     * */
+     **/
     private static native void nGLGetTexLevelParameterfv(int target, int level, int pname, java.nio.FloatBuffer params);
 
     /**
@@ -2801,7 +2930,7 @@ public class GLES31Pipeline
      * 
      *  C function void glBindVertexBuffer ( (GLuint) bindingindex, (GLuint) buffer,  (GLintptr) offset, (GLsizei) stride )
 
-     * */
+     **/
     public void glBindVertexBuffer(int bindingindex, int buffer, long offset, int stride) {
         GLES31Pipeline.nGLBindVertexBuffer(bindingindex, buffer, offset, stride);
     }
@@ -2812,7 +2941,7 @@ public class GLES31Pipeline
      * 
      *  C function void glBindVertexBuffer ( (GLuint) bindingindex, (GLuint) buffer,  (GLintptr) offset, (GLsizei) stride )
 
-     * */
+     **/
     private static native void nGLBindVertexBuffer(int bindingindex, int buffer, long offset, int stride);
 
     /**
@@ -2821,7 +2950,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexAttribFormat ( (GLuint) attribindex, (GLint) size, (GLenum) type,  (GLboolean) normalized, (GLuint) relativeoffset )
 
-     * */
+     **/
     public void glVertexAttribFormat(int attribindex, int size, int type, boolean normalized, int relativeoffset) {
         GLES31Pipeline.nGLVertexAttribFormat(attribindex, size, type, normalized, relativeoffset);
     }
@@ -2832,7 +2961,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexAttribFormat ( (GLuint) attribindex, (GLint) size, (GLenum) type,  (GLboolean) normalized, (GLuint) relativeoffset )
 
-     * */
+     **/
     private static native void nGLVertexAttribFormat(int attribindex, int size, int type, boolean normalized, int relativeoffset);
 
     /**
@@ -2841,7 +2970,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexAttribIFormat ( (GLuint) attribindex, (GLint) size, (GLenum) type, (GLuint) relativeoffset )
 
-     * */
+     **/
     public void glVertexAttribIFormat(int attribindex, int size, int type, int relativeoffset) {
         GLES31Pipeline.nGLVertexAttribIFormat(attribindex, size, type, relativeoffset);
     }
@@ -2852,7 +2981,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexAttribIFormat ( (GLuint) attribindex, (GLint) size, (GLenum) type, (GLuint) relativeoffset )
 
-     * */
+     **/
     private static native void nGLVertexAttribIFormat(int attribindex, int size, int type, int relativeoffset);/*
            glVertexAttribIFormat ( (GLuint) attribindex, (GLint) size, (GLenum) type, (GLuint) relativeoffset )
     */
@@ -2863,7 +2992,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexAttribBinding ( (GLuint) attribindex, (GLuint) bindingindex )
 
-     * */
+     **/
     public void glVertexAttribBinding(int attribindex, int bindingindex) {
         GLES31Pipeline.nGLVertexAttribBinding(attribindex, bindingindex);
     }
@@ -2874,7 +3003,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexAttribBinding ( (GLuint) attribindex, (GLuint) bindingindex )
 
-     * */
+     **/
     private static native void nGLVertexAttribBinding(int attribindex, int bindingindex);/*
         glVertexAttribBinding ( (GLuint) attribindex, (GLuint) bindingindex );
     */
@@ -2885,7 +3014,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexBindingDivisor ( (GLuint) bindingindex, (GLuint) divisor )
 
-     * */
+     **/
     public void glVertexBindingDivisor(int bindingindex, int divisor) {
         GLES31Pipeline.nGLVertexBindingDivisor(bindingindex, divisor);
     }
@@ -2896,7 +3025,7 @@ public class GLES31Pipeline
      * 
      *  C function void glVertexBindingDivisor ( (GLuint) bindingindex, (GLuint) divisor )
 
-     * */
+     **/
     private static native void nGLVertexBindingDivisor(int bindingindex, int divisor);/*
         glVertexBindingDivisor ( (GLuint) bindingindex, (GLuint) divisor );
     */

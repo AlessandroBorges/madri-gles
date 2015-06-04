@@ -58,7 +58,9 @@ public class GLES31ExtPipeline implements Pipeline{
      *  C function void glBlendBarrierKHR ( void )
 
      * */
-    private static native void nGLES31ExtClassInit();
+    private static native void nGLES31ExtClassInit();/*
+    // no op
+    */
 
     /**
      * MACHINE GENERATED! Please, do not edit !

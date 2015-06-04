@@ -22,6 +22,8 @@ package android.util;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * API for sending log output.
@@ -52,6 +54,8 @@ import java.net.UnknownHostException;
  * significant work and incurring significant overhead.
  */
 public final class Log {
+    
+    public static String LOG_NAME = "Madri GLES - OpenGL ES emulator";
 
     /**
      * Priority constant for the println method; use Log.v.
@@ -86,6 +90,7 @@ public final class Log {
     /**
      * Exception class used to capture a stack trace in {@link #wtf}.
      */
+    @SuppressWarnings("serial")
     private static class TerribleFailure extends Exception {
         TerribleFailure(String msg, Throwable cause) { super(msg, cause); }
     }
@@ -211,7 +216,9 @@ public final class Log {
      * @return Whether or not that this is allowed to be logged.
      * @throws IllegalArgumentException is thrown if the tag.length() > 23.
      */
-    public static native boolean isLoggable(String tag, int level);
+    public static  boolean isLoggable(String tag, int level){
+        return true;
+    }
 
     /*
      * Send a {@link #WARN} log message and log the exception.
@@ -356,6 +363,54 @@ public final class Log {
     /** @hide */ public static final int LOG_ID_SYSTEM = 3;
     /** @hide */ public static final int LOG_ID_CRASH = 4;
 
-    /** @hide */ public static native int println_native(int bufID,
-            int priority, String tag, String msg);
+    private static Logger logger;
+    
+    private static Logger getLogger(){
+        if(logger==null){
+            logger = Logger.getLogger("Madri GLES - OpenGL ES emulator.");
+            logger.setLevel(Level.ALL);
+        }
+        return logger;
+    }
+    
+    /** @hide */ 
+    public static int println_native(int bufID,
+                                     int priority,
+                                     String tag,
+                                     String msg) {
+        Logger myLog = getLogger();
+
+        switch (priority) {
+        case VERBOSE:
+              myLog.log(Level.FINE, "V/" + tag, msg);
+            break;
+            
+        case ASSERT:
+            myLog.log(Level.FINE, "A/" + tag, msg);
+            break;
+            
+        case DEBUG:
+            myLog.log(Level.CONFIG, "D/" + tag, msg);
+            break;
+            
+        case ERROR:
+            myLog.log(Level.SEVERE, "E/" + tag, msg);
+            break;
+
+        case INFO:
+            myLog.log(Level.INFO, "I/" + tag, msg);
+            break;
+
+        case WARN:
+            myLog.log(Level.WARNING, "W/" + tag, msg);
+            break;        
+
+        default:
+            myLog.log(Level.FINE, "V/" + tag, msg);
+            break;
+        }
+
+        return 1;
+    }
+    
 }
