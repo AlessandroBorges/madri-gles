@@ -18,14 +18,7 @@ public class GLES30Pipeline
    extends GLES20Pipeline
    implements Pipeline {
     
-    protected static String IDS = "ids";
-    protected static String LENGTH = "length";
-    protected static String ATTACHMENTS = "attachments";
-    protected static String UNIFORM_INDICES = "uniformIndices";
-    protected static String BINARY = "binary";
-    protected static String BUFS = "bufs";
-    protected static String ARRAYS = "arrays";
-    protected static String INVALID_BUFFER = "Invalid buffer type: ";
+    
 
 	/** Includes **/
 	//@off
@@ -5910,4 +5903,14 @@ public class GLES30Pipeline
         		(GLsizei) bufSize, 
         		(GLint *) (params + offset));    
     */
+    
+    
+    protected static String IDS = "ids";   
+    protected static String ATTACHMENTS = "attachments";
+    protected static String UNIFORM_INDICES = "uniformIndices";
+    protected static String BINARY = "binary";
+    protected static String BUFS = "bufs";
+    protected static String ARRAYS = "arrays";
+    
+    
 }
