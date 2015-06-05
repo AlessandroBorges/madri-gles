@@ -86,17 +86,17 @@ public class BufferInfo {
         if (b == null /*|| !b.isDirect()*/) { return 0; }
         // LongBuffer & DoubleBuffer case - 8 bytes
         int elementSizeShift = 4;
-        // other values
-        if (b instanceof IntBuffer || b instanceof FloatBuffer) {
-            // 4 bytes
-            elementSizeShift = 2;
-        } else if (b instanceof ByteBuffer) {
+        // other values       
+        if (b instanceof ByteBuffer) {
             // 1 byte
             elementSizeShift = 0;
-        } else if (b instanceof ShortBuffer || b instanceof CharBuffer) {
+        } else if (b instanceof IntBuffer || b instanceof FloatBuffer) {
+            // 4 bytes
+            elementSizeShift = 2;
+        } else  if (b instanceof ShortBuffer || b instanceof CharBuffer) {
             // 2 bytes
             elementSizeShift = 1;
-        }
+        }        
         return elementSizeShift;
     }
 
@@ -348,6 +348,12 @@ public class BufferInfo {
         int _elementSizeShift = getElementSizeShift(b);
         return b.hasArray() ? ((b.arrayOffset() + b.position()) << _elementSizeShift) : 0;
     }
+    
+    
+    public static ArrayWrapper getArrayWrapper (Buffer buf){        
+        return new ArrayWrapper(buf);
+    }
+    
 
     /**
      * String values of Buffer

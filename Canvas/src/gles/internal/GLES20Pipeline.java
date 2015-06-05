@@ -19,25 +19,7 @@ import gles.util.BufferInfo;
 /** OpenGL ES 2.0
  */
 public class GLES20Pipeline implements Pipeline {
-
-
-  // protected static String FLOATBUFFER_NULL = " java.nio.FloatBuffer param is null.";
- //  protected static String FLOATBUFFER_ND = " java.nio.FloatBuffer param is non-direct.";
-   
-  // protected static String INTBUFFER_NULL = " java.nio.IntBuffer param is null.";
-  // protected static String INTBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
-   
-   protected static String LONGBUFFER_NULL = " java.nio.IntBuffer param is null.";
-   protected static String LONGBUFFER_ND = " java.nio.IntBuffer param is non-direct.";
-   
-  // protected static String BUFFER_NULL = " java.nio.Buffer param  is null.";
-  // protected static String BUFFER_ND = " java.nio.Buffer param is non-direct.";
-   
-  // protected static String OFFSET_0 = "offset < 0";
- //  protected static String ARRAY_INT_0 = "int[] == null";
- //  protected static String ARRAY_FLOAT_0 = "float[] == null";
-  // protected static String ARRAY_0 = "array == null";
-   
+      
    protected static String PARAMS = "params";
    protected static String INDICES = "indices";
    protected static String DATA = "data";
@@ -5742,7 +5724,6 @@ public class GLES20Pipeline implements Pipeline {
         int offset = getOffset(values);
 
         if (values.isDirect()) {
-
             GLES20Pipeline.nGLVertexAttrib2fv(indx, values, offset);
         } else {
             float[] array = values.array();
@@ -6271,6 +6252,42 @@ public class GLES20Pipeline implements Pipeline {
      *  <li>if offset < 0;
      *  <li>if array length < 1.
      */
+    protected static void checkBuffer(java.nio.ShortBuffer values, int needed, String bufferName){
+        if (null == values) throw new IllegalArgumentException(bufferName + " == null");       
+        if (values.remaining() < needed)
+            throw new IllegalArgumentException(bufferName+" remaining() < needed = " + needed);        
+    }
+    
+    /**
+     * Check a parameter buffer
+     * 
+     * @param values buffer with values to check
+     * @param needed
+     * @param bufferName
+     * 
+     *  @throws IllegalArgumentException in following cases:
+     *  <li>if values is null;
+     *  <li>if offset < 0;
+     *  <li>if array length < 1.
+     */
+    protected static void checkBuffer(java.nio.LongBuffer values, int needed, String bufferName){
+        if (null == values) throw new IllegalArgumentException(bufferName + " == null");       
+        if (values.remaining() < needed)
+            throw new IllegalArgumentException(bufferName+" remaining() < needed = " + needed);        
+    }
+    
+    /**
+     * Check a parameter buffer
+     * 
+     * @param values buffer with values to check
+     * @param needed
+     * @param bufferName
+     * 
+     *  @throws IllegalArgumentException in following cases:
+     *  <li>if values is null;
+     *  <li>if offset < 0;
+     *  <li>if array length < 1.
+     */
     protected static void checkBuffer(java.nio.FloatBuffer values, int needed, String bufferName){
         if (null == values) throw new IllegalArgumentException(bufferName + " == null");       
         if (values.remaining() < needed)
@@ -6278,9 +6295,9 @@ public class GLES20Pipeline implements Pipeline {
     }
     
     /**
-     * 
-     * @param values Buffer values
-     * @return offset
+     * Get offset in float elements
+     * @param values FloatBuffer instance
+     * @return offset in float elements
      */
     protected static int getOffset(java.nio.FloatBuffer values){
         if (null == values) throw new IllegalArgumentException("FloatBuffer == null");       
@@ -6288,9 +6305,9 @@ public class GLES20Pipeline implements Pipeline {
     }
     
     /**
-     * get Buffer Offset
-     * @param values Buffer values
-     * @return offset
+     * get Buffer Offset in int values
+     * @param values IntBuffer values
+     * @return offset in int elements
      */
     protected static int getOffset(java.nio.IntBuffer values){
         if (null == values) throw new IllegalArgumentException("IntBuffer == null");       
@@ -6298,9 +6315,9 @@ public class GLES20Pipeline implements Pipeline {
     }
     
     /**
-     * 
-     * @param values Buffer values
-     * @return offset
+     * Get the offset in bytes from a buffer
+     * @param values - generic Buffer.
+     * @return offset in bytes
      */
     protected static int getOffset(java.nio.Buffer values){
         if (null == values) throw new IllegalArgumentException("Buffer == null");       
@@ -6308,11 +6325,21 @@ public class GLES20Pipeline implements Pipeline {
     }
     
     /**
-     * 
-     * @param values Buffer values
-     * @return offset
+     * Get the offset in bytes from a buffer.
+     * @param values - ByteBuffer instance
+     * @return offset in bytes
      */
     protected static int getOffset(java.nio.ByteBuffer values){
+        if (null == values) throw new IllegalArgumentException("Buffer == null");       
+        return BufferInfo.getOffset(values);       
+    }
+    
+    /**
+     * Get the offset in short elements from a buffer.
+     * @param values - ByteBuffer instance
+     * @return offset in short elements
+     */
+    protected static int getOffset(java.nio.ShortBuffer values){
         if (null == values) throw new IllegalArgumentException("Buffer == null");       
         return BufferInfo.getOffset(values);       
     }
