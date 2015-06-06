@@ -1,8 +1,23 @@
 #include <gles.internal.GLES10ExtPipeline.h>
-JNIEXPORT void JNICALL Java_gles_internal_GLES10ExtPipeline_nGLES10ExtClassInit(JNIEnv* env, jclass clazz) {
+
+//@line:16
+
+      #define GL_GLEXT_PROTOTYPES
+      #include <GLES/gl.h>
+      #include <GLES/glext.h>
+      #include <GLES/egl.h>
+          
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     JNIEXPORT void JNICALL Java_gles_internal_GLES10ExtPipeline_nGLES10ExtClassInit(JNIEnv* env, jclass clazz) {
 
 
-//@line:60
+//@line:77
 
      // no op
     
@@ -12,10 +27,14 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES10ExtPipeline_nGLES10ExtClassInit(
 static inline jint wrapped_Java_gles_internal_GLES10ExtPipeline_nGLQueryMatrixxOES___3II_3II
 (JNIEnv* env, jclass clazz, jintArray obj_mantissa, jint mantissaOffset, jintArray obj_exponent, jint exponentOffset, int* mantissa, int* exponent) {
 
-//@line:84
-
-    return (jint) glQueryMatrixxOES ( (GLfixed *)(mantissa + mantissaOffset), (GLint *)(exponent + exponentOffset));
- 
+//@line:101
+     
+     jint val = 0;
+     val = (jint) glQueryMatrixxOES((GLfixed *)(mantissa + mantissaOffset), 
+                                    (GLint *)(exponent + exponentOffset));
+    
+     return val;
+      
 }
 
 JNIEXPORT jint JNICALL Java_gles_internal_GLES10ExtPipeline_nGLQueryMatrixxOES___3II_3II(JNIEnv* env, jclass clazz, jintArray obj_mantissa, jint mantissaOffset, jintArray obj_exponent, jint exponentOffset) {
@@ -33,9 +52,12 @@ JNIEXPORT jint JNICALL Java_gles_internal_GLES10ExtPipeline_nGLQueryMatrixxOES__
 static inline jint wrapped_Java_gles_internal_GLES10ExtPipeline_nGLQueryMatrixxOES__Ljava_nio_IntBuffer_2ILjava_nio_IntBuffer_2I
 (JNIEnv* env, jclass clazz, jobject obj_mantissa, jint mantissaOffset, jobject obj_exponent, jint exponentOffset, int* mantissa, int* exponent) {
 
-//@line:116
+//@line:137
 
-       return (jint) glQueryMatrixxOES ( (GLfixed *)(mantissa + mantissaOffset), (GLint *)(exponent + exponentOffset));
+       jint val = 0;
+       val = (jint) glQueryMatrixxOES((GLfixed *)(mantissa + mantissaOffset), 
+                                    (GLint *)(exponent + exponentOffset));    
+       return val;
     
 }
 

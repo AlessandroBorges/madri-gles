@@ -178,10 +178,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGenProgramPipelines_
 /*
  * Class:     gles_internal_GLES31Pipeline
  * Method:    nGLGenProgramPipelines
- * Signature: (ILjava/nio/IntBuffer;)V
+ * Signature: (ILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGenProgramPipelines__ILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGenProgramPipelines__ILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline
@@ -202,10 +202,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetProgramPipelineiv
 /*
  * Class:     gles_internal_GLES31Pipeline
  * Method:    nGLGetProgramPipelineiv
- * Signature: (IILjava/nio/IntBuffer;)V
+ * Signature: (IILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetProgramPipelineiv__IILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetProgramPipelineiv__IILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline
@@ -665,19 +665,19 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLBindImageTexture
 
 /*
  * Class:     gles_internal_GLES31Pipeline
- * Method:    nGLGetBooleani_v
+ * Method:    nGLGetBooleaniv
  * Signature: (II[ZI)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetBooleani_1v__II_3ZI
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetBooleaniv__II_3ZI
   (JNIEnv *, jclass, jint, jint, jbooleanArray, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline
- * Method:    nGLGetBooleani_v
- * Signature: (IILjava/nio/IntBuffer;)V
+ * Method:    nGLGetBooleaniv
+ * Signature: (IILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetBooleani_1v__IILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetBooleaniv__IILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline
@@ -714,10 +714,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetMultisamplefv__II
 /*
  * Class:     gles_internal_GLES31Pipeline
  * Method:    nGLGetMultisamplefv
- * Signature: (IILjava/nio/FloatBuffer;)V
+ * Signature: (IILjava/nio/FloatBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetMultisamplefv__IILjava_nio_FloatBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetMultisamplefv__IILjava_nio_FloatBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline
@@ -738,10 +738,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetTexLevelParameter
 /*
  * Class:     gles_internal_GLES31Pipeline
  * Method:    nGLGetTexLevelParameteriv
- * Signature: (IIILjava/nio/IntBuffer;)V
+ * Signature: (IIILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetTexLevelParameteriv__IIILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetTexLevelParameteriv__IIILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline
@@ -754,10 +754,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetTexLevelParameter
 /*
  * Class:     gles_internal_GLES31Pipeline
  * Method:    nGLGetTexLevelParameterfv
- * Signature: (IIILjava/nio/FloatBuffer;)V
+ * Signature: (IIILjava/nio/FloatBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetTexLevelParameterfv__IIILjava_nio_FloatBuffer_2
-  (JNIEnv *, jclass, jint, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLGetTexLevelParameterfv__IIILjava_nio_FloatBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES31Pipeline

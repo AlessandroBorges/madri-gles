@@ -402,10 +402,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11ExtPipeline_nGLLightModelxvOES__
 /*
  * Class:     gles_internal_GLES11ExtPipeline
  * Method:    nGLLightModelxvOES
- * Signature: (ILjava/nio/IntBuffer;)V
+ * Signature: (ILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES11ExtPipeline_nGLLightModelxvOES__ILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES11ExtPipeline_nGLLightModelxvOES__ILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES11ExtPipeline
@@ -946,10 +946,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11ExtPipeline_nGLTexGenivOES__II_3
 /*
  * Class:     gles_internal_GLES11ExtPipeline
  * Method:    nGLTexGenivOES
- * Signature: (IILjava/nio/IntBuffer;)V
+ * Signature: (IILjava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES11ExtPipeline_nGLTexGenivOES__IILjava_nio_IntBuffer_2
-  (JNIEnv *, jclass, jint, jint, jobject);
+JNIEXPORT void JNICALL Java_gles_internal_GLES11ExtPipeline_nGLTexGenivOES__IILjava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES11ExtPipeline

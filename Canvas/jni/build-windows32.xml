@@ -38,7 +38,7 @@
 	<!-- define linker and options -->
 	<property name="linker" value="${compilerPrefix}g++${compilerSuffix}"/>
 	<property name="linker-opts" value=" -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "/>
-	<property name="libraries" value=" -LC:\NVPACK\jdk1.7.0_45\lib  -LC:/Projetos/Android/Builder/Angle/x86/libs  -ljawt -luser32 -lGLESv2 "/>
+	<property name="libraries" value=" -LC:\NVPACK\jdk1.7.0_45\lib  -LC:/Projetos/Android/Builder/Adreno/x86/  -ljawt -luser32 -lGLESv2 "/>
 	
 	<!-- cleans the build directory, removes all object files and shared libs -->
 	<target name="clean">
@@ -91,7 +91,7 @@
 			<arg value="-Ijni-headers"/>
 			<arg value="-Ijni-headers/${jniPlatform}"/>
 			<arg value="-I."/>
-						<arg value="-IC:/Projetos/Android/Builder/Angle/inc"/>
+						<arg value="-IC:/Projetos/Android/Builder/Adreno/inc/"/>
 
 			<srcfile/>
 			<arg value="-o"/>
@@ -107,7 +107,7 @@
 			<arg value="-Ijni-headers"/>
 			<arg value="-Ijni-headers/${jniPlatform}"/>
 			<arg value="-I."/>
-						<arg value="-IC:/Projetos/Android/Builder/Angle/inc"/>
+						<arg value="-IC:/Projetos/Android/Builder/Adreno/inc/"/>
 
 			<srcfile/>
 			<arg value="-o"/>

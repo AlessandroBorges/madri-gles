@@ -82,6 +82,30 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexImage3D__IIIIIIII
 /*
  * Class:     gles_internal_GLES30Pipeline
  * Method:    nGLTexImage3D
+ * Signature: (IIIIIIIII[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexImage3D__IIIIIIIII_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLTexImage3D
+ * Signature: (IIIIIIIII[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexImage3D__IIIIIIIII_3II
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jintArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLTexImage3D
+ * Signature: (IIIIIIIII[FI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexImage3D__IIIIIIIII_3FI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jfloatArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLTexImage3D
  * Signature: (IIIIIIIIII)V
  */
 JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexImage3D__IIIIIIIIII
@@ -102,6 +126,30 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexSubImage3D__IIIII
  */
 JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexSubImage3D__IIIIIIIIII_3BI
   (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jbyteArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLTexSubImage3D
+ * Signature: (IIIIIIIIII[SI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexSubImage3D__IIIIIIIIII_3SI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jshortArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLTexSubImage3D
+ * Signature: (IIIIIIIIII[II)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexSubImage3D__IIIIIIIIII_3II
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jintArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLTexSubImage3D
+ * Signature: (IIIIIIIIII[FI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLTexSubImage3D__IIIIIIIIII_3FI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jint, jint, jint, jint, jint, jint, jfloatArray, jint);
 
 /*
  * Class:     gles_internal_GLES30Pipeline
@@ -593,6 +641,14 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLVertexAttribIPointer
 
 /*
  * Class:     gles_internal_GLES30Pipeline
+ * Method:    nGLVertexAttribIPointerBounds
+ * Signature: (IIII[FI)V
+ */
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLVertexAttribIPointerBounds__IIII_3FI
+  (JNIEnv *, jclass, jint, jint, jint, jint, jfloatArray, jint);
+
+/*
+ * Class:     gles_internal_GLES30Pipeline
  * Method:    nGLVertexAttribIPointer
  * Signature: (IIIII)V
  */
@@ -874,18 +930,18 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLCopyBufferSubData
 /*
  * Class:     gles_internal_GLES30Pipeline
  * Method:    nGLGetUniformIndices
- * Signature: (I[Ljava/lang/String;[II)V
+ * Signature: (II[Ljava/lang/String;[II)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLGetUniformIndices__I_3Ljava_lang_String_2_3II
-  (JNIEnv *, jclass, jint, jobjectArray, jintArray, jint);
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLGetUniformIndices__II_3Ljava_lang_String_2_3II
+  (JNIEnv *, jclass, jint, jint, jobjectArray, jintArray, jint);
 
 /*
  * Class:     gles_internal_GLES30Pipeline
  * Method:    nGLGetUniformIndices
- * Signature: (I[Ljava/lang/String;Ljava/nio/IntBuffer;I)V
+ * Signature: (II[Ljava/lang/String;Ljava/nio/IntBuffer;I)V
  */
-JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLGetUniformIndices__I_3Ljava_lang_String_2Ljava_nio_IntBuffer_2I
-  (JNIEnv *, jclass, jint, jobjectArray, jobject, jint);
+JNIEXPORT void JNICALL Java_gles_internal_GLES30Pipeline_nGLGetUniformIndices__II_3Ljava_lang_String_2Ljava_nio_IntBuffer_2I
+  (JNIEnv *, jclass, jint, jint, jobjectArray, jobject, jint);
 
 /*
  * Class:     gles_internal_GLES30Pipeline

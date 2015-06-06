@@ -1,8 +1,22 @@
 #include <gles.internal.GLES11Pipeline.h>
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLES11ClassInit(JNIEnv* env, jclass clazz) {
+
+//@line:19
+
+      #include <GLES/gl.h>
+      #include <GLES/glext.h>
+      #include <GLES/egl.h>
+          
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLES11ClassInit(JNIEnv* env, jclass clazz) {
 
 
-//@line:68
+//@line:83
 
       // no op
      
@@ -12,7 +26,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLES11ClassInit(JNIEnv
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBindBuffer(JNIEnv* env, jclass clazz, jint target, jint buffer) {
 
 
-//@line:91
+//@line:106
 
        glBindBuffer((GLenum)  target, (GLuint ) buffer );
     
@@ -23,7 +37,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferData__IILjava_
 	unsigned char* data = (unsigned char*)(obj_data?env->GetDirectBufferAddress(obj_data):0);
 
 
-//@line:143
+//@line:158
 
         glBufferData((GLenum)  target, (GLsizeiptr) size,(GLvoid *)(data + offset),  (GLenum)  usage );
     
@@ -34,7 +48,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferData__II_3BII(
 	char* data = (char*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:155
+//@line:170
 
        glBufferData((GLenum)  target, (GLsizeiptr) size,(GLvoid *)(data + offset),  (GLenum)  usage );
     
@@ -46,7 +60,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferData__II_3SII(
 	short* data = (short*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:167
+//@line:182
 
        glBufferData((GLenum)  target, (GLsizeiptr) size,(GLvoid *)(data + offset),  (GLenum)  usage );
     
@@ -58,7 +72,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferData__II_3FII(
 	float* data = (float*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:179
+//@line:194
 
       glBufferData((GLenum)  target, (GLsizeiptr) size,(GLvoid *)(data + offset),  (GLenum)  usage );
     
@@ -70,7 +84,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferData__II_3III(
 	int* data = (int*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:191
+//@line:206
 
      glBufferData((GLenum)  target, (GLsizeiptr) size,(GLvoid *)(data + offset),  (GLenum)  usage );
    
@@ -82,7 +96,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferSubData__IIILj
 	unsigned char* data = (unsigned char*)(obj_data?env->GetDirectBufferAddress(obj_data):0);
 
 
-//@line:244
+//@line:259
 
       glBufferSubData((GLenum)  target,  (GLintptr) offset, (GLsizeiptr)size, (GLvoid *)(data + dataOffset) );
     
@@ -93,7 +107,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferSubData__III_3
 	char* data = (char*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:248
+//@line:263
 
       glBufferSubData((GLenum)  target,  (GLintptr) offset, (GLsizeiptr)size, (GLvoid *)(data + dataOffset) );
     
@@ -105,7 +119,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferSubData__III_3
 	short* data = (short*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:252
+//@line:267
 
     glBufferSubData((GLenum)  target,  (GLintptr) offset, (GLsizeiptr)size, (GLvoid *)(data + dataOffset) );
   
@@ -117,7 +131,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferSubData__III_3
 	int* data = (int*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:256
+//@line:271
 
     glBufferSubData((GLenum)  target,  (GLintptr) offset, (GLsizeiptr)size, (GLvoid *)(data + dataOffset) );
   
@@ -129,7 +143,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLBufferSubData__III_3
 	float* data = (float*)env->GetPrimitiveArrayCritical(obj_data, 0);
 
 
-//@line:260
+//@line:275
 
     glBufferSubData((GLenum)  target,  (GLintptr) offset, (GLsizeiptr)size, (GLvoid *)(data + dataOffset) );
   
@@ -141,7 +155,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLClipPlanef__I_3FI(JN
 	float* equation = (float*)env->GetPrimitiveArrayCritical(obj_equation, 0);
 
 
-//@line:283
+//@line:298
 
       glClipPlanef((GLenum)  plane,(GLfloat *) (equation + offset) );
     
@@ -153,7 +167,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLClipPlanef__ILjava_n
 	float* equation = (float*)(obj_equation?env->GetDirectBufferAddress(obj_equation):0);
 
 
-//@line:312
+//@line:327
 
         glClipPlanef((GLenum)  plane,(GLfloat *) (equation + offset));
     
@@ -164,7 +178,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLClipPlanex__I_3II(JN
 	int* equation = (int*)env->GetPrimitiveArrayCritical(obj_equation, 0);
 
 
-//@line:335
+//@line:350
 
         glClipPlanex((GLenum)  plane,  (GLfixed *) (equation + offset) );
     
@@ -176,7 +190,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLClipPlanex__ILjava_n
 	int* equation = (int*)(obj_equation?env->GetDirectBufferAddress(obj_equation):0);
 
 
-//@line:364
+//@line:379
 
             glClipPlanex((GLenum)  plane,  (GLfixed *)(equation + offset));
     
@@ -186,7 +200,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLClipPlanex__ILjava_n
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLColor4ub(JNIEnv* env, jclass clazz, jbyte red, jbyte green, jbyte blue, jbyte alpha) {
 
 
-//@line:386
+//@line:401
 
          glColor4ub((GLubyte)  red, (GLubyte)  green, (GLubyte)  blue, (GLubyte)  alpha );
     
@@ -196,9 +210,12 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLColor4ub(JNIEnv* env
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLColorPointer(JNIEnv* env, jclass clazz, jint size, jint type, jint stride, jint offset) {
 
 
-//@line:408
+//@line:425
 
-         glColorPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  (GLint)  offset );
+         glColorPointer((GLint)  size,  
+                        (GLenum)  type, 
+                        (GLsizei)  stride,  
+                        reinterpret_cast<GLvoid *>(offset));
     
 
 }
@@ -207,7 +224,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLDeleteBuffers__I_3II
 	int* buffers = (int*)env->GetPrimitiveArrayCritical(obj_buffers, 0);
 
 
-//@line:431
+//@line:451
 
         glDeleteBuffers((GLsizei)  n, (GLuint *)(buffers + offset) );
     
@@ -219,7 +236,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLDeleteBuffers__ILjav
 	int* buffers = (int*)(obj_buffers?env->GetDirectBufferAddress(obj_buffers):0);
 
 
-//@line:460
+//@line:480
 
         glDeleteBuffers((GLsizei)  n, (GLuint *)(buffers + offset));
     
@@ -229,7 +246,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLDeleteBuffers__ILjav
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLDrawElements(JNIEnv* env, jclass clazz, jint mode, jint count, jint type, jint offset) {
 
 
-//@line:482
+//@line:502
 
        glDrawElements((GLenum)  mode, (GLsizei)  count,  (GLenum)  type,  reinterpret_cast<GLvoid *>(offset) );
     
@@ -240,7 +257,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGenBuffers__I_3II(JN
 	int* buffers = (int*)env->GetPrimitiveArrayCritical(obj_buffers, 0);
 
 
-//@line:505
+//@line:525
 
         glGenBuffers((GLsizei)  n, (GLuint *)(buffers + offset) );
     
@@ -252,7 +269,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGenBuffers__ILjava_n
 	int* buffers = (int*)(obj_buffers?env->GetDirectBufferAddress(obj_buffers):0);
 
 
-//@line:534
+//@line:554
 
        glGenBuffers((GLsizei)  n, (GLuint *)(buffers + offset) );
     
@@ -263,7 +280,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetBooleanv__I_3ZI(J
 	bool* params = (bool*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:558
+//@line:578
 
        glGetBooleanv((GLenum)  pname, (GLboolean *)(params + offset));
     
@@ -275,7 +292,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetBooleanv__I_3II(J
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:562
+//@line:582
 
       glGetBooleanv((GLenum)  pname, (GLboolean *)(params + offset));
     
@@ -287,7 +304,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetBooleanv__ILjava_
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:592
+//@line:612
 
       glGetBooleanv((GLenum)  pname, (GLboolean *)(params + offset));
     
@@ -298,7 +315,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetBufferParameteriv
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:615
+//@line:635
 
        glGetBufferParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint *)(params + offset));
     
@@ -310,7 +327,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetBufferParameteriv
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:644
+//@line:664
 
        glGetBufferParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint *)(params + offset));
    
@@ -321,7 +338,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetClipPlanef__I_3FI
 	float* eqn = (float*)env->GetPrimitiveArrayCritical(obj_eqn, 0);
 
 
-//@line:667
+//@line:687
 
         glGetClipPlanef((GLenum)  pname, (GLfloat *)(eqn + offset));
     
@@ -333,7 +350,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetClipPlanef__ILjav
 	float* eqn = (float*)(obj_eqn?env->GetDirectBufferAddress(obj_eqn):0);
 
 
-//@line:696
+//@line:716
 
           glGetClipPlanef((GLenum)  pname, (GLfloat *)(eqn + offset));
    
@@ -344,7 +361,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetClipPlanex__I_3II
 	int* eqn = (int*)env->GetPrimitiveArrayCritical(obj_eqn, 0);
 
 
-//@line:719
+//@line:739
 
         glGetClipPlanex((GLenum)  pname, (GLfixed *)(eqn + offset));
     
@@ -356,7 +373,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetClipPlanex__ILjav
 	int* eqn = (int*)(obj_eqn?env->GetDirectBufferAddress(obj_eqn):0);
 
 
-//@line:748
+//@line:768
 
        glGetClipPlanex((GLenum)  pname, (GLfixed *)(eqn + offset));
      
@@ -367,7 +384,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetFixedv__I_3II(JNI
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:771
+//@line:791
 
          glGetFixedv((GLenum)  pname, (GLfixed *)(params + offset));
     
@@ -379,7 +396,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetFixedv__ILjava_ni
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:801
+//@line:821
 
        glGetFixedv((GLenum)  pname, (GLfixed *)(params + offset));
    
@@ -390,7 +407,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetFloatv__I_3FI(JNI
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:825
+//@line:845
 
        glGetFloatv((GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -402,7 +419,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetFloatv__ILjava_ni
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:855
+//@line:875
 
          glGetFloatv((GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -413,7 +430,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetLightfv__II_3FI(J
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:879
+//@line:899
 
         glGetLightfv((GLenum)  light,  (GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -425,7 +442,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetLightfv__IILjava_
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:909
+//@line:929
 
         glGetLightfv((GLenum)  light,  (GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -436,7 +453,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetLightxv__II_3II(J
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:933
+//@line:953
 
          glGetLightxv((GLenum)  light,  (GLenum)  pname, (GLfixed *)(params + offset));
     
@@ -448,7 +465,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetLightxv__IILjava_
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:963
+//@line:983
 
        glGetLightxv((GLenum)  light,  (GLenum)  pname, (GLfixed *)( params + offset));
     
@@ -459,7 +476,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetMaterialfv__II_3F
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:987
+//@line:1007
 
           glGetMaterialfv((GLenum)  face,  (GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -471,7 +488,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetMaterialfv__IILja
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1017
+//@line:1037
 
         glGetMaterialfv((GLenum)  face,  (GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -482,9 +499,9 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetMaterialxv__II_3I
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1041
+//@line:1061
 
-        glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed)(params + offset));
+        glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed *)(params + offset));
     
 	env->ReleasePrimitiveArrayCritical(obj_params, params, 0);
 
@@ -494,78 +511,78 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetMaterialxv__IILja
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1071
+//@line:1094
 
         glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed *)(params + offset));
     
 
 }
 
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvfv__II_3FI(JNIEnv* env, jclass clazz, jint env, jint pname, jfloatArray obj_params, jint offset) {
+JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvfv__II_3FI(JNIEnv* env, jclass clazz, jint envir, jint pname, jfloatArray obj_params, jint offset) {
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1095
+//@line:1118
 
-          glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)(params + offset)):
+          glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)(params + offset));
     
 	env->ReleasePrimitiveArrayCritical(obj_params, params, 0);
 
 }
 
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvfv__IILjava_nio_FloatBuffer_2I(JNIEnv* env, jclass clazz, jint env, jint pname, jobject obj_params, jint offset) {
+JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvfv__IILjava_nio_FloatBuffer_2I(JNIEnv* env, jclass clazz, jint envir, jint pname, jobject obj_params, jint offset) {
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1125
+//@line:1148
 
-        glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)(params + offset));
+        glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)(params + offset));
     
 
 }
 
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnviv__II_3II(JNIEnv* env, jclass clazz, jint env, jint pname, jintArray obj_params, jint offset) {
+JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnviv__II_3II(JNIEnv* env, jclass clazz, jint envir, jint pname, jintArray obj_params, jint offset) {
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1149
+//@line:1172
 
-        glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint *)(params + offset));
+        glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint *)(params + offset));
     
 	env->ReleasePrimitiveArrayCritical(obj_params, params, 0);
 
 }
 
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnviv__IILjava_nio_IntBuffer_2I(JNIEnv* env, jclass clazz, jint env, jint pname, jobject obj_params, jint offset) {
+JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnviv__IILjava_nio_IntBuffer_2I(JNIEnv* env, jclass clazz, jint envir, jint pname, jobject obj_params, jint offset) {
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1180
+//@line:1203
 
-       glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint *)(params + offset));
+       glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint *)(params + offset));
     
 
 }
 
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvxv__II_3II(JNIEnv* env, jclass clazz, jint env, jint pname, jintArray obj_params, jint offset) {
+JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvxv__II_3II(JNIEnv* env, jclass clazz, jint envir, jint pname, jintArray obj_params, jint offset) {
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1204
+//@line:1227
 
-        glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed *)(params + offset) );
+        glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed *)(params + offset) );
     
 	env->ReleasePrimitiveArrayCritical(obj_params, params, 0);
 
 }
 
-JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvxv__IILjava_nio_IntBuffer_2I(JNIEnv* env, jclass clazz, jint env, jint pname, jobject obj_params, jint offset) {
+JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexEnvxv__IILjava_nio_IntBuffer_2I(JNIEnv* env, jclass clazz, jint envir, jint pname, jobject obj_params, jint offset) {
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1235
+//@line:1258
 
-             glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed *)(params + offset) );
+             glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed *)(params + offset) );
     
 
 }
@@ -574,7 +591,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameterfv__I
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1258
+//@line:1281
 
          glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)(params + offset));
    
@@ -586,7 +603,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameterfv__I
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1288
+//@line:1311
 
         glGetTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -597,7 +614,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameteriv__I
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1311
+//@line:1334
 
       glGetTexParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint *)(params + offset));
     
@@ -609,7 +626,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameteriv__I
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1341
+//@line:1364
 
            glGetTexParameteriv((GLenum)  target,  (GLenum)  pname,  (GLint *)(params + offset));
     
@@ -620,7 +637,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameterxv__I
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1364
+//@line:1387
 
         glGetTexParameterxv((GLenum)  target,  (GLenum)  pname, (GLfixed *)(params + offset));
     
@@ -632,7 +649,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameterxv__I
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1394
+//@line:1417
 
             glGetTexParameterxv( (GLenum)target,
                     (GLenum)pname,
@@ -644,7 +661,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLGetTexParameterxv__I
 JNIEXPORT jboolean JNICALL Java_gles_internal_GLES11Pipeline_nGLIsBuffer(JNIEnv* env, jclass clazz, jint buffer) {
 
 
-//@line:1418
+//@line:1441
 
       GLboolean _returnValue = glIsBuffer( (GLuint)buffer);
       return (jboolean)_returnValue;
@@ -655,7 +672,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_GLES11Pipeline_nGLIsBuffer(JNIEnv*
 JNIEXPORT jboolean JNICALL Java_gles_internal_GLES11Pipeline_nGLIsEnabled(JNIEnv* env, jclass clazz, jint cap) {
 
 
-//@line:1441
+//@line:1464
 
        GLboolean _returnValue = glIsEnabled((GLenum)cap);
        return (jboolean)_returnValue;
@@ -666,7 +683,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_GLES11Pipeline_nGLIsEnabled(JNIEnv
 JNIEXPORT jboolean JNICALL Java_gles_internal_GLES11Pipeline_nGLIsTexture(JNIEnv* env, jclass clazz, jint texture) {
 
 
-//@line:1464
+//@line:1487
 
       GLboolean val = glIsTexture( (GLuint)texture);
       return (jboolean)val;
@@ -677,11 +694,11 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_GLES11Pipeline_nGLIsTexture(JNIEnv
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLNormalPointer(JNIEnv* env, jclass clazz, jint type, jint stride, jint offset) {
 
 
-//@line:1487
+//@line:1510
 
         glNormalPointer( (GLenum)  type, 
                          (GLsizei)  stride,  
-                         reinterpret_cast<GLvoid *> offset );
+                         reinterpret_cast<GLvoid *> (offset) );
     
 
 }
@@ -689,7 +706,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLNormalPointer(JNIEnv
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterf(JNIEnv* env, jclass clazz, jint pname, jfloat param) {
 
 
-//@line:1511
+//@line:1534
 
          glPointParameterf((GLenum)  pname, (GLfloat) param );
     
@@ -700,7 +717,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterfv__I_
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1534
+//@line:1557
 
          glPointParameterfv((GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -712,7 +729,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterfv__IL
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1564
+//@line:1587
 
          glPointParameterfv((GLenum)  pname, (GLfloat *)(params + offset));
     
@@ -722,7 +739,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterfv__IL
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterx(JNIEnv* env, jclass clazz, jint pname, jint param) {
 
 
-//@line:1586
+//@line:1609
 
          glPointParameterx((GLenum)  pname, (GLfixed)  param );
     
@@ -733,7 +750,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterxv__I_
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1608
+//@line:1631
 
          glPointParameterxv((GLenum)  pname,  (GLfixed *) (params + offset));
     
@@ -745,7 +762,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointParameterxv__IL
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1638
+//@line:1661
 
        glPointParameterxv((GLenum)  pname,  (GLfixed *) (params + offset));
     
@@ -756,7 +773,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointSizePointerOESB
 	unsigned char* pointer = (unsigned char*)(obj_pointer?env->GetDirectBufferAddress(obj_pointer):0);
 
 
-//@line:1667
+//@line:1690
 
        glPointSizePointerOES((GLenum)  type, (GLsizei)  stride,(GLvoid *)(pointer + offset) );
     
@@ -766,7 +783,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLPointSizePointerOESB
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexCoordPointer(JNIEnv* env, jclass clazz, jint size, jint type, jint stride, jint offset) {
 
 
-//@line:1689
+//@line:1712
 
          glTexCoordPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,   reinterpret_cast<GLvoid *>(offset) );
     
@@ -776,7 +793,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexCoordPointer(JNIE
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexEnvi(JNIEnv* env, jclass clazz, jint target, jint pname, jint param) {
 
 
-//@line:1711
+//@line:1734
 
        glTexEnvi((GLenum)  target,  (GLenum)  pname,  (GLint)  param );
     
@@ -787,7 +804,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexEnviv__II_3II(JNI
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1734
+//@line:1757
 
         glTexEnviv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset));
     
@@ -799,7 +816,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexEnviv__IILjava_ni
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1764
+//@line:1787
 
            glTexEnviv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset));
     
@@ -810,7 +827,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameterfv__II_3
 	float* params = (float*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1787
+//@line:1810
 
           glTexParameterfv((GLenum)  target,  (GLenum)  pname, (GLfloat *) (params + offset));
     
@@ -822,7 +839,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameterfv__IILj
 	float* params = (float*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1817
+//@line:1840
 
         glTexParameterfv((GLenum)  target,  (GLenum)  pname,(GLfloat *) (params + offset));
     
@@ -832,7 +849,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameterfv__IILj
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameteri(JNIEnv* env, jclass clazz, jint target, jint pname, jint param) {
 
 
-//@line:1839
+//@line:1862
 
          glTexParameteri((GLenum)  target,  (GLenum)  pname,  (GLint)  param );
     
@@ -843,7 +860,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameteriv__II_3
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1862
+//@line:1885
 
             glTexParameteriv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset));
     
@@ -855,7 +872,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameteriv__IILj
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1892
+//@line:1915
 
            glTexParameteriv((GLenum)  target,  (GLenum)  pname, (GLint *)(params + offset) );
     
@@ -866,7 +883,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameterxv__II_3
 	int* params = (int*)env->GetPrimitiveArrayCritical(obj_params, 0);
 
 
-//@line:1915
+//@line:1938
 
         glTexParameterxv((GLenum)  target,  (GLenum)  pname,  (GLfixed *)(params + offset));
     
@@ -878,7 +895,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameterxv__IILj
 	int* params = (int*)(obj_params?env->GetDirectBufferAddress(obj_params):0);
 
 
-//@line:1945
+//@line:1968
 
         glTexParameterxv((GLenum)  target,  (GLenum)  pname,  (GLfixed *) (params + offset) );
     
@@ -888,7 +905,7 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLTexParameterxv__IILj
 JNIEXPORT void JNICALL Java_gles_internal_GLES11Pipeline_nGLVertexPointer(JNIEnv* env, jclass clazz, jint size, jint type, jint stride, jint offset) {
 
 
-//@line:1967
+//@line:1990
 
          glVertexPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  reinterpret_cast<GLvoid *>(offset));
     
