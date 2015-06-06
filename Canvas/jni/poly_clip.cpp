@@ -31,7 +31,7 @@
 #include "string.h"
 
 #define LOG_TAG "StreetView"
-#include <utils/Log.h>
+//#include <utils/Log.h>
 
 namespace android {
 

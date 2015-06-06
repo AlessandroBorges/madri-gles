@@ -138,10 +138,10 @@ JNIEXPORT void JNICALL Java_gles_internal_GLES31Pipeline_nGLActiveShaderProgram
 /*
  * Class:     gles_internal_GLES31Pipeline
  * Method:    nGLCreateShaderProgramv
- * Signature: (II[Ljava/lang/String;)I
+ * Signature: (II[Ljava/lang/String;Z)I
  */
 JNIEXPORT jint JNICALL Java_gles_internal_GLES31Pipeline_nGLCreateShaderProgramv
-  (JNIEnv *, jclass, jint, jint, jobjectArray);
+  (JNIEnv *, jclass, jint, jint, jobjectArray, jboolean);
 
 /*
  * Class:     gles_internal_GLES31Pipeline

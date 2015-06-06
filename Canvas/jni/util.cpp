@@ -15,26 +15,26 @@
  */
 
 #include "jni.h"
-#include "JNIHelp.h"
+//#include "JNIHelp.h"
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <dlfcn.h>
+//#include <dlfcn.h>
 
 #include <GLES/gl.h>
 #include <ETC1/etc1.h>
 
-#include <SkBitmap.h>
+//#include <SkBitmap.h>
 
-#include "android_runtime/AndroidRuntime.h"
+//#include "android_runtime/AndroidRuntime.h"
 
 #undef LOG_TAG
 #define LOG_TAG "OpenGLUtil"
-#include <utils/Log.h>
-#include "utils/misc.h"
+//#include <utils/Log.h>
+//#include "utils/misc.h"
 
 #include "poly.h"
 
@@ -562,7 +562,7 @@ void setTracingLevel(JNIEnv *env, jclass clazz, jint level)
     setGLDebugLevel(level);
 }
 
-static int checkFormat(SkColorType colorType, int format, int type)
+static int checkFormat(int colorType, int format, int type)
 {
     switch(colorType) {
         case kIndex_8_SkColorType:
@@ -590,7 +590,7 @@ static int checkFormat(SkColorType colorType, int format, int type)
     return -1;
 }
 
-static int getInternalFormat(SkColorType colorType)
+static int getInternalFormat(int colorType)
 {
     switch(colorType) {
         case kAlpha_8_SkColorType:
@@ -608,7 +608,7 @@ static int getInternalFormat(SkColorType colorType)
     }
 }
 
-static int getType(SkColorType colorType)
+static int getType(int colorType)
 {
     switch(colorType) {
         case kAlpha_8_SkColorType:
@@ -626,21 +626,21 @@ static int getType(SkColorType colorType)
     }
 }
 
-static jint util_getInternalFormat(JNIEnv *env, jclass clazz,
-        jobject jbitmap)
-{
-    SkBitmap const * nativeBitmap =
-            (SkBitmap const *)env->GetLongField(jbitmap, nativeBitmapID);
-    return getInternalFormat(nativeBitmap->colorType());
-}
-
-static jint util_getType(JNIEnv *env, jclass clazz,
-        jobject jbitmap)
-{
-    SkBitmap const * nativeBitmap =
-            (SkBitmap const *)env->GetLongField(jbitmap, nativeBitmapID);
-    return getType(nativeBitmap->colorType());
-}
+//static jint util_getInternalFormat(JNIEnv *env, jclass clazz,
+//        jobject jbitmap)
+//{
+//    SkBitmap const * nativeBitmap =
+//            (SkBitmap const *)env->GetLongField(jbitmap, nativeBitmapID);
+//    return getInternalFormat(nativeBitmap->colorType());
+//}
+//
+//static jint util_getType(JNIEnv *env, jclass clazz,
+//        jobject jbitmap)
+//{
+//    SkBitmap const * nativeBitmap =
+//            (SkBitmap const *)env->GetLongField(jbitmap, nativeBitmapID);
+//    return getType(nativeBitmap->colorType());
+//}
 
 static jint util_texImage2D(JNIEnv *env, jclass clazz,
         jint target, jint level, jint internalformat,
@@ -731,48 +731,48 @@ static jfieldID elementSizeShiftID;
 
 /* Cache method IDs each time the class is loaded. */
 
-static void
-nativeClassInitBuffer(JNIEnv *_env)
-{
-    jclass nioAccessClassLocal = _env->FindClass("java/nio/NIOAccess");
-    nioAccessClass = (jclass) _env->NewGlobalRef(nioAccessClassLocal);
+//static void
+//nativeClassInitBuffer(JNIEnv *_env)
+//{
+//    jclass nioAccessClassLocal = _env->FindClass("java/nio/NIOAccess");
+//    nioAccessClass = (jclass) _env->NewGlobalRef(nioAccessClassLocal);
+//
+//    jclass bufferClassLocal = _env->FindClass("java/nio/Buffer");
+//    bufferClass = (jclass) _env->NewGlobalRef(bufferClassLocal);
+//
+//    getBasePointerID = _env->GetStaticMethodID(nioAccessClass,
+//            "getBasePointer", "(Ljava/nio/Buffer;)J");
+//    getBaseArrayID = _env->GetStaticMethodID(nioAccessClass,
+//            "getBaseArray", "(Ljava/nio/Buffer;)Ljava/lang/Object;");
+//    getBaseArrayOffsetID = _env->GetStaticMethodID(nioAccessClass,
+//            "getBaseArrayOffset", "(Ljava/nio/Buffer;)I");
+//    positionID = _env->GetFieldID(bufferClass, "position", "I");
+//    limitID = _env->GetFieldID(bufferClass, "limit", "I");
+//    elementSizeShiftID =
+//        _env->GetFieldID(bufferClass, "_elementSizeShift", "I");
+//}
 
-    jclass bufferClassLocal = _env->FindClass("java/nio/Buffer");
-    bufferClass = (jclass) _env->NewGlobalRef(bufferClassLocal);
-
-    getBasePointerID = _env->GetStaticMethodID(nioAccessClass,
-            "getBasePointer", "(Ljava/nio/Buffer;)J");
-    getBaseArrayID = _env->GetStaticMethodID(nioAccessClass,
-            "getBaseArray", "(Ljava/nio/Buffer;)Ljava/lang/Object;");
-    getBaseArrayOffsetID = _env->GetStaticMethodID(nioAccessClass,
-            "getBaseArrayOffset", "(Ljava/nio/Buffer;)I");
-    positionID = _env->GetFieldID(bufferClass, "position", "I");
-    limitID = _env->GetFieldID(bufferClass, "limit", "I");
-    elementSizeShiftID =
-        _env->GetFieldID(bufferClass, "_elementSizeShift", "I");
-}
-
-static void *
-getPointer(JNIEnv *_env, jobject buffer, jint *remaining)
-{
-    jint position;
-    jint limit;
-    jint elementSizeShift;
-    jlong pointer;
-    jint offset;
-    void *data;
-
-    position = _env->GetIntField(buffer, positionID);
-    limit = _env->GetIntField(buffer, limitID);
-    elementSizeShift = _env->GetIntField(buffer, elementSizeShiftID);
-    *remaining = (limit - position) << elementSizeShift;
-    pointer = _env->CallStaticLongMethod(nioAccessClass,
-            getBasePointerID, buffer);
-    if (pointer != 0L) {
-        return reinterpret_cast<void *>(pointer);
-    }
-    return NULL;
-}
+//static void *
+//getPointer(JNIEnv *_env, jobject buffer, jint *remaining)
+//{
+//    jint position;
+//    jint limit;
+//    jint elementSizeShift;
+//    jlong pointer;
+//    jint offset;
+//    void *data;
+//
+//    position = _env->GetIntField(buffer, positionID);
+//    limit = _env->GetIntField(buffer, limitID);
+//    elementSizeShift = _env->GetIntField(buffer, elementSizeShiftID);
+//    *remaining = (limit - position) << elementSizeShift;
+//    pointer = _env->CallStaticLongMethod(nioAccessClass,
+//            getBasePointerID, buffer);
+//    if (pointer != 0L) {
+//        return reinterpret_cast<void *>(pointer);
+//    }
+//    return NULL;
+//}
 
 class BufferHelper {
 public:
@@ -1011,65 +1011,66 @@ static jint etc1_getHeight(JNIEnv *env, jclass clazz,
  * JNI registration
  */
 
-static JNINativeMethod gMatrixMethods[] = {
-    { "multiplyMM", "([FI[FI[FI)V", (void*)util_multiplyMM },
-    { "multiplyMV", "([FI[FI[FI)V", (void*)util_multiplyMV },
-};
+//static JNINativeMethod gMatrixMethods[] = {
+//    { "multiplyMM", "([FI[FI[FI)V", (void*)util_multiplyMM },
+//    { "multiplyMV", "([FI[FI[FI)V", (void*)util_multiplyMV },
+//};
+//
+//static JNINativeMethod gVisibilityMethods[] = {
+//    { "computeBoundingSphere", "([FII[FI)V", (void*)util_computeBoundingSphere },
+//    { "frustumCullSpheres", "([FI[FII[III)I", (void*)util_frustumCullSpheres },
+//    { "visibilityTest", "([FI[FI[CII)I", (void*)util_visibilityTest },
+//};
+//
+//static JNINativeMethod gUtilsMethods[] = {
+//    {"nativeClassInit", "()V",                          (void*)nativeUtilsClassInit },
+//    { "native_getInternalFormat", "(Landroid/graphics/Bitmap;)I", (void*) util_getInternalFormat },
+//    { "native_getType", "(Landroid/graphics/Bitmap;)I", (void*) util_getType },
+//    { "native_texImage2D", "(IIILandroid/graphics/Bitmap;II)I", (void*)util_texImage2D },
+//    { "native_texSubImage2D", "(IIIILandroid/graphics/Bitmap;II)I", (void*)util_texSubImage2D },
+//    { "setTracingLevel", "(I)V",                        (void*)setTracingLevel },
+//};
+//
+//static JNINativeMethod gEtc1Methods[] = {
+//    { "encodeBlock", "(Ljava/nio/Buffer;ILjava/nio/Buffer;)V", (void*) etc1_encodeBlock },
+//    { "decodeBlock", "(Ljava/nio/Buffer;Ljava/nio/Buffer;)V", (void*) etc1_decodeBlock },
+//    { "getEncodedDataSize", "(II)I", (void*) etc1_getEncodedDataSize },
+//    { "encodeImage", "(Ljava/nio/Buffer;IIIILjava/nio/Buffer;)V", (void*) etc1_encodeImage },
+//    { "decodeImage", "(Ljava/nio/Buffer;Ljava/nio/Buffer;IIII)V", (void*) etc1_decodeImage },
+//    { "formatHeader", "(Ljava/nio/Buffer;II)V", (void*) etc1_formatHeader },
+//    { "isValid", "(Ljava/nio/Buffer;)Z", (void*) etc1_isValid },
+//    { "getWidth", "(Ljava/nio/Buffer;)I", (void*) etc1_getWidth },
+//    { "getHeight", "(Ljava/nio/Buffer;)I", (void*) etc1_getHeight },
+//};
+//
+//typedef struct _ClassRegistrationInfo {
+//    const char* classPath;
+//    JNINativeMethod* methods;
+//    size_t methodCount;
+//} ClassRegistrationInfo;
 
-static JNINativeMethod gVisibilityMethods[] = {
-    { "computeBoundingSphere", "([FII[FI)V", (void*)util_computeBoundingSphere },
-    { "frustumCullSpheres", "([FI[FII[III)I", (void*)util_frustumCullSpheres },
-    { "visibilityTest", "([FI[FI[CII)I", (void*)util_visibilityTest },
-};
+//
+//static ClassRegistrationInfo gClasses[] = {
+//    {"android/opengl/Matrix", gMatrixMethods, NELEM(gMatrixMethods)},
+//    {"android/opengl/Visibility", gVisibilityMethods, NELEM(gVisibilityMethods)},
+//    {"android/opengl/GLUtils", gUtilsMethods, NELEM(gUtilsMethods)},
+//    {"android/opengl/ETC1", gEtc1Methods, NELEM(gEtc1Methods)},
+//};
 
-static JNINativeMethod gUtilsMethods[] = {
-    {"nativeClassInit", "()V",                          (void*)nativeUtilsClassInit },
-    { "native_getInternalFormat", "(Landroid/graphics/Bitmap;)I", (void*) util_getInternalFormat },
-    { "native_getType", "(Landroid/graphics/Bitmap;)I", (void*) util_getType },
-    { "native_texImage2D", "(IIILandroid/graphics/Bitmap;II)I", (void*)util_texImage2D },
-    { "native_texSubImage2D", "(IIIILandroid/graphics/Bitmap;II)I", (void*)util_texSubImage2D },
-    { "setTracingLevel", "(I)V",                        (void*)setTracingLevel },
-};
-
-static JNINativeMethod gEtc1Methods[] = {
-    { "encodeBlock", "(Ljava/nio/Buffer;ILjava/nio/Buffer;)V", (void*) etc1_encodeBlock },
-    { "decodeBlock", "(Ljava/nio/Buffer;Ljava/nio/Buffer;)V", (void*) etc1_decodeBlock },
-    { "getEncodedDataSize", "(II)I", (void*) etc1_getEncodedDataSize },
-    { "encodeImage", "(Ljava/nio/Buffer;IIIILjava/nio/Buffer;)V", (void*) etc1_encodeImage },
-    { "decodeImage", "(Ljava/nio/Buffer;Ljava/nio/Buffer;IIII)V", (void*) etc1_decodeImage },
-    { "formatHeader", "(Ljava/nio/Buffer;II)V", (void*) etc1_formatHeader },
-    { "isValid", "(Ljava/nio/Buffer;)Z", (void*) etc1_isValid },
-    { "getWidth", "(Ljava/nio/Buffer;)I", (void*) etc1_getWidth },
-    { "getHeight", "(Ljava/nio/Buffer;)I", (void*) etc1_getHeight },
-};
-
-typedef struct _ClassRegistrationInfo {
-    const char* classPath;
-    JNINativeMethod* methods;
-    size_t methodCount;
-} ClassRegistrationInfo;
-
-static ClassRegistrationInfo gClasses[] = {
-    {"android/opengl/Matrix", gMatrixMethods, NELEM(gMatrixMethods)},
-    {"android/opengl/Visibility", gVisibilityMethods, NELEM(gVisibilityMethods)},
-    {"android/opengl/GLUtils", gUtilsMethods, NELEM(gUtilsMethods)},
-    {"android/opengl/ETC1", gEtc1Methods, NELEM(gEtc1Methods)},
-};
-
-int register_android_opengl_classes(JNIEnv* env)
-{
-    nativeClassInitBuffer(env);
-    int result = 0;
-    for (int i = 0; i < NELEM(gClasses); i++) {
-        ClassRegistrationInfo* cri = &gClasses[i];
-        result = AndroidRuntime::registerNativeMethods(env,
-                cri->classPath, cri->methods, cri->methodCount);
-        if (result < 0) {
-            ALOGE("Failed to register %s: %d", cri->classPath, result);
-            break;
-        }
-    }
-    return result;
-}
+//int register_android_opengl_classes(JNIEnv* env)
+//{
+//    nativeClassInitBuffer(env);
+//    int result = 0;
+//    for (int i = 0; i < NELEM(gClasses); i++) {
+//        ClassRegistrationInfo* cri = &gClasses[i];
+//        result = AndroidRuntime::registerNativeMethods(env,
+//                cri->classPath, cri->methods, cri->methodCount);
+//        if (result < 0) {
+//            ALOGE("Failed to register %s: %d", cri->classPath, result);
+//            break;
+//        }
+//    }
+//    return result;
+//}
 
 } // namespace android
