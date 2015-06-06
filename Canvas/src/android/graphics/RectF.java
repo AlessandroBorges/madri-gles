@@ -42,6 +42,18 @@ public class RectF
      * Create a new empty RectF. All coordinates are initialized to 0.
      */
     public RectF() {}
+    
+    
+    /**
+     * creates a Rect with left-top at (0,0) and
+     * right-botton at (width, height)
+     * 
+     * @param width - right side
+     * @param height - Botton side
+     */
+    public RectF(int width, int height){
+        this(0, 0, width, height);
+    }
 
     /**
      * Create a new rectangle with the specified coordinates. Note: no range

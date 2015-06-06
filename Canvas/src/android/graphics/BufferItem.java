@@ -10,7 +10,7 @@ package android.graphics;
 public class BufferItem {
 
     public int mBuf;
-    public Object mGraphicBuffer;
+    public GraphicBuffer mGraphicBuffer;
     public Rect mCrop;
     public int mTransform;
     public int mScalingMode;

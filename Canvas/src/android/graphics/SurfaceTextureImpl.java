@@ -36,7 +36,7 @@ public class SurfaceTextureImpl {
 
     private static final EGLImageKHR EGL_NO_IMAGE_KHR = null;
 
-    static boolean USE_FENCE_SYNC = false;
+    static boolean USE_FENCE_SYNC = true;
     /**
      onFrameAvailable() is called each time an additional frame becomes
      available for consumption. This means that frames that are queued
@@ -51,6 +51,8 @@ public class SurfaceTextureImpl {
          virtual void onFrameAvailable() = 0;
 }
     */
+
+    private Object mCurrentBuffer;
     
     
     
@@ -85,9 +87,10 @@ public class SurfaceTextureImpl {
                            boolean allowSynchronousMode, // = true,
                            int texTarget, //   GLenum texTarget = GL_TEXTURE_EXTERNAL_OES, 
                            boolean useFenceSync, // = true 
-                           Vector bufferQueue) //const sp<BufferQueue> &bufferQueue = 0)
+                           BufferQueue bufferQueue) //const sp<BufferQueue> &bufferQueue = 0)
              {
-    
+        mBufferQueue = bufferQueue;
+        
         mCurrentTransform = 0;
         mCurrentTimestamp = 0;
         mFilteringEnabled = true;
@@ -142,9 +145,10 @@ public class SurfaceTextureImpl {
         }
         mEglDisplay = dpy;
         mEglContext = ctx;
-        BufferItem item;
+        BufferItem item = new BufferItem();
         // In asynchronous mode the list is guaranteed to be one buffer
         // deep, while in synchronous mode we use the oldest buffer.
+        // TODO fix this C'ish way to copy data
         err = mBufferQueue.acquireBuffer(item);
         if (err == NO_ERROR) {
             int buf = item.mBuf;
@@ -156,12 +160,12 @@ public class SurfaceTextureImpl {
                     eglDestroyImageKHR(dpy, mEGLSlots[buf].mEglImage);
                     mEGLSlots[buf].mEglImage = EGL_NO_IMAGE_KHR;
                 }
-                mEGLSlots[buf].mGraphicBuffer = (Vector) item.mGraphicBuffer;
+                mEGLSlots[buf].mGraphicBuffer = item.mGraphicBuffer;
             }
             // we call the rejecter here, in case the caller has a reason to
             // not accept this buffer. this is used by SurfaceFlinger to
             // reject buffers which have the wrong size
-            if (rejecter == null
+            if (rejecter != null
                     && rejecter.reject(mEGLSlots[buf].mGraphicBuffer, item)) {
                 mBufferQueue.releaseBuffer(buf, dpy, mEGLSlots[buf].mFence);
                 mEGLSlots[buf].mFence = EGL_NO_SYNC_KHR;
@@ -213,21 +217,18 @@ public class SurfaceTextureImpl {
                 mEGLSlots[buf].mFence = EGL_NO_SYNC_KHR;
                 return err;
             }
+            
             {
-
+                
                 ST_LOGV("updateTexImage: (slot=%d buf=%p) -> (slot=%d buf=%p)",
                         mCurrentTexture,
-                        mCurrentTextureBuf != null ? mCurrentTextureBuf.handle
-                                : 0,
+                        mCurrentTextureBuf != null ? mCurrentTextureBuf.hashCode() : 0,
                         buf,
-                        item.mGraphicBuffer != null ? item.mGraphicBuffer.handle
-                                : 0);
+                        item.mGraphicBuffer != null ? item.mGraphicBuffer.hashCode() : 0);
             }
             // release old buffer
             if (mCurrentTexture != BufferQueue.INVALID_BUFFER_SLOT) {
-                int status = mBufferQueue.releaseBuffer(mCurrentTexture,
-                        dpy,
-                        mEGLSlots[mCurrentTexture].mFence);
+                int status = mBufferQueue.releaseBuffer(mCurrentTexture,  dpy, mEGLSlots[mCurrentTexture].mFence);
 
                 mEGLSlots[mCurrentTexture].mFence = EGL_NO_SYNC_KHR;
                 if (status == BufferQueue.STALE_BUFFER_SLOT) {
@@ -261,8 +262,7 @@ public class SurfaceTextureImpl {
 
     }
 
-    private void
-            glEGLImageTargetTexture2DOES(int mTexTarget2, EGLImageKHR image) {
+    private void glEGLImageTargetTexture2DOES(int mTexTarget2, EGLImageKHR image) {
         // TODO Auto-generated method stub
 
     }
@@ -286,25 +286,28 @@ public class SurfaceTextureImpl {
         return false;
     }
 
-    // getTransformMatrix retrieves the 4x4 texture coordinate transform matrix
-    // associated with the texture image set by the most recent call to
-    // updateTexImage.
-    //
-    // This transform matrix maps 2D homogeneous texture coordinates of the form
-    // (s, t, 0, 1) with s and t in the inclusive range [0, 1] to the texture
-    // coordinate that should be used to sample that location from the texture.
-    // Sampling the texture outside of the range of this transform is undefined.
-    //
-    // This transform is necessary to compensate for transforms that the stream
-    // content producer may implicitly apply to the content. By forcing users of
-    // a SurfaceTexture to apply this transform we avoid performing an extra
-    // copy of the data that would be needed to hide the transform from the
-    // user.
-    //
-    // The matrix is stored in column-major order so that it may be passed
-    // directly to OpenGL ES via the glLoadMatrixf or glUniformMatrix4fv
-    // functions.
-
+    /**
+     * <pre>
+     *      getTransformMatrix retrieves the 4x4 texture coordinate transform matrix
+     *      associated with the texture image set by the most recent call to
+     *      updateTexImage.
+     *     
+     *      This transform matrix maps 2D homogeneous texture coordinates of the form
+     *      (s, t, 0, 1) with s and t in the inclusive range [0, 1] to the texture
+     *      coordinate that should be used to sample that location from the texture.
+     *      Sampling the texture outside of the range of this transform is undefined.
+     *     
+     *      This transform is necessary to compensate for transforms that the stream
+     *      content producer may implicitly apply to the content. By forcing users of
+     *      a SurfaceTexture to apply this transform we avoid performing an extra
+     *      copy of the data that would be needed to hide the transform from the
+     *      user.
+     *     
+     *      The matrix is stored in column-major order so that it may be passed
+     *      directly to OpenGL ES via the glLoadMatrixf or glUniformMatrix4fv
+     *      functions.
+     * </pre>
+     */
     void getTransformMatrix(float mtx[]) {
         return;
     }
@@ -484,10 +487,12 @@ public class SurfaceTextureImpl {
     }
 
     // createImage creates a new EGLImage from a GraphicBuffer.
-    EGLImageKHR createImage(EGLDisplay dpy, Object grahphicBuffer)// const
+    EGLImageKHR createImage(EGLDisplay dpy, GraphicBuffer grahphicBuffer)// const
                                                                   // sp<GraphicBuffer>&
                                                                   // graphicBuffer);
     {
+        
+      //  EGL14.eglcr
         return null;
 
     }
@@ -523,44 +528,59 @@ public class SurfaceTextureImpl {
     // mCurrentTextureBuf is the graphic buffer of the current texture. It's
     // possible that this buffer is not associated with any buffer slot, so we
     // must track it separately in order to support the getCurrentBuffer method.
-    BufferItem /* sp<GraphicBuffer> */mCurrentTextureBuf;
+    GraphicBuffer /* sp<GraphicBuffer> */ mCurrentTextureBuf;
+    
     // mCurrentCrop is the crop rectangle that applies to the current texture.
     // It gets set each time updateTexImage is called.
     Rect mCurrentCrop;
+    
     // mCurrentTransform is the transform identifier for the current texture. It
     // gets set each time updateTexImage is called.
     int mCurrentTransform;
+    
     // mCurrentScalingMode is the scaling mode for the current texture. It gets
     // set to each time updateTexImage is called.
     int mCurrentScalingMode;
+    
     // mCurrentTransformMatrix is the transform matrix for the current texture.
     // It gets computed by computeTransformMatrix each time updateTexImage is
     // called.
     float[] mCurrentTransformMatrix = new float[16];
+    
     // mCurrentTimestamp is the timestamp for the current texture. It
     // gets set each time updateTexImage is called.
     long mCurrentTimestamp;
+    
     int mDefaultWidth, mDefaultHeight;
+    
     // mFilteringEnabled indicates whether the transform matrix is computed for
     // use with bilinear filtering. It defaults to true and is changed by
     // setFilteringEnabled().
     boolean mFilteringEnabled;
+    
     // mTexName is the name of the OpenGL texture to which streamed images will
     // be bound when updateTexImage is called. It is set at construction time
     // and can be changed with a call to attachToContext.
     int mTexName;
-    // mUseFenceSync indicates whether creation of the EGL_KHR_fence_sync
-    // extension should be used to prevent buffers from being dequeued before
-    // it's safe for them to be written. It gets set at construction time and
-    // never changes.
+    
+    /**
+     * <pre>
+     * mUseFenceSync indicates whether creation of the EGL_KHR_fence_sync
+     * extension should be used to prevent buffers from being dequeued before
+     * it's safe for them to be written. It gets set at construction time and
+     * never changes.
+     **/
     boolean mUseFenceSync;
-    // mTexTarget is the GL texture target with which the GL texture object is
-    // associated. It is set in the constructor and never changed. It is
-    // almost always GL_TEXTURE_EXTERNAL_OES except for one use case in Android
-    // Browser. In that case it is set to GL_TEXTURE_2D to allow
-    // glCopyTexSubImage to read from the texture. This is a hack to work
-    // around a GL driver limitation on the number of FBO attachments, which the
-    // browser's tile cache exceeds.
+    /**
+     * mTexTarget is the GL texture target with which the GL texture object is
+     * associated. It is set in the constructor and never changed. It is
+     * almost always GL_TEXTURE_EXTERNAL_OES except for one use case in Android
+     * Browser. In that case it is set to GL_TEXTURE_2D to allow
+     * glCopyTexSubImage to read from the texture. This is a hack to work
+     * around a GL driver limitation on the number of FBO attachments, which the
+     *  browser's tile cache exceeds.
+     * 
+     */
     int mTexTarget;
 
     // EGLSlot contains the information and object references that
@@ -571,13 +591,15 @@ public class SurfaceTextureImpl {
             mFence = EGL_NO_SYNC_KHR;
         }
 
-        Vector mGraphicBuffer; // sp<GraphicBuffer> mGraphicBuffer;
+        GraphicBuffer mGraphicBuffer; // sp<GraphicBuffer> mGraphicBuffer;
         // mEglImage is the EGLImage created from mGraphicBuffer.
         EGLImageKHR mEglImage;
+        
         // mFence is the EGL sync object that must signal before the buffer
         // associated with this buffer slot may be dequeued. It is initialized
         // to EGL_NO_SYNC_KHR when the buffer is created and (optionally, based
         // on a compile-time option) set to a new sync object in updateTexImage.
+
         EGLSyncKHR mFence;
     };
 
@@ -622,11 +644,12 @@ public class SurfaceTextureImpl {
     // that no buffer is bound to the texture. A call to setBufferCount will
     // reset mCurrentTexture to INVALID_BUFFER_SLOT.
     int mCurrentTexture;
-    // The SurfaceTexture has-a BufferQueue and is responsible for creating this
-    // object
-    // if none is supplied
-   
-    BufferQueue mBufferQueue;
+    /**
+     * 
+     *  The SurfaceTexture has-a BufferQueue and is responsible for creating this
+     *  object  if none is supplied
+     */
+    private BufferQueue mBufferQueue;
     
     // mAttached indicates whether the SurfaceTexture is currently attached to
     // an OpenGL ES context. For legacy reasons, this is initialized to true,
@@ -699,8 +722,13 @@ public class SurfaceTextureImpl {
         out[15] = a[3] * b[12] + a[7] * b[13] + a[11] * b[14] + a[15] * b[15];
     }
 
-    void ST_LOGV(String x) {
+    void ST_LOGV(String x) {        
         Log.v("[SurfaceTexture] " + mName, x);
+    }
+    
+    void ST_LOGV(String x, Object... args) {
+        String s = String.format(x, args);
+        Log.v("[SurfaceTexture] " + mName, s);
     }
 
     void ST_LOGD(String x) {

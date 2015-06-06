@@ -18,12 +18,10 @@ package android.graphics;
 
 import java.lang.ref.WeakReference;
 
-
-
 //import android.annotation.Nullable;
-//import android.os.Handler;
-//import android.os.Looper;
-//import android.os.Message;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.Surface;
 
 /**
@@ -400,6 +398,7 @@ public class SurfaceTexture {
                                    boolean singleBufferMode, 
                                    WeakReference<SurfaceTexture> weakSelf)
                                    throws SurfaceTexture.OutOfResourcesException;
+    
     private native void nativeFinalize();
     private native void nativeGetTransformMatrix(float[] mtx);
     private native long nativeGetTimestamp();

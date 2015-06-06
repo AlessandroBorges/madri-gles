@@ -38,7 +38,20 @@ public class Rect
     /**
      * Create a new empty Rect. All coordinates are initialized to 0.
      */
-    public Rect() {}
+    public Rect() {
+        left = top = right = bottom = 0;
+    }
+    
+    /**
+     * creates a Rect with left-top at (0,0) and
+     * right-botton at (width, height)
+     * 
+     * @param width - right side
+     * @param height - Botton side
+     */
+    public Rect(int width, int height){
+        this(0, 0, width, height);
+    }
 
     /**
      * Create a new rectangle with the specified coordinates. Note: no range

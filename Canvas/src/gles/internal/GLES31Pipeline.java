@@ -589,53 +589,74 @@ public class GLES31Pipeline
      * <pre>
      * Delegate Method generated from GLES31.glCreateShaderProgramv([int type, String[] strings]);
      * 
-     *  C function (GLuint) glCreateShaderProgramv((GLenum) type, (GLsizei) count, const  (GLchar *) const *strings )
-
+     *  C function (GLuint) glCreateShaderProgramv((GLenum) type, 
+     *                                             (GLsizei) count,
+     *                                             const char **strings);
      **/
     public int glCreateShaderProgramv(int type, String[] strings) {
         if(null == strings){
             throw new IllegalArgumentException("strings == null");
         }
-        return GLES31Pipeline.nGLCreateShaderProgramv(type, strings.length, strings);
+        for (int i = 0; i < strings.length; i++) {
+            if(null == strings[i])
+                throw new IllegalArgumentException("strings["+i+"] == null.");            
+        }
+        if(strings.length > 128){
+            throw new IllegalArgumentException("strings.length > 128");
+        }
+        boolean debug = false;
+        return GLES31Pipeline.nGLCreateShaderProgramv(type, strings.length, strings,debug);
     }
 
     /**
      * <pre>
      * Native method generated from GLES31.glCreateShaderProgramv([int type, String[] strings]);
      * 
-     *  C function (GLuint) glCreateShaderProgramv((GLenum) type, (GLsizei) count, const  (GLchar *) const *strings )
-
+     *  C function (GLuint) glCreateShaderProgramv((GLenum) type, 
+     *                                             (GLsizei) count, 
+     *                                             const char **strings);
      **/
-    private static native int nGLCreateShaderProgramv(int type, int stringCount, String[] stringArray);/*
+    static native int nGLCreateShaderProgramv(int type, 
+                                              int stringCount, 
+                                              String[] stringArray, 
+                                              boolean debug);/*
+    int MAX = 128;
+    const char *strings[MAX];
+    jstring *jstringVec = new jstring[stringCount];
+    jint result = 0;
+   
+    // get the strings from stringArray[] 
+    for (int i=0; i<stringCount; i++) {
+         jstring string = (jstring)env->GetObjectArrayElement(stringArray, i);
+         const char *rawString = env->GetStringUTFChars(string, 0);             
+         jstringVec[i] = string;
+         strings[i] = rawString;           
+    }
     
-                      
-            jstring[] jstringVec(stringCount);
-            std::vector<char *>  charVec(stringCount); 
-             
-            for (int i=0; i<stringCount; i++) {
-                 jstring string = (jstring)env->GetObjectArrayElement(stringArray, i);
-                 const char *rawString = env->GetStringUTFChars(string, 0);             
-                 jstringVec[i] = string;
-                 charVec[i] = rawString;           
-            }
-            ////////////////////////////////////////
-             
-             char * strings[] = &charVec[0];
-             
-             (GLint) result = glCreateShaderProgramv((GLenum) type, (GLsizei) stringCount,  strings );
-            
-            //////////////////////////////////////
-            // Done
-            for (int i=0; i<stringCount; i++) {
-               jstring string = jstringVec[i];
-               const char *rawString = charVec[i];
-               
-                env->ReleaseStringUTFChars(string, rawString);
-            }
-            ///////////////////////////////////////////
-             
-             return result;
-    */
+    //nullify non used strings[] elements
+    for(int i=stringCount; i<MAX; i++){
+         strings[i] = NULL;  
+    }
+    
+    // GL call     
+    result = (jint) glCreateShaderProgramv((GLenum) type, (GLsizei) stringCount,  strings );
+    
+    if(debug){
+        for (int i=0; i<stringCount; i++) {
+              printf("[%d] - (%s) \n", i, strings[i]);
+        }
+    }
+    
+    // release resources
+    for (int i=0; i<stringCount; i++) {
+       jstring string = jstringVec[i];
+       const char *rawString = strings[i];       
+       env->ReleaseStringUTFChars(string, rawString);
+    }    
+    delete[] jstringVec;
+    
+    return result;
+*/
 
     /**
      * <pre>
@@ -1278,7 +1299,10 @@ public class GLES31Pipeline
 
      **/
     private static native void nGLProgramUniform4iv(int program, int location, int count, int[] value, int offset);/*
-        glProgramUniform4iv((GLuint) program, (GLint) location, (GLsizei) count, (GLint *)(value + offset) )
+        glProgramUniform4iv((GLuint) program, 
+                            (GLint) location, 
+                            (GLsizei) count, 
+                            (GLint *)(value + offset) );
     */
 
     /**
@@ -2718,6 +2742,7 @@ public class GLES31Pipeline
        // based on code from 
       // http://people.freedesktop.org/~idr/OpenGL_tutorials/05-attributes.html
         GLint  max_length = 0;
+        GLsizei length = 0;
             
        //get max length of infoLog       
        glGetProgramPipelineiv( (GLuint) program,
@@ -2729,10 +2754,10 @@ public class GLES31Pipeline
        
        glGetProgramPipelineInfoLog( (GLuint) program, 
                                     (GLsizei) max_length, 
-                                    (GLsizei) &max_length,  // not used
+                                    (GLsizei *) &length,  // not used
                                     (GLchar *)  &infoLog[0]);
                                     
-       jstring result = env->NewStringUTF(&name[0]);
+       jstring result = env->NewStringUTF(&infoLog[0]);
        return result;
     */
 
@@ -3055,7 +3080,10 @@ public class GLES31Pipeline
      * <pre>
      * Native method generated from GLES31.glGetTexLevelParameterfv([int target, int level, int pname, float[] params, int offset]);
      * 
-     *  C function void glGetTexLevelParameterfv((GLenum) target, (GLint) level, (GLenum) pname,  (GLfloat *) params )
+     *  C function void glGetTexLevelParameterfv((GLenum) target, 
+     *                                           (GLint) level, 
+     *                                           (GLenum) pname,  
+     *                                           (GLfloat *) params )
 
      **/
     private static native void nGLGetTexLevelParameterfv(int target, 
@@ -3065,7 +3093,7 @@ public class GLES31Pipeline
         glGetTexLevelParameterfv((GLenum) target, 
                                  (GLint) level,
                                  (GLenum) pname,
-                                 (GLint *) (params + offset));                                                  
+                                 (GLfloat *) (params + offset));                                                  
         */
 
     /**
@@ -3094,8 +3122,8 @@ public class GLES31Pipeline
         glGetTexLevelParameterfv((GLenum) target, 
                                  (GLint) level,
                                  (GLenum) pname,
-                                 (GLint *) (params + offset));                                                  
-                                                         */                                                         
+                                 (GLfloat *) (params + offset));                                                  
+    */                                                         
                                                          
                                                        
     
@@ -3170,7 +3198,10 @@ public class GLES31Pipeline
 
      **/
     private static native void nGLVertexAttribIFormat(int attribindex, int size, int type, int relativeoffset);/*
-           glVertexAttribIFormat((GLuint) attribindex, (GLint) size, (GLenum) type, (GLuint) relativeoffset )
+           glVertexAttribIFormat((GLuint) attribindex, 
+                                 (GLint) size, 
+                                 (GLenum) type, 
+                                 (GLuint) relativeoffset );
     */
 
     /**

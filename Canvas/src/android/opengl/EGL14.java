@@ -31,12 +31,7 @@ import gles.view.SurfaceView;
  *
  */
 public class EGL14 {
-    //@off
-    /*JNI  
-        #include <stdio>
-        #include <egl.h> 
-      */
-
+    
     public static final int EGL_DEFAULT_DISPLAY            = 0;
     public static EGLContext EGL_NO_CONTEXT                = null;
     public static EGLDisplay EGL_NO_DISPLAY                = null;

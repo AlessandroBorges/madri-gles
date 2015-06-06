@@ -20,8 +20,6 @@ package gles.internal;
 
 
 import android.graphics.SurfaceTexture;
-
-
 import android.opengl.*;
 import gles.view.Surface;
 import gles.view.SurfaceView;
@@ -38,9 +36,11 @@ public class EGL14Pipeline {
      */
     //@off
     /*JNI
+        #define EGL_EGLEXT_PROTOTYPES   
         #include <EGL/egl.h>
         #include <EGL/eglext.h> 
         #include <KHR/khrplatform.h>
+        
         #include <stdio.h>
         #include <stdlib.h>
           
@@ -1560,6 +1560,7 @@ public class EGL14Pipeline {
          #endif                                                                        
       */
     
+   
     
     /////////////////////////////////////////////////////////////////////////////////
     /// Error Checking
@@ -1569,13 +1570,25 @@ public class EGL14Pipeline {
     private static String ERROR_EGLSURFACE_NULL = "EGLSurface == null";
 
     /**
+     * Check EGLObjectHandle
+     * @param dpy EGLDisplay instance
+     * @return EGLDisplay handle
+     *
+     */
+    private static long check(EGLObjectHandle dpy){
+        if (null==dpy) return 0L;
+        return dpy.getNativeHandle();
+    }
+     
+    /**
      * Check EGLDisplay
      * @param dpy EGLDisplay instance
      * @return EGLDisplay handle
      * @throws IllegalArgumentException if display is null
      */
     private static long check(EGLDisplay dpy){
-        if (null==dpy) throw new IllegalArgumentException(ERROR_EGLDISPLAY_NULL);
+        if (null==dpy) return 0L; 
+            //throw new IllegalArgumentException(ERROR_EGLDISPLAY_NULL);
         return dpy.getNativeHandle();
     }
     
@@ -1586,7 +1599,8 @@ public class EGL14Pipeline {
      * @throws IllegalArgumentException if config is null
      */
     private static long check(EGLConfig config){
-        if (null==config) throw new IllegalArgumentException("EGLConfig == null");
+        if (null==config) return 0L; 
+            //throw new IllegalArgumentException("EGLConfig == null");
         return config.getNativeHandle();
     }
     
@@ -1597,7 +1611,8 @@ public class EGL14Pipeline {
      * @throws IllegalArgumentException if surface is null
      */
     private static long check(EGLSurface surface){
-        if (null==surface) throw new IllegalArgumentException("EGLSurface == null");
+        if (null==surface) return 0L; 
+            //throw new IllegalArgumentException("EGLSurface == null");
         return surface.getNativeHandle();
     }
 
@@ -1608,7 +1623,8 @@ public class EGL14Pipeline {
      * @throws  IllegalArgumentException if ctx is null
      */
     private static long check(EGLContext ctx){
-        if (null==ctx) throw new IllegalArgumentException("EGLContext == null");
+        if (null==ctx) return 0L; 
+            //throw new IllegalArgumentException("EGLContext == null");
         return ctx.getNativeHandle();
     }
     

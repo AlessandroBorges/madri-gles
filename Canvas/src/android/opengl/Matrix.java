@@ -124,6 +124,12 @@ public class Matrix {
         // matrixStack.push(mLocal);
     }
     
+    /**
+     * get index of 4x4 column major matrix. 
+     * @param i - row
+     * @param j - column
+     * @return index in a 4x4 matrix stored as float[] 
+     */
     private static final int idx(int i, int j){
         return i*4 + j;
     }
@@ -270,8 +276,8 @@ public class Matrix {
      * @param dstOffset - dst offset
      */
     private static void  mx4transform(float x, float y, float z, float w,  
-                                     float[] m, int mOffset,
-                                     float[] dst, int dstOffset) {
+                                      float[] m, int mOffset,
+                                      float[] dst, int dstOffset) {
         
         int off = dstOffset;
         dst[dstOffset++] = m[off + 0] * x + m[off + 4] * y + m[off +  8] * z + m[off + 12] * w;
