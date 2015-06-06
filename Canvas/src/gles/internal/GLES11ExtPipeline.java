@@ -21,6 +21,22 @@ import java.nio.ShortBuffer;
 public class GLES11ExtPipeline 	
 	implements Pipeline {
 	
+    /** Includes **/
+    //@off
+    /*JNI
+      #define GL_GLEXT_PROTOTYPES
+      #include <GLES/gl.h>
+      #include <GLES/glext.h>
+      #include <GLES/egl.h>
+          
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     */
 	
 	/**
 	 * static & native initialization
@@ -157,7 +173,7 @@ public class GLES11ExtPipeline
 
      * */
     private static native void nGLDrawTexsOES(short x, short y, short z, short width, short height);/*
-       glDrawTexsOES(GLshort x, (GLshort) y, (GLshort) z, (GLshort) width, (GLshort) height );
+       glDrawTexsOES((GLshort) x, (GLshort) y, (GLshort) z, (GLshort) width, (GLshort) height );
     */
 
     /**
@@ -260,7 +276,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDrawTexivOES([int[] coords, int offset]);
      * 
-     *  C function void glDrawTexivOES(const (GLint *)coords )
+     *  C function void glDrawTexivOES(   (GLint *)coords )
 
      * */
     public void glDrawTexivOES(int[] coords, int offset) {
@@ -272,7 +288,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDrawTexivOES([int[] coords, int offset]);
      * 
-     *  C function void glDrawTexivOES(const (GLint *)coords )
+     *  C function void glDrawTexivOES(   (GLint *)coords )
 
      * */
     private static native void nGLDrawTexivOES(int[] coords, int offset);/*
@@ -283,7 +299,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDrawTexivOES([java.nio.IntBuffer coords]);
      * 
-     *  C function void glDrawTexivOES(const (GLint *)coords )
+     *  C function void glDrawTexivOES(   (GLint *)coords )
 
      * */
     public void glDrawTexivOES(java.nio.IntBuffer coords) {
@@ -301,7 +317,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDrawTexivOES([java.nio.IntBuffer coords]);
      * 
-     *  C function void glDrawTexivOES(const (GLint *)coords )
+     *  C function void glDrawTexivOES(   (GLint *)coords )
 
      * */
     private static native void nGLDrawTexivOES(java.nio.IntBuffer coords, int offset);/*
@@ -312,7 +328,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDrawTexxvOES([int[] coords, int offset]);
      * 
-     *  C function void glDrawTexxvOES(const (GLfixed *)coords )
+     *  C function void glDrawTexxvOES(   (GLfixed *)coords )
 
      * */
     public void glDrawTexxvOES(int[] coords, int offset) {
@@ -324,7 +340,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDrawTexxvOES([int[] coords, int offset]);
      * 
-     *  C function void glDrawTexxvOES(const (GLfixed *)coords )
+     *  C function void glDrawTexxvOES(   (GLfixed *)coords )
 
      * */
     private static native void nGLDrawTexxvOES(int[] coords, int offset);/*
@@ -335,7 +351,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDrawTexxvOES([java.nio.IntBuffer coords]);
      * 
-     *  C function void glDrawTexxvOES(const (GLfixed *)coords )
+     *  C function void glDrawTexxvOES(   (GLfixed *)coords )
 
      * */
     public void glDrawTexxvOES(java.nio.IntBuffer coords) {
@@ -354,7 +370,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDrawTexxvOES([java.nio.IntBuffer coords]);
      * 
-     *  C function void glDrawTexxvOES(const (GLfixed *)coords )
+     *  C function void glDrawTexxvOES(   (GLfixed *)coords )
 
      * */
     private static native void nGLDrawTexxvOES(java.nio.IntBuffer coords, int offset);/*
@@ -387,7 +403,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDrawTexfvOES([float[] coords, int offset]);
      * 
-     *  C function void glDrawTexfvOES(const (GLfloat *)coords )
+     *  C function void glDrawTexfvOES(   (GLfloat *)coords )
 
      * */
     public void glDrawTexfvOES(float[] coords, int offset) {
@@ -399,7 +415,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDrawTexfvOES([float[] coords, int offset]);
      * 
-     *  C function void glDrawTexfvOES(const (GLfloat *)coords )
+     *  C function void glDrawTexfvOES(   (GLfloat *)coords )
 
      * */
     private static native void nGLDrawTexfvOES(float[] coords, int offset);/*
@@ -410,7 +426,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDrawTexfvOES([java.nio.FloatBuffer coords]);
      * 
-     *  C function void glDrawTexfvOES(const (GLfloat *)coords )
+     *  C function void glDrawTexfvOES(   (GLfloat *)coords )
 
      * */
     public void glDrawTexfvOES(java.nio.FloatBuffer coords) {
@@ -429,7 +445,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDrawTexfvOES([java.nio.FloatBuffer coords]);
      * 
-     *  C function void glDrawTexfvOES(const (GLfloat *)coords )
+     *  C function void glDrawTexfvOES(   (GLfloat *)coords )
 
      * */
     private static native void nGLDrawTexfvOES(java.nio.FloatBuffer coords, int offset);/*
@@ -635,7 +651,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glClipPlanexOES([int plane, int[] equation, int offset]);
      * 
-     *  C function void glClipPlanexOES((GLenum)  plane, const (GLfixed *)equation )
+     *  C function void glClipPlanexOES((GLenum)  plane,    (GLfixed *)equation )
 
      * */
     public void glClipPlanexOES(int plane, int[] equation, int offset) {
@@ -647,7 +663,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glClipPlanexOES([int plane, int[] equation, int offset]);
      * 
-     *  C function void glClipPlanexOES((GLenum)  plane, const (GLfixed *)equation )
+     *  C function void glClipPlanexOES((GLenum)  plane,    (GLfixed *)equation )
      * */
     private static native void nGLClipPlanexOES(int plane, int[] equation, int offset);/*
      glClipPlanexOES((GLenum)  plane, (GLfixed *)(equation + offset) );
@@ -657,7 +673,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glClipPlanexOES([int plane, java.nio.IntBuffer equation]);
      * 
-     *  C function void glClipPlanexOES((GLenum)  plane, const (GLfixed *)equation )
+     *  C function void glClipPlanexOES((GLenum)  plane,    (GLfixed *)equation )
      * */
     public void glClipPlanexOES(int plane, java.nio.IntBuffer equation) {
         checkBuffer(equation, 4, "equation");
@@ -675,7 +691,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glClipPlanexOES([int plane, java.nio.IntBuffer equation]);
      * 
-     *  C function void glClipPlanexOES((GLenum)  plane, const (GLfixed *)equation )
+     *  C function void glClipPlanexOES((GLenum)  plane,    (GLfixed *)equation )
      * */
     private static native void nGLClipPlanexOES(int plane, java.nio.IntBuffer equation, int offset);/*
          glClipPlanexOES((GLenum)  plane, (GLfixed *)(equation + offset) );
@@ -751,7 +767,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glFogxvOES([int pname, int[] params, int offset]);
      * 
-     *  C function void glFogxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glFogxvOES((GLenum)  pname,    (GLfixed *)params )
 
      * */
     public void glFogxvOES(int pname, int[] params, int offset) {
@@ -763,18 +779,18 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glFogxvOES([int pname, int[] params, int offset]);
      * 
-     *  C function void glFogxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glFogxvOES((GLenum)  pname,    (GLfixed *)params )
 
      * */
     private static native void nGLFogxvOES(int pname, int[] params, int offset);/*
-       glFogxvOES((GLenum)  pname, const (GLfixed *)(params + offset) );
+       glFogxvOES((GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
     /**
      * <pre>
      * Delegate Method generated from GLES11Ext.glFogxvOES([int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glFogxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glFogxvOES((GLenum)  pname,    (GLfixed *)params )
 
      * */
     public void glFogxvOES(int pname, java.nio.IntBuffer params) {
@@ -793,33 +809,44 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glFogxvOES([int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glFogxvOES((GLenum)  pname, const (GLfixed *)params )
-
+     *  C function void glFogxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLFogxvOES(int pname, java.nio.IntBuffer params, int offset);/*
-         glFogxvOES((GLenum)  pname, const (GLfixed *)(params + offset) );
+         glFogxvOES((GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glFrustumxOES([int left, int right, int bottom, int top, int zNear, int zFar]);
+     * Delegate Method generated from GLES11Ext.glFrustumxOES(
+     * [int left, int right, int bottom, int top, int zNear, int zFar]);
      * 
-     *  C function void glFrustumxOES ((GLfixed) left,(GLfixed) right,(GLfixed) bottom,(GLfixed) top,(GLfixed) zNear,(GLfixed) zFar )
-
+     *  C function void glFrustumxOES((GLfixed) left, (GLfixed) right,
+     *                                (GLfixed) bottom,(GLfixed) top,
+     *                                (GLfixed) zNear,(GLfixed) zFar );
      * */
-    public void glFrustumxOES(int left, int right, int bottom, int top, int zNear, int zFar) {
-        GLES11ExtPipeline.nGLFrustumxOES(left, right, bottom, top, zNear, zFar);
+    public void glFrustumxOES(int left, int right, 
+                              int bottom, int top, 
+                              int zNear, int zFar) {
+        GLES11ExtPipeline.nGLFrustumxOES(left, right, 
+                                         bottom, top, 
+                                         zNear, zFar);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glFrustumxOES([int left, int right, int bottom, int top, int zNear, int zFar]);
+     * Native method generated from GLES11Ext.glFrustumxOES(
+     * [int left, int right, int bottom, int top, int zNear, int zFar]);
      * 
-     *  C function void glFrustumxOES ((GLfixed) left,(GLfixed) right,(GLfixed) bottom,(GLfixed) top,(GLfixed) zNear,(GLfixed) zFar )
-
+     *  C function void glFrustumxOES ((GLfixed) left,(GLfixed) right,
+     *                                 (GLfixed) bottom,(GLfixed) top,
+     *                                 (GLfixed) zNear,(GLfixed) zFar );
      * */
-    private static native void nGLFrustumxOES(int left, int right, int bottom, int top, int zNear, int zFar);/*
-       glFrustumxOES ((GLfixed) left,(GLfixed) right,(GLfixed) bottom,(GLfixed) top,(GLfixed) zNear,(GLfixed) zFar );
+    private static native void nGLFrustumxOES(int left, int right, 
+                                              int bottom, int top, 
+                                              int zNear, int zFar);/*
+       glFrustumxOES ((GLfixed) left,(GLfixed) right,
+                      (GLfixed) bottom,(GLfixed) top,
+                      (GLfixed) zNear,(GLfixed) zFar );
     */
     
     /**
@@ -1036,55 +1063,55 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetTexEnvxvOES([int env, int pname, int[] params, int offset]);
+     * Delegate Method generated from GLES11Ext.glGetTexEnvxvOES([int envir, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)params )
+     *  C function void glGetTexEnvxvOES((GLenum)  envir, (GLenum)  pname, (GLfixed *)params )
 
      * */
-    public void glGetTexEnvxvOES(int env, int pname, int[] params, int offset) {
+    public void glGetTexEnvxvOES(int envir, int pname, int[] params, int offset) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkArray(params, offset, needed, PARAMS);
-        GLES11ExtPipeline.nGLGetTexEnvxvOES(env, pname, params, offset);
+        GLES11ExtPipeline.nGLGetTexEnvxvOES(envir, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glGetTexEnvxvOES([int env, int pname, int[] params, int offset]);
+     * Native method generated from GLES11Ext.glGetTexEnvxvOES([int envir, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)params )
+     *  C function void glGetTexEnvxvOES((GLenum)  envir, (GLenum)  pname, (GLfixed *)params )
 
      * */
-    private static native void nGLGetTexEnvxvOES(int env, int pname, int[] params, int offset);/*
-      glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)(params + offset) );
+    private static native void nGLGetTexEnvxvOES(int envir, int pname, int[] params, int offset);/*
+      glGetTexEnvxvOES((GLenum)  envir, (GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetTexEnvxvOES([int env, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11Ext.glGetTexEnvxvOES([int envir, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)params )
+     *  C function void glGetTexEnvxvOES((GLenum)  envir, (GLenum)  pname, (GLfixed *)params )
      * */
-    public void glGetTexEnvxvOES(int env, int pname, java.nio.IntBuffer params) {
+    public void glGetTexEnvxvOES(int envir, int pname, java.nio.IntBuffer params) {
        int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkBuffer(params, needed, "params");
         int offset = getOffset(params);
         if(params.isDirect()){
-            nGLGetTexEnvxvOES(env, pname, params, offset);
+            nGLGetTexEnvxvOES(envir, pname, params, offset);
         }else{
             int[] array = params.array();
-            nGLGetTexEnvxvOES(env, pname, array, offset);
+            nGLGetTexEnvxvOES(envir, pname, array, offset);
         }    
-        //GLES11ExtPipeline.nGLGetTexEnvxvOES(env, pname, params);
+        //GLES11ExtPipeline.nGLGetTexEnvxvOES(envir, pname, params);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glGetTexEnvxvOES([int env, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11Ext.glGetTexEnvxvOES([int envir, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)params )
+     *  C function void glGetTexEnvxvOES((GLenum)  envir, (GLenum)  pname, (GLfixed *)params )
      * */
-    private static native void nGLGetTexEnvxvOES(int env, int pname, java.nio.IntBuffer params, int offset);/*
-       glGetTexEnvxvOES((GLenum)  env, (GLenum)  pname, (GLfixed *)(params + offset) );
+    private static native void nGLGetTexEnvxvOES(int envir, int pname, java.nio.IntBuffer params, int offset);/*
+       glGetTexEnvxvOES((GLenum)  envir, (GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
     /**
@@ -1104,8 +1131,8 @@ public class GLES11ExtPipeline
      *  C function void glGetTexParameterxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)params )
      * */
     private static native void nGLGetTexParameterxvOES(int target, int pname, int[] params, int offset);/*
-    glGetTexParameterxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)(params + offset));
- */
+       glGetTexParameterxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)(params + offset));
+     */
 
     /**
      * <pre>
@@ -1159,7 +1186,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glLightModelxvOES([int pname, int[] params, int offset]);
      * 
-     *  C function void glLightModelxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightModelxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     public void glLightModelxvOES(int pname, int[] params, int offset) {
         int needed = getNeededLight(pname);
@@ -1171,30 +1198,31 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glLightModelxvOES([int pname, int[] params, int offset]);
      * 
-     *  C function void glLightModelxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightModelxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLLightModelxvOES(int pname, int[] params, int offset);/*
-       glLightModelxvOES((GLenum)  pname, const (GLfixed *)(params + offset));
+       glLightModelxvOES((GLenum)  pname,    (GLfixed *)(params + offset));
     */
 
     /**
      * <pre>
      * Delegate Method generated from GLES11Ext.glLightModelxvOES([int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glLightModelxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightModelxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     public void glLightModelxvOES(int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLLightModelxvOES(pname, params);
+        int offset = getOffset(params);
+        GLES11ExtPipeline.nGLLightModelxvOES(pname, params, offset);
     }
 
     /**
      * <pre>
      * Native method generated from GLES11Ext.glLightModelxvOES([int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glLightModelxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightModelxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
-    private static native void nGLLightModelxvOES(int pname, java.nio.IntBuffer params);/*
-       glLightModelxvOES((GLenum)  pname, const (GLfixed *)(params + offset) );
+    private static native void nGLLightModelxvOES(int pname, java.nio.IntBuffer params, int offset);/*
+       glLightModelxvOES((GLenum)  pname,    (GLfixed *)(params + offset) );
     */
 
     /**
@@ -1221,7 +1249,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glLightxvOES([int light, int pname, int[] params, int offset]);
      * 
-     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glLightxvOES(int light, int pname, int[] params, int offset) {
         GLES11ExtPipeline.nGLLightxvOES(light, pname, params, offset);
@@ -1231,7 +1259,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glLightxvOES([int light, int pname, int[] params, int offset]);
      * 
-     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLLightxvOES(int light, int pname, int[] params, int offset);/*
         glLightxvOES((GLenum)  light, (GLenum)  pname, (GLfixed *)(params + offset));
@@ -1241,7 +1269,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glLightxvOES([int light, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glLightxvOES(int light, int pname, java.nio.IntBuffer params) {
         
@@ -1260,7 +1288,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glLightxvOES([int light, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glLightxvOES((GLenum)  light, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLLightxvOES(int light, int pname, java.nio.IntBuffer params, int offset);/*
        glLightxvOES((GLenum)  light, (GLenum)  pname, (GLfixed *)(params + offset));
@@ -1290,7 +1318,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glLoadMatrixxOES([int[] m, int offset]);
      * 
-     *  C function void glLoadMatrixxOES(const (GLfixed *)m )
+     *  C function void glLoadMatrixxOES(   (GLfixed *)m )
      * */
     public void glLoadMatrixxOES(int[] m, int offset) {
         checkArray(m, offset, 16, "m");
@@ -1301,17 +1329,17 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glLoadMatrixxOES([int[] m, int offset]);
      * 
-     *  C function void glLoadMatrixxOES(const (GLfixed *)m )
+     *  C function void glLoadMatrixxOES(   (GLfixed *)m )
      * */
     private static native void nGLLoadMatrixxOES(int[] m, int offset);/*
-         glLoadMatrixxOES(const (GLfixed *)(m + offset));
+         glLoadMatrixxOES(   (GLfixed *)(m + offset));
     */
 
     /**
      * <pre>
      * Delegate Method generated from GLES11Ext.glLoadMatrixxOES([java.nio.IntBuffer m]);
      * 
-     *  C function void glLoadMatrixxOES(const (GLfixed *)m )
+     *  C function void glLoadMatrixxOES(   (GLfixed *)m )
      * */
     public void glLoadMatrixxOES(java.nio.IntBuffer m) {
         
@@ -1330,10 +1358,10 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glLoadMatrixxOES([java.nio.IntBuffer m]);
      * 
-     *  C function void glLoadMatrixxOES(const (GLfixed *)m )
+     *  C function void glLoadMatrixxOES(   (GLfixed *)m )
      * */
     private static native void nGLLoadMatrixxOES(java.nio.IntBuffer m, int offset);/*
-       glLoadMatrixxOES(const (GLfixed *)(m + offset));
+       glLoadMatrixxOES(   (GLfixed *)(m + offset));
     */
 
     /**
@@ -1360,7 +1388,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glMaterialxvOES([int face, int pname, int[] params, int offset]);
      * 
-     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glMaterialxvOES(int face, int pname, int[] params, int offset) {
         int needed = getNeededMaterial(pname);
@@ -1372,7 +1400,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glMaterialxvOES([int face, int pname, int[] params, int offset]);
      * 
-     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLMaterialxvOES(int face, int pname, int[] params, int offset);/*
        glMaterialxvOES((GLenum)  face, (GLenum)  pname, (GLfixed *)(params + offset));
@@ -1382,7 +1410,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glMaterialxvOES([int face, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glMaterialxvOES(int face, int pname, java.nio.IntBuffer params) {
         int needed = getNeededMaterial(pname);
@@ -1401,7 +1429,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glMaterialxvOES([int face, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glMaterialxvOES((GLenum)  face, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLMaterialxvOES(int face, int pname, java.nio.IntBuffer params, int offset);/*
       glMaterialxvOES((GLenum)  face, (GLenum)  pname, (GLfixed *)(params + offset));
@@ -1411,7 +1439,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glMultMatrixxOES([int[] m, int offset]);
      * 
-     *  C function void glMultMatrixxOES(const (GLfixed *)m )
+     *  C function void glMultMatrixxOES(   (GLfixed *)m )
      * */
     public void glMultMatrixxOES(int[] m, int offset) {
         checkArray(m, offset, 16, "m");
@@ -1422,17 +1450,17 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glMultMatrixxOES([int[] m, int offset]);
      * 
-     *  C function void glMultMatrixxOES(const (GLfixed *)m )
+     *  C function void glMultMatrixxOES(   (GLfixed *)m )
      * */
     private static native void nGLMultMatrixxOES(int[] m, int offset);/*
-    glMultMatrixxOES(const (GLfixed *)(m + offset));    
+    glMultMatrixxOES(   (GLfixed *)(m + offset));    
  */
 
     /**
      * <pre>
      * Delegate Method generated from GLES11Ext.glMultMatrixxOES([java.nio.IntBuffer m]);
      * 
-     *  C function void glMultMatrixxOES(const (GLfixed *)m )
+     *  C function void glMultMatrixxOES(   (GLfixed *)m )
      * */
     public void glMultMatrixxOES(java.nio.IntBuffer m) {
         checkBuffer(m, 16, "m");
@@ -1450,10 +1478,10 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glMultMatrixxOES([java.nio.IntBuffer m]);
      * 
-     *  C function void glMultMatrixxOES(const (GLfixed *)m )
+     *  C function void glMultMatrixxOES(   (GLfixed *)m )
      * */
     private static native void nGLMultMatrixxOES(java.nio.IntBuffer m, int offset);/*
-       glMultMatrixxOES(const (GLfixed *)(m + offset));    
+       glMultMatrixxOES(   (GLfixed *)(m + offset));    
     */
 
     /**
@@ -1550,7 +1578,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glPointParameterxvOES([int pname, int[] params, int offset]);
      * 
-     *  C function void glPointParameterxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glPointParameterxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     public void glPointParameterxvOES(int pname, int[] params, int offset) {
         GLES11ExtPipeline.nGLPointParameterxvOES(pname, params, offset);
@@ -1560,7 +1588,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glPointParameterxvOES([int pname, int[] params, int offset]);
      * 
-     *  C function void glPointParameterxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glPointParameterxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLPointParameterxvOES(int pname, int[] params, int offset);/*
          glPointParameterxvOES((GLenum)  pname, (GLfixed *)(params + offset) );
@@ -1571,10 +1599,11 @@ public class GLES11ExtPipeline
      * Delegate Method generated from GLES11Ext.glPointParameterxvOES(
      * [int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glPointParameterxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glPointParameterxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     public void glPointParameterxvOES(int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLPointParameterxvOES(pname, params);
+        int offset = getOffset(params);
+        GLES11ExtPipeline.nGLPointParameterxvOES(pname, params, offset);
     }
 
     /**
@@ -1582,7 +1611,7 @@ public class GLES11ExtPipeline
      * Native method generated from GLES11Ext.glPointParameterxvOES(
      * [int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glPointParameterxvOES((GLenum)  pname, const (GLfixed *)params )
+     *  C function void glPointParameterxvOES((GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLPointParameterxvOES(int pname, 
                                                       java.nio.IntBuffer params, int offset);/*
@@ -1713,7 +1742,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexEnvxvOES([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glTexEnvxvOES(int target, int pname, int[] params, int offset) {
         GLES11ExtPipeline.nGLTexEnvxvOES(target, pname, params, offset);
@@ -1723,7 +1752,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glTexEnvxvOES([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLTexEnvxvOES(int target, int pname, int[] params, int offset);/*
         glTexEnvxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)(params + offset));
@@ -1733,19 +1762,23 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexEnvxvOES([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glTexEnvxvOES(int target, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLTexEnvxvOES(target, pname, params);
+        int offset = getOffset(params);
+        GLES11ExtPipeline.nGLTexEnvxvOES(target, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glTexEnvxvOES([int target, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11Ext.glTexEnvxvOES(
+     * [int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexEnvxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
-    private static native void nGLTexEnvxvOES(int target, int pname, java.nio.IntBuffer params, int offset);/*
+    private static native void nGLTexEnvxvOES(int target, 
+                                              int pname, 
+                                              java.nio.IntBuffer params, int offset);/*
        glTexEnvxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)(params + offset));
     */
 
@@ -1773,7 +1806,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexParameterxvOES([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glTexParameterxvOES(int target, int pname, int[] params, int offset) {
         GLES11ExtPipeline.nGLTexParameterxvOES(target, pname, params, offset);
@@ -1783,7 +1816,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glTexParameterxvOES([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLTexParameterxvOES(int target, int pname, int[] params, int offset);/*
     glTexParameterxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)(params + offset) );
@@ -1793,17 +1826,18 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexParameterxvOES([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     public void glTexParameterxvOES(int target, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLTexParameterxvOES(target, pname, params);
+        int offset = getOffset(params);
+        GLES11ExtPipeline.nGLTexParameterxvOES(target, pname, params, offset);
     }
 
     /**
      * <pre>
      * Native method generated from GLES11Ext.glTexParameterxvOES([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexParameterxvOES((GLenum)  target, (GLenum)  pname,    (GLfixed *)params )
      * */
     private static native void nGLTexParameterxvOES(int target, int pname, java.nio.IntBuffer params, int offset);/*
        glTexParameterxvOES((GLenum)  target, (GLenum)  pname, (GLfixed *)(params + offset) );
@@ -1873,7 +1907,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDeleteRenderbuffersOES([int n, int[] renderbuffers, int offset]);
      * 
-     *  C function void glDeleteRenderbuffersOES((GLsizei) n, const (GLuint)  *renderbuffers )
+     *  C function void glDeleteRenderbuffersOES((GLsizei) n,    (GLuint)  *renderbuffers )
      * */
     public void glDeleteRenderbuffersOES(int n, int[] renderbuffers, int offset) {
         GLES11ExtPipeline.nGLDeleteRenderbuffersOES(n, renderbuffers, offset);
@@ -1883,7 +1917,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDeleteRenderbuffersOES([int n, int[] renderbuffers, int offset]);
      * 
-     *  C function void glDeleteRenderbuffersOES((GLsizei) n, const (GLuint)  *renderbuffers )
+     *  C function void glDeleteRenderbuffersOES((GLsizei) n,    (GLuint)  *renderbuffers )
      * */
     private static native void nGLDeleteRenderbuffersOES(int n, int[] renderbuffers, int offset);/*
          glDeleteRenderbuffersOES((GLsizei) n, (GLuint  *)(renderbuffers + offset));
@@ -1893,25 +1927,30 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDeleteRenderbuffersOES([int n, java.nio.IntBuffer renderbuffers]);
      * 
-     *  C function void glDeleteRenderbuffersOES((GLsizei) n, const (GLuint)  *renderbuffers )
+     *  C function void glDeleteRenderbuffersOES((GLsizei) n,    (GLuint)  *renderbuffers )
      * */
     public void glDeleteRenderbuffersOES(int n, java.nio.IntBuffer renderbuffers) {
-        GLES11ExtPipeline.nGLDeleteRenderbuffersOES(n, renderbuffers);
+        int offset = getOffset(renderbuffers);
+        GLES11ExtPipeline.nGLDeleteRenderbuffersOES(n, renderbuffers, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glDeleteRenderbuffersOES([int n, java.nio.IntBuffer renderbuffers]);
+     * Native method generated from GLES11Ext.glDeleteRenderbuffersOES(
+     * [int n, java.nio.IntBuffer renderbuffers]);
      * 
-     *  C function void glDeleteRenderbuffersOES((GLsizei) n, const (GLuint)  *renderbuffers )
+     *  C function void glDeleteRenderbuffersOES((GLsizei) n,    (GLuint)  *renderbuffers )
      * */
-    private static native void nGLDeleteRenderbuffersOES(int n, java.nio.IntBuffer renderbuffers, int offset);/*
+    private static native void nGLDeleteRenderbuffersOES(int n, 
+                                                         java.nio.IntBuffer renderbuffers, 
+                                                         int offset);/*
        glDeleteRenderbuffersOES((GLsizei) n, (GLuint  *)(renderbuffers + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGenRenderbuffersOES([int n, int[] renderbuffers, int offset]);
+     * Delegate Method generated from GLES11Ext.glGenRenderbuffersOES(
+     * [int n, int[] renderbuffers, int offset]);
      * 
      *  C function void glGenRenderbuffersOES((GLsizei) n, (GLuint)  *renderbuffers )
      * */
@@ -1921,7 +1960,8 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glGenRenderbuffersOES([int n, int[] renderbuffers, int offset]);
+     * Native method generated from GLES11Ext.glGenRenderbuffersOES(
+     * [int n, int[] renderbuffers, int offset]);
      * 
      *  C function void glGenRenderbuffersOES((GLsizei) n, (GLuint)  *renderbuffers )
      * */
@@ -1931,29 +1971,36 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGenRenderbuffersOES([int n, java.nio.IntBuffer renderbuffers]);
+     * Delegate Method generated from GLES11Ext.glGenRenderbuffersOES(
+     * [int n, java.nio.IntBuffer renderbuffers]);
      * 
      *  C function void glGenRenderbuffersOES((GLsizei) n, (GLuint)  *renderbuffers )
      * */
     public void glGenRenderbuffersOES(int n, java.nio.IntBuffer renderbuffers) {
-        GLES11ExtPipeline.nGLGenRenderbuffersOES(n, renderbuffers);
+        int offset = getOffset(renderbuffers);
+        GLES11ExtPipeline.nGLGenRenderbuffersOES(n, renderbuffers, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glGenRenderbuffersOES([int n, java.nio.IntBuffer renderbuffers]);
+     * Native method generated from GLES11Ext.glGenRenderbuffersOES(
+     * [int n, java.nio.IntBuffer renderbuffers]);
      * 
      *  C function void glGenRenderbuffersOES((GLsizei) n, (GLuint)  *renderbuffers )
      * */
-    private static native void nGLGenRenderbuffersOES(int n, java.nio.IntBuffer renderbuffers, int offset);/*
+    private static native void nGLGenRenderbuffersOES(int n, 
+                                                      java.nio.IntBuffer renderbuffers, int offset);/*
        glGenRenderbuffersOES((GLsizei) n, (GLuint *)(renderbuffers + offset) );
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glRenderbufferStorageOES([int target, int internalformat, int width, int height]);
+     * Delegate Method generated from GLES11Ext.glRenderbufferStorageOES(
+     * [int target, int internalformat, int width, int height]);
      * 
-     *  C function void glRenderbufferStorageOES((GLenum)  target, (GLenum)  internalformat, (GLsizei) width, (GLsizei) height )
+     *  C function void glRenderbufferStorageOES((GLenum)  target, 
+     *                                           (GLenum)  internalformat, 
+     *                                           (GLsizei) width, (GLsizei) height )
      * */
     public void glRenderbufferStorageOES(int target, int internalformat, int width, int height) {
         GLES11ExtPipeline.nGLRenderbufferStorageOES(target, internalformat, width, height);
@@ -2065,7 +2112,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDeleteFramebuffersOES([int n, int[] framebuffers, int offset]);
      * 
-     *  C function void glDeleteFramebuffersOES((GLsizei) n, const (GLuint)  *framebuffers )
+     *  C function void glDeleteFramebuffersOES((GLsizei) n,    (GLuint)  *framebuffers )
      * */
     public void glDeleteFramebuffersOES(int n, int[] framebuffers, int offset) {
         GLES11ExtPipeline.nGLDeleteFramebuffersOES(n, framebuffers, offset);
@@ -2075,7 +2122,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDeleteFramebuffersOES([int n, int[] framebuffers, int offset]);
      * 
-     *  C function void glDeleteFramebuffersOES((GLsizei) n, const (GLuint)  *framebuffers )
+     *  C function void glDeleteFramebuffersOES((GLsizei) n,    (GLuint)  *framebuffers )
      * */
     private static native void nGLDeleteFramebuffersOES(int n, int[] framebuffers, int offset);/*
       glDeleteFramebuffersOES((GLsizei) n, (GLuint *)(framebuffers + offset));
@@ -2085,7 +2132,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glDeleteFramebuffersOES([int n, java.nio.IntBuffer framebuffers]);
      * 
-     *  C function void glDeleteFramebuffersOES((GLsizei) n, const (GLuint)  *framebuffers )
+     *  C function void glDeleteFramebuffersOES((GLsizei) n,    (GLuint)  *framebuffers )
      * */
     public void glDeleteFramebuffersOES(int n, java.nio.IntBuffer framebuffers) {
         checkBuffer(framebuffers, n, "framebuffers");
@@ -2105,7 +2152,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glDeleteFramebuffersOES([int n, java.nio.IntBuffer framebuffers]);
      * 
-     *  C function void glDeleteFramebuffersOES((GLsizei) n, const (GLuint)  *framebuffers )
+     *  C function void glDeleteFramebuffersOES((GLsizei) n,    (GLuint)  *framebuffers )
      * */
     private static native void nGLDeleteFramebuffersOES(int n, java.nio.IntBuffer framebuffers, int offset);/*
        glDeleteFramebuffersOES((GLsizei) n, (GLuint *)(framebuffers + offset));
@@ -2207,12 +2254,11 @@ public class GLES11ExtPipeline
                                           int attachment,
                                           int renderbuffertarget,
                                           int renderbuffer);/*
-                  glFramebufferTexture2DOES((GLenum)  target, 
-                                 (GLenum)  attachment, 
-                                 (GLenum)  textarget, 
-                                 (GLuint)  texture, 
-                                 (GLint) level );                               
-                                          */
+       glFramebufferRenderbufferOES((GLenum)  target, 
+                                     (GLenum)  attachment, 
+                                     (GLenum)  renderbuffertarget, 
+                                     (GLuint)  renderbuffer );                             
+      */
 
     /**
      * <pre>
@@ -2288,13 +2334,19 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetFramebufferAttachmentParameterivOES([int target, int attachment, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11Ext.glGetFramebufferAttachmentParameterivOES(
+     * [int target, int attachment, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetFramebufferAttachmentParameterivOES((GLenum)  target, (GLenum)  attachment, (GLenum)  pname, (GLint *)params )
+     *  C function void glGetFramebufferAttachmentParameterivOES((GLenum)  target, 
+     *  (GLenum)  attachment, (GLenum)  pname, (GLint *)params )
 
      * */
-    public void glGetFramebufferAttachmentParameterivOES(int target, int attachment, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetFramebufferAttachmentParameterivOES(target, attachment, pname, params);
+    public void glGetFramebufferAttachmentParameterivOES(int target,
+                                                         int attachment,
+                                                         int pname,
+                                                         java.nio.IntBuffer params) {
+        int offset = getOffset(params);
+        nGLGetFramebufferAttachmentParameterivOES(target, attachment, pname, params, offset);
     }
 
     /**
@@ -2381,18 +2433,22 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glMatrixIndexPointerOESBounds([int size, int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
-     *  C function void glMatrixIndexPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride, const (GLvoid *) pointer )
+     *  C function void glMatrixIndexPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride,    (GLvoid *) pointer )
 
      * */
-    public void glMatrixIndexPointerOESBounds(int size, int type, int stride, java.nio.Buffer pointer, int remaining) {
-        GLES11ExtPipeline.nGLMatrixIndexPointerOESBounds(size, type, stride, pointer,offset, remaining);
+    public void glMatrixIndexPointerOESBounds(int size, 
+                                              int type, 
+                                              int stride, 
+                                              java.nio.Buffer pointer, int remaining) {
+        int offset = getOffset(pointer);
+        nGLMatrixIndexPointerOESBounds(size, type, stride, pointer, offset, remaining);
     }
 
     /**
      * <pre>
      * Native method generated from GLES11Ext.glMatrixIndexPointerOESBounds([int size, int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
-     *  C function void glMatrixIndexPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride, const (GLvoid *) pointer )
+     *  C function void glMatrixIndexPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride,    (GLvoid *) pointer )
 
      * */
     private static native void nGLMatrixIndexPointerOESBounds(int size, 
@@ -2412,22 +2468,33 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glWeightPointerOESBounds([int size, int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
-     *  C function void glWeightPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride, const (GLvoid *) pointer )
+     *  C function void glWeightPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride,    (GLvoid *) pointer )
 
      * */
-    public void glWeightPointerOESBounds(int size, int type, int stride, java.nio.Buffer pointer, int remaining) {
-        GLES11ExtPipeline.nGLWeightPointerOESBounds(size, type, stride, pointer, remaining);
+    public void glWeightPointerOESBounds(int size, 
+                                         int type, 
+                                         int stride, 
+                                         java.nio.Buffer pointer, int remaining) {
+        int offset = getOffset(pointer);
+        nGLWeightPointerOESBounds(size, type, stride, pointer, offset, remaining);
     }
 
     /**
      * <pre>
      * Native method generated from GLES11Ext.glWeightPointerOESBounds([int size, int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
-     *  C function void glWeightPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride, const (GLvoid *) pointer )
+     *  C function void glWeightPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride,    (GLvoid *) pointer )
 
      * */
-    private static native void nGLWeightPointerOESBounds(int size, int type, int stride, java.nio.Buffer pointer, int offset, int remaining);/*
-        glWeightPointerOES((GLint) size, (GLenum)  type, (GLsizei) stride, (GLvoid *) (pointer + offset));
+    private static native void nGLWeightPointerOESBounds(int size, 
+                                                         int type, 
+                                                         int stride, 
+                                                         java.nio.Buffer pointer, int offset, 
+                                                         int remaining);/*
+        glWeightPointerOES((GLint) size, 
+                           (GLenum)  type, 
+                           (GLsizei) stride, 
+                           (GLvoid *) (pointer + offset));
     */
 
     /**
@@ -2500,7 +2567,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glClipPlanefOES([int plane, float[] equation, int offset]);
      * 
-     *  C function void glClipPlanefOES((GLenum)  plane, const (GLfloat *)equation )
+     *  C function void glClipPlanefOES((GLenum)  plane,    (GLfloat *)equation )
 
      * */
     public void glClipPlanefOES(int plane, float[] equation, int offset) {
@@ -2511,7 +2578,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glClipPlanefOES([int plane, float[] equation, int offset]);
      * 
-     *  C function void glClipPlanefOES((GLenum)  plane, const (GLfloat *)equation )
+     *  C function void glClipPlanefOES((GLenum)  plane,    (GLfloat *)equation )
 
      * */
     private static native void nGLClipPlanefOES(int plane, float[] equation, int offset);/*
@@ -2522,18 +2589,20 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glClipPlanefOES([int plane, java.nio.FloatBuffer equation]);
      * 
-     *  C function void glClipPlanefOES((GLenum)  plane, const (GLfloat *)equation )
+     *  C function void glClipPlanefOES((GLenum)  plane,    (GLfloat *)equation )
 
      * */
     public void glClipPlanefOES(int plane, java.nio.FloatBuffer equation) {
-        GLES11ExtPipeline.nGLClipPlanefOES(plane, equation);
+        int offset = getOffset(equation);
+        nGLClipPlanefOES(plane, equation, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glClipPlanefOES([int plane, java.nio.FloatBuffer equation]);
+     * Native method generated from GLES11Ext.glClipPlanefOES(
+     * [int plane, java.nio.FloatBuffer equation]);
      * 
-     *  C function void glClipPlanefOES((GLenum)  plane, const (GLfloat *)equation )
+     *  C function void glClipPlanefOES((GLenum)  plane,    (GLfloat *)equation )
 
      * */
     private static native void nGLClipPlanefOES(int plane, java.nio.FloatBuffer equation, int offset);/*
@@ -2570,7 +2639,8 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetClipPlanefOES(int pname, java.nio.FloatBuffer eqn) {
-        GLES11ExtPipeline.nGLGetClipPlanefOES(pname, eqn);
+        int offset = getOffset(eqn);
+        nGLGetClipPlanefOES(pname, eqn, offset);
     }
 
     /**
@@ -2625,14 +2695,14 @@ public class GLES11ExtPipeline
 
      * */
     private static native void nGLTexGenfOES(int coord, int pname, float param);/*
-         glTexGenfOES((GLenum)  coord, (GLenum)  pname, (GLfloat) param ).
+         glTexGenfOES((GLenum)  coord, (GLenum)  pname, (GLfloat) param );
     */
 
     /**
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexGenfvOES([int coord, int pname, float[] params, int offset]);
      * 
-     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname, const (GLfloat *)params )
+     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname,    (GLfloat *)params )
 
      * */
     public void glTexGenfvOES(int coord, int pname, float[] params, int offset) {
@@ -2643,7 +2713,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glTexGenfvOES([int coord, int pname, float[] params, int offset]);
      * 
-     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname, const (GLfloat *)params )
+     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname,    (GLfloat *)params )
 
      * */
     private static native void nGLTexGenfvOES(int coord, int pname, float[] params, int offset);/*
@@ -2654,18 +2724,19 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexGenfvOES([int coord, int pname, java.nio.FloatBuffer params]);
      * 
-     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname, const (GLfloat *)params )
+     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname,    (GLfloat *)params )
 
      * */
     public void glTexGenfvOES(int coord, int pname, java.nio.FloatBuffer params) {
-        GLES11ExtPipeline.nGLTexGenfvOES(coord, pname, params);
+        int offset = getOffset(params);
+        nGLTexGenfvOES(coord, pname, params, offset);
     }
 
     /**
      * <pre>
      * Native method generated from GLES11Ext.glTexGenfvOES([int coord, int pname, java.nio.FloatBuffer params]);
      * 
-     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname, const (GLfloat *)params )
+     *  C function void glTexGenfvOES((GLenum)  coord, (GLenum)  pname,    (GLfloat *)params )
 
      * */
     private static native void nGLTexGenfvOES(int coord, int pname, java.nio.FloatBuffer params, int offset);/*
@@ -2697,9 +2768,10 @@ public class GLES11ExtPipeline
     
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glTexGenivOES([int coord, int pname, int[] params, int offset]);
+     * Delegate Method generated from GLES11Ext.glTexGenivOES(
+     * [int coord, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname, const (GLint *)params )
+     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname,    (GLint *)params )
 
      * */
     public void glTexGenivOES(int coord, int pname, int[] params, int offset) {
@@ -2708,9 +2780,10 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glTexGenivOES([int coord, int pname, int[] params, int offset]);
+     * Native method generated from GLES11Ext.glTexGenivOES(
+     * [int coord, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname, const (GLint *)params )
+     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname,    (GLint *)params )
 
      * */
     private static native void nGLTexGenivOES(int coord, int pname, int[] params, int offset);/*
@@ -2719,23 +2792,27 @@ public class GLES11ExtPipeline
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glTexGenivOES([int coord, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11Ext.glTexGenivOES(
+     * [int coord, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname, const (GLint *)params )
+     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname,    (GLint *)params )
 
      * */
     public void glTexGenivOES(int coord, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLTexGenivOES(coord, pname, params);
+        int offset = getOffset(params);
+        nGLTexGenivOES(coord, pname, params, offset);
     }
 
     /**
      * <pre>
      * Native method generated from GLES11Ext.glTexGenivOES([int coord, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname, const (GLint *)params )
+     *  C function void glTexGenivOES((GLenum)  coord, (GLenum)  pname,    (GLint *)params )
 
      * */
-    private static native void nGLTexGenivOES(int coord, int pname, java.nio.IntBuffer params);/*
+    private static native void nGLTexGenivOES(int coord, 
+                                              int pname, 
+                                              java.nio.IntBuffer params, int offset);/*
         glTexGenivOES((GLenum)  coord, (GLenum)  pname, (GLint *)(params + offset));
     */
 
@@ -2765,7 +2842,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexGenxvOES([int coord, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname,    (GLfixed *)params )
 
      * */
     public void glTexGenxvOES(int coord, int pname, int[] params, int offset) {
@@ -2776,7 +2853,7 @@ public class GLES11ExtPipeline
      * <pre>
      * Native method generated from GLES11Ext.glTexGenxvOES([int coord, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname,    (GLfixed *)params )
 
      * */
     private static native void nGLTexGenxvOES(int coord, int pname, int[] params, int offset);/*
@@ -2787,27 +2864,32 @@ public class GLES11ExtPipeline
      * <pre>
      * Delegate Method generated from GLES11Ext.glTexGenxvOES([int coord, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname,    (GLfixed *)params )
 
      * */
     public void glTexGenxvOES(int coord, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLTexGenxvOES(coord, pname, params);
+        int offset = getOffset(params);
+        nGLTexGenxvOES(coord, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11Ext.glTexGenxvOES([int coord, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11Ext.glTexGenxvOES(
+     * [int coord, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname, const (GLfixed *)params )
+     *  C function void glTexGenxvOES((GLenum)  coord, (GLenum)  pname,    (GLfixed *)params )
 
      * */
-    private static native void nGLTexGenxvOES(int coord, int pname, java.nio.IntBuffer params, int offset);/*
+    private static native void nGLTexGenxvOES(int coord, 
+                                              int pname, 
+                                              java.nio.IntBuffer params, int offset);/*
        glTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11Ext.glGetTexGenfvOES([int coord, int pname, float[] params, int offset]);
+     * Delegate Method generated from GLES11Ext.glGetTexGenfvOES(
+     * [int coord, int pname, float[] params, int offset]);
      * 
      *  C function void glGetTexGenfvOES((GLenum)  coord, (GLenum)  pname, (GLfloat *)params )
 
@@ -2835,7 +2917,8 @@ public class GLES11ExtPipeline
 
      * */
     public void glGetTexGenfvOES(int coord, int pname, java.nio.FloatBuffer params) {
-        GLES11ExtPipeline.nGLGetTexGenfvOES(coord, pname, params);
+        int offset = getOffset(params);
+        GLES11ExtPipeline.nGLGetTexGenfvOES(coord, pname, params, offset);
     }
 
     /**
@@ -2879,7 +2962,8 @@ public class GLES11ExtPipeline
      *  C function void glGetTexGenivOES((GLenum)  coord, (GLenum)  pname, (GLint *)params )
      * */
     public void glGetTexGenivOES(int coord, int pname, java.nio.IntBuffer params) {
-        GLES11ExtPipeline.nGLGetTexGenivOES(coord, pname, params);
+        int offset = getOffset(params);
+        GLES11ExtPipeline.nGLGetTexGenivOES(coord, pname, params, offset);
     }
 
     /**

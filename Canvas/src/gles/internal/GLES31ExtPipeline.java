@@ -9,8 +9,24 @@ import gles.util.BufferInfo;
 import android.opengl.GLES31Ext.DebugProcKHR;
 
 public class GLES31ExtPipeline implements Pipeline{
-	
-	
+
+    /** Includes **/
+    //@off
+    /*JNI
+      #define GL_GLEXT_PROTOTYPES 
+     
+      #include <GLES3/gl31.h>
+      #include <GLES2/gl2ext.h>
+ 
+      
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     */
 
 	/**
 	 * static & native initialization
@@ -86,9 +102,15 @@ public class GLES31ExtPipeline implements Pipeline{
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES31Ext.glDebugMessageControlKHR([int source, int type, int severity, int count, int[] ids, int offset, boolean enabled]);
+     * Delegate Method generated from GLES31Ext.glDebugMessageControlKHR(
+     * [int source, int type, int severity, int count, int[] ids, int offset, boolean enabled]);
      * 
-     *  C function void glDebugMessageControlKHR ( GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled )
+     *  C function void glDebugMessageControlKHR ( (GLenum) source, 
+     *                                             (GLenum) type, 
+     *                                             (GLenum) severity, 
+     *                                             (GLsizei) count, 
+     *                                             const (GLuint *) ids, 
+     *                                             GLboolean enabled )
 
      * */
     public void glDebugMessageControlKHR(int source, int type, int severity, int count, int[] ids, int offset, boolean enabled) {
@@ -100,7 +122,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glDebugMessageControlKHR([int source, int type, int severity, int count, int[] ids, int offset, boolean enabled]);
      * 
-     *  C function void glDebugMessageControlKHR ( GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled )
+     *  C function void glDebugMessageControlKHR ( (GLenum) source, (GLenum) type, (GLenum) severity, (GLsizei) count, const (GLuint *) ids, GLboolean enabled )
 
      * */
     private static native void nGLDebugMessageControlKHR( int source, 
@@ -121,7 +143,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glDebugMessageControlKHR([int source, int type, int severity, int count, java.nio.IntBuffer ids, boolean enabled]);
      * 
-     *  C function void glDebugMessageControlKHR ( GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled )
+     *  C function void glDebugMessageControlKHR ( (GLenum) source, (GLenum) type, (GLenum) severity, (GLsizei) count, const (GLuint *) ids, GLboolean enabled )
 
      * */
     public void glDebugMessageControlKHR( int source, 
@@ -142,7 +164,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glDebugMessageControlKHR([int source, int type, int severity, int count, java.nio.IntBuffer ids, boolean enabled]);
      * 
-     *  C function void glDebugMessageControlKHR ( GLenum source, GLenum type, GLenum severity, GLsizei count, const GLuint *ids, GLboolean enabled )
+     *  C function void glDebugMessageControlKHR ( (GLenum) source, (GLenum) type, (GLenum) severity, (GLsizei) count, const (GLuint *) ids, GLboolean enabled )
 
      * */
     private static native void nGLDebugMessageControlKHR( int source, 
@@ -163,7 +185,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glDebugMessageInsertKHR([int source, int type, int id, int severity, String buf]);
      * 
-     *  C function void glDebugMessageInsertKHR ( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *buf )
+     *  C function void glDebugMessageInsertKHR ( (GLenum) source, (GLenum) type, (GLuint) id, (GLenum) severity, (GLsizei) length, const (GLchar *) buf )
 
      * */
     public void glDebugMessageInsertKHR(int source, int type, int id, int severity, String buf) {
@@ -175,7 +197,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glDebugMessageInsertKHR([int source, int type, int id, int severity, String buf]);
      * 
-     *  C function void glDebugMessageInsertKHR ( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar *buf )
+     *  C function void glDebugMessageInsertKHR ( (GLenum) source, (GLenum) type, (GLuint) id, (GLenum) severity, (GLsizei) length, const (GLchar *) buf )
 
      * */
     private static native void nGLDebugMessageInsertKHR(int source, int type, int id, int severity, String buf);/*
@@ -184,11 +206,11 @@ public class GLES31ExtPipeline implements Pipeline{
                                 (GLuint) id, 
                                 (GLenum) severity, 
                                 (GLsizei) length, 
-                                (GLchar *) buf );
+                                ((GLchar *) ) buf );
     */
 
     
- // C function void glDebugMessageCallbackKHR ( GLDEBUGPROCKHR callback, const void *userParam )
+ // C function void glDebugMessageCallbackKHR ( GLDEBUGPROCKHR callback, const  (void *) userParam )
 
    
      
@@ -196,7 +218,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glDebugMessageCallbackKHR([DebugProcKHR callback]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
     public void glDebugMessageCallbackKHR(DebugProcKHR callback) {
@@ -208,7 +230,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glDebugMessageCallbackKHR([DebugProcKHR callback]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
     private static native void nGLDebugMessageCallbackKHR(DebugProcKHR callback);/*
@@ -219,7 +241,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, int bufSize, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset, int[] lengths, int lengthsOffset, byte[] messageLog, int messageLogOffset]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
     public int glGetDebugMessageLogKHR(int count, int bufSize, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset, int[] lengths, int lengthsOffset, byte[] messageLog, int messageLogOffset) {
@@ -231,64 +253,149 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, int bufSize, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset, int[] lengths, int lengthsOffset, byte[] messageLog, int messageLogOffset]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
-    private static native int nGLGetDebugMessageLogKHR(int count, int bufSize, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset, int[] lengths, int lengthsOffset, byte[] messageLog, int messageLogOffset);/*
-      // no op   
+    private static native int nGLGetDebugMessageLogKHR(int count, int bufSize, 
+                                                       int[] sources, int sourcesOffset, 
+                                                       int[] types, int typesOffset, 
+                                                       int[] ids, int idsOffset, 
+                                                       int[] severities, int severitiesOffset, 
+                                                       int[] lengths, int lengthsOffset, 
+                                                       byte[] messageLog, int messageLogOffset);/*
+     glGetDebugMessageLogKHR ( (GLuint) count, 
+                               (GLsizei) bufSize, 
+                               (GLenum *) (sources + sourcesOffset ), 
+                               (GLenum *) (types + typesOffset ), 
+                               (GLuint *) (ids + idsOffset ), 
+                               (GLenum *) (severities + severitiesOffset), 
+                               (GLsizei *) (lengths + lengthsOffset ), 
+                               (GLchar *)  (messageLog + messageLogOffset ) );
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities, java.nio.IntBuffer lengths, java.nio.ByteBuffer messageLog]);
+     * Delegate Method generated from GLES31Ext.glGetDebugMessageLogKHR([int count,
+     * java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids,
+     * java.nio.IntBuffer severities, java.nio.IntBuffer lengths, java.nio.ByteBuffer
+     * messageLog]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
-
+     * C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize,
+     * (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei
+     * *) lengths, (GLchar *) messageLog )
+     * 
      * */
-    public int glGetDebugMessageLogKHR(int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities, java.nio.IntBuffer lengths, java.nio.ByteBuffer messageLog) {
-        throw new UnsupportedOperationException("not implemented yet");
-        // return GLES31ExtPipeline.nGLGetDebugMessageLogKHR(count, sources, types, ids, severities, lengths, messageLog);
+    public int glGetDebugMessageLogKHR(int count,
+                                       java.nio.IntBuffer sources,
+                                       java.nio.IntBuffer types,
+                                       java.nio.IntBuffer ids,
+                                       java.nio.IntBuffer severities,
+                                       java.nio.IntBuffer lengths,
+                                       java.nio.ByteBuffer messageLog) {
+        // throw new UnsupportedOperationException("not implemented yet");
+        return nGLGetDebugMessageLogKHR(count, 
+                                        sources, 
+                                        types, 
+                                        ids, 
+                                        severities, 
+                                        lengths, 
+                                        messageLog);
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities, java.nio.IntBuffer lengths, java.nio.ByteBuffer messageLog]);
+     * Native method generated from GLES31Ext.glGetDebugMessageLogKHR([int count,
+     * java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids,
+     * java.nio.IntBuffer severities, java.nio.IntBuffer lengths, java.nio.ByteBuffer
+     * messageLog]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
-
+     * C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize,
+     * (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei
+     * *) lengths, (GLchar *) messageLog )
+     * 
      * */
-    private static native int nGLGetDebugMessageLogKHR(int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities, java.nio.IntBuffer lengths, java.nio.ByteBuffer messageLog);/*
+    private static native int nGLGetDebugMessageLogKHR(int count,
+                                                       java.nio.IntBuffer sources,
+                                                       java.nio.IntBuffer types,
+                                                       java.nio.IntBuffer ids,
+                                                       java.nio.IntBuffer severities,
+                                                       java.nio.IntBuffer lengths,
+                                                       java.nio.ByteBuffer messageLog);/*
       // no op
+       
+       glGetDebugMessageLogKHR ( (GLuint) count, 
+                                 (GLsizei) bufSize, 
+                                 (GLenum *)sources, 
+                                 (GLenum *)types, 
+                                 (GLuint *) ids, 
+                                 (GLenum *)severities, 
+                                 (GLsizei *) lengths, 
+                                 (GLchar *) messageLog );
+        
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset]);
+     * Delegate Method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, int[]
+     * sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset,
+     * int[] severities, int severitiesOffset]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
-
+     * C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize,
+     * (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei
+     * *) lengths, (GLchar *) messageLog )
+     * 
      * */
-    public String[] glGetDebugMessageLogKHR(int count, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset) {
-        throw new UnsupportedOperationException("not implemented yet");
-        // return GLES31ExtPipeline.nGLGetDebugMessageLogKHR(count, sources, sourcesOffset, types, typesOffset, ids, idsOffset, severities, severitiesOffset);
+    public String[] glGetDebugMessageLogKHR(int count,
+                                            int[] sources,
+                                            int sourcesOffset,
+                                            int[] types,
+                                            int typesOffset,
+                                            int[] ids,
+                                            int idsOffset,
+                                            int[] severities,
+                                            int severitiesOffset) {
+        // throw new UnsupportedOperationException("not implemented yet");
+        return nGLGetDebugMessageLogKHR(count,
+                sources,
+                sourcesOffset,
+                types,
+                typesOffset,
+                ids,
+                idsOffset,
+                severities,
+                severitiesOffset);
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
-    private static native String[] nGLGetDebugMessageLogKHR(int count, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset);/*
+    private static native String[] nGLGetDebugMessageLogKHR(int count,
+                                                            int[] sources,  int sourcesOffset,
+                                                            int[] types, int typesOffset,
+                                                            int[] ids,   int idsOffset,
+                                                            int[] severities, int severitiesOffset);/*
+       GLsizei length = 0;
+       GLchar * messageLog = NULL;
       // no op
+       glGetDebugMessageLogKHR((GLuint) count, 
+                               (GLsizei) bufSize, 
+                               (GLenum *)(sources + sourcesOffset), 
+                               (GLenum *)(types + typesOffset  ), 
+                               (GLuint *) ( ids +   idsOffset), 
+                               (GLenum *) (severities + severitiesOffset  ), 
+                               (GLsizei *) (lengths ), 
+                               (GLchar *) (messageLog));
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
     public String[] glGetDebugMessageLogKHR(int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities) {
@@ -300,18 +407,39 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities]);
      * 
-     *  C function GLuint glGetDebugMessageLogKHR ( GLuint count, GLsizei bufSize, GLenum *sources, GLenum *types, GLuint *ids, GLenum *severities, GLsizei *lengths, GLchar *messageLog )
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, 
+     *                                                (GLsizei) bufSize, 
+     *                                                (GLenum *)sources, 
+     *                                                (GLenum *)types, 
+     *                                                (GLuint *) ids, 
+     *                                                (GLenum *)severities, 
+     *                                                (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
-    private static native String[] nGLGetDebugMessageLogKHR(int count, java.nio.IntBuffer sources, java.nio.IntBuffer types, java.nio.IntBuffer ids, java.nio.IntBuffer severities);/*
-      throw new UnsupportedOperationException("not implemented yet");
+    private static native String[] nGLGetDebugMessageLogKHR(int count,
+                                                            java.nio.IntBuffer sources,
+                                                            java.nio.IntBuffer types,
+                                                            java.nio.IntBuffer ids,
+                                                            java.nio.IntBuffer severities);/*
+       GLsizei length = 0;
+       GLchar * messageLog = NULL;
+      // no op
+       glGetDebugMessageLogKHR((GLuint) count, 
+                               (GLsizei) bufSize, 
+                               (GLenum *)(sources + sourcesOffset), 
+                               (GLenum *)(types + typesOffset  ), 
+                               (GLuint *) ( ids +   idsOffset), 
+                               (GLenum *) (severities + severitiesOffset  ), 
+                               (GLsizei *) (lengths ), 
+                               (GLchar *) (messageLog));
     */
+    
 
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glPushDebugGroupKHR([int source, int id, int length, String message]);
      * 
-     *  C function void glPushDebugGroupKHR ( GLenum source, GLuint id, GLsizei length, const GLchar *message )
+     *  C function void glPushDebugGroupKHR ( (GLenum) source, (GLuint) id, (GLsizei) length, const (GLchar *) message )
 
      * */
     public void glPushDebugGroupKHR(int source, int id, int length, String message) {
@@ -325,14 +453,14 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glPushDebugGroupKHR([int source, int id, int length, String message]);
      * 
-     *  C function void glPushDebugGroupKHR ( GLenum source, GLuint id, GLsizei length, const GLchar *message )
+     *  C function void glPushDebugGroupKHR ( (GLenum) source, (GLuint) id, (GLsizei) length, const (GLchar *) message )
 
      * */
     private static native void nGLPushDebugGroupKHR(int source, int id, int length, String message);/*
         glPushDebugGroupKHR(   (GLenum)source,
                 (GLuint)id,
                 (GLsizei)length,
-                (GLchar *)message);
+                ((GLchar *) message);
     */
 
     /**
@@ -361,7 +489,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glObjectLabelKHR([int identifier, int name, int length, String label]);
      * 
-     *  C function void glObjectLabelKHR ( GLenum identifier, GLuint name, GLsizei length, const GLchar *label )
+     *  C function void glObjectLabelKHR ( (GLenum) identifier, (GLuint) name, (GLsizei) length, const (GLchar *) label )
 
      * */
     public void glObjectLabelKHR(int identifier, int name, int length, String label) {
@@ -375,44 +503,45 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glObjectLabelKHR([int identifier, int name, int length, String label]);
      * 
-     *  C function void glObjectLabelKHR ( GLenum identifier, GLuint name, GLsizei length, const GLchar *label )
+     *  C function void glObjectLabelKHR ( (GLenum) identifier, (GLuint) name, (GLsizei) length, const (GLchar *) label )
 
      * */
     private static native void nGLObjectLabelKHR(int identifier, int name, int length, String label);/*
       glObjectLabelKHR( (GLenum)identifier,
                         (GLuint)name,
                         (GLsizei)length,
-                        (GLchar *)label );
+                        ((GLchar *) label );
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetObjectLabelKHR([int identifier, int name]);
      * 
-     *  C function void glGetObjectLabelKHR ( GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label )
+     *  C function void glGetObjectLabelKHR ( (GLenum) identifier, (GLuint) name, (GLsizei) bufSize, (GLsizei *) length, (GLchar *) label )
 
      * */
     public String glGetObjectLabelKHR(int identifier, int name) {
-           throw new UnsupportedOperationException("not implemented yet");
-       // return GLES31ExtPipeline.nGLGetObjectLabelKHR(identifier, name);
+         //  throw new UnsupportedOperationException("not implemented yet");
+        return GLES31ExtPipeline.nGLGetObjectLabelKHR(identifier, name);
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetObjectLabelKHR([int identifier, int name]);
      * 
-     *  C function void glGetObjectLabelKHR ( GLenum identifier, GLuint name, GLsizei bufSize, GLsizei *length, GLchar *label )
+     *  C function void glGetObjectLabelKHR ( (GLenum) identifier, (GLuint) name, (GLsizei) bufSize, (GLsizei *) length, (GLchar *) label )
 
      * */
     private static native String nGLGetObjectLabelKHR(int identifier, int name);/*
        // no op
+        *return (jobject)0;
     */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glObjectPtrLabelKHR([long ptr, String label]);
      * 
-     *  C function void glObjectPtrLabelKHR ( const void *ptr, GLsizei length, const GLchar *label )
+     *  C function void glObjectPtrLabelKHR ( const  (void *) ptr, (GLsizei) length, const (GLchar *) label )
 
      * */
     public void glObjectPtrLabelKHR(long ptr, String label) {
@@ -424,7 +553,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glObjectPtrLabelKHR([long ptr, String label]);
      * 
-     *  C function void glObjectPtrLabelKHR ( const void *ptr, GLsizei length, const GLchar *label )
+     *  C function void glObjectPtrLabelKHR ( const  (void *) ptr, (GLsizei) length, const (GLchar *) label )
 
      * */
     private static native void nGLObjectPtrLabelKHR(long ptr, String label);/*
@@ -435,7 +564,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetObjectPtrLabelKHR([long ptr]);
      * 
-     *  C function void glGetObjectPtrLabelKHR ( const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label )
+     *  C function void glGetObjectPtrLabelKHR ( const  (void *) ptr, (GLsizei) bufSize, (GLsizei *) length, (GLchar *) label )
 
      * */
     public String glGetObjectPtrLabelKHR(long ptr) {
@@ -447,7 +576,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetObjectPtrLabelKHR([long ptr]);
      * 
-     *  C function void glGetObjectPtrLabelKHR ( const void *ptr, GLsizei bufSize, GLsizei *length, GLchar *label )
+     *  C function void glGetObjectPtrLabelKHR ( const  (void *) ptr, (GLsizei) bufSize, (GLsizei *) length, (GLchar *) label )
 
      * */
     private static native String nGLGetObjectPtrLabelKHR(long ptr);/*
@@ -458,7 +587,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetDebugMessageCallbackKHR();
      * 
-     *  C function void glGetPointervKHR ( GLenum pname, void **params )
+     *  C function void glGetPointervKHR ( (GLenum) pname,  (void *) *params )
 
      * */
     public DebugProcKHR glGetDebugMessageCallbackKHR() {
@@ -470,11 +599,13 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetDebugMessageCallbackKHR();
      * 
-     *  C function void glGetPointervKHR ( GLenum pname, void **params )
+     *  C function void glGetPointervKHR ( (GLenum) pname,  (void *) *params )
 
      * */
     private static native DebugProcKHR nGLGetDebugMessageCallbackKHR();/*
        // no op
+        glGetPointervKHR ( (GLenum) pname,  (void *)params );
+        return (jobject)0;
     */
 
     /**
@@ -503,7 +634,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexStorage3DMultisampleOES([int target, int samples, int internalformat, int width, int height, int depth, boolean fixedsamplelocations]);
      * 
-     *  C function void glTexStorage3DMultisampleOES ( GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )
+     *  C function void glTexStorage3DMultisampleOES ( (GLenum) target, (GLsizei) samples, (GLenum) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth, GLboolean fixedsamplelocations )
 
      * */
     public void glTexStorage3DMultisampleOES( int target, 
@@ -522,7 +653,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexStorage3DMultisampleOES([int target, int samples, int internalformat, int width, int height, int depth, boolean fixedsamplelocations]);
      * 
-     *  C function void glTexStorage3DMultisampleOES ( GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )
+     *  C function void glTexStorage3DMultisampleOES ( (GLenum) target, (GLsizei) samples, (GLenum) internalformat, (GLsizei) width, (GLsizei) height, (GLsizei) depth, GLboolean fixedsamplelocations )
 
      * */
     private static native void nGLTexStorage3DMultisampleOES(int target, int samples, int internalformat, int width, int height, int depth, boolean fixedsamplelocations);/*
@@ -541,7 +672,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glCopyImageSubDataEXT([int srcName, int srcTarget, int srcLevel, int srcX, int srcY, int srcZ, int dstName, int dstTarget, int dstLevel, int dstX, int dstY, int dstZ, int srcWidth, int srcHeight, int srcDepth]);
      * 
-     *  C function void glCopyImageSubDataEXT ( GLuint srcName, GLenum srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth )
+     *  C function void glCopyImageSubDataEXT ( (GLuint) srcName, (GLenum) srcTarget, (GLint) srcLevel, (GLint) srcX, (GLint) srcY, (GLint) srcZ, (GLuint) dstName, (GLenum) dstTarget, (GLint) dstLevel, (GLint) dstX, (GLint) dstY, (GLint) dstZ, (GLsizei) srcWidth, (GLsizei) srcHeight, (GLsizei) srcDepth )
 
      * */
     public void glCopyImageSubDataEXT( int srcName, 
@@ -563,10 +694,10 @@ public class GLES31ExtPipeline implements Pipeline{
      * dstLevel, int dstX, int dstY, int dstZ, int srcWidth, int srcHeight, int
      * srcDepth]);
      * 
-     * C function void glCopyImageSubDataEXT ( GLuint srcName, GLenum srcTarget,
-     * GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName,
-     * GLenum dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ,
-     * GLsizei srcWidth, GLsizei srcHeight, GLsizei srcDepth )
+     * C function void glCopyImageSubDataEXT ( (GLuint) srcName, (GLenum) srcTarget,
+     * (GLint) srcLevel, (GLint) srcX, (GLint) srcY, (GLint) srcZ, (GLuint) dstName,
+     * (GLenum) dstTarget, (GLint) dstLevel, (GLint) dstX, (GLint) dstY, (GLint) dstZ,
+     * (GLsizei) srcWidth, (GLsizei) srcHeight, (GLsizei) srcDepth )
      * 
      * */
     private static native void nGLCopyImageSubDataEXT( int srcName, 
@@ -599,7 +730,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glEnableiEXT([int target, int index]);
      * 
-     *  C function void glEnableiEXT ( GLenum target, GLuint index )
+     *  C function void glEnableiEXT ( (GLenum) target, (GLuint) index )
 
      * */
     public void glEnableiEXT(int target, int index) {
@@ -610,7 +741,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glEnableiEXT([int target, int index]);
      * 
-     *  C function void glEnableiEXT ( GLenum target, GLuint index )
+     *  C function void glEnableiEXT ( (GLenum) target, (GLuint) index )
 
      * */
     private static native void nGLEnableiEXT(int target, int index);/*
@@ -622,7 +753,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glDisableiEXT([int target, int index]);
      * 
-     *  C function void glDisableiEXT ( GLenum target, GLuint index )
+     *  C function void glDisableiEXT ( (GLenum) target, (GLuint) index )
 
      * */
     public void glDisableiEXT(int target, int index) {
@@ -633,7 +764,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glDisableiEXT([int target, int index]);
      * 
-     *  C function void glDisableiEXT ( GLenum target, GLuint index )
+     *  C function void glDisableiEXT ( (GLenum) target, (GLuint) index )
 
      * */
     private static native void nGLDisableiEXT(int target, int index);/* 
@@ -644,7 +775,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glBlendEquationiEXT([int buf, int mode]);
      * 
-     *  C function void glBlendEquationiEXT ( GLuint buf, GLenum mode )
+     *  C function void glBlendEquationiEXT ( (GLuint) buf, (GLenum) mode )
 
      * */
     public void glBlendEquationiEXT(int buf, int mode) {
@@ -655,7 +786,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glBlendEquationiEXT([int buf, int mode]);
      * 
-     *  C function void glBlendEquationiEXT ( GLuint buf, GLenum mode )
+     *  C function void glBlendEquationiEXT ( (GLuint) buf, (GLenum) mode )
 
      * */
     private static native void nGLBlendEquationiEXT(int buf, int mode); /*
@@ -666,7 +797,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glBlendEquationSeparateiEXT([int buf, int modeRGB, int modeAlpha]);
      * 
-     *  C function void glBlendEquationSeparateiEXT ( GLuint buf, GLenum modeRGB, GLenum modeAlpha )
+     *  C function void glBlendEquationSeparateiEXT ( (GLuint) buf, (GLenum) modeRGB, (GLenum) modeAlpha )
 
      * */
     public void glBlendEquationSeparateiEXT(int buf, int modeRGB, int modeAlpha) {
@@ -677,7 +808,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glBlendEquationSeparateiEXT([int buf, int modeRGB, int modeAlpha]);
      * 
-     *  C function void glBlendEquationSeparateiEXT ( GLuint buf, GLenum modeRGB, GLenum modeAlpha )
+     *  C function void glBlendEquationSeparateiEXT ( (GLuint) buf, (GLenum) modeRGB, (GLenum) modeAlpha )
 
      * */
     private static native void nGLBlendEquationSeparateiEXT(int buf, int modeRGB, int modeAlpha);/*
@@ -693,7 +824,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glBlendFunciEXT([int buf, int src, int dst]);
      * 
-     *  C function void glBlendFunciEXT ( GLuint buf, GLenum src, GLenum dst )
+     *  C function void glBlendFunciEXT ( (GLuint) buf, (GLenum) src, (GLenum) dst )
 
      * */
     public void glBlendFunciEXT(int buf, int src, int dst) {
@@ -704,7 +835,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glBlendFunciEXT([int buf, int src, int dst]);
      * 
-     *  C function void glBlendFunciEXT ( GLuint buf, GLenum src, GLenum dst )
+     *  C function void glBlendFunciEXT ( (GLuint) buf, (GLenum) src, (GLenum) dst )
 
      * */
     private static native void nGLBlendFunciEXT(int buf, int src, int dst);/*
@@ -720,7 +851,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glBlendFuncSeparateiEXT([int buf, int srcRGB, int dstRGB, int srcAlpha, int dstAlpha]);
      * 
-     *  C function void glBlendFuncSeparateiEXT ( GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha )
+     *  C function void glBlendFuncSeparateiEXT ( (GLuint) buf, (GLenum) srcRGB, (GLenum) dstRGB, (GLenum) srcAlpha, (GLenum) dstAlpha )
 
      * */
     public void glBlendFuncSeparateiEXT(int buf, int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
@@ -731,7 +862,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glBlendFuncSeparateiEXT([int buf, int srcRGB, int dstRGB, int srcAlpha, int dstAlpha]);
      * 
-     *  C function void glBlendFuncSeparateiEXT ( GLuint buf, GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha )
+     *  C function void glBlendFuncSeparateiEXT ( (GLuint) buf, (GLenum) srcRGB, (GLenum) dstRGB, (GLenum) srcAlpha, (GLenum) dstAlpha )
 
      * */
     private static native void nGLBlendFuncSeparateiEXT(int buf, int srcRGB, int dstRGB, int srcAlpha, int dstAlpha);/*
@@ -748,7 +879,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glColorMaskiEXT([int index, boolean r, boolean g, boolean b, boolean a]);
      * 
-     *  C function void glColorMaskiEXT ( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
+     *  C function void glColorMaskiEXT ( (GLuint) index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
 
      * */
     public void glColorMaskiEXT(int index, boolean r, boolean g, boolean b, boolean a) {
@@ -759,7 +890,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glColorMaskiEXT([int index, boolean r, boolean g, boolean b, boolean a]);
      * 
-     *  C function void glColorMaskiEXT ( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
+     *  C function void glColorMaskiEXT ( (GLuint) index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
 
      * */
     private static native void nGLColorMaskiEXT(int index, boolean r, boolean g, boolean b, boolean a);/*
@@ -777,7 +908,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glIsEnablediEXT([int target, int index]);
      * 
-     *  C function GLboolean glIsEnablediEXT ( GLenum target, GLuint index )
+     *  C function GLboolean glIsEnablediEXT ( (GLenum) target, (GLuint) index )
 
      * */
     public boolean glIsEnablediEXT(int target, int index) {
@@ -788,7 +919,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glIsEnablediEXT([int target, int index]);
      * 
-     *  C function GLboolean glIsEnablediEXT ( GLenum target, GLuint index )
+     *  C function GLboolean glIsEnablediEXT ( (GLenum) target, (GLuint) index )
 
      * */
     private static native boolean nGLIsEnablediEXT(int target, int index);/*
@@ -801,7 +932,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glFramebufferTextureEXT([int target, int attachment, int texture, int level]);
      * 
-     *  C function void glFramebufferTextureEXT ( GLenum target, GLenum attachment, GLuint texture, GLint level )
+     *  C function void glFramebufferTextureEXT ( (GLenum) target, (GLenum) attachment, (GLuint) texture, (GLint) level )
 
      * */
     public void glFramebufferTextureEXT(int target, int attachment, int texture, int level) {
@@ -812,7 +943,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glFramebufferTextureEXT([int target, int attachment, int texture, int level]);
      * 
-     *  C function void glFramebufferTextureEXT ( GLenum target, GLenum attachment, GLuint texture, GLint level )
+     *  C function void glFramebufferTextureEXT ( (GLenum) target, (GLenum) attachment, (GLuint) texture, (GLint) level )
 
      * */
     private static native void nGLFramebufferTextureEXT(int target, int attachment, int texture, int level);/*
@@ -864,7 +995,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glPatchParameteriEXT([int pname, int value]);
      * 
-     *  C function void glPatchParameteriEXT ( GLenum pname, GLint value )
+     *  C function void glPatchParameteriEXT ( (GLenum) pname, (GLint) value )
 
      * */
     public void glPatchParameteriEXT(int pname, int value) {
@@ -875,7 +1006,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glPatchParameteriEXT([int pname, int value]);
      * 
-     *  C function void glPatchParameteriEXT ( GLenum pname, GLint value )
+     *  C function void glPatchParameteriEXT ( (GLenum) pname, (GLint) value )
 
      * */
     private static native void nGLPatchParameteriEXT(int pname, int value);/*
@@ -886,7 +1017,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexParameterIivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameterIivEXT ( GLenum target, GLenum pname, const GLint *params )
+     *  C function void glTexParameterIivEXT ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     public void glTexParameterIivEXT(int target, int pname, int[] params, int offset) {
@@ -898,7 +1029,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexParameterIivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameterIivEXT ( GLenum target, GLenum pname, const GLint *params )
+     *  C function void glTexParameterIivEXT ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     private static native void nGLTexParameterIivEXT(int target, int pname, int[] params, int offset);/*
@@ -910,7 +1041,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexParameterIivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameterIivEXT ( GLenum target, GLenum pname, const GLint *params )
+     *  C function void glTexParameterIivEXT ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     public void glTexParameterIivEXT(int target, int pname, java.nio.IntBuffer params) {
@@ -928,7 +1059,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexParameterIivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameterIivEXT ( GLenum target, GLenum pname, const GLint *params )
+     *  C function void glTexParameterIivEXT ( (GLenum) target, (GLenum) pname, const (GLint *) params )
 
      * */
     private static native void nGLTexParameterIivEXT(int target, int pname, java.nio.IntBuffer params, int offset);/*
@@ -939,7 +1070,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexParameterIuivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameterIuivEXT ( GLenum target, GLenum pname, const GLuint *params )
+     *  C function void glTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, const (GLuint *) params )
 
      * */
     public void glTexParameterIuivEXT(int target, int pname, int[] params, int offset) {
@@ -951,7 +1082,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexParameterIuivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glTexParameterIuivEXT ( GLenum target, GLenum pname, const GLuint *params )
+     *  C function void glTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, const (GLuint *) params )
 
      * */
     private static native void nGLTexParameterIuivEXT(int target, int pname, int[] params, int offset);/*
@@ -964,7 +1095,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexParameterIuivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameterIuivEXT ( GLenum target, GLenum pname, const GLuint *params )
+     *  C function void glTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, const (GLuint *) params )
 
      * */
     public void glTexParameterIuivEXT(int target, int pname, java.nio.IntBuffer params) {
@@ -982,7 +1113,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexParameterIuivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glTexParameterIuivEXT ( GLenum target, GLenum pname, const GLuint *params )
+     *  C function void glTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, const (GLuint *) params )
 
      * */
     private static native void nGLTexParameterIuivEXT(int target, int pname, java.nio.IntBuffer params, int offset);/*
@@ -995,7 +1126,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetTexParameterIivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexParameterIivEXT ( GLenum target, GLenum pname, GLint *params )
+     *  C function void glGetTexParameterIivEXT ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetTexParameterIivEXT(int target, int pname, int[] params, int offset) {
@@ -1007,7 +1138,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetTexParameterIivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexParameterIivEXT ( GLenum target, GLenum pname, GLint *params )
+     *  C function void glGetTexParameterIivEXT ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetTexParameterIivEXT(int target, int pname, int[] params, int offset);/*
@@ -1020,7 +1151,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetTexParameterIivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexParameterIivEXT ( GLenum target, GLenum pname, GLint *params )
+     *  C function void glGetTexParameterIivEXT ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetTexParameterIivEXT(int target, int pname, java.nio.IntBuffer params) {
@@ -1038,7 +1169,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetTexParameterIivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexParameterIivEXT ( GLenum target, GLenum pname, GLint *params )
+     *  C function void glGetTexParameterIivEXT ( (GLenum) target, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetTexParameterIivEXT(int target, int pname, java.nio.IntBuffer params, int offset);/*
@@ -1051,7 +1182,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetTexParameterIuivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexParameterIuivEXT ( GLenum target, GLenum pname, GLuint *params )
+     *  C function void glGetTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, (GLuint *) params )
 
      * */
     public void glGetTexParameterIuivEXT(int target, int pname, int[] params, int offset) {
@@ -1063,7 +1194,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetTexParameterIuivEXT([int target, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexParameterIuivEXT ( GLenum target, GLenum pname, GLuint *params )
+     *  C function void glGetTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, (GLuint *) params )
 
      * */
     private static native void nGLGetTexParameterIuivEXT(int target, int pname, int[] params, int offset);/*
@@ -1077,7 +1208,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetTexParameterIuivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexParameterIuivEXT ( GLenum target, GLenum pname, GLuint *params )
+     *  C function void glGetTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, (GLuint *) params )
 
      * */
     public void glGetTexParameterIuivEXT(int target, int pname, java.nio.IntBuffer params) {
@@ -1095,7 +1226,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetTexParameterIuivEXT([int target, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexParameterIuivEXT ( GLenum target, GLenum pname, GLuint *params )
+     *  C function void glGetTexParameterIuivEXT ( (GLenum) target, (GLenum) pname, (GLuint *) params )
 
      * */
     private static native void nGLGetTexParameterIuivEXT(int target, int pname, java.nio.IntBuffer params, int offset);/*
@@ -1109,7 +1240,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glSamplerParameterIivEXT([int sampler, int pname, int[] param, int offset]);
      * 
-     *  C function void glSamplerParameterIivEXT ( GLuint sampler, GLenum pname, const GLint *param )
+     *  C function void glSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, const (GLint *) param )
 
      * */
     public void glSamplerParameterIivEXT(int sampler, int pname, int[] param, int offset) {
@@ -1121,7 +1252,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glSamplerParameterIivEXT([int sampler, int pname, int[] param, int offset]);
      * 
-     *  C function void glSamplerParameterIivEXT ( GLuint sampler, GLenum pname, const GLint *param )
+     *  C function void glSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, const (GLint *) param )
 
      * */
     private static native void nGLSamplerParameterIivEXT(int sampler, int pname, int[] param, int offset);/*
@@ -1132,7 +1263,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glSamplerParameterIivEXT([int sampler, int pname, java.nio.IntBuffer param]);
      * 
-     *  C function void glSamplerParameterIivEXT ( GLuint sampler, GLenum pname, const GLint *param )
+     *  C function void glSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, const (GLint *) param )
 
      * */
     public void glSamplerParameterIivEXT(int sampler, int pname, java.nio.IntBuffer params) {
@@ -1150,7 +1281,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glSamplerParameterIivEXT([int sampler, int pname, java.nio.IntBuffer param]);
      * 
-     *  C function void glSamplerParameterIivEXT ( GLuint sampler, GLenum pname, const GLint *param )
+     *  C function void glSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, const (GLint *) param )
 
      * */
     private static native void nGLSamplerParameterIivEXT(int sampler, int pname, java.nio.IntBuffer param, int offset);/*
@@ -1161,7 +1292,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glSamplerParameterIuivEXT([int sampler, int pname, int[] param, int offset]);
      * 
-     *  C function void glSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, const GLuint *param )
+     *  C function void glSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, const (GLuint *) param )
 
      * */
     public void glSamplerParameterIuivEXT(int sampler, int pname, int[] param, int offset) {
@@ -1173,7 +1304,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glSamplerParameterIuivEXT([int sampler, int pname, int[] param, int offset]);
      * 
-     *  C function void glSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, const GLuint *param )
+     *  C function void glSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, const (GLuint *) param )
 
      * */
     private static native void nGLSamplerParameterIuivEXT(int sampler, int pname, int[] param, int offset);/*
@@ -1184,7 +1315,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glSamplerParameterIuivEXT([int sampler, int pname, java.nio.IntBuffer param]);
      * 
-     *  C function void glSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, const GLuint *param )
+     *  C function void glSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, const (GLuint *) param )
 
      * */
     public void glSamplerParameterIuivEXT(int sampler, int pname, java.nio.IntBuffer param) {
@@ -1202,7 +1333,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glSamplerParameterIuivEXT([int sampler, int pname, java.nio.IntBuffer param]);
      * 
-     *  C function void glSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, const GLuint *param )
+     *  C function void glSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, const (GLuint *) param )
 
      * */
     private static native void nGLSamplerParameterIuivEXT(int sampler, int pname, java.nio.IntBuffer param, int offset);/*
@@ -1213,7 +1344,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetSamplerParameterIivEXT([int sampler, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetSamplerParameterIivEXT ( GLuint sampler, GLenum pname, GLint *params )
+     *  C function void glGetSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetSamplerParameterIivEXT(int sampler, int pname, int[] params, int offset) {
@@ -1224,7 +1355,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetSamplerParameterIivEXT([int sampler, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetSamplerParameterIivEXT ( GLuint sampler, GLenum pname, GLint *params )
+     *  C function void glGetSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetSamplerParameterIivEXT(int sampler, int pname, int[] params, int offset);/*
@@ -1235,7 +1366,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetSamplerParameterIivEXT([int sampler, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetSamplerParameterIivEXT ( GLuint sampler, GLenum pname, GLint *params )
+     *  C function void glGetSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, (GLint *) params )
 
      * */
     public void glGetSamplerParameterIivEXT(int sampler, int pname, java.nio.IntBuffer params) {        
@@ -1253,7 +1384,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetSamplerParameterIivEXT([int sampler, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetSamplerParameterIivEXT ( GLuint sampler, GLenum pname, GLint *params )
+     *  C function void glGetSamplerParameterIivEXT ( (GLuint) sampler, (GLenum) pname, (GLint *) params )
 
      * */
     private static native void nGLGetSamplerParameterIivEXT(int sampler, int pname, java.nio.IntBuffer params, int offset);/*
@@ -1264,7 +1395,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetSamplerParameterIuivEXT([int sampler, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, GLuint *params )
+     *  C function void glGetSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, (GLuint *) params )
 
      * */
     public void glGetSamplerParameterIuivEXT(int sampler, int pname, int[] params, int offset) {
@@ -1276,7 +1407,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetSamplerParameterIuivEXT([int sampler, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, GLuint *params )
+     *  C function void glGetSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, (GLuint *) params )
 
      * */
     private static native void nGLGetSamplerParameterIuivEXT(int sampler, int pname, int[] params, int offset);/*
@@ -1288,7 +1419,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glGetSamplerParameterIuivEXT([int sampler, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, GLuint *params )
+     *  C function void glGetSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, (GLuint *) params )
 
      * */
     public void glGetSamplerParameterIuivEXT(int sampler, int pname, java.nio.IntBuffer params) {
@@ -1306,7 +1437,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glGetSamplerParameterIuivEXT([int sampler, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetSamplerParameterIuivEXT ( GLuint sampler, GLenum pname, GLuint *params )
+     *  C function void glGetSamplerParameterIuivEXT ( (GLuint) sampler, (GLenum) pname, (GLuint *) params )
 
      * */
     private static native void nGLGetSamplerParameterIuivEXT(int sampler, int pname, java.nio.IntBuffer params, int offset);/*
@@ -1317,7 +1448,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexBufferEXT([int target, int internalformat, int buffer]);
      * 
-     *  C function void glTexBufferEXT ( GLenum target, GLenum internalformat, GLuint buffer )
+     *  C function void glTexBufferEXT ( (GLenum) target, (GLenum) internalformat, (GLuint) buffer )
 
      * */
     public void glTexBufferEXT(int target, int internalformat, int buffer) {
@@ -1328,7 +1459,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexBufferEXT([int target, int internalformat, int buffer]);
      * 
-     *  C function void glTexBufferEXT ( GLenum target, GLenum internalformat, GLuint buffer )
+     *  C function void glTexBufferEXT ( (GLenum) target, (GLenum) internalformat, (GLuint) buffer )
 
      * */
     private static native void nGLTexBufferEXT(int target, int internalformat, int buffer);/*
@@ -1339,7 +1470,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glTexBufferRangeEXT([int target, int internalformat, int buffer, int offset, int size]);
      * 
-     *  C function void glTexBufferRangeEXT ( GLenum target, GLenum internalformat, GLuint buffer, GLintptr offset, GLsizeiptr size )
+     *  C function void glTexBufferRangeEXT ( (GLenum) target, (GLenum) internalformat, (GLuint) buffer, (GLintptr) offset, GLsizeiptr size )
 
      * */
     public void glTexBufferRangeEXT(int target, int internalformat, int buffer, int offset, int size) {
@@ -1350,7 +1481,7 @@ public class GLES31ExtPipeline implements Pipeline{
      * MACHINE GENERATED! Please, do not edit !
      * Native method generated from GLES31Ext.glTexBufferRangeEXT([int target, int internalformat, int buffer, int offset, int size]);
      * 
-     *  C function void glTexBufferRangeEXT ( GLenum target, GLenum internalformat, GLuint buffer, GLintptr offset, GLsizeiptr size )
+     *  C function void glTexBufferRangeEXT ( (GLenum) target, (GLenum) internalformat, (GLuint) buffer, (GLintptr) offset, GLsizeiptr size )
 
      * */
     private static native void nGLTexBufferRangeEXT(int target, int internalformat, int buffer, int offset, int size);/*

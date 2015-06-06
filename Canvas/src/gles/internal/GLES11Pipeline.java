@@ -14,6 +14,21 @@ public class GLES11Pipeline
 	extends GLES10Pipeline 
 	implements Pipeline {
 
+    /** Includes **/
+    //@off
+    /*JNI
+      #include <GLES/gl.h>
+      #include <GLES/glext.h>
+      #include <GLES/egl.h>
+          
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     */
     
     private final String EQN = "eqn";
     private final String EQUATION = "equation";
@@ -402,11 +417,16 @@ public class GLES11Pipeline
      * <pre>
      * Native method generated from GLES11.glColorPointer([int size, int type, int stride, int offset]);
      * 
-     *  C function void glColorPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  (GLint)  offset )
-
+     *  C function void glColorPointer((GLint)  size,  
+     *                                 (GLenum)  type, 
+     *                                 (GLsizei)  stride,  
+     *                                 (GLint)  offset )
      * */
     private static native void nGLColorPointer(int size, int type, int stride, int offset);/*
-         glColorPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  (GLint)  offset );
+         glColorPointer((GLint)  size,  
+                        (GLenum)  type, 
+                        (GLsizei)  stride,  
+                        reinterpret_cast<GLvoid *>(offset));
     */
 
     /**
@@ -1039,7 +1059,7 @@ public class GLES11Pipeline
 
      * */
     private static native void nGLGetMaterialxv(int face, int pname, int[] params, int offset);/*
-        glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed)(params + offset));
+        glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed *)(params + offset));
     */
 
     /**
@@ -1068,172 +1088,175 @@ public class GLES11Pipeline
      *  C function void glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetMaterialxv(int face, int pname, java.nio.IntBuffer params, int offset);/*
+    private static native void nGLGetMaterialxv(int face, 
+                                                int pname, 
+                                                java.nio.IntBuffer params, 
+                                                int offset);/*
         glGetMaterialxv((GLenum)  face,  (GLenum)  pname, (GLfixed *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11.glGetTexEnvfv([int env, int pname, float[] params, int offset]);
+     * Delegate Method generated from GLES11.glGetTexEnvfv([int envir, int pname, float[] params, int offset]);
      * 
-     *  C function void glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)params )
+     *  C function void glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    public void glGetTexEnvfv(int env, int pname, float[] params, int offset) {
+    public void glGetTexEnvfv(int envir, int pname, float[] params, int offset) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkArray(params, offset, needed, PARAMS);
-        GLES11Pipeline.nGLGetTexEnvfv(env, pname, params, offset);
+        GLES11Pipeline.nGLGetTexEnvfv(envir, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11.glGetTexEnvfv([int env, int pname, float[] params, int offset]);
+     * Native method generated from GLES11.glGetTexEnvfv([int envir, int pname, float[] params, int offset]);
      * 
-     *  C function void glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)params )
+     *  C function void glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    private static native void nGLGetTexEnvfv(int env, int pname, float[] params, int offset);/*
-          glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)(params + offset)):
+    private static native void nGLGetTexEnvfv(int envir, int pname, float[] params, int offset);/*
+          glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11.glGetTexEnvfv([int env, int pname, java.nio.FloatBuffer params]);
+     * Delegate Method generated from GLES11.glGetTexEnvfv([int envir, int pname, java.nio.FloatBuffer params]);
      * 
-     *  C function void glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)params )
+     *  C function void glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    public void glGetTexEnvfv(int env, int pname, java.nio.FloatBuffer params) {
+    public void glGetTexEnvfv(int envir, int pname, java.nio.FloatBuffer params) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkBuffer(params, needed, PARAMS);
         int offset = getOffset(params);
         if(params.isDirect()){
-            GLES11Pipeline.nGLGetTexEnvfv(env, pname, params, offset);
+            GLES11Pipeline.nGLGetTexEnvfv(envir, pname, params, offset);
         }else{
             float[] array = params.array();
-            GLES11Pipeline.nGLGetTexEnvfv(env, pname, array, offset);
+            GLES11Pipeline.nGLGetTexEnvfv(envir, pname, array, offset);
         }        
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11.glGetTexEnvfv([int env, int pname, java.nio.FloatBuffer params]);
+     * Native method generated from GLES11.glGetTexEnvfv([int envir, int pname, java.nio.FloatBuffer params]);
      * 
-     *  C function void glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)params )
+     *  C function void glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)params )
 
      * */
-    private static native void nGLGetTexEnvfv(int env, int pname, java.nio.FloatBuffer params, int offset);/*
-        glGetTexEnvfv((GLenum)  env,  (GLenum)  pname, (GLfloat *)(params + offset));
+    private static native void nGLGetTexEnvfv(int envir, int pname, java.nio.FloatBuffer params, int offset);/*
+        glGetTexEnvfv((GLenum)  envir,  (GLenum)  pname, (GLfloat *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11.glGetTexEnviv([int env, int pname, int[] params, int offset]);
+     * Delegate Method generated from GLES11.glGetTexEnviv([int envir, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint)  *params )
+     *  C function void glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    public void glGetTexEnviv(int env, int pname, int[] params, int offset) {
+    public void glGetTexEnviv(int envir, int pname, int[] params, int offset) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkArray(params, offset, needed, PARAMS);
-        GLES11Pipeline.nGLGetTexEnviv(env, pname, params, offset);
+        GLES11Pipeline.nGLGetTexEnviv(envir, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11.glGetTexEnviv([int env, int pname, int[] params, int offset]);
+     * Native method generated from GLES11.glGetTexEnviv([int envir, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint)  *params )
+     *  C function void glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    private static native void nGLGetTexEnviv(int env, int pname, int[] params, int offset);/*
-        glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint *)(params + offset));
+    private static native void nGLGetTexEnviv(int envir, int pname, int[] params, int offset);/*
+        glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11.glGetTexEnviv([int env, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11.glGetTexEnviv([int envir, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint)  *params )
+     *  C function void glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    public void glGetTexEnviv(int env, int pname, java.nio.IntBuffer params) {
+    public void glGetTexEnviv(int envir, int pname, java.nio.IntBuffer params) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkBuffer(params, needed, PARAMS);
         int offset = getOffset(params);
         if(params.isDirect()){
-            GLES11Pipeline.nGLGetTexEnviv(env, pname, params, offset);
+            GLES11Pipeline.nGLGetTexEnviv(envir, pname, params, offset);
         }else{
             int[] array = params.array();
-            GLES11Pipeline.nGLGetTexEnviv(env, pname, array, offset);
+            GLES11Pipeline.nGLGetTexEnviv(envir, pname, array, offset);
         }    
-       // GLES11Pipeline.nGLGetTexEnviv(env, pname, params);
+       // GLES11Pipeline.nGLGetTexEnviv(envir, pname, params);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11.glGetTexEnviv([int env, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11.glGetTexEnviv([int envir, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint)  *params )
+     *  C function void glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint)  *params )
 
      * */
-    private static native void nGLGetTexEnviv(int env, int pname, java.nio.IntBuffer params, int offset);/*
-       glGetTexEnviv((GLenum)  env,  (GLenum)  pname,  (GLint *)(params + offset));
+    private static native void nGLGetTexEnviv(int envir, int pname, java.nio.IntBuffer params, int offset);/*
+       glGetTexEnviv((GLenum)  envir,  (GLenum)  pname,  (GLint *)(params + offset));
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11.glGetTexEnvxv([int env, int pname, int[] params, int offset]);
+     * Delegate Method generated from GLES11.glGetTexEnvxv([int envir, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed)  *params )
+     *  C function void glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    public void glGetTexEnvxv(int env, int pname, int[] params, int offset) {
+    public void glGetTexEnvxv(int envir, int pname, int[] params, int offset) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkArray(params, offset, needed, PARAMS);
-        GLES11Pipeline.nGLGetTexEnvxv(env, pname, params, offset);
+        GLES11Pipeline.nGLGetTexEnvxv(envir, pname, params, offset);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11.glGetTexEnvxv([int env, int pname, int[] params, int offset]);
+     * Native method generated from GLES11.glGetTexEnvxv([int envir, int pname, int[] params, int offset]);
      * 
-     *  C function void glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed)  *params )
+     *  C function void glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetTexEnvxv(int env, int pname, int[] params, int offset);/*
-        glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed *)(params + offset) );
+    private static native void nGLGetTexEnvxv(int envir, int pname, int[] params, int offset);/*
+        glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
     /**
      * <pre>
-     * Delegate Method generated from GLES11.glGetTexEnvxv([int env, int pname, java.nio.IntBuffer params]);
+     * Delegate Method generated from GLES11.glGetTexEnvxv([int envir, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed)  *params )
+     *  C function void glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    public void glGetTexEnvxv(int env, int pname, java.nio.IntBuffer params) {
+    public void glGetTexEnvxv(int envir, int pname, java.nio.IntBuffer params) {
         int needed = pname == android.opengl.GLES11.GL_TEXTURE_ENV_COLOR ? 4 : 1;
         checkBuffer(params, needed, PARAMS);
         int offset = getOffset(params);
         if(params.isDirect()){
-            GLES11Pipeline.nGLGetTexEnvxv(env, pname, params, offset);
+            GLES11Pipeline.nGLGetTexEnvxv(envir, pname, params, offset);
         }else{
             int[] array = params.array();
-            GLES11Pipeline.nGLGetTexEnvxv(env, pname, array, offset);
+            GLES11Pipeline.nGLGetTexEnvxv(envir, pname, array, offset);
         }    
-       // GLES11Pipeline.nGLGetTexEnvxv(env, pname, params);
+       // GLES11Pipeline.nGLGetTexEnvxv(envir, pname, params);
     }
 
     /**
      * <pre>
-     * Native method generated from GLES11.glGetTexEnvxv([int env, int pname, java.nio.IntBuffer params]);
+     * Native method generated from GLES11.glGetTexEnvxv([int envir, int pname, java.nio.IntBuffer params]);
      * 
-     *  C function void glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed)  *params )
+     *  C function void glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed)  *params )
 
      * */
-    private static native void nGLGetTexEnvxv(int env, int pname, java.nio.IntBuffer params, int offset);/*
-             glGetTexEnvxv((GLenum)  env,  (GLenum)  pname, (GLfixed *)(params + offset) );
+    private static native void nGLGetTexEnvxv(int envir, int pname, java.nio.IntBuffer params, int offset);/*
+             glGetTexEnvxv((GLenum)  envir,  (GLenum)  pname, (GLfixed *)(params + offset) );
     */
 
     /**
@@ -1487,7 +1510,7 @@ public class GLES11Pipeline
     private static native void nGLNormalPointer(int type, int stride, int offset);/*
         glNormalPointer( (GLenum)  type, 
                          (GLsizei)  stride,  
-                         reinterpret_cast<GLvoid *> offset );
+                         reinterpret_cast<GLvoid *> (offset) );
     */
 
     /**

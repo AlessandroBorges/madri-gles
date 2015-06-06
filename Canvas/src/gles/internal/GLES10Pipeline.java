@@ -18,6 +18,21 @@ import gles.util.BufferInfo;
 
 public class GLES10Pipeline implements Pipeline {
     
+    /** Includes **/
+    //@off
+    /*JNI
+      #include <GLES/gl.h>
+      #include <GLES/glext.h>
+      #include <GLES/egl.h>
+          
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     */
     
     protected static String PARAMS = "params";
     protected static String M = "m";
@@ -1371,7 +1386,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLGenTextures(int n, int[] textures, int offset);/*
-        glGenTextures ( (GLsizei) n, (GLuint *)(textures + offset );
+        glGenTextures((GLsizei) n, (GLuint *)(textures + offset));
     */
 
     /**
@@ -1422,7 +1437,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native int nGLGetError();/*
-              return (jnit)  glGetError ();
+         return (jint)  glGetError ();
     */
 
     /**
@@ -2942,7 +2957,7 @@ public class GLES10Pipeline implements Pipeline {
 
      * */
     private static native void nGLSampleCoveragex(int value, boolean invert);/*
-        glSampleCoveragex ( ( (GLclampx) ) value, (GLboolean) invert );
+        glSampleCoveragex((GLclampx)value, (GLboolean) invert );
     */
 
     /**

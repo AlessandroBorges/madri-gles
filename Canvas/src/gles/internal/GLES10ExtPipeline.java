@@ -11,6 +11,23 @@ import static gles.internal.GLES10Pipeline.getOffset;
 
 public class GLES10ExtPipeline implements Pipeline {
 	
+    /** Includes **/
+    //@off
+    /*JNI
+      #define GL_GLEXT_PROTOTYPES
+      #include <GLES/gl.h>
+      #include <GLES/glext.h>
+      #include <GLES/egl.h>
+          
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <vector>
+      
+      using namespace std;
+      
+      ////////////////////////////////////////
+     */
+    
 	/**
 	 * static & native initialization
 	 */
@@ -81,16 +98,20 @@ public class GLES10ExtPipeline implements Pipeline {
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
 
      * */
-    private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);/*
-    return (jint) glQueryMatrixxOES ( (GLfixed *)(mantissa + mantissaOffset), (GLint *)(exponent + exponentOffset));
- */
+    private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);/*     
+     jint val = 0;
+     val = (jint) glQueryMatrixxOES((GLfixed *)(mantissa + mantissaOffset), 
+                                    (GLint *)(exponent + exponentOffset));
+    
+     return val;
+      */
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES10Ext.glQueryMatrixxOES([java.nio.IntBuffer mantissa, java.nio.IntBuffer exponent]);
+     * Delegate Method generated from GLES10Ext.glQueryMatrixxOES(
+     * [java.nio.IntBuffer mantissa, java.nio.IntBuffer exponent]);
      * 
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
-
      * */
     public int glQueryMatrixxOES(java.nio.IntBuffer mantissa, java.nio.IntBuffer exponent) {
        checkBuffer(mantissa, 16, "mantissa");
@@ -114,6 +135,9 @@ public class GLES10ExtPipeline implements Pipeline {
 
      * */
     private static native int nGLQueryMatrixxOES(java.nio.IntBuffer mantissa, int mantissaOffset, java.nio.IntBuffer exponent, int exponentOffset);/*
-       return (jint) glQueryMatrixxOES ( (GLfixed *)(mantissa + mantissaOffset), (GLint *)(exponent + exponentOffset));
+       jint val = 0;
+       val = (jint) glQueryMatrixxOES((GLfixed *)(mantissa + mantissaOffset), 
+                                    (GLint *)(exponent + exponentOffset));    
+       return val;
     */
 }

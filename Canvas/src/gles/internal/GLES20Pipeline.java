@@ -27,6 +27,7 @@ public class GLES20Pipeline implements Pipeline {
         //@off
         /*JNI
           #include <GLES2/gl2.h>
+          #include <GLES2/gl2ext.h>
           #include <stdio.h>
           #include <stdlib.h>
           #include <vector>
@@ -2048,20 +2049,14 @@ public class GLES20Pipeline implements Pipeline {
                                                   int[] size, int sizeOffset,
                                                   int[] type, int typeOffset,
                                                   byte[] name, int nameOffset);/*
-                    
-                    //GLsizei *length0 = (GLsizei *) (length + lengthOffset);
-                    //GLint *size0 = (GLint *)(size + sizeOffset);
-                    //GLenum *type0 = (GLenum *)(type + typeOffset);
-                    //char *name0 = (char*) (name + nameOffset);
-                    
-                    glGetActiveAttrib(
-                                            (GLuint) program, 
+                 
+                    glGetActiveAttrib((GLuint) program, 
                                             (GLuint) index, 
                                             (GLsizei) bufsize, 
-                                            (GLsizei *) &length[lengthOffset], 
-                                            (GLint *) &size[sizeOffset], 
-                                            (GLenum *) &type[typeOffset], 
-                                            (char *) &name[nameOffset]);
+                                            (GLsizei *) (length + lengthOffset), 
+                                            (GLint *)  (size + sizeOffset), 
+                                            (GLenum *) (type + typeOffset), 
+                                            (char *) (name + nameOffset));
                     
                     */
 
@@ -2093,14 +2088,14 @@ public class GLES20Pipeline implements Pipeline {
      *  @hide Method is broken, but used to be public (b/6006380) 
      **/
     @Deprecated
-    private static native void nGLGetActiveAttrib(
+    private static  void nGLGetActiveAttrib(
                     int program, 
                     int index, 
                     int bufsize, 
                     java.nio.IntBuffer length, 
                     java.nio.IntBuffer size, 
                     java.nio.IntBuffer type,
-                    byte name);/*
+                    byte name){};/*
                     //no op
 //              glGetActiveAttrib ((GLuint) program,
 //                                 (GLuint) index, 
