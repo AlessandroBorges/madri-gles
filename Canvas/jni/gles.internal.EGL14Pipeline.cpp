@@ -1,10 +1,12 @@
 #include <gles.internal.EGL14Pipeline.h>
 
-//@line:40
+//@line:38
 
+        #define EGL_EGLEXT_PROTOTYPES   
         #include <EGL/egl.h>
         #include <EGL/eglext.h> 
         #include <KHR/khrplatform.h>
+        
         #include <stdio.h>
         #include <stdlib.h>
           
