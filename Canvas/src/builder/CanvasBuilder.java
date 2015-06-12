@@ -48,16 +48,20 @@ public class CanvasBuilder {
      **/
     static public void main(String[] args) throws Exception {
         System.out.println(System.getenv("PATH"));
-        
-	String src = "src",
-		bin = "bin",
-		jni = "jni";
-	
-	boolean genFFP = false;
-	
-	SDK sdk = SDK.ADRENO;
+
+        String src = "src", bin = "bin", jni = "jni";
+
+        boolean genFFP = false;
+
+        SDK sdk = SDK.ADRENO;
+      String[] exclude = {""
+              
+      };
       
-      String[]	ffpSrc = { "**/gles/internal/GLES10Pipeline.java", 
+      String[]	ffpSrc = { "**/gles/emulator/util/JAWT.java",
+                           "**/gles/emulator/util/DrawingSurface.java",
+                           "**/gles/emulator/util/DrawingSurfaceInfo.java",
+                           "**/gles/internal/GLES10Pipeline.java", 
                            "**/gles/internal/GLES10ExtPipeline.java", 
                             "**/gles/internal/GLES11Pipeline.java",
 			            	"**/gles/internal/GLES11ExtPipeline.java",
@@ -108,6 +112,8 @@ public class CanvasBuilder {
 	  String[] headerDir = {};//{ "**/gles/headers/JAWT_Info.h"  };
 	  String jawt_Lib32 = "C:\\NVPACK\\jdk1.7.0_45\\lib";
 	  String jawt_Lib64 = "C:/JDK8_64/lib";
+	  
+	  
 	  String[] libsWin32Dir={jawt_Lib32};
 	  String[] libsWin64Dir={jawt_Lib64};
 	  String[] libGLESAngle={"-llibGLESv2-x64"};

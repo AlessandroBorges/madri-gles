@@ -16,6 +16,8 @@
 
 package android.opengl;
 
+import gles.internal.*;
+
 /**
  * A collection of utility methods for computing the visibility of triangle
  * meshes.
@@ -46,9 +48,15 @@ public class Visibility {
      * positions is null, positionsOffset < 0, indices is null,
      * indicesOffset < 0, indicesOffset > indices.length - indexCount
      */
-    public static native int visibilityTest(float[] ws, int wsOffset,
+    public static  int visibilityTest(float[] ws, int wsOffset,
             float[] positions, int positionsOffset, char[] indices,
-            int indicesOffset, int indexCount);
+            int indicesOffset, int indexCount){
+        // Delegate it 
+        return UtilPipeline.visibilityTest(ws, wsOffset, 
+                                   positions, positionsOffset, 
+                                   indices, indicesOffset, 
+                                   indexCount); 
+    }
 
     /**
      * Given an OpenGL ES ModelView-Projection matrix (which implicitly
@@ -99,9 +107,15 @@ public class Visibility {
      * results is null, resultsOffset < 0, resultsOffset > results.length -
      * resultsCapacity.
      */
-    public static native int frustumCullSpheres(float[] mvp, int mvpOffset,
+    public static int frustumCullSpheres(float[] mvp, int mvpOffset,
             float[] spheres, int spheresOffset, int spheresCount,
-            int[] results, int resultsOffset, int resultsCapacity);
+            int[] results, int resultsOffset, int resultsCapacity){
+        
+        // delegate
+        return UtilPipeline.frustumCullSpheres(mvp, mvpOffset, 
+                                               spheres, spheresOffset, spheresCount, 
+                                               results, resultsOffset, resultsCapacity);
+    }
 
     /**
      * Compute a bounding sphere for a set of points. It is approximately the
@@ -117,7 +131,11 @@ public class Visibility {
      * positionsOffset < 0, positionsOffset > positions.length - positionsCount,
      * sphere is null, sphereOffset < 0, sphereOffset > sphere.length - 4.
      */
-    public static native void computeBoundingSphere(float[] positions,
+    public static void computeBoundingSphere(float[] positions,
             int positionsOffset, int positionsCount, float[] sphere,
-            int sphereOffset);
+            int sphereOffset){
+        UtilPipeline.computeBoundingSphere(positions, positionsOffset, positionsCount, 
+                                           sphere, sphereOffset);
+        
+    }
 }

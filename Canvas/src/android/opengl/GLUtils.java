@@ -34,13 +34,13 @@ import android.graphics.Bitmap;
 
 public final class GLUtils {
 
-    /*
-     * We use a class initializer to allow the native code to cache some
-     * field offsets.
-     */
-    static {
-        nativeClassInit();
-    }
+//    /*
+//     * We use a class initializer to allow the native code to cache some
+//     * field offsets.
+//     */
+//    static {
+//        nativeClassInit();
+//    }
 
     private GLUtils() {
     }
@@ -278,9 +278,11 @@ public final class GLUtils {
      * Set OpenGL Tracing level for this application.
      * @hide
      */
-    native public static void setTracingLevel(int level);
+    public static void setTracingLevel(int level){
+        Log.d("android.opengl.GLUtils", "setTracingLevel(int) is not implemented.");
+    }
 
-    native private static void nativeClassInit();
+    //native private static void nativeClassInit();
 
    // native private static int native_getInternalFormat(Bitmap bitmap);
     
