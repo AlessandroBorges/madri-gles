@@ -10,18 +10,23 @@ import android.opengl.Context;
  *
  */
 public class SurfaceView {
+    
+    Context ctx;
+    AttributeSet attrs;
+    SurfaceHolder sHolder;
 
 	public SurfaceView(Context context) {
-		// TODO Auto-generated constructor stub
+		this.ctx = context;
 	}
 
 	public SurfaceView(Context context, AttributeSet attrs) {
-		// TODO Auto-generated constructor stub
+	    this.ctx = context;
+	    this.attrs = attrs;
+
 	}
 
 	public SurfaceHolder getHolder() {
-		// TODO Auto-generated method stub
-		return null;
+		return sHolder;
 	}
 
 	protected void onAttachedToWindow() {

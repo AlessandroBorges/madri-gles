@@ -3,6 +3,8 @@
  */
 package gles.internal;
 
+import android.util.DisplayMetrics;
+
 /**
  * @author Alessandro Borges
  *
@@ -19,6 +21,11 @@ public class Sys {
 		GLES31,
 		GLES31Ext
 	}
+	
+	/**
+	 * display metrics for this instance of Emulator
+	 */
+  private static DisplayMetrics displayMetrics =null;
 	
     public enum EGL_PIPE {
         EGL14
@@ -39,6 +46,29 @@ public class Sys {
     public static boolean isGL10() {
         // TODO Auto-generated method stub
         return false;
+    }
+    
+    public static boolean isGL20() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
+    public static boolean isGL30() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
+    public static boolean isGL31() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static DisplayMetrics getDisplayMetrics() {
+         if(displayMetrics == null){
+             throw new UnsupportedOperationException("not implemented yet");
+         }
+         
+         return displayMetrics;  
     }
 
 }

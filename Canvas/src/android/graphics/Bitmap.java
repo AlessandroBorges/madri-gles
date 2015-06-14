@@ -15,6 +15,7 @@
  */
 package android.graphics;
 
+import android.util.DisplayMetrics;
 
 import java.io.IOException;
 import java.io.OutputStream;

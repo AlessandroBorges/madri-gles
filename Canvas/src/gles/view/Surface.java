@@ -1,6 +1,11 @@
 package gles.view;
 
-public class Surface {
+/**
+ * Surface class
+ * @author Alessandro Borges
+ *
+ */
+public class Surface implements android.view.Surface {
     
     protected long handle;
     
