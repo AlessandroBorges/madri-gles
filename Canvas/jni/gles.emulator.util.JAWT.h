@@ -63,6 +63,62 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_unlockGlobal0
 JNIEXPORT void JNICALL Java_gles_emulator_util_JAWT_freeResource
   (JNIEnv *, jclass, jlong, jlong, jlong);
 
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    lock0
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_lock0
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    unlock0
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_unlock0
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    getHWND
+ * Signature: (JJ[J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_getHWND
+  (JNIEnv *, jclass, jlong, jlong, jlongArray);
+
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    getRectangle0
+ * Signature: (JJ[I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_getRectangle0
+  (JNIEnv *, jclass, jlong, jlong, jintArray);
+
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    updateDSIEGLhandlers0
+ * Signature: (JJ[J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_updateDSIEGLhandlers0
+  (JNIEnv *, jclass, jlong, jlong, jlongArray);
+
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    freeDrawingSurfaceInfo0
+ * Signature: (JJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_freeDrawingSurfaceInfo0
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     gles_emulator_util_JAWT
+ * Method:    getDSIBounds
+ * Signature: (JJ[I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_getDSIBounds
+  (JNIEnv *, jclass, jlong, jlong, jintArray);
+
 #ifdef __cplusplus
 }
 #endif

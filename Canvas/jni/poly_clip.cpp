@@ -33,7 +33,7 @@
 #define LOG_TAG "StreetView"
 //#include <utils/Log.h>
 
-namespace android {
+namespace std {
 
 #define SWAP(a, b, temp)	{temp = a; a = b; b = temp;}
 #define COORD(vert, i) ((float *)(vert))[i]
@@ -58,7 +58,7 @@ namespace android {
 
 void poly_clip_to_halfspace(Poly* p, Poly* q, int index, float sign, float k)
 {
-    unsigned long m;
+   // unsigned long m;
     float *up, *vp, *wp;
     Poly_vert *v;
     int i;

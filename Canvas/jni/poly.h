@@ -25,7 +25,7 @@
 #ifndef POLY_HDR
 #define POLY_HDR
 
-namespace android {
+namespace std {
 
 #define POLY_NMAX 10		/* max #sides to a polygon; change if needed */
 /* note that poly_clip, given an n-gon as input, might output an (n+6)gon */
