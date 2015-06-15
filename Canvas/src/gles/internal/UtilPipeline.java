@@ -41,6 +41,7 @@ public class UtilPipeline implements Pipeline {
       #include <ETC1/etc1.h>
       #include "poly.h"      
       
+      using namespace std;
 static inline
 void mx4transform(float x, float y, float z, float w, const float* pM, float* pDest) {
     pDest[0] = pM[0 + 4 * 0] * x + pM[0 + 4 * 1] * y + pM[0 + 4 * 2] * z + pM[0 + 4 * 3] * w;
@@ -140,7 +141,20 @@ int visibilityTest(float* pWS, float* pPositions, int positionsLength,
 }
 
 static void doThrowIAE(JNIEnv* env, const char* msg) {
-    jniThrowException(env, "java/lang/IllegalArgumentException", msg);
+    //jniThrowException(env, "java/lang/IllegalArgumentException", msg);
+    jclass exClass;
+    const char *className = "java/lang/IllegalArgumentException" ;
+
+    exClass = env->FindClass(className );
+    if ( exClass == NULL ) {
+         
+        //return throwNoClassDefError( env, className );
+        printf("Exception class not found: %s ", className);
+        return;
+    }
+
+    env->ThrowNew(exClass, msg );
+    return;
 }
 
 template<class JArray, class T>
@@ -457,84 +471,84 @@ jint util_visibilityTest(JNIEnv *env, jclass clazz,
 
 #define I(_i, _j) ((_j)+ 4*(_i))
 
-static
-void multiplyMM(float* r, const float* lhs, const float* rhs)
-{
-    for (int i=0 ; i<4 ; i++) {
-        register const float rhs_i0 = rhs[ I(i,0) ];
-        register float ri0 = lhs[ I(0,0) ] * rhs_i0;
-        register float ri1 = lhs[ I(0,1) ] * rhs_i0;
-        register float ri2 = lhs[ I(0,2) ] * rhs_i0;
-        register float ri3 = lhs[ I(0,3) ] * rhs_i0;
-        for (int j=1 ; j<4 ; j++) {
-            register const float rhs_ij = rhs[ I(i,j) ];
-            ri0 += lhs[ I(j,0) ] * rhs_ij;
-            ri1 += lhs[ I(j,1) ] * rhs_ij;
-            ri2 += lhs[ I(j,2) ] * rhs_ij;
-            ri3 += lhs[ I(j,3) ] * rhs_ij;
-        }
-        r[ I(i,0) ] = ri0;
-        r[ I(i,1) ] = ri1;
-        r[ I(i,2) ] = ri2;
-        r[ I(i,3) ] = ri3;
-    }
-}
+//static
+//void multiplyMM(float* r, const float* lhs, const float* rhs)
+//{
+//    for (int i=0 ; i<4 ; i++) {
+//        register const float rhs_i0 = rhs[ I(i,0) ];
+//        register float ri0 = lhs[ I(0,0) ] * rhs_i0;
+//        register float ri1 = lhs[ I(0,1) ] * rhs_i0;
+//        register float ri2 = lhs[ I(0,2) ] * rhs_i0;
+//        register float ri3 = lhs[ I(0,3) ] * rhs_i0;
+//        for (int j=1 ; j<4 ; j++) {
+//            register const float rhs_ij = rhs[ I(i,j) ];
+//            ri0 += lhs[ I(j,0) ] * rhs_ij;
+//            ri1 += lhs[ I(j,1) ] * rhs_ij;
+//            ri2 += lhs[ I(j,2) ] * rhs_ij;
+//            ri3 += lhs[ I(j,3) ] * rhs_ij;
+//        }
+//        r[ I(i,0) ] = ri0;
+//        r[ I(i,1) ] = ri1;
+//        r[ I(i,2) ] = ri2;
+//        r[ I(i,3) ] = ri3;
+//    }
+//}
 
-static
-void util_multiplyMM(JNIEnv *env, jclass clazz,
-    jfloatArray result_ref, jint resultOffset,
-    jfloatArray lhs_ref, jint lhsOffset,
-    jfloatArray rhs_ref, jint rhsOffset) {
+//static
+//void util_multiplyMM(JNIEnv *env, jclass clazz,
+//    jfloatArray result_ref, jint resultOffset,
+//    jfloatArray lhs_ref, jint lhsOffset,
+//    jfloatArray rhs_ref, jint rhsOffset) {
+//
+//    FloatArrayHelper resultMat(env, result_ref, resultOffset, 16);
+//    FloatArrayHelper lhs(env, lhs_ref, lhsOffset, 16);
+//    FloatArrayHelper rhs(env, rhs_ref, rhsOffset, 16);
+//
+//    bool checkOK = resultMat.check() && lhs.check() && rhs.check();
+//
+//    if ( !checkOK ) {
+//        return;
+//    }
+//
+//    resultMat.bind();
+//    lhs.bind();
+//    rhs.bind();
+//
+//    multiplyMM(resultMat.mData, lhs.mData, rhs.mData);
+//
+//    resultMat.commitChanges();
+//}
 
-    FloatArrayHelper resultMat(env, result_ref, resultOffset, 16);
-    FloatArrayHelper lhs(env, lhs_ref, lhsOffset, 16);
-    FloatArrayHelper rhs(env, rhs_ref, rhsOffset, 16);
+//static
+//void multiplyMV(float* r, const float* lhs, const float* rhs)
+//{
+//    mx4transform(rhs[0], rhs[1], rhs[2], rhs[3], lhs, r);
+//}
 
-    bool checkOK = resultMat.check() && lhs.check() && rhs.check();
-
-    if ( !checkOK ) {
-        return;
-    }
-
-    resultMat.bind();
-    lhs.bind();
-    rhs.bind();
-
-    multiplyMM(resultMat.mData, lhs.mData, rhs.mData);
-
-    resultMat.commitChanges();
-}
-
-static
-void multiplyMV(float* r, const float* lhs, const float* rhs)
-{
-    mx4transform(rhs[0], rhs[1], rhs[2], rhs[3], lhs, r);
-}
-
-static
-void util_multiplyMV(JNIEnv *env, jclass clazz,
-    jfloatArray result_ref, jint resultOffset,
-    jfloatArray lhs_ref, jint lhsOffset,
-    jfloatArray rhs_ref, jint rhsOffset) {
-
-    FloatArrayHelper resultV(env, result_ref, resultOffset, 4);
-    FloatArrayHelper lhs(env, lhs_ref, lhsOffset, 16);
-    FloatArrayHelper rhs(env, rhs_ref, rhsOffset, 4);
-
-    bool checkOK = resultV.check() && lhs.check() && rhs.check();
-
-    if ( !checkOK ) {
-        return;
-    }
-
-    resultV.bind();
-    lhs.bind();
-    rhs.bind();
-
-    multiplyMV(resultV.mData, lhs.mData, rhs.mData);
-
-    resultV.commitChanges();
-}
+//static
+//void util_multiplyMV(JNIEnv *env, jclass clazz,
+//    jfloatArray result_ref, jint resultOffset,
+//    jfloatArray lhs_ref, jint lhsOffset,
+//    jfloatArray rhs_ref, jint rhsOffset) {
+//
+//    FloatArrayHelper resultV(env, result_ref, resultOffset, 4);
+//    FloatArrayHelper lhs(env, lhs_ref, lhsOffset, 16);
+//    FloatArrayHelper rhs(env, rhs_ref, rhsOffset, 4);
+//
+//    bool checkOK = resultV.check() && lhs.check() && rhs.check();
+//
+//    if ( !checkOK ) {
+//        return;
+//    }
+//
+//    resultV.bind();
+//    lhs.bind();
+//    rhs.bind();
+//
+//    multiplyMV(resultV.mData, lhs.mData, rhs.mData);
+//
+//    resultV.commitChanges();
+//}
 
      */
 
@@ -660,9 +674,9 @@ void util_multiplyMV(JNIEnv *env, jclass clazz,
                                                     float[] sphere, int sphereOffset);/*MANUAL
             
             util_computeBoundingSphere(env, clazz,
-                                       positions, positionsOffset, 
+                                       obj_positions, positionsOffset, 
                                        positionsCount,
-                                       sphere, sphereOffset); 
+                                       obj_sphere, sphereOffset); 
             
             */
 
@@ -769,7 +783,7 @@ void util_multiplyMV(JNIEnv *env, jclass clazz,
      * @param header native order direct buffer of the header.
      */
     public static native boolean isValid(Buffer header, int offset);/*
-       jboolean result = etc1_pkm_is_valid((etc1_byte*) headerB.getData());       
+       jboolean result = etc1_pkm_is_valid((etc1_byte*) (header + offset));       
        return result ? JNI_TRUE : JNI_FALSE;    
     */
 
@@ -778,7 +792,7 @@ void util_multiplyMV(JNIEnv *env, jclass clazz,
      * @param header native order direct buffer of the header.
      */
     public static native int getWidth(Buffer header, int offset);/*
-        int  result = etc1_pkm_get_width((etc1_byte*) headerB.getData());
+        int  result = etc1_pkm_get_width((etc1_byte*) (header + offset));
         return (jint) result;
     */
 
@@ -787,8 +801,8 @@ void util_multiplyMV(JNIEnv *env, jclass clazz,
      * @param header native order direct buffer of the header.
      */
     public static native int getHeight(Buffer header, int offset);/*
-       jint result = etc1_pkm_get_height((etc1_byte*) headerB.getData());
-       result result;    
+       jint result = etc1_pkm_get_height((etc1_byte*) (header + offset));
+       return result;    
     */
 
     

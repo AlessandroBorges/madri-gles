@@ -1,7 +1,7 @@
 package gles.emulator.util;
 
 public abstract class ObjectHandler {
-    private final long mHandle;
+    private long mHandle;
 
     /**
      * @deprecated Use {@link #ObjectHandle(long)} instead. Handles
@@ -37,6 +37,7 @@ public abstract class ObjectHandler {
     public long getNativeHandle() {
         return mHandle;
     }
+    
     @Override
     public int hashCode() {
         /*
@@ -46,6 +47,23 @@ public abstract class ObjectHandler {
         int result = 17;
         result = 31 * result + (int) (mHandle ^ (mHandle >>> 32));
         return result;
+    }
+    
+    /**
+     * Check if this Object is a NULL pointer.<br>
+     * Valid objects will return false, but released objects will return true;
+     * @return true if this resource is already released, i.e. a NULL pointer.
+     */
+    public boolean isNull(){
+        return mHandle==0;
+    }
+    
+    /**
+     * release native pointer.
+     * After call, this objects becomes virtually NULL, i.e, isNull() return true.
+     */
+    protected void release(){
+        this.mHandle = 0L;
     }
 }
 

@@ -1,11 +1,14 @@
 package gles.emulator.util;
 
-class JAWT_Rectangle{
+import java.awt.Rectangle;
+
+@SuppressWarnings("serial")
+class JAWT_Rectangle extends java.awt.Rectangle{
    
-    public int x;
-    public int y;
-    public int width;
-    public int height;
+//    public int x;
+//    public int y;
+//    public int width;
+//    public int height;
     
     
     /* (non-Javadoc)
@@ -24,6 +27,22 @@ class JAWT_Rectangle{
 	builder.append(height);
 	builder.append("]");
 	return builder.toString();
+    }
+
+    public JAWT_Rectangle() {
+        super();
+    }
+
+    public JAWT_Rectangle(int x, int y, int width, int height) {
+        super(x, y, width, height);       
+    }
+
+    public JAWT_Rectangle(int width, int height) {
+        super(width, height);       
+    }
+
+    public JAWT_Rectangle(Rectangle r) {
+        super(r);
     }
     
 }

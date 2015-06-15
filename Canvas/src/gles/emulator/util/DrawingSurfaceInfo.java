@@ -202,60 +202,86 @@ package gles.emulator.util;
 		return egl_handlers[EGLNativeWindowType_index];
 	    }
 	    
-	    /**
-	     * update EGL native handlers. 
-	     */
-	    private void updateEGLhandlers(){
-		if(this.egl_handlers == null){
-		    egl_handlers = new long[3];
-		}
-        JAWT.updateDSIEGLhandlers0(// awt.getAwtHandler(),
-		                   ds.getNativeHandle(),
-		                   getNativeHandle(),
-		                   egl_handlers);
-	    }
+    /**
+     * update EGL native handlers.
+     */
+    private void updateEGLhandlers() {
+        if (this.egl_handlers == null) {
+            egl_handlers = new long[3];
+        }
+        boolean ok = JAWT.updateDSIEGLhandlers0(// awt.getAwtHandler(),
+                                                ds.getNativeHandle(),
+                                                getNativeHandle(),
+                                                egl_handlers);
+        
+        if (!ok) { 
+            throw new RuntimeException("Native AWT error: unable to update native handlers."); 
+        }
+    }
 	    
-	    /**
-	     * get HWND 
-	     * @return
-	     */
-	    public long getHWND(){
-		if(JAWT.getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)){
-		    return hwnd_hdc[0];
-		}else{
-		    return 0;
-		}
-	    }
-	    
-	    /**
-	     * get HDC
-	     * @return
-	     */
-	    public long getHDC(){
-		if(JAWT.getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)){
-		    return hwnd_hdc[1];
-		}else{
-		    return 0;
-		}
-	    }
-	    
-	    /**
-	     * Get native dimensions
-	     * @return native dimensions
-	     */
-	    public JAWT_Rectangle getRectangle(){
-		JAWT_Rectangle rect = new JAWT_Rectangle();
-		int[] val = new int[4];
-        if (JAWT.getRectangle0(ds.getNativeHandle(), this.getNativeHandle(),
-                val)) {
-		  rect.x = val[0];
-		  rect.y = val[1];
-		  rect.width = val[2];
-		  rect.height = val[3];
-		}
-		return rect;
-	    }
-	    
+    /**
+     * get HWND
+     * 
+     * @return
+     */
+    public long getHWND() {
+        if (JAWT.getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)) {
+            return hwnd_hdc[0];
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * get HDC
+     * 
+     * @return
+     */
+    public long getHDC() {
+        if (JAWT.getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)) {
+            return hwnd_hdc[1];
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Get native dimensions
+     * 
+     * @return native dimensions
+     */
+    public JAWT_Rectangle getRectangle() {
+        JAWT_Rectangle rect = new JAWT_Rectangle();
+        int[] val = new int[4];
+        if (JAWT.getRectangle0(ds.getNativeHandle(), this.getNativeHandle(),  val)) {
+            rect.x = val[0];
+            rect.y = val[1];
+            rect.width = val[2];
+            rect.height = val[3];
+        }
+        return rect;
+    }
+    
+    /**
+     * return the DrawingSurface owner of this instance
+     * @return DrawingSurface owner of this DSI
+     */
+    public DrawingSurface getDrawingSurface(){
+        return this.ds;
+    }
+    
+    protected void release(){
+        super.release();
+        this.ds = null;
+        this.awt = null;
+        this.bounds = null;
+        this.cachedDrawingSurface = 0L;
+        this.clip = null;
+        this.egl_handlers = null;
+        
+    }
+    
+    
 	  
 	    
    } // class  

@@ -25,7 +25,7 @@ public class JAWT {
     using namespace std;
     
      
-    static JAWT *mAWT = NULL;
+   // static JAWT *mAWT = NULL;
 
  /////////////////////////////////////////   
     */
@@ -109,9 +109,23 @@ public class JAWT {
 	    long handle = getDrawingSurfaceInfo0(drawingSurface.getNativeHandle());
 	    if(dsi==null){
 		dsi = new DrawingSurfaceInfo(handle, this, drawingSurface);
-	    }
-	    
+	    }	    
 	    return dsi;	    
+	}
+	
+	/**
+	 * Releases DrawingSurfaceInfo.<br>
+	 * Same as {@link DrawingSurface#freeDrawingSurfaceInfo(DrawingSurfaceInfo)}
+	 * @param dsi DrawingSurfaceInfo to release
+	 */
+	public boolean freeDrawingSurfaceInfo(DrawingSurfaceInfo dsi){
+	    final DrawingSurface ds = dsi.getDrawingSurface();
+	    //ds.freeDrawingSurfaceInfo(dsi);
+	    boolean ok =  freeDrawingSurfaceInfo0(ds.getNativeHandle(), dsi.getNativeHandle());
+	    if(ok){
+	        dsi.release();
+	    }	        
+	    return ok;
 	}
 	
 	/**
@@ -119,8 +133,7 @@ public class JAWT {
 	 * @param dsObj
 	 * @return
 	 */
-	private static native long getDrawingSurfaceInfo0(long dsObj);/*
-	
+	protected static native long getDrawingSurfaceInfo0(long dsObj);/*	
 	JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*) dsObj;
       	JAWT_DrawingSurfaceInfo *dsi;
        	jint lock;
@@ -128,8 +141,15 @@ public class JAWT {
         ds->env = env;
         lock = ds->Lock(ds);
         if ((lock & JAWT_LOCK_ERROR) != 0) {
-	       fprintf(stderr, "Error locking surface\n");
-	       return 0;
+	       fprintf(stderr, "Error locking surface. Try again...\n");
+	       //try again
+	       ds->Unlock(ds);
+	       lock = ds->Lock(ds);
+	       // check 
+	       if ((lock & JAWT_LOCK_ERROR) != 0) {
+	        fprintf(stderr, "Error locking surface #2. Give up!\n");
+	         return 0;
+	       }
         }
 
        dsi = ds->GetDrawingSurfaceInfo(ds);
@@ -139,7 +159,8 @@ public class JAWT {
 	     ds->Unlock(ds);
 	     return 0;
        }
-       
+       //unlock
+       ds->Unlock(ds);
       return (jlong)dsi;
       */
 	
@@ -352,7 +373,7 @@ public class JAWT {
      * @param drawingSurface - DrawingSurface handle 
      * @return true if ok.
      */
- protected static native boolean lock0(long drawingSurface);/* 
+   protected static native boolean lock0(long drawingSurface);/* 
         JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
         jint lock = 0;
 
@@ -388,8 +409,10 @@ public class JAWT {
      */
     protected static native boolean unlock0(long drawingSurface);/* 
         JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
-            ds->env = env;
-            ds->Unlock(ds);                
+                
+        ds->env = env;
+        ds->Unlock(ds);
+                                
         return JNI_TRUE;
     */
     
@@ -421,8 +444,15 @@ public class JAWT {
           
           lock = ds->Lock(ds);
           
-           if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
-               printf("Error locking surface \n");
+           if((lock & JAWT_LOCK_ERROR) != 0){
+               printf("Error locking surface. Try again...\n");
+               ds->Unlock(ds);
+               lock = ds->Lock(ds);
+               
+               if((lock & JAWT_LOCK_ERROR) != 0){
+                   printf("Error #2 locking surface. Give up. \n");
+                   return JNI_FALSE;
+               }
            }
           
            // update dsi
@@ -443,11 +473,14 @@ public class JAWT {
                  val[0] = (jlong) dsi_x11->drawable;   // EGLNativeWindowType
                  val[1] = (jlong) dsi_x11->display;    // EGLNativeDisplayType 
         #endif   
-               
-            // Unlock the drawing surface
-            ds->Unlock(ds);
+        
+        // release dsi       
+        ds->FreeDrawingSurfaceInfo(dsi);
+        
+        // Unlock the drawing surface
+        ds->Unlock(ds);
              
-           return JNI_TRUE;                
+        return JNI_TRUE;                
     */
     
     protected static native boolean getRectangle0(long dsHandle, 
@@ -498,7 +531,7 @@ public class JAWT {
       JAWT_DrawingSurface* ds;
       JAWT_DrawingSurfaceInfo* dsi;
       // awt = (JAWT *) awtHandle;
-       * 
+       
       #ifdef OS_WIN32
               JAWT_Win32DrawingSurfaceInfo* dsi_win;
       #else
@@ -516,6 +549,14 @@ public class JAWT {
           
        // update dsi
        dsi = ds->GetDrawingSurfaceInfo(ds);
+       
+       if (dsi == NULL) {
+           printf("Error getting surface info\n");
+           ds->Unlock(ds);
+           //awt.FreeDrawingSurface(ds);
+            return JNI_FALSE;
+       }
+       
        //ignore older  one         
        //dsi = (JAWT_DrawingSurfaceInfo*)dsiHandler;              
                        
@@ -540,9 +581,67 @@ public class JAWT {
              EGLhandlers[2] = (jlong) dsi_x11->drawable;   // EGLNativeWindowType_index  2L             
          #endif   
          
+         // Free the drawing surface info 
+         ds->FreeDrawingSurfaceInfo(dsi);
+         
+         // unlock the drawing surface
          ds->Unlock(ds);
          return JNI_TRUE;
     */
+
+    protected static native boolean freeDrawingSurfaceInfo0(long dsHandle, long dsiHandle);/*
+      jint lock;
+      JAWT_DrawingSurface* ds;
+      JAWT_DrawingSurfaceInfo* dsi;
+         
+      ds = (JAWT_DrawingSurface *) dsHandle;
+      ds->env = env;
+      
+      dsi =(JAWT_DrawingSurfaceInfo *) dsiHandle;
+      
+      // lock DS
+      lock = ds->Lock(ds);
+      if((lock & JAWT_LOCK_ERROR) != 0 ) {
+            printf("Error locking surface \n");
+            return JNI_FALSE;
+       }
+     
+      // Free the drawing surface info 
+      ds->FreeDrawingSurfaceInfo(dsi);
+       
+       // unlock the drawing surface
+       ds->Unlock(ds);
+       return JNI_TRUE; 
+    */
+    
+    protected static native boolean getDSIBounds(long dsHandle, long dsiHandle, int[] val);/*
+         JAWT_DrawingSurface *ds;
+         JAWT_DrawingSurfaceInfo* dsi;
+         jint lock;
+                  
+         ds  = (JAWT_DrawingSurface *) dsHandle; 
+          
+         ds->env = env;
+         lock = ds->Lock(ds);
+         if ((lock & JAWT_LOCK_ERROR) != 0 ) {
+             printf("Error locking surface \n");
+             return JNI_FALSE;    
+          }
+             
+         // update dsi                    
+         dsi = (JAWT_DrawingSurfaceInfo*)dsiHandle;
+                             
+              val[0] = dsi->bounds.x;
+              val[1] = dsi->bounds.y;
+              val[2] = dsi->bounds.width;
+              val[3] = dsi->bounds.height;
+          
+          // unlock  the drawing surface
+          ds->Unlock(ds);   
+               
+          return JNI_TRUE;    
+    */
+    
     
 }
 

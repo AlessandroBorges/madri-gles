@@ -58,24 +58,21 @@ public class CanvasBuilder {
               
       };
       
-      String[]	ffpSrc = { "**/gles/emulator/util/JAWT.java",
-                           "**/gles/emulator/util/DrawingSurface.java",
-                           "**/gles/emulator/util/DrawingSurfaceInfo.java",
+      String[]	ffpSrc = { "**/gles/emulator/util/JAWT.java",                           
                            "**/gles/internal/GLES10Pipeline.java", 
                            "**/gles/internal/GLES10ExtPipeline.java", 
-                            "**/gles/internal/GLES11Pipeline.java",
-			            	"**/gles/internal/GLES11ExtPipeline.java",
+                           "**/gles/internal/GLES11Pipeline.java",
+			   "**/gles/internal/GLES11ExtPipeline.java",
 			            //	"**/android/opengl/EGL14.java", 
 			            //	"**/android/opengl/EGLExt.java"
 			            	};
       
-      String[]  ppSrc =  {    		"**/gles/emulator/util/JAWT.java",
-					"**/gles/emulator/util/DrawingSurface.java",
-					"**/gles/emulator/util/DrawingSurfaceInfo.java",
-					"**/gles/internal/EGL14Pipeline.java",
-					"**/gles/internal/GLES20Pipeline.java",
-					"**/gles/internal/GLES30Pipeline.java",
-					"**/gles/internal/GLES31Pipeline.java",
+      String[]  ppSrc =  { "**/gles/emulator/util/JAWT.java",					
+			   "**/gles/internal/EGL14Pipeline.java",
+			   "**/gles/internal/GLES20Pipeline.java",
+			   "**/gles/internal/GLES30Pipeline.java",
+			   "**/gles/internal/GLES31Pipeline.java",
+			   "**/gles/internal/UtilPipeline.java",
 					//"**/gles/internal/GLES31ExtPipeline.java",
 					//"**/gles/internal/TesteGL.java",
 				
