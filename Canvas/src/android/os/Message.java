@@ -87,19 +87,19 @@ public final class Message //implements Parcelable
      *
      * It is an error to attempt to enqueue or recycle a message that is already in use.
      */
-    /*package*/ static final int FLAG_IN_USE = 1 << 0;
+    /*package*/public static final int FLAG_IN_USE = 1 << 0;
 
     /** If set message is asynchronous */
-    /*package*/ static final int FLAG_ASYNCHRONOUS = 1 << 1;
+    /*package*/public static final int FLAG_ASYNCHRONOUS = 1 << 1;
 
     /** Flags to clear in the copyFrom method */
-    /*package*/ static final int FLAGS_TO_CLEAR_ON_COPY_FROM = FLAG_IN_USE;
+    /*package*/public static final int FLAGS_TO_CLEAR_ON_COPY_FROM = FLAG_IN_USE;
 
-    /*package*/ int flags;
+    /*package*/ public int flags;
 
     /*package*/ long when;
     
-    /*package*/ /*Bundle*/ Object data;
+    /*package*/ /*Bundle*/ public Bundle data;
     
     /*package*/ Handler target;
     
@@ -149,7 +149,7 @@ public final class Message //implements Parcelable
         m.replyTo = orig.replyTo;
         m.sendingUid = orig.sendingUid;
         if (orig.data != null) {
-            m.data = new Object();//new Bundle(orig.data);
+            m.data = new Bundle(orig.data);
         }
         m.target = orig.target;
         m.callback = orig.callback;
@@ -328,7 +328,7 @@ public final class Message //implements Parcelable
         this.sendingUid = o.sendingUid;
 
         if (o.data != null) {
-            this.data =  o.data;// (Bundle) o.data.clone();
+            this.data = (Bundle)(o.data).clone();
         } else {
             this.data = null;
         }
@@ -380,9 +380,9 @@ public final class Message //implements Parcelable
      * @see #peekData()
      * @see #setData(Bundle)
      */
-    public /*Bundle*/ Object getData() {
+    public Bundle getData() {
         if (data == null) {
-            data = new Object();//new Bundle();
+            data = new Bundle();
         }
         
         return data;
@@ -395,7 +395,7 @@ public final class Message //implements Parcelable
      * @see #getData()
      * @see #setData(Bundle)
      */
-    public /*Bundle*/ Object peekData() {
+    public Bundle peekData() {
         return data;
     }
 
@@ -405,7 +405,7 @@ public final class Message //implements Parcelable
      * @see #getData() 
      * @see #peekData()
      */
-    public void setData(/*Bundle*/ Object data) {
+    public void setData(Bundle data) {
         this.data = data;
     }
 
@@ -459,7 +459,7 @@ public final class Message //implements Parcelable
         }
     }
 
-    /*package*/ boolean isInUse() {
+    /*package*/ public boolean isInUse() {
         return ((flags & FLAG_IN_USE) == FLAG_IN_USE);
     }
 

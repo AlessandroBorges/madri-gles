@@ -4,6 +4,8 @@
 package gles.internal;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.opengl.EGL14;
 import android.opengl.EGLConfig;
@@ -116,7 +118,38 @@ public class EGLUtil {
         return null;
     }
     
+    /**
+     * creates or recover a EGL display by native handle
+     * @param handle native handle
+     * @return EGLDisplay instance
+     */
+    public EGLDisplay getEGLDisplaybyHandle(long handle){
+        if(displayMap.containsKey(handle)){
+            return displayMap.get(handle);
+        }
+        
+        EGLDisplay dsp = EGLUtil.createEGLDisplay(handle);
+        displayMap.put(handle, dsp);
+        return dsp;
+    }
     
+    /**
+     * creates or recover a EGL display by native handle
+     * @param handle native handle
+     * @return EGLDisplay instance
+     */
+    public EGLSurface getEGLSurfacebyHandle(long handle){
+        if(surfaceMap.containsKey(handle)){
+            return surfaceMap.get(handle);
+        }
+        
+        EGLSurface sur = EGLUtil.createEGLSurface(handle);
+        surfaceMap.put(handle, sur);
+        return sur;
+    }
+    
+    private Map<Long, EGLDisplay> displayMap = new HashMap<Long, EGLDisplay>();
+    private Map<Long, EGLSurface> surfaceMap = new HashMap<Long, EGLSurface>();
     
     public static void main(String[] args) {
         System.out.println("EGLDisplay: " + createEGLDisplay(0));

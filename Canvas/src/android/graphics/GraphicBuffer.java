@@ -2,7 +2,7 @@ package android.graphics;
 
 import java.nio.Buffer;
 
-class GraphicBuffer {
+public class GraphicBuffer {
     
     public enum Usage {
         USAGE_SW_READ_NEVER ,    

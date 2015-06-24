@@ -3,7 +3,14 @@
  */
 package gles.emulator.util;
 
+import gles.internal.EGLUtil;
+
 import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
+
+import android.opengl.EGLDisplay;
+import android.opengl.EGLSurface;
 
 import com.badlogic.gdx.jnigen.JniGenSharedLibraryLoader;
 
@@ -40,11 +47,11 @@ public class JAWT {
 	
 	
 	/** JAWT_DrawingSurface handle */
-	private DrawingSurface ds=null;
+	private DrawingSurface m_ds=null;
 	//private long dsHandle=0;
 	
 	/** JAWT_DrawingSurfaceInfo handle */
-	private DrawingSurfaceInfo dsi = null;
+	private DrawingSurfaceInfo m_dsi = null;
 	//private long dsiHandle=0;
 	
 	/**
@@ -57,13 +64,11 @@ public class JAWT {
 		this.c = componentAWT;
 	}
 	
-	/**
+     /**
      * get native AWT handler
      * @return native handler
-     */
-	
-	
-	public long getAwtHandler(){
+     */	
+   public long getAwtHandler(){
 	    if(awtHandle==0){
 		awtHandle = getAWT0();
 	    }
@@ -102,28 +107,34 @@ public class JAWT {
      * 
      * 
      * @param drawingSurface
-     * @return
+     * @return dsi instance
      */
 	public DrawingSurfaceInfo getDrawingSurfaceInfo(){
 	    final DrawingSurface drawingSurface = getDrawingSurface();
 	    long handle = getDrawingSurfaceInfo0(drawingSurface.getNativeHandle());
-	    if(dsi==null){
-		dsi = new DrawingSurfaceInfo(handle, this, drawingSurface);
+	    if(m_dsi==null){
+		m_dsi = new DrawingSurfaceInfo(handle, this, drawingSurface);
 	    }	    
-	    return dsi;	    
+	    return m_dsi;	    
 	}
 	
 	/**
 	 * Releases DrawingSurfaceInfo.<br>
 	 * Same as {@link DrawingSurface#freeDrawingSurfaceInfo(DrawingSurfaceInfo)}
 	 * @param dsi DrawingSurfaceInfo to release
+	 * @return true if dsi was freed.false if dsi was null or failed to release
 	 */
 	public boolean freeDrawingSurfaceInfo(DrawingSurfaceInfo dsi){
+	    if(dsi == null) return false;
 	    final DrawingSurface ds = dsi.getDrawingSurface();
 	    //ds.freeDrawingSurfaceInfo(dsi);
 	    boolean ok =  freeDrawingSurfaceInfo0(ds.getNativeHandle(), dsi.getNativeHandle());
 	    if(ok){
 	        dsi.release();
+	        // releasing local m_dsi
+	        if(this.m_dsi != null && dsi.getNativeHandle() == m_dsi.getEGLNativeDisplayType()){
+	            this.m_dsi = null;
+	        }
 	    }	        
 	    return ok;
 	}
@@ -174,11 +185,11 @@ public class JAWT {
 	    if(null == this.c){
 		throw new RuntimeException("AWT Component is null.");
 	    }
-	    if(ds==null){
+	    if(m_ds==null){
 		long handle = getDrawingSurfaceAWT0(this.c, getAwtHandler());
-		ds = new DrawingSurface(handle);
+		m_ds = new DrawingSurface(handle);
 	    }
-	    return ds;
+	    return m_ds;
 	}
 	
     /**
@@ -337,10 +348,10 @@ public class JAWT {
 	 * @return
 	 */
     public synchronized boolean dsLock() {
-	if (ds == null) {
+	if (m_ds == null) {
 	    return false;
 	} else {
-	    if (ds.lock()) {
+	    if (m_ds.lock()) {
 		gotDsiLock = true;
 		return true;
 	    } else
@@ -350,10 +361,10 @@ public class JAWT {
     }
     
     public synchronized boolean dsUnlock() {
-	if (ds == null) {
+	if (m_ds == null) {
 	    return false;
 	} else {
-	    if (ds.unlock()) {
+	    if (m_ds.unlock()) {
 		gotDsiLock = true;
 		return true;
 	    } else
@@ -496,6 +507,7 @@ public class JAWT {
          lock = ds->Lock(ds);
          if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
                   printf("Error locking surface \n");
+                  return JNI_FALSE;
           }
              
          // update dsi
@@ -641,7 +653,33 @@ public class JAWT {
                
           return JNI_TRUE;    
     */
+
+    /**
+     * Get the Canvas EGLDisplay 
+     * @return
+     */
+    public long getEGLNativeDisplayType() {
+        DrawingSurface ds = this.getDrawingSurface();
+        DrawingSurfaceInfo dsi = ds.getDrawingSurfaceInfo();
+        long eglNativeDisplayType = dsi.getEGLNativeDisplayType();
+        
+        return eglNativeDisplayType;
+    }
     
+    /**
+     * Get the Canvas' EGLSurface 
+     * @return
+     */
+    public long getEGLNativeWindowType() {
+        DrawingSurface ds = this.getDrawingSurface();
+        DrawingSurfaceInfo dsi = ds.getDrawingSurfaceInfo();
+        long eglNativeWindowType = dsi.getEGLNativeWindowType();
+      
+        return eglNativeWindowType;
+    }
+    
+    
+   
     
 }
 

@@ -9,7 +9,7 @@ package android.graphics;
  */
 public class Canvas {
 
-    public int mDensity;
+   // public int mDensity;
 
     public void concat(Matrix m) {
         // TODO Auto-generated method stub
@@ -34,6 +34,11 @@ public class Canvas {
     public void translate(float f, float g) {
         // TODO Auto-generated method stub
         
+    }
+
+    public int getDensity() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }

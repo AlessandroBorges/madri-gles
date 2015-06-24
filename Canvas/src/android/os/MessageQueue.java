@@ -48,11 +48,31 @@ public final class MessageQueue {
     // Barriers are indicated by messages with a null target whose arg1 field carries the token.
     private int mNextBarrierToken;
 
-    private native static long nativeInit();
-    private native static void nativeDestroy(long ptr);
-    private native static void nativePollOnce(long ptr, int timeoutMillis);
-    private native static void nativeWake(long ptr);
-    private native static boolean nativeIsIdling(long ptr);
+    private  static long nativeInit(){return 1L;}
+    private  static void nativeDestroy(long ptr){
+        
+    }
+    private  static void nativePollOnce2(long ptr, int timeoutMillis){
+        
+    }
+    private  static void nativeWake(long ptr){
+      //  Thread t =  Thread.currentThread();
+      //  t.notify();
+    }
+    
+    private  static boolean nativeIsIdling(long ptr){
+       //return  Looper.myLooper().isIdling();
+       Thread t =  Thread.currentThread();
+       if(t.isAlive()){
+          Thread.State state = t.getState();
+          if(state == Thread.State.BLOCKED || state == Thread.State.WAITING || state == Thread.State.TIMED_WAITING){
+              return true;
+          }else{
+              return false;
+          }
+       }else
+       return false;
+    }
 
     /**
      * Callback interface for discovering when a thread is going to block
@@ -103,7 +123,7 @@ public final class MessageQueue {
 
     MessageQueue(boolean quitAllowed) {
         mQuitAllowed = quitAllowed;
-        mPtr = nativeInit();
+      //  mPtr = nativeInit();
     }
 
     @Override
@@ -119,7 +139,7 @@ public final class MessageQueue {
     // Must only be called on the looper thread or the finalizer.
     private void dispose() {
         if (mPtr != 0) {
-            nativeDestroy(mPtr);
+           // nativeDestroy(mPtr);
             mPtr = 0;
         }
     }
@@ -130,7 +150,7 @@ public final class MessageQueue {
         // which is not supported.
         final long ptr = mPtr;
         if (ptr == 0) {
-            return null;
+          //  return null;
         }
 
         int pendingIdleHandlerCount = -1; // -1 only during first iteration
@@ -140,7 +160,7 @@ public final class MessageQueue {
               //  Binder.flushPendingCommands();
             }
 
-            nativePollOnce(ptr, nextPollTimeoutMillis);
+            //nativePollOnce(ptr, nextPollTimeoutMillis);
 
             synchronized (this) {
                 // Try to retrieve the next message.  Return if found.

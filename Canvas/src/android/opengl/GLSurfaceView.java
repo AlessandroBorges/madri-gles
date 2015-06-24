@@ -1809,7 +1809,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     public SurfaceHolder getHolder() {
 		// TODO Auto-generated method stub
-		return null;
+               return null;
 	}
 
 	private static class GLThreadManager {

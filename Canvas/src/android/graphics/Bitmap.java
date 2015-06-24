@@ -1204,7 +1204,7 @@ public class Bitmap {
              * density of the given {@link Canvas}.
              */
             public int getScaledWidth(Canvas canvas) {
-                return scaleFromDensity(getWidth(), mDensity, canvas.mDensity);
+                return scaleFromDensity(getWidth(), mDensity, canvas.getDensity());//canvas.mDensity);
             }
 
             /**
@@ -1212,7 +1212,7 @@ public class Bitmap {
              * density of the given {@link Canvas}.
              */
             public int getScaledHeight(Canvas canvas) {
-                return scaleFromDensity(getHeight(), mDensity, canvas.mDensity);
+                return scaleFromDensity(getHeight(), mDensity, canvas.getDensity());//canvas.mDensity);
             }
 
             /**
