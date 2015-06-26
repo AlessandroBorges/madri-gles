@@ -8,7 +8,7 @@ public class CanvasBuilder {
     static final boolean buildIt = true;
     static final boolean createBuild = true;
     static final boolean generateCPP = true;
-    static final boolean packIt = false;
+    static final boolean packIt = true;
     static final boolean buildLinux = false;
     
   
@@ -69,10 +69,10 @@ public class CanvasBuilder {
       
       String[]  ppSrc =  { "**/gles/emulator/util/JAWT.java",					
 			   "**/gles/internal/EGL14Pipeline.java",
-			   "**/gles/internal/GLES20Pipeline.java",
-			   "**/gles/internal/GLES30Pipeline.java",
-			   "**/gles/internal/GLES31Pipeline.java",
-			   "**/gles/internal/UtilPipeline.java",
+			 //  "**/gles/internal/GLES20Pipeline.java",
+			//   "**/gles/internal/GLES30Pipeline.java",
+			//   "**/gles/internal/GLES31Pipeline.java",
+			//   "**/gles/internal/UtilPipeline.java",
 					//"**/gles/internal/GLES31ExtPipeline.java",
 					//"**/gles/internal/TesteGL.java",
 				
@@ -167,25 +167,27 @@ public class CanvasBuilder {
             win64.compilerPrefix = "";// "mingw32-";
             win64.headerDirs = headerDir;// {"HEADERS HERE"};
             win64.libraries = SDKPath.libPath(libsWin64Dir) +
-        	             " -ljawt -luser32 -llibGLESv2-x64 ";
+                              "-ljawt -luser32 -lGLESv2 -lEGL";
+        	           //  " -ljawt -luser32 -llibGLESv2-x64 ";
             
             win64.cFlags +=  " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
             win64.linkerFlags += win32.linkerFlags;
             
             BuildTarget linux32 = null;
             BuildTarget linux64 = null;
-      if(buildLinux){
-         linux32 = BuildTarget.newDefaultTarget(TargetOs.Linux, false);
-        linux32.cIncludes = win32.cIncludes;
-        linux32.headerDirs = win32.headerDirs;
-        linux32.libraries = win32.libraries;
-        linux32.cFlags = win32.cFlags;
-        linux32.linkerFlags = win32.linkerFlags;
-        
-        linux64 = BuildTarget.newDefaultTarget(TargetOs.Linux, true);
-     // BuildTarget mac = BuildTarget.newDefaultTarget(TargetOs.MacOsX, true);
-   
-      }  
+
+            if (buildLinux) {
+                linux32 = BuildTarget.newDefaultTarget(TargetOs.Linux, false);
+                linux32.cIncludes = win32.cIncludes;
+                linux32.headerDirs = win32.headerDirs;
+                linux32.libraries = win32.libraries;
+                linux32.cFlags = win32.cFlags;
+                linux32.linkerFlags = win32.linkerFlags;
+
+                linux64 = BuildTarget.newDefaultTarget(TargetOs.Linux, true);
+                // BuildTarget mac = BuildTarget.newDefaultTarget(TargetOs.MacOsX, true);
+
+            }
             if (createBuild) {
         	System.out.println("\n\n#### Create Ant Build  ... \n");
 		    BuildConfig config = new BuildConfig("GLES");
@@ -202,6 +204,7 @@ public class CanvasBuilder {
 		// "-v -Dhas-compiler=true  clean postcompile");
 		
 	    }
+	    
 	    if(packIt){
 		System.out.println("\n\n#### Pack it  ... \n");
 		BuildExecutor.executeAnt("jni/build.xml", "-v pack-natives");

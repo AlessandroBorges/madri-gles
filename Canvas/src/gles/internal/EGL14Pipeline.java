@@ -30,7 +30,7 @@ import static gles.internal.EGLUtil.*;
  * EGL 1.4
  *
  */
-public class EGL14Pipeline {
+public class EGL14Pipeline implements Pipeline {
     /* 
      * CPP codes
      */
@@ -48,7 +48,15 @@ public class EGL14Pipeline {
         
         /////////////////////////////////////////////// 
       */
-
+  
+    /**
+     * The singleton
+     */
+    private static EGL14Pipeline singleton;
+    /**
+     * private constructor
+     */
+    private EGL14Pipeline(){}
     
   /**
    * initialize native variables.
@@ -1687,6 +1695,15 @@ public class EGL14Pipeline {
         if (offset < 0) throw new IllegalArgumentException(arrayName + "offset < 0");
         if (array.length - offset < 1)
             throw new IllegalArgumentException(arrayName+".length - offset < 1 < needed");        
+    }
+
+    
+ 
+    public static EGL14Pipeline getPipelineInstance() {
+        if(null == singleton){
+            singleton = new EGL14Pipeline();
+        }
+        return singleton;
     }
 
 }

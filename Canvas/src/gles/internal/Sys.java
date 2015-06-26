@@ -23,6 +23,12 @@ public class Sys {
 	}
 	
 	/**
+	 * singleton EGLPipeline
+	 */
+	private static EGL14Pipeline eglPipeline = null;
+	
+	
+	/**
 	 * display metrics for this instance of Emulator
 	 */
   private static DisplayMetrics displayMetrics =null;
@@ -36,7 +42,10 @@ public class Sys {
     }
 
     public static Pipeline getEGLPipelineInstance(EGL_PIPE mode) {
-        return null;
+        if(null==eglPipeline){
+            eglPipeline = EGL14Pipeline.getPipelineInstance();
+        }
+        return eglPipeline;
     }
 
     /**

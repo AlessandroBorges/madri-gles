@@ -38,7 +38,10 @@ public class JAWT {
     */
     
     static{
-        new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
+        System.out.println(System.getProperty("java.library.path"));
+     //   new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
+        System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
+        System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
         }
 	
 	private Component c;

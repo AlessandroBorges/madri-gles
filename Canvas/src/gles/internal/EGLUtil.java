@@ -30,8 +30,8 @@ public class EGLUtil {
     private static Constructor<EGLContext> ctorEGLContext;
     private static Constructor<EGLSurface> ctorEGLSurface;
     
-    public static EGLDisplay EGL_NO_DISPLAY = EGLDisplay.getNullEGLDisplay(); 
-    public static EGLContext EGL_NO_CONTEXT = createEGLContext(0L); 
+    public static EGLDisplay EGL_NO_DISPLAY; // EGLDisplay.getNullEGLDisplay(); 
+    public static EGLContext EGL_NO_CONTEXT; // createEGLContext(0L); 
     
     static{
         
@@ -45,6 +45,10 @@ public class EGLUtil {
             ctorEGLConfig.setAccessible(true);
             ctorEGLContext.setAccessible(true);
             ctorEGLSurface.setAccessible(true); 
+            
+            EGL_NO_CONTEXT = createEGLContext(0L);
+            EGL_NO_DISPLAY = EGLDisplay.getNullEGLDisplay();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

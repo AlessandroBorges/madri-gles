@@ -11,6 +11,6 @@ public interface Pipeline {
      * Get a Pipeline instance
      * @return
      */
-    public Pipeline getPipelineInstance();
+   // public  Pipeline getPipelineInstance();
 
 }

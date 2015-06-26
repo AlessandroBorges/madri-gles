@@ -930,7 +930,7 @@ public class EGLPipeline implements Pipeline {
                                                               EGLSurface sur, 
                                                               long time);
 
-    @Override
+    
     public Pipeline getPipelineInstance() {
         // TODO Auto-generated method stub
         return null;

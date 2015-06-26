@@ -47,16 +47,16 @@ public class Emulator extends JFrame {
    
     protected void jbInit(){        
         Dimension size = new Dimension(mWidth, mHeight);
-        
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myCanvasEGL = new CanvasEGL();
         myCanvasEGL.setPreferredSize(size);
         
         setLayout(new BorderLayout());
         add(myCanvasEGL,BorderLayout.CENTER);
         pack();
-        this.setVisible(true);
+        
         addWindowListener(myWindowAdapter);
-       
+        this.setVisible(true);
         
         checkWM();
     }
@@ -102,7 +102,7 @@ public class Emulator extends JFrame {
     
     
     
-    public void checkWM() {
+    private void checkWM() {
         Toolkit tk = this.getToolkit();
         if (!(tk.isFrameStateSupported(Frame.ICONIFIED))) {
             print("Your window manager doesn't support ICONIFIED.");
@@ -168,7 +168,14 @@ public class Emulator extends JFrame {
      * @param args
      */
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+      
+        final Runnable doRun =  new Runnable() {
+            public void run() {
+                final Emulator emulator = new Emulator("Emulator");
+            }
+        };
+        
+        SwingUtilities.invokeLater(doRun);
 
     }
 
