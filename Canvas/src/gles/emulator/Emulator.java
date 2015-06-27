@@ -9,6 +9,8 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+import android.opengl.*;
+
 /**
  * The emulator Window
  * @author Alessandro Borges
@@ -25,7 +27,7 @@ public class Emulator extends JFrame {
     /**
      * Window Size
      */
-    protected int mHeight = 640, mWidth=512;
+    protected int mHeight = 480, mWidth=512;
 
     public Emulator(String title) throws HeadlessException {
         super(SUB_TITLE + DIV + title);
@@ -58,7 +60,7 @@ public class Emulator extends JFrame {
         addWindowListener(myWindowAdapter);
         this.setVisible(true);
         
-        checkWM();
+      //  checkWM();
     }
     
     /**
@@ -74,7 +76,7 @@ public class Emulator extends JFrame {
      */
    protected void opened(){
        System.out.println("Window opened");
-      SwingUtilities.invokeLater(runJAWT);
+       SwingUtilities.invokeLater(runJAWT);
        
     }
     
@@ -97,9 +99,67 @@ public class Emulator extends JFrame {
         @Override
         public void run() {            
             myCanvasEGL.nativeBinding();
+            checkEGL();
         }
     };
     
+    
+    private void checkEGL(){
+        /*
+         * Get an EGL instance
+         */
+       
+        EGLDisplay mEglDisplay = myCanvasEGL.getEGLDisplay();
+        
+        EGL14LogWrapper egl = new EGL14LogWrapper(true, true, System.out);
+        int[] major = new int[1];
+        int[] minor = new int[1];
+        boolean ok = egl.eglInitialize(mEglDisplay, major, 0, minor, 0);
+        if(ok){
+            System.err.println("initialize OK !");
+        }else{
+            System.err.println("failed to initialize");
+            return;
+        }
+        //EGLConfig[] config = new EGLConfig[10];
+        int[] num_config = new int[1];
+        
+
+        
+     // typical high-quality attrib list
+        int configSpec[] = {
+        // 32 bit color
+                EGL14.EGL_RED_SIZE, 8,
+                EGL14.EGL_GREEN_SIZE, 8,
+                EGL14.EGL_BLUE_SIZE, 8,
+        // at least 24 bit depth
+                EGL14.EGL_DEPTH_SIZE, 24,
+                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_WINDOW_BIT,
+        // want opengl-es 2.x conformant CONTEXT
+                EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT, 
+                EGL14.EGL_NONE
+        };      
+      
+
+        EGLConfig[] configs = new EGLConfig[4];
+        
+         ok = egl.eglChooseConfig(mEglDisplay, configSpec, configs, 4, num_config);
+         EGLConfig mEglConfig = configs[0];
+         int ctxattr[] = {
+                 EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
+                 EGL14.EGL_NONE
+              };
+         EGLContext mEglContext = egl.eglCreateContext(mEglDisplay, 
+                                                       mEglConfig, 
+                                                       EGL14.EGL_NO_CONTEXT, ctxattr);
+         System.out.println("EGLContext: " + mEglContext);
+        
+        EGLSurface mEglSurface = egl.eglCreateWindowSurface(mEglDisplay, 
+                                                            mEglConfig, 
+                                                            myCanvasEGL, 
+                                                            null);
+        System.out.println("EGLSurface: " + mEglSurface);
+    }
     
     
     private void checkWM() {

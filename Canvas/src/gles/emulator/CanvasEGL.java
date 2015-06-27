@@ -2,11 +2,14 @@ package gles.emulator;
 
 import gles.emulator.util.DrawingSurfaceInfo;
 import gles.emulator.util.JAWT;
+import gles.internal.Sys;
+import gles.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 import java.awt.Canvas;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -38,11 +41,11 @@ public class CanvasEGL
     /**
      * EGLDisplay binding
      */
-    protected EGLDisplay myEGLDisplay = null;
-    protected EGLSurface myEGLSurface = null;
+    protected EGLDisplay mEGLDisplay = null;
+    protected EGLSurface mEGLSurface = null;
     
     protected Surface    mSurface     = new MySurface(this);
-    
+    protected SurfaceView mSurfaveView = new SurfaceView(this);
     /**
      * Wrapper for Surface
      * @author Alessandro Borges
@@ -69,6 +72,12 @@ public class CanvasEGL
         @Override
         public void unlockCanvasAndPost(android.graphics.Canvas canvas) {
             myCanvasEGL.unlockCanvasAndPost(canvas);            
+        }
+
+        @Override
+        public long getNativeHandle() {
+            long winHandle = myCanvasEGL.getHWND(); 
+            return winHandle;
         }        
     }// end MySurface
     
@@ -145,14 +154,14 @@ public class CanvasEGL
     protected long getHDC() {
         DrawingSurfaceInfo dsi = jawt.getDrawingSurfaceInfo();
         long hdc = dsi.getHDC();
-        jawt.freeDrawingSurfaceInfo(dsi);
+        //jawt.freeDrawingSurfaceInfo(dsi);
         return hdc;
     }
     
     protected long getHWND(){
         DrawingSurfaceInfo dsi = jawt.getDrawingSurfaceInfo();
         long hwnd = dsi.getHWND();
-        jawt.freeDrawingSurfaceInfo(dsi);
+       // jawt.freeDrawingSurfaceInfo(dsi);
         return hwnd;
     }
 
@@ -235,13 +244,17 @@ public class CanvasEGL
      * @return EGLDisplay of this
      */
     public EGLDisplay getEGLDisplay() {
-        if (null == myEGLDisplay) {
+        if (null == mEGLDisplay || mEGLDisplay.getNativeHandle()==0) {
             long display_id = getHDC();
-            myEGLDisplay = EGL14.eglGetDisplay(display_id);
+            mEGLDisplay = EGL14.eglGetDisplay(display_id);
+            int error = EGL14.eglGetError();
+            System.out.println("CanvasEGL.getEGLDisplay() eglError: " + EGL14LogWrapper.getErrorString (error));
         }
-        return myEGLDisplay;
+        return mEGLDisplay;
     }
 	
+    
+    
     
     private class MyMouseListener implements MouseListener{
         
@@ -376,6 +389,14 @@ public class CanvasEGL
         public void keyReleased(KeyEvent e) {
         }
         
+    }
+    
+    /**
+     * Reverence holder of this Canvas
+     * @return
+     */
+    public SurfaceHolder getHolder(){
+        return mSurfaceHolder;
     }
     
     private final SurfaceHolder mSurfaceHolder = new MySurfaceHolder();
@@ -550,9 +571,19 @@ public class CanvasEGL
 
     public void nativeBinding() {
         jawt = new JAWT(this);
-        long dspHandle = jawt.getEGLNativeDisplayType();
-        EGLDisplay dsp = EGL14.eglGetDisplay(dspHandle);
-        this.myEGLDisplay = dsp;
+        
+        Rectangle r = jawt.getDrawingSurfaceInfo().getRectangle();
+        System.out.println("Bounds " +r);
+        
+       // long dspHandle = jawt.getEGLNativeDisplayType();
+       // EGLDisplay dsp = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);//dspHandle);
+        
+       // this.mEGLDisplay = dsp;
+        
+//        if(Sys.DEBUG){
+//            System.out.println("myEGLDisplay: " + mEGLDisplay.getNativeHandle());
+//            System.out.println("egl error: 0x" + Integer.toHexString(EGL14.eglGetError()));
+//        }
         // TODO create EGLSurface
         //this.myEGLSurface = ...
         

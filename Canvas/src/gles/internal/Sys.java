@@ -11,7 +11,10 @@ import android.util.DisplayMetrics;
  */
 public class Sys {
 	
-	public enum GL_PIPE{
+      public static boolean DEBUG = true;
+      
+      
+       public enum GL_PIPE{
 		GLES10,
 		GLES10Ext,
 		GLES11,

@@ -552,14 +552,24 @@ jint util_visibilityTest(JNIEnv *env, jclass clazz,
 
      */
 
+    
+    
+    private static UtilPipeline singleton; 
     /* (non-Javadoc)
      * @see gles.internal.Pipeline#getPipelineInstance()
-     */
-    @Override
-    public Pipeline getPipelineInstance() {
-        // TODO Auto-generated method stub
-        return null;
+     */ 
+    public static Pipeline getPipelineInstance() {
+        if(null==singleton){
+            singleton = new UtilPipeline();
+        }
+        return singleton;
     }
+    
+    
+    /**
+     * singleton 
+     */
+    private UtilPipeline(){}
     
     /**
      * Test whether a given triangle mesh is visible on the screen. The mesh

@@ -523,19 +523,20 @@ public class EGL14 {
                                                     Object win,
                                                     int[] attrib_list, int offset) 
     {
-        Surface sur = null;
-        if (win instanceof SurfaceView) {
-            SurfaceView surfaceView = (SurfaceView) win;
-            sur = surfaceView.getHolder().getSurface();
-        } else if (win instanceof SurfaceHolder) {
-            SurfaceHolder holder = (SurfaceHolder) win;
-            sur = holder.getSurface();
-        } else if (win instanceof Surface) {
-            sur = (Surface) win;
-        }
+//        Surface sur = null;
+//        if (win instanceof SurfaceView) {
+//            SurfaceView surfaceView = (SurfaceView) win;
+//            sur = surfaceView.getHolder().getSurface();
+//        } else if (win instanceof SurfaceHolder) {
+//            SurfaceHolder holder = (SurfaceHolder) win;
+//            sur = holder.getSurface();
+//        } else if (win instanceof Surface) {
+//            sur = (Surface) win;
+//        }
+
         EGLSurface surface;
-        if (sur != null) {
-            surface = _eglCreateWindowSurface(dpy, config, sur, attrib_list, offset);
+        if (win instanceof gles.emulator.CanvasEGL) {
+            surface = _eglCreateWindowSurface(dpy, config, win, attrib_list, offset);
         } else if (win instanceof SurfaceTexture) {
             surface = _eglCreateWindowSurfaceTexture(dpy, config, win, attrib_list, offset);
         } else {

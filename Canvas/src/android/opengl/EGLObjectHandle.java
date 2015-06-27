@@ -81,4 +81,20 @@ public abstract class EGLObjectHandle {
         result = 31 * result + (int) (mHandle ^ (mHandle >>> 32));
         return result;
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        String name = this.getClass().getCanonicalName();
+        builder.append(name);
+        builder.append(" [mHandle=");
+        builder.append(mHandle);
+        builder.append("]");
+        return builder.toString();
+    }
+    
+    
 }

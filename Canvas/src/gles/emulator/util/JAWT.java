@@ -40,6 +40,8 @@ public class JAWT {
     static{
         System.out.println(System.getProperty("java.library.path"));
      //   new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
+        System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
+        System.load("C:/Users/Livia/workspace/Canvas/libs/libGLESv2.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
         }
@@ -135,7 +137,7 @@ public class JAWT {
 	    if(ok){
 	        dsi.release();
 	        // releasing local m_dsi
-	        if(this.m_dsi != null && dsi.getNativeHandle() == m_dsi.getEGLNativeDisplayType()){
+	        if(this.m_dsi != null && dsi.getNativeHandle() == m_dsi.getNativeHandle()){
 	            this.m_dsi = null;
 	        }
 	    }	        
@@ -658,8 +660,9 @@ public class JAWT {
     */
 
     /**
-     * Get the Canvas EGLDisplay 
-     * @return
+     * Get the Canvas EGLDisplay.<br>
+     * On Windows, it returns HDC
+     * @return HDC / Display* pointer
      */
     public long getEGLNativeDisplayType() {
         DrawingSurface ds = this.getDrawingSurface();

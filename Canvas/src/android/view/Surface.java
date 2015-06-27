@@ -8,4 +8,6 @@ public interface Surface {
 
   public void unlockCanvasAndPost(android.graphics.Canvas canvas);
 
+  public long getNativeHandle();
+
 }

@@ -1,6 +1,5 @@
-Hi,
-
-For native drawing on awt Canvas, it's necessary to get JAWT's drawingSurface and lock it, as shown below:
+//Hi,
+// For native drawing on awt Canvas, it's necessary to get JAWT's drawingSurface and lock it, as shown below:
 
     JNIEXPORT void JNICALL
     Java_MyCanvas_paint(JNIEnv* env, jobject canvas, jobject graphics)

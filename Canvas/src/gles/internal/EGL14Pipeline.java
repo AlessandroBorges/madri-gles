@@ -21,9 +21,12 @@ package gles.internal;
 
 import android.graphics.SurfaceTexture;
 import android.opengl.*;
-import gles.view.Surface;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import gles.emulator.CanvasEGL;
+//import gles.view.Surface;
 import gles.view.SurfaceView;
-import gles.view.SurfaceHolder;
+//import gles.view.SurfaceHolder;
 import static gles.internal.EGLUtil.*;
 
 /**
@@ -698,7 +701,12 @@ public class EGL14Pipeline implements Pipeline {
     {
         
         long dpyHandle = check(dpy);
-        long configHandle = check(config);            
+        long configHandle = check(config);   
+        if(null == attrib_list){
+            int[] tmp = {EGL14.EGL_NONE};
+            attrib_list = tmp;
+            offset = 0;
+        }
         checkAttrib(attrib_list, offset);
         
         if(null == win){
@@ -706,6 +714,10 @@ public class EGL14Pipeline implements Pipeline {
         }
         
         Surface sur = null;
+        if(win instanceof CanvasEGL){
+            CanvasEGL canvasEGL = (CanvasEGL)win;            
+            sur = canvasEGL.getHolder().getSurface();
+        }else
         if (win instanceof SurfaceView) {
             SurfaceView surfaceView = (SurfaceView)win;
             sur = surfaceView.getHolder().getSurface();
@@ -1675,7 +1687,7 @@ public class EGL14Pipeline implements Pipeline {
 
         if (attrib_list.length - attrib_listOffset < 1)
             throw new IllegalArgumentException("length - Offset < 1 < needed");
-        if (checkEGLNONE(attrib_list, attrib_listOffset)) { 
+        if (!checkEGLNONE(attrib_list, attrib_listOffset)) { 
             throw new IllegalArgumentException("attrib_list must contain EGL_NONE!"); 
             }
     }
