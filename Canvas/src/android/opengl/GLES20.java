@@ -633,7 +633,7 @@ public class GLES20 {
     private native static void nativeClassInit();
 
     static {
-        nativeClassInit();
+      //  nativeClassInit();
     }
 
     /**

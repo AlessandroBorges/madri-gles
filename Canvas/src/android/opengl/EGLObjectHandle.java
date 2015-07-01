@@ -90,8 +90,8 @@ public abstract class EGLObjectHandle {
         StringBuilder builder = new StringBuilder();
         String name = this.getClass().getCanonicalName();
         builder.append(name);
-        builder.append(" [mHandle=");
-        builder.append(mHandle);
+        builder.append(" [mHandle=0x");
+        builder.append(Long.toHexString(mHandle));
         builder.append("]");
         return builder.toString();
     }

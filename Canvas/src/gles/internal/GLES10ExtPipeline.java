@@ -49,7 +49,7 @@ public class GLES10ExtPipeline implements Pipeline {
 	 * Get a instance of this Pipeline implementation
 	 * @return a live instance of GLES10EXT
 	 */
-	public  Pipeline getPipelineInstance() {
+	public  static Pipeline getPipelineInstance() {
 		if(instance == null){
 			instance = new GLES10ExtPipeline();
 		}        

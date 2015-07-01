@@ -35,24 +35,26 @@ public class GLES31Pipeline
 		
 	}
 	
-	/**
-	 * Private constructor
-	 */
-	private GLES31Pipeline(){}
+    /**
+     * Private constructor
+     */
+    private GLES31Pipeline() {
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static Pipeline instance;
-	
-	/**
-	 * Get a instance of this Pipeline implementation
-	 * @return a live instance of GLES10EXT
-	 */
-	public  Pipeline getPipelineInstance() {
-		if(instance == null){
-			instance = new GLES31Pipeline();
-		}        
+    private static Pipeline instance;
+
+    /**
+     * Get a instance of this Pipeline implementation
+     * 
+     * @return a live instance of GLES10EXT
+     */
+    public static Pipeline getPipelineInstance() {
+        if (instance == null) {
+            instance = new GLES31Pipeline();
+        }
         return instance;
     }
 

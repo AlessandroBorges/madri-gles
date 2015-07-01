@@ -41,8 +41,11 @@ public class GLES20Pipeline implements Pipeline {
          * static & native initialization
          */
         static{
-                GLES20ClassInit();
-                
+                //GLES20ClassInit();  
+           // System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
+//            System.load("C:/Users/Livia/workspace/Canvas/libs/libGLESv2.dll");
+//            System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
+//            System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
         }
         
         /**
@@ -59,7 +62,7 @@ public class GLES20Pipeline implements Pipeline {
          * Get a instance of this Pipeline implementation
          * @return a live instance of GLES10EXT
          */
-        public  Pipeline getPipelineInstance() {
+        public static Pipeline getPipelineInstance() {
                 if(instance == null){
                         instance = new GLES20Pipeline();
                 }        

@@ -5,7 +5,7 @@ import android.opengl.AttributeSet;
 import android.opengl.Context;
 
 /**
- * This class will extends AWT.Canvas
+ * This class shall/should extends AWT.Canvas
  * TODO - better bridge to CanvasEGL
  * @author Alessandro Borges
  *
@@ -32,7 +32,7 @@ public class SurfaceView {
 	}
 
 	public SurfaceHolder getHolder() {
-	        sHolder =  mCanvas.getHolder();
+	        sHolder =  (SurfaceHolder) mCanvas.getHolder();
 		return sHolder;
 	}
 

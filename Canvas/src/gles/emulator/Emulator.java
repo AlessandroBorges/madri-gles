@@ -111,16 +111,26 @@ public class Emulator extends JFrame {
        
         EGLDisplay mEglDisplay = myCanvasEGL.getEGLDisplay();
         
-        EGL14LogWrapper egl = new EGL14LogWrapper(true, true, System.out);
+        EGL14LogWrapper egl = new EGL14LogWrapper(true, false, System.out);
         int[] major = new int[1];
         int[] minor = new int[1];
-        boolean ok = egl.eglInitialize(mEglDisplay, major, 0, minor, 0);
+        
+        boolean ok = egl.eglInitialize(mEglDisplay, major, 0, minor, 0);        
         if(ok){
-            System.err.println("initialize OK !");
+            System.out.println("### initialize OK !");
         }else{
-            System.err.println("failed to initialize");
-            return;
+            System.err.println("### failed to initialize");
+           // return;
         }
+        
+        ok = egl.eglBindAPI(EGL14.EGL_OPENGL_ES_API);
+        if(ok){
+            System.out.println("### bind API ok");
+        }else{
+            System.err.println("### bind API FAILED");
+        }
+        
+        
         //EGLConfig[] config = new EGLConfig[10];
         int[] num_config = new int[1];
         
@@ -133,32 +143,68 @@ public class Emulator extends JFrame {
                 EGL14.EGL_GREEN_SIZE, 8,
                 EGL14.EGL_BLUE_SIZE, 8,
         // at least 24 bit depth
-                EGL14.EGL_DEPTH_SIZE, 24,
+                EGL14.EGL_DEPTH_SIZE, 16,
                 EGL14.EGL_SURFACE_TYPE, EGL14.EGL_WINDOW_BIT,
         // want opengl-es 2.x conformant CONTEXT
                 EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT, 
-                EGL14.EGL_NONE
+                EGL14.EGL_NONE,0
         };      
       
 
         EGLConfig[] configs = new EGLConfig[4];
         
          ok = egl.eglChooseConfig(mEglDisplay, configSpec, configs, 4, num_config);
-         EGLConfig mEglConfig = configs[0];
-         int ctxattr[] = {
-                 EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
-                 EGL14.EGL_NONE
-              };
-         EGLContext mEglContext = egl.eglCreateContext(mEglDisplay, 
-                                                       mEglConfig, 
-                                                       EGL14.EGL_NO_CONTEXT, ctxattr);
-         System.out.println("EGLContext: " + mEglContext);
+        EGLConfig mEglConfig = configs[0];
+        if(ok){
+            System.out.println("### good config: " + mEglConfig);
+        }else{
+            System.err.println("### BAD config: " + mEglConfig);
+        }
+        
         
         EGLSurface mEglSurface = egl.eglCreateWindowSurface(mEglDisplay, 
                                                             mEglConfig, 
                                                             myCanvasEGL, 
                                                             null);
         System.out.println("EGLSurface: " + mEglSurface);
+        if(mEglSurface == EGL14.EGL_NO_SURFACE){
+            System.err.println("### mEglSurface is an EGL_NO_SURFACE: " + mEglSurface);
+            //return;
+        }else{
+            System.out.println("### mEglSurface is : " + mEglSurface);
+        }
+        
+        int ctxattr[] = {
+                EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
+                EGL14.EGL_NONE
+             };
+        
+        EGLContext mEglContext = egl.eglCreateContext(mEglDisplay, 
+                mEglConfig, 
+                EGL14.EGL_NO_CONTEXT, ctxattr);
+        
+        if(mEglContext == EGL14.EGL_NO_CONTEXT){
+            System.err.println("mEglContext == EGL_NO_CONTEXT !");
+            return;
+        }
+        
+        System.out.println("EGLContext: " + mEglContext);
+        if (!egl.eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext)){
+            System.err.println("failed to MakeCurrent");
+        }else{
+            System.out.println("### MakeCurrent !!!");
+            GLES20.glClearColor(0.2f, 0.2f, .8f, 0.5f);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            egl.eglSwapBuffers(mEglDisplay, mEglSurface);
+        //    myCanvasEGL.repaint();
+//            egl.eglSwapBuffers(mEglDisplay, mEglSurface);
+//            egl.eglSwapBuffers(mEglDisplay, mEglSurface);
+//            egl.eglSwapBuffers(mEglDisplay, mEglSurface);
+            
+        }
+           ///
+         //  glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
+        
     }
     
     

@@ -38,9 +38,12 @@ public class JAWT {
     */
     
     static{
-        System.out.println(System.getProperty("java.library.path"));
+        System.out.println("Library path" + System.getProperty("java.library.path"));
      //   new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
-        System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
+      // System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
+      //  System.load("C:/Users/Livia/workspace/Canvas/libs/log4cplus.dll");
+      //  System.load("C:/Users/Livia/workspace/Canvas/libs/libMaliEmulator.dll");
+      //  System.load("C:/Users/Livia/workspace/Canvas/libs/d3dcompiler_47.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/libGLESv2.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
@@ -349,33 +352,33 @@ public class JAWT {
     }
 
 	/**
-	 * Request lock for rendering
-	 * @return
+	 * Request a lock for DrawingSurface.Lock();
+	 * @return true if ok
 	 */
     public synchronized boolean dsLock() {
-	if (m_ds == null) {
-	    return false;
-	} else {
-	    if (m_ds.lock()) {
-		gotDsiLock = true;
-		return true;
-	    } else
-		return false;
-
-	}
+        if (m_ds == null) {
+            m_ds = getDrawingSurface();
+        }
+        if (m_ds.lock()) {
+            gotDsiLock = true;
+            return true;
+        } else 
+            return false;
     }
     
+    /**
+     * Request a DrawingSurface.Unlock()
+     * @return true if ok
+     */
     public synchronized boolean dsUnlock() {
-	if (m_ds == null) {
-	    return false;
-	} else {
-	    if (m_ds.unlock()) {
-		gotDsiLock = true;
-		return true;
-	    } else
-		return false;
-
-	}
+        if (m_ds == null) {
+            m_ds = getDrawingSurface();
+        }
+        if (m_ds.unlock()) {
+            gotDsiLock = true;
+            return true;
+        } else 
+            return false;
     }
     
     //////////////////////////////////////////////////////////////

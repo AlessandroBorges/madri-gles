@@ -218,12 +218,12 @@ public class CanvasEGL
 
     /**
      * from SurfaceView.
-     * Does nothing
+     * call repaint()
      * @param force
      * @param redrawNeeded
      */
     protected void updateWindow(boolean force, boolean redrawNeeded) {
-        
+        repaint();
     }
     /**
      * from SurfaceView.
@@ -240,20 +240,47 @@ public class CanvasEGL
     
     /**
      * get or create a {@link EGLDisplay} for this canvas instance
-     * 
+     * TODO - Use Sys
      * @return EGLDisplay of this
      */
     public EGLDisplay getEGLDisplay() {
         if (null == mEGLDisplay || mEGLDisplay.getNativeHandle()==0) {
             long display_id = getHDC();
-            mEGLDisplay = EGL14.eglGetDisplay(display_id);
+            mEGLDisplay = EGL14.eglGetDisplay(display_id);//(EGL14.EGL_DEFAULT_DISPLAY);
+            EGLcheck();
+            if (mEGLDisplay.getNativeHandle() == EGL14.EGL_NO_DISPLAY.getNativeHandle()) {
+                // try default display
+                mEGLDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
+                EGLcheck();
+                if(mEGLDisplay.getNativeHandle()==0){
+                int displayAttributes[] = {
+                        EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL14.EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
+                        EGL14.EGL_NONE, 0 };
+
+                int platform = EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE;
+
+                mEGLDisplay = EGL14.eglGetPlatformDisplayEXT(platform, 
+                                                             display_id,
+                                                             displayAttributes);
+                EGLcheck();
+                }
+            }
             int error = EGL14.eglGetError();
-            System.out.println("CanvasEGL.getEGLDisplay() eglError: " + EGL14LogWrapper.getErrorString (error));
+            System.out.println("CanvasEGL.getEGLDisplay() eglError: "
+                               + EGL14LogWrapper.getErrorString (error) +
+                               "\t Display handle: " + mEGLDisplay.getNativeHandle());
         }
         return mEGLDisplay;
     }
 	
-    
+    /**
+     * Debug EGL
+     */
+    private void EGLcheck() {
+        int eglError = EGL14.eglGetError();
+        String err = EGL14LogWrapper.getErrorString(eglError);
+        System.out.println("CanvasEGL.getEGLDisplay() = " + err);
+    }
     
     
     private class MyMouseListener implements MouseListener{
@@ -569,11 +596,11 @@ public class CanvasEGL
         }
     }
 
-    public void nativeBinding() {
+    public void nativeBinding() {       
         jawt = new JAWT(this);
         
-        Rectangle r = jawt.getDrawingSurfaceInfo().getRectangle();
-        System.out.println("Bounds " +r);
+        //Rectangle r = jawt.getDrawingSurfaceInfo().getRectangle();
+        //System.out.println("Bounds " +r);
         
        // long dspHandle = jawt.getEGLNativeDisplayType();
        // EGLDisplay dsp = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);//dspHandle);

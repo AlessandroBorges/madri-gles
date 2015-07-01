@@ -61,7 +61,7 @@ public class GLES10Pipeline implements Pipeline {
      * 
      * @return a live instance of GLES10EXT
      */
-    public Pipeline getPipelineInstance() {
+    public static Pipeline getPipelineInstance() {
         if (instance == null) {
             instance = new GLES10Pipeline();
         }

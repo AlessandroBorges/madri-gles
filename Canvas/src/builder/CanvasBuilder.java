@@ -69,14 +69,12 @@ public class CanvasBuilder {
       
       String[]  ppSrc =  { "**/gles/emulator/util/JAWT.java",					
 			   "**/gles/internal/EGL14Pipeline.java",
-			 //  "**/gles/internal/GLES20Pipeline.java",
+			   "**/gles/internal/GLES20Pipeline.java",
 			//   "**/gles/internal/GLES30Pipeline.java",
 			//   "**/gles/internal/GLES31Pipeline.java",
-			//   "**/gles/internal/UtilPipeline.java",
-					//"**/gles/internal/GLES31ExtPipeline.java",
-					//"**/gles/internal/TesteGL.java",
-				
-					
+			    "**/gles/internal/UtilPipeline.java",
+			//"**/gles/internal/GLES31ExtPipeline.java",
+			//"**/gles/internal/TesteGL.java",					
     		  };
       
      

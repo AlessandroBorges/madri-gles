@@ -46,12 +46,52 @@ public class EGL14Pipeline implements Pipeline {
         
         #include <stdio.h>
         #include <stdlib.h>
+        #include <angle.h>
           
         using namespace std;
         
         /////////////////////////////////////////////// 
       */
   
+    /** 
+     * Accepted as the <platform> argument of eglGetPlatformDisplayEXT: */
+    public final static int      EGL_PLATFORM_ANGLE_ANGLE                       = 0x3201;
+    /** 
+     * Accepted as an attribute name in the <attrib_list> argument 
+     * of   eglGetPlatformDisplayEXT:
+     */
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_ANGLE                  = 0x3202;
+     /** 
+      * Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
+      */
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE          = 0x3203;
+
+    /**
+     * Accepted as an attribute name in the <attrib_list> argument of
+     * eglGetPlatformDisplayEXT:
+     */
+    public final static int      EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE     = 0x3204;
+    public final static int      EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE     = 0x3205;
+
+   /** 
+    * Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
+    */
+
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE             = 0x3207;
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE            = 0x3208;
+
+     /**Accepted as an attribute name in the <attrib_list> argument of
+    * eglGetPlatformDisplayEXT:
+*/
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE           = 0x3209;
+    public final static int      EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE = 0x320F;
+
+    // Accepted as values for the EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE attribute:
+
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE  = 0x320A;
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE      = 0x320B;
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE = 0x320C;
+    
     /**
      * The singleton
      */
@@ -139,6 +179,119 @@ public class EGL14Pipeline implements Pipeline {
         long handle = eglGetDisplay0((long)displayID);
     	return createEGLDisplay(handle);
     }
+    
+    /**
+     * <pre>
+     * Get a EGLDisplay from Google Angle.
+     * Example:
+     *   int displayAttributes[] = {   
+     *   EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+     *   EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, 9,
+     *   EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, 3,
+     *   EGL_NONE,
+     *  };
+     *   
+     *   int platform = EGL_PLATFORM_ANGLE_TYPE_ANGLE;
+     *   EGLDisplay mEGLDisplay = EGL14.EGL_DEFAULT_DISPLAY;
+     *   
+     *   mEglDisplay = eglGetPlatformDisplayEXT(platform,
+     *                                          mEGLDisplay, 
+     *                                          displayAttributes); 
+     *  ////////////////////////////////
+     *  
+     *  If no <attrib_list> is specified, the value of 
+     *  EGL_PLATFORM_ANGLE_TYPE_ANGLE is implicitly set to
+     *  EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE.
+     *  
+     *  Otherwise, the value of EGL_PLATFORM_ANGLE_TYPE_ANGLE should be:
+     *       - EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE for an implementation dependent
+     *         display, equivalent to using a <native_display> of EGL_DEFAULT_DISPLAY,
+     *       - EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE for a D3D9 display which translates
+     *         to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE for a D3D11 display which
+     *         translates to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE a D3D11 WARP display which
+     *         translates to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE for an OpenGL display which
+     *         translates to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE for a native OpenGL ES display;
+     * 
+     * </pre>
+     * 
+     * @param platform - EGL_PLATFORM_ANGLE_ANGLE
+     * @param display - EGLNativeDisplayType  value or EGL_DEFAULT_DISPLAY
+     * @param displayAttributes - int[] with requested attributes
+     * 
+     * @return EGLDisplay
+     */
+    public   EGLDisplay eglGetPlatformDisplayEXT(int platform, 
+                                                   long eglNativeDisplayType, 
+                                                   int[] displayAttributes){
+        if(displayAttributes==null){
+            int[] val = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE,
+                         EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, 9,
+                         EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, 3,
+                         EGL14.EGL_NONE, 0};
+            displayAttributes = val;
+        }
+        
+        long handle = eglGetPlatformDisplayEXT0(platform, eglNativeDisplayType, displayAttributes);
+        EGLDisplay angleDisplay = EGLUtil.createEGLDisplay(handle);
+        return angleDisplay;
+    }
+    
+    /**
+     * 
+     * From eglGetPlatformDisplayEXT
+     * Prototype:
+     * EGLAPI EGLDisplay EGLAPIENTRY eglGetPlatformDisplayEXT (EGLenum platform, 
+     *                    void *native_display, 
+     *                    const EGLint *attrib_list);
+     * 
+     * @param platform
+     * @param display
+     * @param displayAttributes
+     * @return
+     */
+    static protected native long eglGetPlatformDisplayEXT0(int platform, 
+                                                    long display, 
+                                                    int[] displayAttributes);/*
+//    const EGLint displayAttributes[] =
+//    {   
+//        EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+//        EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, 9,
+//        EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, 3,
+//        EGL_NONE,
+//      };
+
+    PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT = 
+     reinterpret_cast<PFNEGLGETPLATFORMDISPLAYEXTPROC>(eglGetProcAddress("eglGetPlatformDisplayEXT"));
+
+    if (!eglGetPlatformDisplayEXT){
+        //throw Exception::CreateException(E_FAIL, L"Failed to get function eglGetPlatformDisplayEXT");
+        printf(" eglGetPlatformDisplayEXT - Failed to get function eglGetPlatformDisplayEXT");
+        return (jlong) 0;
+    }
+    
+    EGLDisplay mEglDisplay = NULL;
+   // mEglDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE, EGL_DEFAULT_DISPLAY, displayAttributes);
+     mEglDisplay = eglGetPlatformDisplayEXT((EGLenum) platform,
+                                             (void *) display, 
+                                             (EGLint *)displayAttributes); 
+    if (mEglDisplay == EGL_NO_DISPLAY){
+        //throw Exception::CreateException(E_FAIL, L"Failed to get EGL display");
+        printf("eglGetPlatformDisplayEXT - Failed to get EGL display");
+        return (jlong)0;
+    }
+    
+    if (eglInitialize(mEglDisplay, NULL, NULL) == EGL_FALSE){
+        //throw Exception::CreateException(E_FAIL, L"Failed to initialize EGL");
+        printf("eglGetPlatformDisplayEXT - Failed to initialize EGL");
+        return (jlong)0;
+    }
+    
+    return (jlong)mEglDisplay;
+    */
     
     /**
      * native version of eglDisplay
@@ -1515,7 +1668,7 @@ public class EGL14Pipeline implements Pipeline {
      */
     public boolean eglCopyBuffers(EGLDisplay dpy,
                                   EGLSurface surface,
-                                  int target) {      
+                                  long target) {      
         long dpyHandle = check(dpy);
         long surfaceHandle = check(surface);        
         return eglCopyBuffers0(dpyHandle, surfaceHandle, target);

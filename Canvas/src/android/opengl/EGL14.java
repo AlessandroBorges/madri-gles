@@ -148,6 +148,46 @@ public class EGL14 {
     public static final int EGL_READ                           = 0x305A;
     public static final int EGL_CORE_NATIVE_ENGINE             = 0x305B;
 
+    /** 
+     * Accepted as the <platform> argument of eglGetPlatformDisplayEXT: */
+    public final static int      EGL_PLATFORM_ANGLE_ANGLE                       = 0x3201;
+    /** 
+     * Accepted as an attribute name in the <attrib_list> argument 
+     * of   eglGetPlatformDisplayEXT:
+     */
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_ANGLE                  = 0x3202;
+     /** 
+      * Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
+      */
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE          = 0x3203;
+
+    /**
+     * Accepted as an attribute name in the <attrib_list> argument of
+     * eglGetPlatformDisplayEXT:
+     */
+    public final static int      EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE     = 0x3204;
+    public final static int      EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE     = 0x3205;
+
+   /** 
+    * Accepted as values for the EGL_PLATFORM_ANGLE_TYPE_ANGLE attribute:
+    */
+
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE             = 0x3207;
+    public final static int      EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE            = 0x3208;
+
+     /**Accepted as an attribute name in the <attrib_list> argument of
+    * eglGetPlatformDisplayEXT:
+*/
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE           = 0x3209;
+    public final static int      EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE = 0x320F;
+
+    // Accepted as values for the EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE attribute:
+
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE  = 0x320A;
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE      = 0x320B;
+    public final static int      EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE = 0x320C;
+    
+    
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from EGL14._nativeClassInit();
@@ -283,6 +323,58 @@ public class EGL14 {
      */
     public static EGLDisplay eglGetDisplay(long display_id) {
         return  getPipeline().eglGetDisplay(display_id);
+    }
+    
+    /**
+     * <pre>
+     * Get a EGLDisplay from Google Angle.
+     * Example:
+     *   int displayAttributes[] = {   
+     *   EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+     *   EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, 9,
+     *   EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, 3,
+     *   EGL_NONE,
+     *  };
+     *   
+     *   int platform = EGL_PLATFORM_ANGLE_TYPE_ANGLE;
+     *   EGLDisplay mEGLDisplay = EGL14.EGL_DEFAULT_DISPLAY;
+     *   
+     *   mEglDisplay = eglGetPlatformDisplayEXT(platform,
+     *                                          mEGLDisplay, 
+     *                                          displayAttributes); 
+     *  ////////////////////////////////
+     *  
+     *  If no <attrib_list> is specified, the value of 
+     *  EGL_PLATFORM_ANGLE_TYPE_ANGLE is implicitly set to
+     *  EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE.
+     *  
+     *  Otherwise, the value of EGL_PLATFORM_ANGLE_TYPE_ANGLE should be:
+     *       - EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE for an implementation dependent
+     *         display, equivalent to using a <native_display> of EGL_DEFAULT_DISPLAY,
+     *       - EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE for a D3D9 display which translates
+     *         to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE for a D3D11 display which
+     *         translates to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_D3D11_WARP_ANGLE a D3D11 WARP display which
+     *         translates to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_OPENGL_ANGLE for an OpenGL display which
+     *         translates to OpenGL ES;
+     *       - EGL_PLATFORM_ANGLE_TYPE_OPENGLES_ANGLE for a native OpenGL ES display;
+     * 
+     * </pre>
+     * 
+     * @param platform - EGL_PLATFORM_ANGLE_ANGLE.
+     * @param display - EGLNativeDisplayType, aka HDC value or EGL_DEFAULT_DISPLAY.
+     * @param displayAttributes - int[] with requested attributes.
+     * 
+     * @return EGLDisplay from angle
+     */
+    public static EGLDisplay eglGetPlatformDisplayEXT(int platform, 
+                                                   long eglNativeDisplayType, 
+                                                   int[] displayAttributes){
+         return  getPipeline().eglGetPlatformDisplayEXT(platform,
+                                                        eglNativeDisplayType, 
+                                                        displayAttributes);
     }
 
     /**

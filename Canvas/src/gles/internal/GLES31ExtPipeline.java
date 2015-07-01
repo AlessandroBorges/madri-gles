@@ -49,10 +49,10 @@ public class GLES31ExtPipeline implements Pipeline{
 	 * Get a instance of this Pipeline implementation
 	 * @return a live instance of GLES10EXT
 	 */
-	public  Pipeline getPipelineInstance() {
-		if(instance == null){
-			instance = new GLES31ExtPipeline();
-		}        
+    public static Pipeline getPipelineInstance() {
+        if (instance == null) {
+            instance = new GLES31ExtPipeline();
+        }
         return instance;
     }
 

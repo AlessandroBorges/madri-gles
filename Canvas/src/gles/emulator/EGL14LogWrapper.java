@@ -39,9 +39,22 @@ public class EGL14LogWrapper
         mCheckError = check_error;
            // (GLDebugHelper.CONFIG_CHECK_GL_ERROR & configFlags) != 0;
     }
+    
+    
+    public boolean eglBindAPI(int api){
+        begin("eglBindAPI");
+        arg("api", api);        
+        end();
+        boolean result = mEgl14.eglBindAPI(api);       
+        returns(result);
+        checkError();
+        return result;
+    }
 
     public boolean eglChooseConfig(EGLDisplay display, int[] attrib_list,
-            EGLConfig[] configs, int config_size, int[] num_config) {
+                                   EGLConfig[] configs, int config_size, 
+                                   int[] num_config) 
+    {
         begin("eglChooseConfig");
         arg("display", display);
         arg("attrib_list", attrib_list);
