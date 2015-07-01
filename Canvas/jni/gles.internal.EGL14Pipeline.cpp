@@ -1,6 +1,6 @@
 #include <gles.internal.EGL14Pipeline.h>
 
-//@line:38
+//@line:41
 
         #define EGL_EGLEXT_PROTOTYPES   
         #include <EGL/egl.h>
@@ -9,6 +9,7 @@
         
         #include <stdio.h>
         #include <stdlib.h>
+        #include <angle.h>
           
         using namespace std;
         
@@ -16,7 +17,7 @@
       JNIEXPORT void JNICALL Java_gles_internal_EGL14Pipeline_nativeClassInit(JNIEnv* env, jclass clazz) {
 
 
-//@line:56
+//@line:107
 
      // do nothing, meanwhile
     
@@ -26,17 +27,70 @@
 JNIEXPORT jint JNICALL Java_gles_internal_EGL14Pipeline_nEGLGetError(JNIEnv* env, jclass clazz) {
 
 
-//@line:105
+//@line:156
 
         return (jint) eglGetError();
     
 
 }
 
+static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglGetPlatformDisplayEXT0
+(JNIEnv* env, jclass clazz, jint platform, jlong display, jintArray obj_displayAttributes, int* displayAttributes) {
+
+//@line:258
+
+//    const EGLint displayAttributes[] =
+//    {   
+//        EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
+//        EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE, 9,
+//        EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE, 3,
+//        EGL_NONE,
+//      };
+
+    PFNEGLGETPLATFORMDISPLAYEXTPROC eglGetPlatformDisplayEXT = 
+     reinterpret_cast<PFNEGLGETPLATFORMDISPLAYEXTPROC>(eglGetProcAddress("eglGetPlatformDisplayEXT"));
+
+    if (!eglGetPlatformDisplayEXT){
+        //throw Exception::CreateException(E_FAIL, L"Failed to get function eglGetPlatformDisplayEXT");
+        printf(" eglGetPlatformDisplayEXT - Failed to get function eglGetPlatformDisplayEXT");
+        return (jlong) 0;
+    }
+    
+    EGLDisplay mEglDisplay = NULL;
+   // mEglDisplay = eglGetPlatformDisplayEXT(EGL_PLATFORM_ANGLE_ANGLE, EGL_DEFAULT_DISPLAY, displayAttributes);
+     mEglDisplay = eglGetPlatformDisplayEXT((EGLenum) platform,
+                                             (void *) display, 
+                                             (EGLint *)displayAttributes); 
+    if (mEglDisplay == EGL_NO_DISPLAY){
+        //throw Exception::CreateException(E_FAIL, L"Failed to get EGL display");
+        printf("eglGetPlatformDisplayEXT - Failed to get EGL display");
+        return (jlong)0;
+    }
+    
+    if (eglInitialize(mEglDisplay, NULL, NULL) == EGL_FALSE){
+        //throw Exception::CreateException(E_FAIL, L"Failed to initialize EGL");
+        printf("eglGetPlatformDisplayEXT - Failed to initialize EGL");
+        return (jlong)0;
+    }
+    
+    return (jlong)mEglDisplay;
+    
+}
+
+JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetPlatformDisplayEXT0(JNIEnv* env, jclass clazz, jint platform, jlong display, jintArray obj_displayAttributes) {
+	int* displayAttributes = (int*)env->GetPrimitiveArrayCritical(obj_displayAttributes, 0);
+
+	jlong JNI_returnValue = wrapped_Java_gles_internal_EGL14Pipeline_eglGetPlatformDisplayEXT0(env, clazz, platform, display, obj_displayAttributes, displayAttributes);
+
+	env->ReleasePrimitiveArrayCritical(obj_displayAttributes, displayAttributes, 0);
+
+	return JNI_returnValue;
+}
+
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetDisplay0(JNIEnv* env, jclass clazz, jlong display_id) {
 
 
-//@line:137
+//@line:301
 
           return (jlong) eglGetDisplay((EGLNativeDisplayType)display_id);
     
@@ -46,7 +100,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetDisplay0(JNIEnv* 
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglInitialize0
 (JNIEnv* env, jclass clazz, jlong dpy, jintArray obj_major, jint majorOffset, jintArray obj_minor, jint minorOffset, int* major, int* minor) {
 
-//@line:246
+//@line:410
 
         //EGLBoolean eglInitialize ( EGLDisplay dpy, EGLint *major, EGLint *minor )
         return (jboolean) eglInitialize((EGLDisplay) dpy, 
@@ -70,7 +124,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglInitialize0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglTerminate0(JNIEnv* env, jclass clazz, jlong dpy) {
 
 
-//@line:281
+//@line:445
 
        // C function EGLBoolean eglTerminate ( EGLDisplay dpy )        
          return (jboolean) eglTerminate ( (EGLDisplay) dpy );        
@@ -81,7 +135,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglTerminate0(JNIEnv
 JNIEXPORT jstring JNICALL Java_gles_internal_EGL14Pipeline_eglQueryString0(JNIEnv* env, jclass clazz, jlong dpy, jint name) {
 
 
-//@line:343
+//@line:507
 
        const char * nativeString = eglQueryString ( (EGLDisplay) dpy, (EGLint) name );
        return env->NewStringUTF(nativeString);
@@ -92,7 +146,7 @@ JNIEXPORT jstring JNICALL Java_gles_internal_EGL14Pipeline_eglQueryString0(JNIEn
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglGetConfigs0
 (JNIEnv* env, jclass clazz, jlong eglDisplay, jlongArray obj_configs, jint config_size, jintArray obj_num_config, long long* configs, int* num_config) {
 
-//@line:436
+//@line:600
         
         // C function EGLBoolean eglGetConfigs ( EGLDisplay dpy, EGLConfig *configs, EGLint config_size, EGLint *num_config )
            return (jboolean)  eglGetConfigs ( (EGLDisplay) eglDisplay, 
@@ -118,7 +172,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglGetConfigs0(JNIEn
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglChooseConfig0
 (JNIEnv* env, jclass clazz, jlong display, jintArray obj_attrib_list, jint attrib_listOffset, jlongArray obj_configsHandler, jint configLength, jint config_size, jintArray obj_num_config, jint num_configOffset, int* attrib_list, long long* configsHandler, int* num_config) {
 
-//@line:535
+//@line:699
 
             
 	    EGLConfig * configs = new EGLConfig[configLength]; 
@@ -158,7 +212,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglChooseConfig0(JNI
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglGetConfigAttrib0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jint attribute, jintArray obj_value, jint offset, int* value) {
 
-//@line:586
+//@line:750
 
                                                     
        EGLBoolean res = eglGetConfigAttrib((EGLDisplay) dpy, 
@@ -183,7 +237,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglGetConfigAttrib0(
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreateWindowSurface0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jlong win, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:611
+//@line:775
                 
                 
                 EGLSurface surface = eglCreateWindowSurface((EGLDisplay) dpy,
@@ -208,7 +262,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreateWindowSurface0
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreateWindowSurfaceTexture0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jlong win, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:665
+//@line:829
     
     
        EGLSurface  surface = eglCreateWindowSurface(
@@ -234,7 +288,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreateWindowSurfaceT
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePbufferSurface0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:765
+//@line:938
 
        EGLSurface  surface = eglCreatePbufferSurface(
                                 (EGLDisplay)dpy,
@@ -258,7 +312,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePbufferSurface
 static inline jobject wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jint pixmap, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:814
+//@line:987
 
         
          // no op
@@ -280,7 +334,7 @@ JNIEXPORT jobject JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurfac
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroySurface0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface) {
 
 
-//@line:846
+//@line:1019
                     
       return (jboolean) eglDestroySurface ( (EGLDisplay) dpy, (EGLSurface) surface );
      
@@ -290,7 +344,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroySurface0(J
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglQuerySurface0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint attribute, jintArray obj_value, jint offset, int* value) {
 
-//@line:889
+//@line:1062
 
         
         return (jboolean) eglQuerySurface((EGLDisplay) dpy, 
@@ -314,7 +368,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglQuerySurface0(JNI
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindAPI0(JNIEnv* env, jclass clazz, jint api) {
 
 
-//@line:914
+//@line:1087
 
        return (jboolean) eglBindAPI((EGLenum) api);
     
@@ -324,7 +378,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindAPI0(JNIEnv* 
 JNIEXPORT jint JNICALL Java_gles_internal_EGL14Pipeline_eglQueryAPI0(JNIEnv* env, jclass clazz) {
 
 
-//@line:932
+//@line:1105
 
          return (jint) eglQueryAPI();
     
@@ -334,7 +388,7 @@ JNIEXPORT jint JNICALL Java_gles_internal_EGL14Pipeline_eglQueryAPI0(JNIEnv* env
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitClient0(JNIEnv* env, jclass clazz) {
 
 
-//@line:951
+//@line:1124
 
       return (jboolean) eglWaitClient();
     
@@ -344,7 +398,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitClient0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseThread0(JNIEnv* env, jclass clazz) {
 
 
-//@line:968
+//@line:1141
 
       return (jboolean) eglReleaseThread();
     
@@ -354,7 +408,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseThread0(JN
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePbufferFromClientBuffer0
 (JNIEnv* env, jclass clazz, jlong dpy, jint buftype, jlong buffer, jlong config, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:1061
+//@line:1234
 
         
         EGLSurface surface = eglCreatePbufferFromClientBuffer ( (EGLDisplay) dpy, 
@@ -379,7 +433,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePbufferFromCli
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSurfaceAttrib0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint attribute, jint value) {
 
 
-//@line:1106
+//@line:1279
         
         return (jboolean) eglSurfaceAttrib((EGLDisplay) dpy, 
                                            (EGLSurface) surface, 
@@ -393,7 +447,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSurfaceAttrib0(JN
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindTexImage0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint buffer) {
 
 
-//@line:1139
+//@line:1312
         
         return (jboolean) eglBindTexImage( (EGLDisplay) dpy, (EGLSurface) surface, (EGLint) buffer );        
         
@@ -403,7 +457,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindTexImage0(JNI
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseTexImage0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint buffer) {
 
 
-//@line:1169
+//@line:1342
 
         return (jboolean) eglReleaseTexImage((EGLDisplay) dpy, 
                                              (EGLSurface) surface, 
@@ -416,7 +470,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseTexImage0(
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapInterval0(JNIEnv* env, jclass clazz, jlong dpy, jint interval) {
 
 
-//@line:1196
+//@line:1369
 
          return (jboolean) eglSwapInterval((EGLDisplay) dpy, (EGLint) interval);
            
@@ -427,7 +481,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapInterval0(JNI
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreateContext0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jlong share_context, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:1246
+//@line:1419
 
                                                      
        return (jlong) eglCreateContext((EGLDisplay) dpy, 
@@ -451,7 +505,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreateContext0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroyContext0(JNIEnv* env, jclass clazz, jlong dpy, jlong ctx) {
 
 
-//@line:1278
+//@line:1451
 
      return (jboolean) eglDestroyContext((EGLDisplay) dpy, (EGLContext) ctx);
     
@@ -461,7 +515,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroyContext0(J
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglMakeCurrent0(JNIEnv* env, jclass clazz, jlong dpy, jlong draw, jlong read, jlong ctx) {
 
 
-//@line:1318
+//@line:1491
 
                                                 
        return (jboolean) eglMakeCurrent((EGLDisplay) dpy, 
@@ -475,7 +529,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglMakeCurrent0(JNIE
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentContext0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1342
+//@line:1515
 
        return (jlong) eglGetCurrentContext();
     
@@ -485,7 +539,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentContext0(J
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentSurface0(JNIEnv* env, jclass clazz, jint readdraw) {
 
 
-//@line:1365
+//@line:1538
 
         return (jlong) eglGetCurrentSurface((EGLint)readdraw);     
     
@@ -495,7 +549,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentSurface0(J
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentDisplay0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1381
+//@line:1554
         
        return (jlong) eglGetCurrentDisplay();
     
@@ -505,7 +559,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentDisplay0(J
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglQueryContext0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong ctx, jint attribute, jintArray obj_value, jint offset, int* value) {
 
-//@line:1423
+//@line:1596
 
          return (jboolean) eglQueryContext((EGLDisplay)dpy,
                                              (EGLContext)ctx,
@@ -527,7 +581,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglQueryContext0(JNI
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitGL0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1445
+//@line:1618
 
         return (jboolean) eglWaitGL();
     
@@ -537,7 +591,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitGL0(JNIEnv* e
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitNative0(JNIEnv* env, jclass clazz, jint engine) {
 
 
-//@line:1459
+//@line:1632
         
         return (jboolean) eglWaitNative((EGLint) engine);        
      
@@ -547,7 +601,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitNative0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapBuffers0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface) {
 
 
-//@line:1484
+//@line:1657
  
         return (jboolean) eglSwapBuffers ( (EGLDisplay) dpy, (EGLSurface) surface );        
        
@@ -557,7 +611,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapBuffers0(JNIE
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglCopyBuffers0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jlong target) {
 
 
-//@line:1518
+//@line:1691
         
        return (jboolean) eglCopyBuffers((EGLDisplay) dpy, 
                                         (EGLSurface) surface, 
@@ -569,7 +623,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglCopyBuffers0(JNIE
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglPresentationTimeANDROID0(JNIEnv* env, jclass clazz, jlong dpy, jlong sur, jlong time) {
 
 
-//@line:1553
+//@line:1726
 
         #ifdef   eglPresentationTimeANDROID                                                   
         return (jboolean) eglPresentationTimeANDROID((EGLDisplay) dpy,

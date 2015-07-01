@@ -7,6 +7,30 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_ANGLE 12801L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_ANGLE 12802L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE 12803L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_MAX_VERSION_MAJOR_ANGLE 12804L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_MAX_VERSION_MINOR_ANGLE 12805L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE 12807L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE 12808L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE 12809L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE 12815L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_HARDWARE_ANGLE 12810L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE 12811L
+#undef gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE
+#define gles_internal_EGL14Pipeline_EGL_PLATFORM_ANGLE_DEVICE_TYPE_REFERENCE_ANGLE 12812L
 /*
  * Class:     gles_internal_EGL14Pipeline
  * Method:    nativeClassInit
@@ -22,6 +46,14 @@ JNIEXPORT void JNICALL Java_gles_internal_EGL14Pipeline_nativeClassInit
  */
 JNIEXPORT jint JNICALL Java_gles_internal_EGL14Pipeline_nEGLGetError
   (JNIEnv *, jclass);
+
+/*
+ * Class:     gles_internal_EGL14Pipeline
+ * Method:    eglGetPlatformDisplayEXT0
+ * Signature: (IJ[I)J
+ */
+JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetPlatformDisplayEXT0
+  (JNIEnv *, jclass, jint, jlong, jintArray);
 
 /*
  * Class:     gles_internal_EGL14Pipeline

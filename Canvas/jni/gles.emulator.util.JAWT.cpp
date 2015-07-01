@@ -1,6 +1,6 @@
 #include <gles.emulator.util.JAWT.h>
 
-//@line:17
+//@line:24
  
     #include "madrigles.h"
     #include <assert.h>
@@ -18,7 +18,7 @@
     JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getAWT0(JNIEnv* env, jclass clazz) {
 
 
-//@line:76
+//@line:89
 
 	
 	    JAWT *awt;
@@ -43,7 +43,7 @@
 JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getDrawingSurfaceInfo0(JNIEnv* env, jclass clazz, jlong dsObj) {
 
 
-//@line:136
+//@line:155
 	
 	JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*) dsObj;
       	JAWT_DrawingSurfaceInfo *dsi;
@@ -80,7 +80,7 @@ JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getDrawingSurfaceInfo0(JNIE
 JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getDrawingSurfaceAWT0(JNIEnv* env, jclass clazz, jobject canvas, jlong awtHandle) {
 
 
-//@line:190
+//@line:209
 
 	    JAWT *awt = (JAWT*) awtHandle;
       	JAWT_DrawingSurface *ds;
@@ -98,7 +98,7 @@ JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getDrawingSurfaceAWT0(JNIEn
 JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getDrawingSurfaceWindowIdAWT(JNIEnv* env, jclass clazz, jobject canvas, jlong dsHandle, jlong dsiHandle, jlong display, jint screen) {
 
 
-//@line:216
+//@line:235
 
 			
       JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*) dsHandle;
@@ -142,7 +142,7 @@ JNIEXPORT jlong JNICALL Java_gles_emulator_util_JAWT_getDrawingSurfaceWindowIdAW
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_lockGlobal0(JNIEnv* env, jclass clazz, jlong awt) {
 
 
-//@line:269
+//@line:288
 
 	  if(awt){
 	   ((JAWT *) awt)->Lock(env);
@@ -156,7 +156,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_lockGlobal0(JNIEnv* env,
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_unlockGlobal0(JNIEnv* env, jclass clazz, jlong awt) {
 
 
-//@line:295
+//@line:314
 
           ((JAWT *) awt)->Unlock(env);
            return JNI_TRUE;
@@ -167,7 +167,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_unlockGlobal0(JNIEnv* en
 JNIEXPORT void JNICALL Java_gles_emulator_util_JAWT_freeResource(JNIEnv* env, jclass clazz, jlong awtObj, jlong drawingSurface, jlong drawingSurfaceInfo) {
 
 
-//@line:306
+//@line:325
 
 	    JAWT *awt = (JAWT*) awtObj;
 	    JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
@@ -183,7 +183,7 @@ JNIEXPORT void JNICALL Java_gles_emulator_util_JAWT_freeResource(JNIEnv* env, jc
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_lock0(JNIEnv* env, jclass clazz, jlong drawingSurface) {
 
 
-//@line:376
+//@line:395
  
         JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
         jint lock = 0;
@@ -215,7 +215,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_lock0(JNIEnv* env, jclas
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_unlock0(JNIEnv* env, jclass clazz, jlong drawingSurface) {
 
 
-//@line:410
+//@line:429
  
         JAWT_DrawingSurface *ds = (JAWT_DrawingSurface*)drawingSurface;
                 
@@ -230,7 +230,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_unlock0(JNIEnv* env, jcl
 static inline jboolean wrapped_Java_gles_emulator_util_JAWT_getHWND
 (JNIEnv* env, jclass clazz, jlong dsHandle, jlong dsiHandle, jlongArray obj_val, long long* val) {
 
-//@line:431
+//@line:450
         
       JAWT_DrawingSurface *ds;
           JAWT_DrawingSurfaceInfo* dsi;                
@@ -300,7 +300,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_getHWND(JNIEnv* env, jcl
 static inline jboolean wrapped_Java_gles_emulator_util_JAWT_getRectangle0
 (JNIEnv* env, jclass clazz, jlong dsHandle, jlong dsiHandle, jintArray obj_val, int* val) {
 
-//@line:488
+//@line:507
         
          JAWT_DrawingSurface *ds;
          JAWT_DrawingSurfaceInfo* dsi;
@@ -312,6 +312,7 @@ static inline jboolean wrapped_Java_gles_emulator_util_JAWT_getRectangle0
          lock = ds->Lock(ds);
          if ( (lock & JAWT_LOCK_ERROR) != 0 ) {
                   printf("Error locking surface \n");
+                  return JNI_FALSE;
           }
              
          // update dsi
@@ -347,7 +348,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_getRectangle0(JNIEnv* en
 static inline jboolean wrapped_Java_gles_emulator_util_JAWT_updateDSIEGLhandlers0
 (JNIEnv* env, jclass clazz, jlong dsHandle, jlong dsiHandler, jlongArray obj_EGLhandlers, long long* EGLhandlers) {
 
-//@line:528
+//@line:548
 
       jint lock;
       // JAWT *awt; 
@@ -426,7 +427,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_updateDSIEGLhandlers0(JN
 JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_freeDrawingSurfaceInfo0(JNIEnv* env, jclass clazz, jlong dsHandle, jlong dsiHandle) {
 
 
-//@line:592
+//@line:612
 
       jint lock;
       JAWT_DrawingSurface* ds;
@@ -457,7 +458,7 @@ JNIEXPORT jboolean JNICALL Java_gles_emulator_util_JAWT_freeDrawingSurfaceInfo0(
 static inline jboolean wrapped_Java_gles_emulator_util_JAWT_getDSIBounds
 (JNIEnv* env, jclass clazz, jlong dsHandle, jlong dsiHandle, jintArray obj_val, int* val) {
 
-//@line:617
+//@line:637
 
          JAWT_DrawingSurface *ds;
          JAWT_DrawingSurfaceInfo* dsi;

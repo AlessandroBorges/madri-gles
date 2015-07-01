@@ -523,7 +523,7 @@ jint util_visibilityTest(JNIEnv *env, jclass clazz,
 
      JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_visibilityTest(JNIEnv* env, jclass clazz, jfloatArray ws, jint wsOffset, jfloatArray positions, jint positionsOffset, jcharArray indices, jint indicesOffset, jint indexCount) {
 
-//@line:591
+//@line:601
 
             return util_visibilityTest(env, clazz,
                                        ws, wsOffset,
@@ -535,7 +535,7 @@ jint util_visibilityTest(JNIEnv *env, jclass clazz,
 
 JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_frustumCullSpheres(JNIEnv* env, jclass clazz, jfloatArray mvp, jint mvpOffset, jfloatArray spheres, jint spheresOffset, jint spheresCount, jintArray results, jint resultsOffset, jint resultsCapacity) {
 
-//@line:650
+//@line:660
 
             
             return util_frustumCullSpheres(env, clazz,
@@ -547,7 +547,7 @@ JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_frustumCullSpheres(JNIEnv
 
 JNIEXPORT void JNICALL Java_gles_internal_UtilPipeline_computeBoundingSphere(JNIEnv* env, jclass clazz, jfloatArray obj_positions, jint positionsOffset, jint positionsCount, jfloatArray obj_sphere, jint sphereOffset) {
 
-//@line:674
+//@line:684
 
             
             util_computeBoundingSphere(env, clazz,
@@ -563,7 +563,7 @@ JNIEXPORT void JNICALL Java_gles_internal_UtilPipeline_encodeBlock(JNIEnv* env, 
 	unsigned char* out = (unsigned char*)(obj_out?env->GetDirectBufferAddress(obj_out):0);
 
 
-//@line:699
+//@line:709
 
                                           
             etc1_encode_block((etc1_byte*) (in + inOffset), 
@@ -578,7 +578,7 @@ JNIEXPORT void JNICALL Java_gles_internal_UtilPipeline_decodeBlock(JNIEnv* env, 
 	unsigned char* out = (unsigned char*)(obj_out?env->GetDirectBufferAddress(obj_out):0);
 
 
-//@line:717
+//@line:727
 
         etc1_decode_block((etc1_byte*) (in + inOffset), 
                           (etc1_byte*) (out + outOffset));
@@ -590,7 +590,7 @@ JNIEXPORT void JNICALL Java_gles_internal_UtilPipeline_decodeBlock(JNIEnv* env, 
 JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_getEncodedDataSize(JNIEnv* env, jclass clazz, jint width, jint height) {
 
 
-//@line:726
+//@line:736
 
         return (jint) etc1_get_encoded_data_size(width, height);
     
@@ -600,7 +600,7 @@ JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_getEncodedDataSize(JNIEnv
 static inline jint wrapped_Java_gles_internal_UtilPipeline_encodeImage
 (JNIEnv* env, jclass clazz, jobject obj_in, jint inOffset, jint width, jint height, jint pixelSize, jint stride, jobject obj_out, jint outOffset, unsigned char* in, unsigned char* out) {
 
-//@line:742
+//@line:752
 
            int result = etc1_encode_image((etc1_byte*) (in + inOffset),
                                           width, height, 
@@ -624,7 +624,7 @@ JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_encodeImage(JNIEnv* env, 
 static inline jint wrapped_Java_gles_internal_UtilPipeline_decodeImage
 (JNIEnv* env, jclass clazz, jobject obj_in, jint inOffset, jobject obj_out, jint outOffset, jint width, jint height, jint pixelSize, jint stride, unsigned char* in, unsigned char* out) {
 
-//@line:763
+//@line:773
 
               int result = etc1_decode_image((etc1_byte*) (in + inOffset),
                                              (etc1_byte*) (out + outOffset),
@@ -648,7 +648,7 @@ JNIEXPORT void JNICALL Java_gles_internal_UtilPipeline_formatHeader(JNIEnv* env,
 	unsigned char* header = (unsigned char*)(obj_header?env->GetDirectBufferAddress(obj_header):0);
 
 
-//@line:777
+//@line:787
 
                etc1_pkm_format_header((etc1_byte*) (header + offset), width, height);
     
@@ -658,7 +658,7 @@ JNIEXPORT void JNICALL Java_gles_internal_UtilPipeline_formatHeader(JNIEnv* env,
 static inline jboolean wrapped_Java_gles_internal_UtilPipeline_isValid
 (JNIEnv* env, jclass clazz, jobject obj_header, jint offset, unsigned char* header) {
 
-//@line:785
+//@line:795
 
        jboolean result = etc1_pkm_is_valid((etc1_byte*) (header + offset));       
        return result ? JNI_TRUE : JNI_FALSE;    
@@ -677,7 +677,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_UtilPipeline_isValid(JNIEnv* env, 
 static inline jint wrapped_Java_gles_internal_UtilPipeline_getWidth
 (JNIEnv* env, jclass clazz, jobject obj_header, jint offset, unsigned char* header) {
 
-//@line:794
+//@line:804
 
         int  result = etc1_pkm_get_width((etc1_byte*) (header + offset));
         return (jint) result;
@@ -696,7 +696,7 @@ JNIEXPORT jint JNICALL Java_gles_internal_UtilPipeline_getWidth(JNIEnv* env, jcl
 static inline jint wrapped_Java_gles_internal_UtilPipeline_getHeight
 (JNIEnv* env, jclass clazz, jobject obj_header, jint offset, unsigned char* header) {
 
-//@line:803
+//@line:813
 
        jint result = etc1_pkm_get_height((etc1_byte*) (header + offset));
        return result;    

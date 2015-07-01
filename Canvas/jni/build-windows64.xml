@@ -38,7 +38,7 @@
 	<!-- define linker and options -->
 	<property name="linker" value="${compilerPrefix}g++${compilerSuffix}"/>
 	<property name="linker-opts" value="-Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ -m64 -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "/>
-	<property name="libraries" value=" -LC:/JDK8_64/lib  -LC:/Projetos/Android/Builder/Adreno/x64/  -ljawt -luser32 -llibGLESv2-x64 "/>
+	<property name="libraries" value=" -LC:/JDK8_64/lib  -LC:/Projetos/Android/Builder/Adreno/x64/ -ljawt -luser32 -lGLESv2 -lEGL"/>
 	
 	<!-- cleans the build directory, removes all object files and shared libs -->
 	<target name="clean">
