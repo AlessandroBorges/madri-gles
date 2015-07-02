@@ -43,7 +43,7 @@ public class JAWT {
       // System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
       //  System.load("C:/Users/Livia/workspace/Canvas/libs/log4cplus.dll");
       //  System.load("C:/Users/Livia/workspace/Canvas/libs/libMaliEmulator.dll");
-      //  System.load("C:/Users/Livia/workspace/Canvas/libs/d3dcompiler_47.dll");
+        System.load("C:/Users/Livia/workspace/Canvas/libs/d3dcompiler_46.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/libGLESv2.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
         System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");

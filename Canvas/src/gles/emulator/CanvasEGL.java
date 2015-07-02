@@ -22,6 +22,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.opengl.EGL14;
 import android.opengl.EGLDisplay;
+import android.opengl.EGLObjectHandle;
 import android.opengl.EGLSurface;
 import android.os.Handler;
 import android.os.Looper;
@@ -238,48 +239,54 @@ public class CanvasEGL
         updateWindow(false, false);
     }
     
+    private boolean isAngle = true;
     /**
      * get or create a {@link EGLDisplay} for this canvas instance
      * TODO - Use Sys
      * @return EGLDisplay of this
      */
     public EGLDisplay getEGLDisplay() {
-        if (null == mEGLDisplay || mEGLDisplay.getNativeHandle()==0) {
+        if (null == mEGLDisplay || mEGLDisplay.getNativeHandle() == 0) {
             long display_id = getHDC();
-            mEGLDisplay = EGL14.eglGetDisplay(display_id);//(EGL14.EGL_DEFAULT_DISPLAY);
-            EGLcheck();
-            if (mEGLDisplay.getNativeHandle() == EGL14.EGL_NO_DISPLAY.getNativeHandle()) {
+            if (!isAngle) {
+                mEGLDisplay = EGL14.eglGetDisplay(display_id);// (EGL14.EGL_DEFAULT_DISPLAY);
+                if (EGLcheck(mEGLDisplay) == EGL14.EGL_SUCCESS) { 
+                    return mEGLDisplay; 
+                 }
+            } else if (mEGLDisplay==null ||
+                       mEGLDisplay.getNativeHandle() == EGL14.EGL_NO_DISPLAY.getNativeHandle()) {
                 // try default display
                 mEGLDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
-                EGLcheck();
-                if(mEGLDisplay.getNativeHandle()==0){
-                int displayAttributes[] = {
-                        EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL14.EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
-                        EGL14.EGL_NONE, 0 };
+                if (EGLcheck(mEGLDisplay) == EGL14.EGL_SUCCESS) { 
+                    return mEGLDisplay; 
+                 }
+                if (mEGLDisplay.getNativeHandle() == 0) {
+                    int displayAttributes[] = {
+                            EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL14.EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
+                            EGL14.EGL_NONE, 0 };
 
-                int platform = EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE;
+                    int platform = EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE;
 
-                mEGLDisplay = EGL14.eglGetPlatformDisplayEXT(platform, 
-                                                             display_id,
-                                                             displayAttributes);
-                EGLcheck();
+                    mEGLDisplay = EGL14.eglGetPlatformDisplayEXT(platform,
+                            display_id,
+                            displayAttributes);
+                    EGLcheck(mEGLDisplay);
                 }
             }
-            int error = EGL14.eglGetError();
-            System.out.println("CanvasEGL.getEGLDisplay() eglError: "
-                               + EGL14LogWrapper.getErrorString (error) +
-                               "\t Display handle: " + mEGLDisplay.getNativeHandle());
         }
         return mEGLDisplay;
     }
 	
     /**
      * Debug EGL
+     * @return eglError
      */
-    private void EGLcheck() {
+    private int EGLcheck(EGLObjectHandle obj) {
         int eglError = EGL14.eglGetError();
         String err = EGL14LogWrapper.getErrorString(eglError);
-        System.out.println("CanvasEGL.getEGLDisplay() = " + err);
+        System.out.println("CanvasEGL.getEGLDisplay() = " + err + " " 
+                              +(obj !=null?obj.toString():" null"));
+        return eglError;
     }
     
     
