@@ -255,12 +255,12 @@ public class Emulator extends JFrame {
       print("");
       print("GL_NUM_COMPRESSED_TEXTURE_FORMATS: " + numCompressedFormats);
       print("GL_COMPRESSED_TEXTURE_FORMATS: ");
-      
+      Arrays.sort(compFormatsList);
         for (int i = 0; i < compFormatsList.length; i++) {
             int format = compFormatsList[i];
-            String name = getTextureCompresssedNames().get(format);
+            String name = getCompressedFormatName(format);
             if(name==null) name = "unknow";
-            print(name + " (0x" + Integer.toHexString(format) + ")");
+            print('\t' + name + " (0x" + Integer.toHexString(format) + ")");
         }
     }
     
@@ -329,153 +329,129 @@ public class Emulator extends JFrame {
         return strState.trim();
     }
     
-    /**
-     * Get Compressed Texture names
-     * @return
-     */
-    private Map<Integer,String> getTextureCompresssedNames(){
-        if(compTextures==null){
-            compTextures = new HashMap<Integer, String>(compressedTextureList.length);
-            for (Object[] tuple : compressedTextureList) {
-                String value = (String)tuple[0];
-                Integer key = (Integer)tuple[1];
-                compTextures.put(key, value);
-            }
+    public static String getCompressedFormatName(int formatID){
+        switch(formatID){
+        case 0x8225 : return "GL_COMPRESSED_RED";
+        case 0x8226 : return "GL_COMPRESSED_RG";
+        case 0x83f0 : return "GL_COMPRESSED_RGB_S3TC_DXT1_EXT";
+        case 0x83f1 : return "GL_COMPRESSED_RGBA_S3TC_DXT1_EXT";
+        case 0x83f2 : return "GL_COMPRESSED_RGBA_S3TC_DXT3_EXT";
+        case 0x83f3 : return "GL_COMPRESSED_RGBA_S3TC_DXT5_EXT";
+        case 0x84e9 : return "GL_COMPRESSED_ALPHA_ARB";
+        case 0x84ea : return "GL_COMPRESSED_LUMINANCE_ARB";
+        case 0x84eb : return "GL_COMPRESSED_LUMINANCE_ALPHA_ARB";
+        case 0x84ec : return "GL_COMPRESSED_INTENSITY_ARB";
+        case 0x84ed : return "GL_COMPRESSED_RGB_ARB";
+        case 0x84ee : return "GL_COMPRESSED_RGBA_ARB";
+        case 0x86a3 : return "GL_COMPRESSED_TEXTURE_FORMATS_ARB";
+        case 0x86b0 : return "GL_COMPRESSED_RGB_FXT1_3DFX";
+        case 0x86b1 : return "GL_COMPRESSED_RGBA_FXT1_3DFX";
+        case 0x87ee : return "ATC_RGBA_INTERPOLATED_ALPHA_AMD";
+        case 0x87f9 : return "3DC_X_AMD";
+        case 0x87fa : return "3DC_XY_AMD";
+        case 0x8b90 : return "GL_PALETTE4_RGB8_OES";
+        case 0x8b91 : return "GL_PALETTE4_RGBA8_OES";
+        case 0x8b92 : return "GL_PALETTE4_R5_G6_B5_OES";
+        case 0x8b93 : return "GL_PALETTE4_RGBA4_OES";
+        case 0x8b94 : return "GL_PALETTE4_RGB5_A1_OES";
+        case 0x8b95 : return "GL_PALETTE8_RGB8_OES";
+        case 0x8b96 : return "GL_PALETTE8_RGBA8_OES";
+        case 0x8b97 : return "GL_PALETTE8_R5_G6_B5_OES";
+        case 0x8b98 : return "GL_PALETTE8_RGBA4_OES";
+        case 0x8b99 : return "GL_PALETTE8_RGB5_A1_OES";
+        case 0x8c00 : return "COMPRESSED_RGB_PVRTC_4BPPV1_IMG";
+        case 0x8c01 : return "COMPRESSED_RGB_PVRTC_2BPPV1_IMG";
+        case 0x8c02 : return "COMPRESSED_RGBA_PVRTC_4BPPV1_IMG";
+        case 0x8c03 : return "COMPRESSED_RGBA_PVRTC_2BPPV1_IMG";
+        case 0x8c48 : return "GL_COMPRESSED_SRGB_EXT";
+        case 0x8c49 : return "GL_COMPRESSED_SRGB_ALPHA_EXT";
+        case 0x8c4a : return "GL_COMPRESSED_SLUMINANCE_EXT";
+        case 0x8c4b : return "GL_COMPRESSED_SLUMINANCE_ALPHA_EXT";
+        case 0x8c4c : return "GL_COMPRESSED_SRGB_S3TC_DXT1_EXT";
+        case 0x8c4d : return "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT";
+        case 0x8c4e : return "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT";
+        case 0x8c4f : return "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT";
+        case 0x8c70 : return "GL_COMPRESSED_LUMINANCE_LATC1_EXT";
+        case 0x8c71 : return "GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT";
+        case 0x8c72 : return "GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT";
+        case 0x8c73 : return "GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT";
+        case 0x8c92 : return "ATC_RGB_AMD";
+        case 0x8c93 : return "ATC_RGBA_EXPLICIT_ALPHA_AMD";
+        case 0x8d64 : return "ETC1_RGB8_OES";
+        case 0x8dbb : return "GL_COMPRESSED_RED_RGTC1_EXT";
+        case 0x8dbc : return "GL_COMPRESSED_SIGNED_RED_RGTC1_EXT";
+        case 0x8dbd : return "GL_COMPRESSED_RED_GREEN_RGTC2_EXT";
+        case 0x8dbe : return "GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT";
+        case 0x8e8c : return "GL_COMPRESSED_RGBA_BPTC_UNORM_ARB";
+        case 0x8e8d : return "GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB";
+        case 0x8e8e : return "GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB";
+        case 0x8e8f : return "GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB";
+        case 0x9137 : return "COMPRESSED_RGBA_PVRTC_2BPPV2_IMG";
+        case 0x9138 : return "COMPRESSED_RGBA_PVRTC_4BPPV2_IMG";
+        case 0x9270 : return "GL_COMPRESSED_R11_EAC";
+        case 0x9271 : return "GL_COMPRESSED_SIGNED_R11_EAC";
+        case 0x9272 : return "GL_COMPRESSED_RG11_EAC";
+        case 0x9273 : return "GL_COMPRESSED_SIGNED_RG11_EAC";
+        case 0x9274 : return "GL_COMPRESSED_RGB8_ETC2";
+        case 0x9275 : return "GL_COMPRESSED_SRGB8_ETC2";
+        case 0x9276 : return "GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2";
+        case 0x9277 : return "GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2";
+        case 0x9278 : return "GL_COMPRESSED_RGBA8_ETC2_EAC";
+        case 0x9279 : return "GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC";
+        case 0x93b0 : return "GL_COMPRESSED_RGBA_ASTC_4x4_KHR";
+        case 0x93b1 : return "GL_COMPRESSED_RGBA_ASTC_5x4_KHR";
+        case 0x93b2 : return "GL_COMPRESSED_RGBA_ASTC_5x5_KHR";
+        case 0x93b3 : return "GL_COMPRESSED_RGBA_ASTC_6x5_KHR";
+        case 0x93b4 : return "GL_COMPRESSED_RGBA_ASTC_6x6_KHR";
+        case 0x93b5 : return "GL_COMPRESSED_RGBA_ASTC_8x5_KHR";
+        case 0x93b6 : return "GL_COMPRESSED_RGBA_ASTC_8x6_KHR";
+        case 0x93b7 : return "GL_COMPRESSED_RGBA_ASTC_8x8_KHR";
+        case 0x93b8 : return "GL_COMPRESSED_RGBA_ASTC_10x5_KHR";
+        case 0x93b9 : return "GL_COMPRESSED_RGBA_ASTC_10x6_KHR";
+        case 0x93ba : return "GL_COMPRESSED_RGBA_ASTC_10x8_KHR";
+        case 0x93bb : return "GL_COMPRESSED_RGBA_ASTC_10x10_KHR";
+        case 0x93bc : return "GL_COMPRESSED_RGBA_ASTC_12x10_KHR";
+        case 0x93bd : return "GL_COMPRESSED_RGBA_ASTC_12x12_KHR";
+        case 0x93c0 : return "GL_COMPRESSED_RGBA_ASTC_3x3x3_OES";
+        case 0x93c1 : return "GL_COMPRESSED_RGBA_ASTC_4x3x3_OES";
+        case 0x93c2 : return "GL_COMPRESSED_RGBA_ASTC_4x4x3_OES";
+        case 0x93c3 : return "GL_COMPRESSED_RGBA_ASTC_4x4x4_OES";
+        case 0x93c4 : return "GL_COMPRESSED_RGBA_ASTC_5x4x4_OES";
+        case 0x93c5 : return "GL_COMPRESSED_RGBA_ASTC_5x5x4_OES";
+        case 0x93c6 : return "GL_COMPRESSED_RGBA_ASTC_5x5x5_OES";
+        case 0x93c7 : return "GL_COMPRESSED_RGBA_ASTC_6x5x5_OES";
+        case 0x93c8 : return "GL_COMPRESSED_RGBA_ASTC_6x6x5_OES";
+        case 0x93c9 : return "GL_COMPRESSED_RGBA_ASTC_6x6x6_OES";
+        case 0x93d0 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR";
+        case 0x93d1 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR";
+        case 0x93d2 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR";
+        case 0x93d3 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR";
+        case 0x93d4 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR";
+        case 0x93d5 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR";
+        case 0x93d6 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR";
+        case 0x93d7 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR";
+        case 0x93d8 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR";
+        case 0x93d9 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR";
+        case 0x93da : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR";
+        case 0x93db : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR";
+        case 0x93dc : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR";
+        case 0x93dd : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR";
+        case 0x93e0 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_3x3x3_OES";
+        case 0x93e1 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x3x3_OES";
+        case 0x93e2 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4x3_OES";
+        case 0x93e3 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4x4_OES";
+        case 0x93e4 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4x4_OES";
+        case 0x93e5 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5x4_OES";
+        case 0x93e6 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5x5_OES";
+        case 0x93e7 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5x5_OES";
+        case 0x93e8 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6x5_OES";
+        case 0x93e9 : return "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6x6_OES";
+        default:
+            return "0x" + Integer.toHexString(formatID);
         }
-        return compTextures;
+        
     }
     
-    private Map<Integer,String> compTextures = null;
-    /**
-     * Original list from 
-     * http://fossies.org/linux/mesa-demos/src/xdemos/glinfo_common.c
-     * 
-      * Copyright (C) 1999-2014  Brian Paul   All Rights Reserved.
-      * 
-      * Permission is hereby granted, free of charge, to any person obtaining a
-      * copy of this software and associated documentation files (the "Software"),
-      * to deal in the Software without restriction, including without limitation
-      * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-      * and/or sell copies of the Software, and to permit persons to whom the
-      * Software is furnished to do so, subject to the following conditions:
-     * 
-     * The above copyright notice and this permission notice shall be included
-     * in all copies or substantial portions of the Software.
-     * 
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-     * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-     * BRIAN PAUL BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
-     * AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-     * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-     */
-    private Object compressedTextureList [][] = {
-                   { "GL_COMPRESSED_ALPHA", 0x84E9 },
-                   { "GL_COMPRESSED_LUMINANCE", 0x84EA },
-                   { "GL_COMPRESSED_LUMINANCE_ALPHA", 0x84EB },
-                   { "GL_COMPRESSED_INTENSITY", 0x84EC },
-                   { "GL_COMPRESSED_RGB", 0x84ED },
-                   { "GL_COMPRESSED_RGBA", 0x84EE },
-                   { "GL_COMPRESSED_TEXTURE_FORMATS", 0x86A3 },
-                   { "GL_COMPRESSED_RGB", 0x84ED },
-                   { "GL_COMPRESSED_RGBA", 0x84EE },
-                   { "GL_COMPRESSED_TEXTURE_FORMATS", 0x86A3 },
-                   { "GL_COMPRESSED_ALPHA", 0x84E9 },
-                   { "GL_COMPRESSED_LUMINANCE", 0x84EA },
-                   { "GL_COMPRESSED_LUMINANCE_ALPHA", 0x84EB },
-                   { "GL_COMPRESSED_INTENSITY", 0x84EC },
-                   { "GL_COMPRESSED_SRGB", 0x8C48 },
-                   { "GL_COMPRESSED_SRGB_ALPHA", 0x8C49 },
-                   { "GL_COMPRESSED_SLUMINANCE", 0x8C4A },
-                   { "GL_COMPRESSED_SLUMINANCE_ALPHA", 0x8C4B },
-                   { "GL_COMPRESSED_RED", 0x8225 },
-                   { "GL_COMPRESSED_RG", 0x8226 },
-                   { "GL_COMPRESSED_RED_RGTC1", 0x8DBB },
-                   { "GL_COMPRESSED_SIGNED_RED_RGTC1", 0x8DBC },
-                   { "GL_COMPRESSED_RG_RGTC2", 0x8DBD },
-                   { "GL_COMPRESSED_SIGNED_RG_RGTC2", 0x8DBE },
-                   { "GL_COMPRESSED_RGB8_ETC2", 0x9274 },
-                   { "GL_COMPRESSED_SRGB8_ETC2", 0x9275 },
-                   { "GL_COMPRESSED_RGB8_PUNCHTHROUGH_ALPHA1_ETC2", 0x9276 },
-                   { "GL_COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2", 0x9277 },
-                   { "GL_COMPRESSED_RGBA8_ETC2_EAC", 0x9278 },
-                   { "GL_COMPRESSED_SRGB8_ALPHA8_ETC2_EAC", 0x9279 },
-                   { "GL_COMPRESSED_R11_EAC", 0x9270 },
-                   { "GL_COMPRESSED_SIGNED_R11_EAC", 0x9271 },
-                   { "GL_COMPRESSED_RG11_EAC", 0x9272 },
-                   { "GL_COMPRESSED_SIGNED_RG11_EAC", 0x9273 },
-                   { "GL_COMPRESSED_ALPHA_ARB", 0x84E9 },
-                   { "GL_COMPRESSED_LUMINANCE_ARB", 0x84EA },
-                   { "GL_COMPRESSED_LUMINANCE_ALPHA_ARB", 0x84EB },
-                   { "GL_COMPRESSED_INTENSITY_ARB", 0x84EC },
-                   { "GL_COMPRESSED_RGB_ARB", 0x84ED },
-                   { "GL_COMPRESSED_RGBA_ARB", 0x84EE },
-                   { "GL_COMPRESSED_TEXTURE_FORMATS_ARB", 0x86A3 },
-                   { "GL_COMPRESSED_RGBA_BPTC_UNORM_ARB", 0x8E8C },
-                   { "GL_COMPRESSED_SRGB_ALPHA_BPTC_UNORM_ARB", 0x8E8D },
-                   { "GL_COMPRESSED_RGB_BPTC_SIGNED_FLOAT_ARB", 0x8E8E },
-                   { "GL_COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_ARB", 0x8E8F },
-                   { "GL_COMPRESSED_RGBA_ASTC_4x4_KHR", 0x93B0 },
-                   { "GL_COMPRESSED_RGBA_ASTC_5x4_KHR", 0x93B1 },
-                   { "GL_COMPRESSED_RGBA_ASTC_5x5_KHR", 0x93B2 },
-                   { "GL_COMPRESSED_RGBA_ASTC_6x5_KHR", 0x93B3 },
-                   { "GL_COMPRESSED_RGBA_ASTC_6x6_KHR", 0x93B4 },
-                   { "GL_COMPRESSED_RGBA_ASTC_8x5_KHR", 0x93B5 },
-                   { "GL_COMPRESSED_RGBA_ASTC_8x6_KHR", 0x93B6 },
-                  { "GL_COMPRESSED_RGBA_ASTC_8x8_KHR", 0x93B7 },
-                  { "GL_COMPRESSED_RGBA_ASTC_10x5_KHR", 0x93B8 },
-                  { "GL_COMPRESSED_RGBA_ASTC_10x6_KHR", 0x93B9 },
-                  { "GL_COMPRESSED_RGBA_ASTC_10x8_KHR", 0x93BA },
-                  { "GL_COMPRESSED_RGBA_ASTC_10x10_KHR", 0x93BB },
-                  { "GL_COMPRESSED_RGBA_ASTC_12x10_KHR", 0x93BC },
-                  { "GL_COMPRESSED_RGBA_ASTC_12x12_KHR", 0x93BD },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_4x4_KHR", 0x93D0 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x4_KHR", 0x93D1 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_5x5_KHR", 0x93D2 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x5_KHR", 0x93D3 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_6x6_KHR", 0x93D4 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x5_KHR", 0x93D5 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x6_KHR", 0x93D6 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_8x8_KHR", 0x93D7 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x5_KHR", 0x93D8 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x6_KHR", 0x93D9 },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x8_KHR", 0x93DA },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_10x10_KHR", 0x93DB },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x10_KHR", 0x93DC },
-                  { "GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR", 0x93DD },
-                  { "GL_COMPRESSED_RGB_FXT1_3DFX", 0x86B0 },
-                  { "GL_COMPRESSED_RGBA_FXT1_3DFX", 0x86B1 },
-                  { "GL_COMPRESSED_LUMINANCE_LATC1_EXT", 0x8C70 },
-                  { "GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT", 0x8C71 },
-                  { "GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT", 0x8C72 },
-                  { "GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT", 0x8C73 },
-                  { "GL_COMPRESSED_RED_RGTC1_EXT", 0x8DBB },
-                  { "GL_COMPRESSED_SIGNED_RED_RGTC1_EXT", 0x8DBC },
-                  { "GL_COMPRESSED_RED_GREEN_RGTC2_EXT", 0x8DBD },
-                  { "GL_COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT", 0x8DBE },
-                  { "GL_COMPRESSED_RGB_S3TC_DXT1_EXT", 0x83F0 },
-                  { "GL_COMPRESSED_RGBA_S3TC_DXT1_EXT", 0x83F1 },
-                  { "GL_COMPRESSED_RGBA_S3TC_DXT3_EXT", 0x83F2 },
-                  { "GL_COMPRESSED_RGBA_S3TC_DXT5_EXT", 0x83F3 },
-                  { "GL_COMPRESSED_SRGB_EXT", 0x8C48 },
-                  { "GL_COMPRESSED_SRGB_ALPHA_EXT", 0x8C49 },
-                  { "GL_COMPRESSED_SLUMINANCE_EXT", 0x8C4A },
-                  { "GL_COMPRESSED_SLUMINANCE_ALPHA_EXT", 0x8C4B },
-                  { "GL_COMPRESSED_SRGB_S3TC_DXT1_EXT", 0x8C4C },
-                  { "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT", 0x8C4D },
-                  { "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT3_EXT", 0x8C4E },
-                  { "GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT", 0x8C4F },
-                  { "GL_PALETTE4_RGB8_OES", 0x8B90 },
-                  { "GL_PALETTE4_RGBA8_OES", 0x8B91 },
-                  { "GL_PALETTE4_R5_G6_B5_OES", 0x8B92 },
-                  { "GL_PALETTE4_RGBA4_OES", 0x8B93 },
-                  { "GL_PALETTE4_RGB5_A1_OES", 0x8B94 },
-                  { "GL_PALETTE8_RGB8_OES", 0x8B95 },
-                  { "GL_PALETTE8_RGBA8_OES", 0x8B96 },
-                  { "GL_PALETTE8_R5_G6_B5_OES", 0x8B97 },
-                  { "GL_PALETTE8_RGBA4_OES", 0x8B98 },
-                  { "GL_PALETTE8_RGB5_A1_OES", 0x8B99 }
-               };
     /**
      * @param args
      */
