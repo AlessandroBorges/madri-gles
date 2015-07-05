@@ -261,7 +261,7 @@ public class GLES11 extends GLES10 {
     
     private static GLES11Pipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES11Pipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES11);
+    		pipeline = (GLES11Pipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES11);
     	}
     	return pipeline;
     }

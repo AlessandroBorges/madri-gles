@@ -3,6 +3,9 @@
  */
 package gles.emulator;
 
+import gles.internal.Sys;
+import gles.internal.Sys.SDK;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -113,6 +116,8 @@ public class Emulator extends JFrame {
         public void run() {            
             myCanvasEGL.nativeBinding();
             checkEGL();
+            GLESInfo info = new GLESInfo();
+            System.out.println(info.toString());
         }
     };
     
@@ -131,62 +136,33 @@ public class Emulator extends JFrame {
         boolean ok = egl.eglInitialize(mEglDisplay, major, 0, minor, 0);        
         if(ok){
             System.out.println("### initialize OK !");
-            // EGL_CLIENT_APIS, EGL_VENDOR, EGL_VERSION, or EGL_EXTENSIONS.
-            System.out.println("Vendor: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VENDOR));
-            System.out.println("Version: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VERSION));
-            System.out.println("EGL APIS: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_CLIENT_APIS));
-            System.out.println("Extensions: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_EXTENSIONS));
+           queryEGL(mEglDisplay);          
         }else{
             System.err.println("### failed to initialize");
-           // return;
         }
         
-        ok = egl.eglBindAPI(EGL14.EGL_OPENGL_ES_API);
+        ok = egl.eglBindAPI(EGL14.EGL_OPENGL_ES_API);        
         
-        
-        //EGLConfig[] config = new EGLConfig[10];
-        int[] num_config = new int[1];
-        
-     // typical high-quality attrib list
-        int configSpec[] = {
-        // 32 bit color
-                EGL14.EGL_RED_SIZE, 8,
-                EGL14.EGL_GREEN_SIZE, 8,
-                EGL14.EGL_BLUE_SIZE, 8,
-        // at least 24 bit depth
-                EGL14.EGL_DEPTH_SIZE, 0,
-                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_WINDOW_BIT,
-        // want opengl-es 2.x conformant CONTEXT
-                EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT, 
-                EGL14.EGL_NONE
-        };      
-      
-
-        EGLConfig[] configs = new EGLConfig[1];
-        
-         ok = egl.eglChooseConfig(mEglDisplay, configSpec, configs, 1, num_config);
+        EGLConfig[] configs = chooseEGLConfig(true, mEglDisplay, egl);
+              
         EGLConfig mEglConfig = configs[0];
-        if(ok){
-            System.out.println("### good config: " + mEglConfig);
-        }else{
-            System.err.println("### BAD config: " + mEglConfig);
-        }  
-        
         ////////////////////////////////////////////////////
         int ctxattr[] = {
                 EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
                 EGL14.EGL_NONE
         };
 
-        EGLContext mEglContext = (EGLContext)egl.eglGetCurrentContext();
+        EGLContext mEglContext = null;//(EGLContext)egl.eglGetCurrentContext();
         
         if(mEglContext == null || mEglContext == EGL14.EGL_NO_CONTEXT)
             mEglContext = egl.eglCreateContext(mEglDisplay,
                                                mEglConfig,
                                                EGL14.EGL_NO_CONTEXT, ctxattr);
         if (mEglContext == EGL14.EGL_NO_CONTEXT) {
-            System.err.println("mEglContext == EGL_NO_CONTEXT !");
-            return;
+            System.out.println("### mEglContext == EGL_NO_CONTEXT !");
+            mEglContext = (EGLContext)egl.eglGetCurrentContext();
+            System.out.println("### eglGetCurrentContext: " + mEglContext);
+           // return;
         }
         
         ///////////////////////////////////////////////////////////////////////
@@ -228,6 +204,64 @@ public class Emulator extends JFrame {
             egl.eglSwapBuffers(mEglDisplay, mEglSurface);
         }        
     }
+    
+    /**
+     * Query EGL Vendor, Version, EGL APIS, EGL Extensions
+     * @param mEglDisplay current EGLDisplay 
+     */
+    protected void queryEGL(EGLDisplay mEglDisplay){
+        System.out.println("Vendor: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VENDOR));
+        System.out.println("Version: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VERSION));
+        System.out.println("EGL APIS: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_CLIENT_APIS));
+        System.out.println("Extensions: " );
+        String glExtensions = EGL14.eglQueryString(mEglDisplay, EGL14.EGL_EXTENSIONS);
+        String[] extensions = glExtensions.split(" ");
+        Arrays.sort(extensions);
+        for (String ext : extensions) {
+         print('\t' + ext);
+         }
+    }
+    
+    
+    private EGLConfig[] chooseEGLConfig(boolean tryES3, EGLDisplay mEglDisplay, EGL14LogWrapper egl){
+        int[] num_config = new int[1];
+        int EGL_OPENGL_ES3_BIT = 0x00000040;
+        int renderType = tryES3 ? EGL_OPENGL_ES3_BIT : EGL14.EGL_OPENGL_ES2_BIT;
+        if(tryES3){
+            
+        }
+     // typical high-quality attrib list
+        int configSpec[] = {
+        // colors
+                EGL14.EGL_RED_SIZE,   5,
+                EGL14.EGL_GREEN_SIZE, 6,
+                EGL14.EGL_BLUE_SIZE,  5,
+        // at least 16 bit depth
+                EGL14.EGL_DEPTH_SIZE, 16,
+                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_WINDOW_BIT,
+        // want opengl-es 2.x conformant CONTEXT
+                EGL14.EGL_RENDERABLE_TYPE, renderType , 
+                EGL14.EGL_NONE
+        };           
+             
+        egl.eglChooseConfig(mEglDisplay, configSpec, null, 0, num_config);
+        System.out.println("### num available Configs(ES3/ES2): " + num_config[0]);
+        
+        // failed to get Config
+        if(num_config[0]==0){
+            System.out.println("Failed to get ES3. Try ES2...");
+            configSpec[11] = EGL14.EGL_OPENGL_ES2_BIT; 
+            egl.eglChooseConfig(mEglDisplay, configSpec, null, 1, num_config);
+            System.out.println("### num available Configs (ES2): " + num_config[0]);
+        }
+        
+        int avail_configs = num_config[0];
+        EGLConfig[] configs = new EGLConfig[avail_configs];   
+        egl.eglChooseConfig(mEglDisplay, configSpec, configs, avail_configs, num_config);
+        System.out.println("### returned EGLConfigs: " + num_config[0]);
+        return configs;
+    }
+    
     
     /**
      * Query GL_VENDOR, GL_RENDERER, GL_VERSION, GL_SHADING_LANGUAGE_VERSION, or GL_EXTENSIONS.
@@ -459,7 +493,9 @@ public class Emulator extends JFrame {
       
         final Runnable doRun =  new Runnable() {
             public void run() {
+                Sys.setSDK(SDK.MALI);
                 final Emulator emulator = new Emulator("Emulator");
+                
             }
         };
         

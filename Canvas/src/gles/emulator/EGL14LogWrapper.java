@@ -252,6 +252,10 @@ public class EGL14LogWrapper
         return result;
     }
 
+    public EGLDisplay eglGetDisplay(EGLDisplay display) {
+        return eglGetDisplay(display.getHandle());
+    }
+    
     public EGLDisplay eglGetDisplay(int native_display) {
         begin("eglGetDisplay");
         arg("native_display", native_display);

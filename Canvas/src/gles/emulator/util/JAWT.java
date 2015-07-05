@@ -4,6 +4,7 @@
 package gles.emulator.util;
 
 import gles.internal.EGLUtil;
+import gles.internal.Sys;
 
 import java.awt.Component;
 import java.util.HashMap;
@@ -38,15 +39,20 @@ public class JAWT {
     */
     
     static{
-        System.out.println("Library path" + System.getProperty("java.library.path"));
-     //   new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
-      // System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
-      //  System.load("C:/Users/Livia/workspace/Canvas/libs/log4cplus.dll");
-      //  System.load("C:/Users/Livia/workspace/Canvas/libs/libMaliEmulator.dll");
-        System.load("C:/Users/Livia/workspace/Canvas/libs/d3dcompiler_46.dll");
-        System.load("C:/Users/Livia/workspace/Canvas/libs/libGLESv2.dll");
-        System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
-        System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
+        
+        Sys.loadNativeLibs();
+        
+//        System.out.println("Library path" + System.getProperty("java.library.path"));
+//        new JniGenSharedLibraryLoader("libs/GLES-natives.jar").load("GLES");
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/log4cplus.dll");
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/libMaliEmulator.dll");
+//      
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/angle/d3dcompiler_46.dll");
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/angle/libGLESv2.dll");
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/angle/libEGL.dll");
+//        
+//        System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
         }
 	
 	private Component c;

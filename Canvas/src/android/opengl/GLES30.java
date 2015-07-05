@@ -628,7 +628,7 @@ public class GLES30 extends GLES20 {
     
     private static GLES30Pipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES30Pipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES30);
+    		pipeline = (GLES30Pipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES30);
     	}
     	return pipeline;
     }

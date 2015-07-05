@@ -491,7 +491,7 @@ public class GLES10 {
     
     private static GLES10Pipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES10Pipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES10);
+    		pipeline = (GLES10Pipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES10);
     	}
     	return pipeline;
     }

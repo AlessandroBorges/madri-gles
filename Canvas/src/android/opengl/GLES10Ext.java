@@ -24,7 +24,7 @@ public class GLES10Ext extends GLES10 {
     */
     private static GLES10ExtPipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES10ExtPipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES10Ext);
+    		pipeline = (GLES10ExtPipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES10Ext);
     	}
     	return pipeline;
     }

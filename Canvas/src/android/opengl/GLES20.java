@@ -617,7 +617,7 @@ public class GLES20 {
      */
      private static GLES20Pipeline getPipeline(){
      	if(pipeline==null){
-     		pipeline = (GLES20Pipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES20);
+     		pipeline = (GLES20Pipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES20);
      	}
      	return pipeline;
      }

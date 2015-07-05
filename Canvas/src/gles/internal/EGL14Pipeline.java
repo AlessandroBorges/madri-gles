@@ -553,19 +553,25 @@ public class EGL14Pipeline implements Pipeline {
                                  int configsOffset, int config_size,
                                  int[] num_config, int num_configOffset) {
     	              
-        if(null == configs) throw new IllegalArgumentException("configs == null");        
+        if(null == configs) {
+            configsOffset = 0;
+            config_size = 0;        
+        }
         if(null == num_config) throw new IllegalArgumentException("num_config == null");        
         if(configsOffset < 0) throw new IllegalArgumentException("configsOffser < 0");        
-        if(configs.length - configsOffset < config_size)
-            throw new IllegalArgumentException("length - configsOffset < config_size < needed");        
+        
+        if(configs != null &&  configs.length - configsOffset < config_size)
+            throw new IllegalArgumentException("length - configsOffset < config_size < needed"); 
+        
         if(num_configOffset < 0)
-            throw new IllegalArgumentException("num_configOffset < 0");        
+            throw new IllegalArgumentException("num_configOffset < 0");  
+        
         if(num_config.length - num_configOffset < 1)
             throw new IllegalArgumentException("length - num_configOffset < 1 < needed");
         
     	     	
     	// prepare new parameters without offset thing
-    	long[] eglConfigs = new long[configs.length-configsOffset];    	
+    	long[] eglConfigs = (null == configs) ? new long[0] : new long[configs.length-configsOffset];    	
     	config_size = eglConfigs.length;
     	int[] pNum_config = new int[1];
     	
@@ -578,11 +584,13 @@ public class EGL14Pipeline implements Pipeline {
     	num_config[num_configOffset] = numConfigs;
     	
     	// fill back configs arrays
-    	 for(int i = 0; i <= numConfigs; i++){
+    	if(config_size > 0){
+    	 for(int i = 0; i < numConfigs; i++){
     	     long handle = eglConfigs[i];
     	     EGLConfig cfg = createEGLConfig(handle);
     	     configs[i+configsOffset] =  cfg;
-    	 }   	
+    	 } 
+    	}
     	
     	return val;
     }
@@ -599,6 +607,10 @@ public class EGL14Pipeline implements Pipeline {
                                                  int config_size,
                                                  int[] num_config);/*        
         // C function EGLBoolean eglGetConfigs ( EGLDisplay dpy, EGLConfig *configs, EGLint config_size, EGLint *num_config )
+           if(config_size==0){
+             configs = NULL; 
+           }
+           
            return (jboolean)  eglGetConfigs ( (EGLDisplay) eglDisplay, 
                                              (EGLConfig *) configs, 
                                              (EGLint)  config_size, 
@@ -639,31 +651,38 @@ public class EGL14Pipeline implements Pipeline {
             checkAttrib(attrib_list, attrib_listOffset);            
             // configs check
             String error = null;
-            if (configs == null) error = "configs == null";
+            if (configs == null){
+                config_size = 0;
+                configsOffset=0;
+            }
             if (configsOffset < 0) error = "configsOffset < 0";            
-            int remaining = attrib_list.length - attrib_listOffset;
-            if (remaining < config_size) error = "length - configsOffset < config_size < needed";
+            int remainingAttrib = attrib_list.length - attrib_listOffset;
+            if (remainingAttrib < 1) error = "attribs.length - attribsOffset < 1 < needed";
           
+            int remainConf = config_size==0 ? 0 : (configs.length - configsOffset);
+            if(remainConf<config_size){
+                error = "configs.length - configsOffset < config_size < needed";
+            }
             if (error != null) { 
                 throw new IllegalArgumentException(error); 
             }   
             
          // num_config checks
-            checkArray(num_config, num_configOffset, "num_config");            
-            int num_configRemaining = num_config.length - num_configOffset;
-        
+            checkArray(num_config, num_configOffset, "num_config");
+           
             long displayHandler = check(display);	
-            long[] configHandlers = new long[num_configRemaining];
+            long[] configHandlers = new long[config_size];
             boolean val=true;
 	
             val = eglChooseConfig0(displayHandler, 
 	                       attrib_list, attrib_listOffset, 
-	                       configHandlers, num_configRemaining, 
+	                       configHandlers, configHandlers.length, 
 	                       config_size, 
 	                       num_config, num_configOffset);
 	
             // prepare returning EGLConfig array
-            for (int i = 0; i < num_configRemaining; i++) {
+            if(configs != null)
+            for (int i = 0; i < configHandlers.length; i++) {
                 long handle = configHandlers[i];
                 EGLConfig eglConfig = createEGLConfig(handle);
                 configs[i + configsOffset] = eglConfig;
@@ -698,7 +717,10 @@ public class EGL14Pipeline implements Pipeline {
                                                    int[] num_config, int num_configOffset
             );/*
             
-	    EGLConfig * configs = new EGLConfig[configLength]; 
+	    EGLConfig * configs = NULL;
+	    if(configLength > 0){
+	      configs = new EGLConfig[configLength];
+	    } 
 	    EGLBoolean val = eglChooseConfig((EGLDisplay) display,
 	      	                             (EGLint *) (attrib_list + attrib_listOffset), 
 	      	                             configs,
@@ -707,17 +729,25 @@ public class EGL14Pipeline implements Pipeline {
 	      
 	     // cast EGLConfig objects to jlong 
 	     // they can be 32 or 64 bits, so lets cast it one by one to jlong 
-	     if (configs) {
+	     if (configLength > 0) {
 	         for (int i = 0; i < configLength; i++) {
 	                    configsHandler[i] = (jlong) configs[i];
 	          }
-              delete[] configs;
+                 delete[] configs;
               }
 	      
 	      return (jboolean) val;
     */
 
-    // 
+    /**
+     * 
+     * @param dpy
+     * @param config
+     * @param attribute
+     * @param value
+     * @param offset
+     * @return
+     */
 
     public   boolean eglGetConfigAttrib(EGLDisplay dpy,
                                         EGLConfig config,

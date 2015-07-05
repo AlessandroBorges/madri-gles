@@ -357,7 +357,7 @@ public class GLES31 extends GLES30 {
     
     private static GLES31Pipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES31Pipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES31);
+    		pipeline = (GLES31Pipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES31);
     	}
     	return pipeline;
     }

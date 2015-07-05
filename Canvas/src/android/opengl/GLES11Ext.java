@@ -232,7 +232,7 @@ public class GLES11Ext
     
     private static GLES11ExtPipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES11ExtPipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES11Ext);
+    		pipeline = (GLES11ExtPipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES11Ext);
     	}
     	return pipeline;
     }

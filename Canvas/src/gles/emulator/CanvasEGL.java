@@ -246,31 +246,32 @@ public class CanvasEGL
      * @return EGLDisplay of this
      */
     public EGLDisplay getEGLDisplay() {
+        
         if (null == mEGLDisplay || mEGLDisplay.getNativeHandle() == 0) {
             long display_id = getHDC();
-            if (!isAngle) {
-                mEGLDisplay = EGL14.eglGetDisplay(display_id);// (EGL14.EGL_DEFAULT_DISPLAY);
-                if (EGLcheck(mEGLDisplay) == EGL14.EGL_SUCCESS) { 
-                    return mEGLDisplay; 
-                 }
-            } else if (mEGLDisplay==null ||
-                       mEGLDisplay.getNativeHandle() == EGL14.EGL_NO_DISPLAY.getNativeHandle()) {
+            mEGLDisplay = EGL14.eglGetDisplay(display_id);
+           if (eglErrorCheck(mEGLDisplay) == EGL14.EGL_SUCCESS) { 
+                   //return mEGLDisplay; 
+           }
+           if (mEGLDisplay == EGL14.EGL_NO_DISPLAY) {
                 // try default display
                 mEGLDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
-                if (EGLcheck(mEGLDisplay) == EGL14.EGL_SUCCESS) { 
+                if (eglErrorCheck(mEGLDisplay) == EGL14.EGL_SUCCESS) { 
                     return mEGLDisplay; 
                  }
-                if (mEGLDisplay.getNativeHandle() == 0) {
+                
+                if (isAngle && mEGLDisplay.getNativeHandle() == 0) {
                     int displayAttributes[] = {
-                            EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL14.EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
-                            EGL14.EGL_NONE, 0 };
+                            EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE, 
+                            EGL14.EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
+                            EGL14.EGL_NONE};
 
                     int platform = EGL14.EGL_PLATFORM_ANGLE_TYPE_ANGLE;
 
                     mEGLDisplay = EGL14.eglGetPlatformDisplayEXT(platform,
                             display_id,
                             displayAttributes);
-                    EGLcheck(mEGLDisplay);
+                    eglErrorCheck(mEGLDisplay);
                 }
             }
         }
@@ -281,7 +282,7 @@ public class CanvasEGL
      * Debug EGL
      * @return eglError
      */
-    private int EGLcheck(EGLObjectHandle obj) {
+    private int eglErrorCheck(EGLObjectHandle obj) {
         int eglError = EGL14.eglGetError();
         String err = EGL14LogWrapper.getErrorString(eglError);
         System.out.println("CanvasEGL.getEGLDisplay() = " + err + " " 

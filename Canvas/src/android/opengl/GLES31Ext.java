@@ -421,7 +421,7 @@ public class GLES31Ext {
      */
     private static GLES31ExtPipeline getPipeline(){
     	if(pipeline==null){
-    		pipeline = (GLES31ExtPipeline) Sys.getPipelineInstance(Sys.GL_PIPE.GLES31Ext);
+    		pipeline = (GLES31ExtPipeline) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES31Ext);
     	}
     	return pipeline;
     }
