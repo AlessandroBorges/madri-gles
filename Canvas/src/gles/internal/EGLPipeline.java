@@ -6,6 +6,7 @@ import static gles.internal.EGLUtil.*;
 /**
  * THIS IS A TEMPLATE
  ***/
+@Deprecated
 public class EGLPipeline implements Pipeline {
     /* 
      * CPP codes

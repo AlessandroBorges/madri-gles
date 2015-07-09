@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package javax.microedition.khronos.egl;
+//package com.google.android.gles_jni;
+package gles.internal;
 
-import javax.microedition.khronos.opengles.GL;
+import javax.microedition.khronos.egl.*;
 
-public abstract class EGLContext
-{
-    protected static  EGL EGL_INSTANCE;
-    
-    public static EGL getEGL() {
-        return EGL_INSTANCE;
+public class EGLDisplayImpl 
+extends android.opengl.EGLDisplay
+implements javax.microedition.khronos.egl.EGLDisplay 
+{  
+
+    protected EGLDisplayImpl(long display) {
+       super(display);
     }
-
-    public abstract GL getGL();
+    
 }

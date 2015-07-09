@@ -493,7 +493,7 @@ public class Emulator extends JFrame {
       
         final Runnable doRun =  new Runnable() {
             public void run() {
-                Sys.setSDK(SDK.MALI);
+                Sys.setSDK(SDK.ANGLE);
                 final Emulator emulator = new Emulator("Emulator");
                 
             }

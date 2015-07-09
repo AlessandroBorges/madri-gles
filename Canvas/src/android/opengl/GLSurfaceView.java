@@ -30,7 +30,7 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.Context;
-import android.opengl.Log;
+import android.util.Log;
 //import android.content.pm.ConfigurationInfo;
 //import android.os.SystemProperties;
 //import android.util.AttributeSet;

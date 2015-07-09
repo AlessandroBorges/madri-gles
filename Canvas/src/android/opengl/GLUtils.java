@@ -25,7 +25,7 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGL11;
 
 import android.graphics.Bitmap;
-
+import android.util.Log;
 /**
  *
  * Utility class to help bridging OpenGL ES and Android APIs.

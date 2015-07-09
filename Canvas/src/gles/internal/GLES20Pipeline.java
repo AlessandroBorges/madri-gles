@@ -14,12 +14,17 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 
+import android.opengl.GLES20;
+
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 import gles.util.BufferInfo;
 
 /**
  * OpenGL ES 2.0
  */
-public class GLES20Pipeline implements Pipeline {
+public class GLES20Pipeline 
+ implements Pipeline, GLCommon {
       
    
         
@@ -40,13 +45,7 @@ public class GLES20Pipeline implements Pipeline {
         /**
          * static & native initialization
          */
-        static{
-                //GLES20ClassInit();  
-           // System.load("C:/Users/Livia/workspace/Canvas/libs/TextureConverter.dll");
-//            System.load("C:/Users/Livia/workspace/Canvas/libs/libGLESv2.dll");
-//            System.load("C:/Users/Livia/workspace/Canvas/libs/libEGL.dll");
-//            System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
-        }
+        static{  }
         
         /**
          * Private constructor
@@ -58,16 +57,43 @@ public class GLES20Pipeline implements Pipeline {
          */
         private static Pipeline instance;
         
-        /**
-         * Get a instance of this Pipeline implementation
-         * @return a live instance of GLES10EXT
-         */
-        public static Pipeline getPipelineInstance() {
-                if(instance == null){
-                        instance = new GLES20Pipeline();
-                }        
+    /**
+     * Get a instance of this Pipeline implementation
+     * 
+     * @return a live instance of GLES10EXT
+     */
+    public static Pipeline getPipelineInstance() {
+        if (instance == null) {
+            instance = new GLES20Pipeline();
+        }
         return instance;
     }
+    
+    
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("GLES20Pipeline [ ");
+        
+        try {
+//            String vendor = glGetString(GLES20.GL_VENDOR);
+//            String version = glGetString(GLES20.GL_VERSION);
+//            
+//            builder.append("Vendor: ").append(vendor);
+//            builder.append(", Version: ").append(version);
+            
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
+
 
     /**
      *<pre>

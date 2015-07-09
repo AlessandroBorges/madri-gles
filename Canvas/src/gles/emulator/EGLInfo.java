@@ -13,8 +13,12 @@ public class EGLInfo {
     private String          mEGLClientAPIs;
     private EGLConfigInfo[] mEGLConfigs;
 
-    public EGLInfo(boolean mEGLAvailable, String mEGLVendor, String mEGLVersion, String mEGLExtensions,
-            String mEGLClientAPIs) {
+    public EGLInfo(boolean mEGLAvailable, 
+                   String mEGLVendor, 
+                   String mEGLVersion, 
+                   String mEGLExtensions,
+                   String mEGLClientAPIs) 
+    {
         this.mEGLAvailable = mEGLAvailable;
         this.mEGLVendor = mEGLVendor;
         this.mEGLVersion = mEGLVersion;
@@ -77,37 +81,35 @@ public class EGLInfo {
     public String toString() {
        
         StringBuilder builder = new StringBuilder();
-        builder.append("EGLInfo [mEGLAvailable=");
-        builder.append(mEGLAvailable);
-        builder.append(",\n ");
+        builder.append("EGLInfo\n ");      
         if (mEGLVendor != null) {
-            builder.append("EGLVendor=");
+            builder.append("EGLVendor: ");
             builder.append(mEGLVendor);
-            builder.append(",\n ");
+            builder.append('\n');
         }
         if (mEGLVersion != null) {
-            builder.append("EGLVersion=");
+            builder.append("EGLVersion: ");
             builder.append(mEGLVersion);
-            builder.append(",\n ");
+            builder.append('\n');
         }
         if (mEGLExtensions != null) {
-            builder.append("EGLExtensions=");
+            builder.append("EGLExtensions:\n");
             String[] extArr = mEGLExtensions.split(" ");
             List<String> ext = Arrays.asList(extArr);
             builder.append(toString(ext,ext.size()));
             builder.append(", ");
         }
         if (mEGLClientAPIs != null) {
-            builder.append("mEGLClientAPIs=");
+            builder.append(" EGL client APIs: ");
             builder.append(mEGLClientAPIs);
             builder.append(", ");
         }
         if (mEGLConfigs != null) {
-            builder.append("EGLConfigs=");
+            builder.append("EGLConfigs:\n");
             List<EGLConfigInfo> list = Arrays.asList(mEGLConfigs).subList(0, mEGLConfigs.length);
             builder.append(toString(list,list.size()));
         }
-        builder.append("]");
+        builder.append(" ");
         return builder.toString();
     }
     

@@ -53,7 +53,7 @@ import java.util.logging.Logger;
  * That means that if your log message is filtered out, you might be doing
  * significant work and incurring significant overhead.
  */
-public final class Log {
+public final  class Log {
     
     public static String LOG_NAME = "Madri GLES - OpenGL ES emulator";
 
@@ -379,6 +379,7 @@ public final class Log {
                                      String tag,
                                      String msg) {
         Logger myLog = getLogger();
+       
 
         switch (priority) {
         case VERBOSE:

@@ -10,6 +10,8 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 
+import javax.microedition.khronos.opengles.*;
+
 public class GLES11Pipeline 
 	extends GLES10Pipeline 
 	implements Pipeline {

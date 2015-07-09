@@ -11,7 +11,7 @@ import android.opengl.EGL14;
 import static android.opengl.EGL14.*;
 import android.opengl.EGLContext;
 import android.opengl.EGLDisplay;
-import android.opengl.Log;
+import android.util.Log;
 
 /**
  * @author Alessandro Borges

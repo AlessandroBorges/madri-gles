@@ -1978,6 +1978,7 @@ public class GLES11ExtPipeline
      * */
     public void glGenRenderbuffersOES(int n, java.nio.IntBuffer renderbuffers) {
         int offset = getOffset(renderbuffers);
+        checkBuffer(renderbuffers, n, "renderbuffers");
         GLES11ExtPipeline.nGLGenRenderbuffersOES(n, renderbuffers, offset);
     }
 
@@ -2443,6 +2444,19 @@ public class GLES11ExtPipeline
         int offset = getOffset(pointer);
         nGLMatrixIndexPointerOESBounds(size, type, stride, pointer, offset, remaining);
     }
+    
+     public void glMatrixIndexPointerOES(int size, int type, int stride, int offset) {
+         nGLMatrixIndexPointerOES(size, type, stride, offset);
+    }
+     
+    private static native void nGLMatrixIndexPointerOES(int size, int type, int stride, int offset);/*
+        glMatrixIndexPointerOES(
+        (GLint)size,
+        (GLenum)type,
+        (GLsizei)stride,
+        reinterpret_cast<GLvoid *>(offset)
+    );
+     */
 
     /**
      * <pre>
@@ -2497,6 +2511,13 @@ public class GLES11ExtPipeline
                            (GLvoid *) (pointer + offset));
     */
 
+    public void glWeightPointerOESBounds(int size, int type, int stride, int offset) {
+        // TODO Auto-generated method stub        
+    }
+    
+    
+    
+    
     /**
      * <pre>
      * Delegate Method generated from GLES11Ext.glDepthRangefOES([float zNear, float zFar]);
@@ -3035,4 +3056,8 @@ public class GLES11ExtPipeline
                                                  int offset);/*
        glGetTexGenxvOES((GLenum)  coord, (GLenum)  pname, (GLfixed *)(params + offset));
     */
+
+    
+    
+    
 }

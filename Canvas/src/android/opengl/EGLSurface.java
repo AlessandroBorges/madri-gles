@@ -25,7 +25,7 @@ public class EGLSurface extends EGLObjectHandle
 implements javax.microedition.khronos.egl.EGLSurface
 {
     
-    EGLSurface(long handle) {
+    protected EGLSurface(long handle) {
         super(handle);
     }
 

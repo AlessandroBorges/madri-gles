@@ -74,72 +74,77 @@ class GLESInfo {
         StringBuilder builder = new StringBuilder();
         builder.append("GLESInfo [");
         if (mRenderer != null) {
-            builder.append("Renderer=");
+            builder.append("\n Renderer: ");
             builder.append(mRenderer);
-            builder.append(",\n ");
+            builder.append(",");
         }
         if (mVersion != null) {
-            builder.append("Version=");
+            builder.append("\n Version: ");
             builder.append(mVersion);
             builder.append(",\n ");
         }
         if (mVendor != null) {
-            builder.append("Vendor=");
+            builder.append("Vendor: ");
             builder.append(mVendor);
             builder.append(",\n ");
         }
         if (mExtensions != null) {
-            builder.append("Extensions=");
-            List<String> exts = Arrays.asList(mExtensions);
-            builder.append(toString(exts,maxLen));
-            builder.append(",\n ");
+            builder.append("Extensions: \n");
+            String[] extArr = mExtensions.split(" ");
+            Arrays.sort(extArr);
+            for (String ext : extArr) {
+                builder.append(ext).append('\n');
+            }
         }
-        builder.append("MajorVersion=");
+        
+        builder.append("\n ES version: ");
         builder.append(mMajorVersion);
-        builder.append(",\n MinorVersion=");
+        builder.append(".");
         builder.append(mMinorVersion);
-        builder.append(",\n ShadingLanguageMajorVersion=");
+        
+        builder.append("\n Shading Language Version: ");
         builder.append(mShadingLanguageMajorVersion);
-        builder.append(", ShadingLanguageMinorVersion=");
+        builder.append('.');
         builder.append(mShadingLanguageMinorVersion);
-        builder.append(", ");
+        builder.append("\n");
+        
         if (mGLCompressedFormats != null) {
-            builder.append("GLCompressedFormats=");
+            builder.append(" Compressed Formats:\n");
             builder.append(toString(mGLCompressedFormats, maxLen));
-            builder.append(",\n ");
+            builder.append("\n ");
         }
-        if (mGLShaderBinaryFormats != null) {
-            builder.append("GLShaderBinaryFormats=");
+        if (mGLShaderBinaryFormats != null && mGLShaderBinaryFormats.size()>0) {
+            builder.append(" Shader Binary Formats: ");
             builder.append(toString(mGLShaderBinaryFormats, maxLen));
-            builder.append(",\n ");
+            builder.append("\n ");
         }
-        if (mGLProgramBinaryFormats != null) {
-            builder.append("mGLProgramBinaryFormats=");
+        if (mGLProgramBinaryFormats != null && mGLProgramBinaryFormats.size()>0) {
+            builder.append(" Program Binary Formats:\n");
             builder.append(toString(mGLProgramBinaryFormats, maxLen));
             builder.append(", ");
         }
         if (mShadingLanguageVersion != null) {
-            builder.append("mShadingLanguageVersion=");
+            builder.append(" Shading Language Version: ");
             builder.append(mShadingLanguageVersion);
-            builder.append(",\n ");
+            builder.append('\n');
         }
         if (eglInfo != null) {
-            builder.append("eglInfo=");
+            builder.append("\nEglInfo: ");
             builder.append(eglInfo);
-            builder.append(",\n ");
+            builder.append('\n');
         }
-        builder.append("ScreenWidth=");
+        builder.append("Screen width: ");
         builder.append(mScreenWidth);
-        builder.append(", ScreenHeight=");
+        builder.append(", height: ");
         builder.append(mScreenHeight);
-        builder.append(",\n ");
+        builder.append("\n ");
         if (mapCaps20 != null) {
-            builder.append("mapCaps20=");
+            builder.append("\n Capability Bits 2.0:\n");
             builder.append(toString(mapCaps20.entrySet(), maxLen));
             builder.append(",\n ");
         }
         if (mapCaps30 != null) {
-            builder.append("mapCaps30=");
+            builder.append("\n Capability Bits 3.0:\n");
             builder.append(toString(mapCaps30.entrySet(), maxLen));
         }
         builder.append("]");
@@ -148,13 +153,13 @@ class GLESInfo {
 
     private String toString(Collection<?> collection, int maxLen) {
         StringBuilder builder = new StringBuilder();
-        builder.append("[");
+        builder.append("");
         int i = 0;
         for (Iterator<?> iterator = collection.iterator(); iterator.hasNext() && i < maxLen; i++) {
             if (i > 0) builder.append(",\n ");
             builder.append(iterator.next());
         }
-        builder.append("]");
+        builder.append("");
         return builder.toString();
     }
 

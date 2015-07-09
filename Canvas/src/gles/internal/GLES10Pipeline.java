@@ -16,7 +16,7 @@ import android.opengl.GLES11;
 import android.opengl.GLES20;
 import gles.util.BufferInfo;
 
-public class GLES10Pipeline implements Pipeline {
+public class GLES10Pipeline implements Pipeline, GLCommon {
     
     /** Includes **/
     //@off

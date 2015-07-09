@@ -25,7 +25,7 @@ public class EGLDisplay extends EGLObjectHandle
 implements javax.microedition.khronos.egl.EGLDisplay
 {
 	
-    private EGLDisplay(long handle) {
+    protected EGLDisplay(long handle) {
         super(handle);
     }
 

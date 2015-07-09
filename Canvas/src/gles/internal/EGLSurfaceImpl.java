@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package javax.microedition.khronos.egl;
+//package com.google.android.gles_jni;
+package gles.internal;
+import javax.microedition.khronos.egl.*;
 
-import javax.microedition.khronos.opengles.GL;
-
-public abstract class EGLContext
+public class EGLSurfaceImpl 
+extends android.opengl.EGLSurface
+implements EGLSurface 
 {
-    protected static  EGL EGL_INSTANCE;
+   
+    private long mNativePixelRef;    
     
-    public static EGL getEGL() {
-        return EGL_INSTANCE;
+    protected EGLSurfaceImpl(long surface) { 
+        super(surface);
+        mNativePixelRef = 0;
     }
-
-    public abstract GL getGL();
+    
 }

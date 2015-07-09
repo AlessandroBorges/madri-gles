@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package javax.microedition.khronos.egl;
+//package com.google.android.gles_jni;
+package gles.internal;
 
-import javax.microedition.khronos.opengles.GL;
+import javax.microedition.khronos.egl.*;
 
-public abstract class EGLContext
-{
-    protected static  EGL EGL_INSTANCE;
+public class EGLConfigImpl 
+ extends android.opengl.EGLConfig
+ implements javax.microedition.khronos.egl.EGLConfig 
+  {    
     
-    public static EGL getEGL() {
-        return EGL_INSTANCE;
+    protected EGLConfigImpl(long handle) {
+        super(handle);
+        // TODO Auto-generated constructor stub
     }
 
-    public abstract GL getGL();
+   
 }

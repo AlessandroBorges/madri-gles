@@ -3,10 +3,11 @@
  */
 package gles.internal;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.opengl.Log;
+import android.util.Log;
 import android.util.DisplayMetrics;
 
 /**
@@ -38,17 +39,28 @@ public class Sys {
        */
       private static boolean nativeLibsLoaded = false;
       
-      private static Set<GL_PIPE> glPipeLoaded = new HashSet<Sys.GL_PIPE>(4);
+      /**
+       * Store GL pipes already loaded 
+       */
+      private static Set<GL_PIPE> glPipeLoaded = new HashSet<Sys.GL_PIPE>(5);
+      
+      /**
+       * default GL pipe
+       */
+      private static GL_PIPE glPipeDefault = GL_PIPE.GLES20;
+      
       /**
        * Enumeration of OpenGL ES pipelines.<br>
        * Not all pipes will be availble on all platform/renderers.
        *
        */
        public enum GL_PIPE{
+                GLES_COMMON(0),
 		GLES10(10),
 		GLES10Ext(10),
 		GLES11(11),
 		GLES11Ext(12),
+		
 		GLES20(20),
 		GLES30(30),
 		GLES31(31),
@@ -62,9 +74,25 @@ public class Sys {
 		 * internal value of GL
 		 * @return
 		 */
-		public int getInternalValue(){
+		public int version(){
 		    return ver;
 		}
+		
+		/**
+		 * Return true if this Pipeline is GL-ES 1.x
+		 * @return
+		 */
+		public boolean isFFP(){
+		    return ver >= 10 && ver < 20; 
+		}
+		
+		/**
+		 * return true if thie pipeline is GL-ES 20 class
+		 * @return
+		 */
+		public boolean isPPL(){
+                    return ver >= 20; 
+                }
 	}
 
     /**
@@ -89,23 +117,67 @@ public class Sys {
     /**
      * Get a OpenGL ES Pipeline.
      * TODO - deal to not load  FFP and Programable pipelines
-     * @param mode - one of {@link GL_PIPE}
+     * @param requestPipeType - one of {@link GL_PIPE} enumeration
      * @return a Pipeline
      */
-    public static Pipeline getGLPipelineInstance(GL_PIPE mode) {
-        Log.i(TAG, "getPipelineInstance: " + mode);
+    public static Pipeline getGLPipelineInstance(GL_PIPE requestPipeType) {
+        Log.i(TAG, "getPipelineInstance: " + requestPipeType);
         
+        // avoid loading of forbidden combinations
+        // GL-ES 1.x do not mix with GL-ES 20 and vice-versa
+        // GLES_COMMON is neutral
+        if(requestPipeType != GL_PIPE.GLES_COMMON && glPipeLoaded.size()>0){           
+            boolean isGL20 = false;
+            boolean isGL10 = false;
+            
+            // check GL20
+            for (GL_PIPE gl_PIPE : glPipeLoaded) {
+                if(gl_PIPE.version() >= GL_PIPE.GLES20.version()){
+                    isGL20 = true;
+                    break;
+                }
+            }
+            
+            // check GL1x
+            for (GL_PIPE gl_PIPE : glPipeLoaded) {
+                if( gl_PIPE.version() >= GL_PIPE.GLES10.version() 
+                 && gl_PIPE.version() <= GL_PIPE.GLES11Ext.version()){
+                    isGL10 = true;
+                    break;
+                }
+            }
+            
+            boolean requestGL20 = requestPipeType.version()>=20;            
+            if(isGL20 && !requestGL20){
+                IllegalArgumentException exc = 
+                        new IllegalArgumentException("Using GL-ES 20 driver. "
+                                + "Unabled to load: " + requestPipeType.toString());
+                Log.e(TAG, "Failed to load driver: " + requestPipeType, exc);
+                throw exc;
+            }            
+            
+            if(isGL10 && requestGL20){
+                IllegalArgumentException exc = 
+                        new IllegalArgumentException("Using GL-ES 1.x driver. "
+                                + "Unabled to load: " + requestPipeType.toString());
+                Log.e(TAG, "Failed to load driver: " + requestPipeType, exc);
+                throw exc;
+            }
+        }
+        // now, we have only valid GLES pipes combos
+        glPipeLoaded.add(requestPipeType);
+        // able to loaded natives then !
         if(!nativeLibsLoaded){
-            loadDefaultNativeLibs();
+            loadNativeLibs();
         }
         
-        glPipeLoaded.add(mode);
-        
-        switch (mode) {
+        switch (requestPipeType) {
+            case GLES_COMMON:    return GLESCommonPipeline.getPipelineInstance();
             case GLES10:    return GLES10Pipeline.getPipelineInstance();
             case GLES10Ext: return GLES10ExtPipeline.getPipelineInstance();            
             case GLES11:    return GLES11Pipeline.getPipelineInstance();
             case GLES11Ext: return GLES11ExtPipeline.getPipelineInstance();
+            
             case GLES20:    return GLES20Pipeline.getPipelineInstance();
             case GLES30:    return GLES30Pipeline.getPipelineInstance();
             case GLES31Ext: return GLES31ExtPipeline.getPipelineInstance();
@@ -121,10 +193,10 @@ public class Sys {
      * @return
      */
     public static Pipeline getEGLPipelineInstance(EGL_PIPE mode) {
-        Log.i(TAG, "getEGLPipelineInstance : " + mode);
+        Log.i(TAG, "getEGLPipelineInstance() : " + mode);
         if(null==eglPipeline){
             if(!nativeLibsLoaded){
-                loadDefaultNativeLibs();
+                loadNativeLibs();
             }
             eglPipeline = EGL14Pipeline.getPipelineInstance();
         }
@@ -139,16 +211,51 @@ public class Sys {
      * @see #loadNativeLibs()
      * 
      * @param type - SDK type. One of ADRENO, ANGLE, PowerVR or MALI
-     * @throws UnsupportedOperationException if called more than one time.
+     * @throws UnsupportedOperationException if called after native libs are already loaded
      */
-    public static void setSDK(SDK type){
-        if(selectedSDK == null){
+    public static boolean setSDK(SDK type){
+        if(selectedSDK == null || !nativeLibsLoaded){
             selectedSDK = type;
+            return true;
         }else{
-            if(selectedSDK != type)
-            throw new UnsupportedOperationException("SDK already set as [" + selectedSDK+
-                    "]. SDK can be set only once.");
+            if(selectedSDK != type){
+           String msg = "SDK native libs already loaded."
+                    + " SDK can't  be changed after dynamic linking."
+                    + " Using SDK " + selectedSDK+   ".";
+           Log.e(TAG, msg);
+           //throw new UnsupportedOperationException(msg);
+            return false;
+            }
+            return true;
+        }       
+    }
+    
+    /**
+     * Set default GL_PIPE. <br>
+     * If unset, it uses {@link GL_PIPE#GLES20} <br>
+     * Call it before loading native libs.
+     * 
+     * @see GL_PIPE
+     * @see SDK
+     * @see #loadNativeLibs()
+     * 
+     * @param pipe - All GL_PIPE enumeration, except GL_COMMON
+     * @return <b>true</b> if pipe mode sucessfully set and <b>false</b> if native 
+     * libs were already loaded or try to set GL_COMMON 
+     */
+    public static boolean setGLPipe(GL_PIPE pipe){
+        if(pipe==GL_PIPE.GLES_COMMON)
+            return false;
+        
+        if(glPipeDefault == null || !nativeLibsLoaded){
+            glPipeDefault = pipe;
+            Log.i(TAG, "default glPipe is " + pipe);
+            return true;
         }
+        if(glPipeDefault != pipe || nativeLibsLoaded){
+          return false;        
+        }
+        return false;        
     }
     
     /**
@@ -189,6 +296,7 @@ public class Sys {
     
     /**
      * Load an previouly define SDK and GLES20 pipeline.
+     * If undefined SDK, loads Google's ANGLE and GLES20 pipeline
      * @return true if ok
      */
     public static boolean loadNativeLibs(){
@@ -196,7 +304,7 @@ public class Sys {
         if(selectedSDK==null){
            setSDK(SDK.ANGLE);   
         }
-        loadNativeLibs(selectedSDK, GL_PIPE.GLES20);
+        loadNativeLibs(selectedSDK, glPipeDefault);
                
         return true;
     }
@@ -208,21 +316,20 @@ public class Sys {
      * 
      * @param sdk - SDK to run. One of  ADRENO, ANGLE, PowerVR, MALI
      * @param GL_PIPE - one of GL_PIPE GLES10, GLES10Ext, GLES11,  GLES11Ext,  
-     *                  GLES20,  GLES30,  GLES31,  GLES31Ext
+     *                  GLES20,  GLES30,  GLES31,  GLES31Ext<br> <b>except GL_COMMON</b>
      * 
      * @throws UnsupportedOperationException if native libs are already loaded.
      * 
      */
     public static void loadNativeLibs(SDK sdk, GL_PIPE pipeline){
-        if(nativeLibsLoaded) return;
-        Log.i(TAG, "loadNativeLibs: " + sdk +", " + pipeline);
-        
-        setSDK(sdk);
         if(nativeLibsLoaded){
-            throw new UnsupportedOperationException("native libs already loaded.");
+            String pipes = Arrays.toString(glPipeLoaded.toArray());
+            Log.i(TAG, "loadNativeLibs()- libs already loaded " + selectedSDK +", " + pipes);
+            return;
         }        
-        loadLibs(pipeline);
-        nativeLibsLoaded = true;
+        Log.i(TAG, "loadNativeLibs() : " + sdk +", " + pipeline);        
+        setSDK(sdk);
+        loadLibs(pipeline);      
     }
     
     /**
@@ -234,43 +341,69 @@ public class Sys {
      * @param pipelineMode one of GL_PIPE enumeration
      */
     private static void loadLibs(GL_PIPE pipelineMode) {
-        Log.i(TAG, "loadLibs:"  + pipelineMode);
-        boolean is64bit = is64Bit();
+        Log.i(TAG, "loadLibs() : "  + pipelineMode);
         
-        if (SDK.ADRENO == selectedSDK) {
-            System.load("C:/Users/Livia/workspace/Canvas/libs/adreno/TextureConverter.dll");
-            System.load("C:/Users/Livia/workspace/Canvas/libs/adreno/libGLESv2.dll");
-            System.load("C:/Users/Livia/workspace/Canvas/libs/adreno/libEGL.dll");
-        } else
-
-        if (SDK.ANGLE == selectedSDK) {
-            System.load("C:/Users/Livia/workspace/Canvas/libs/angle/d3dcompiler_46.dll");
-            System.load("C:/Users/Livia/workspace/Canvas/libs/angle/libGLESv2.dll");
-            System.load("C:/Users/Livia/workspace/Canvas/libs/angle/libEGL.dll");
-        } else if (SDK.PowerVR == selectedSDK) {
-            if (pipelineMode.getInternalValue() < 20) {
-                System.load("C:/Users/Livia/workspace/Canvas/libs/Mali/libGLES_CM.dll");
-            } else {
-                System.load("C:/Users/Livia/workspace/Canvas/libs/PowerVR/libGLESv2.dll");
-                System.load("C:/Users/Livia/workspace/Canvas/libs/PowerVR/libEGL.dll");
-            }
-        } else if (SDK.MALI == selectedSDK) {
-            System.load("C:/Users/Livia/workspace/Canvas/libs/Mali/log4cplus.dll");
-            System.load("C:/Users/Livia/workspace/Canvas/libs/Mali/libMaliEmulator.dll");
-            if (pipelineMode.getInternalValue() < 20) {
-                System.load("C:/Users/Livia/workspace/Canvas/libs/Mali/libGLES_CM.dll");
-            } else {
-                System.load("C:/Users/Livia/workspace/Canvas/libs/Mali/libGLESv2.dll");
-                System.load("C:/Users/Livia/workspace/Canvas/libs/Mali/libEGL.dll");
-            }
+        if(pipelineMode == null || pipelineMode==GL_PIPE.GLES_COMMON){
+            Log.i(TAG, "loadLibs(): there is no native libs for "  + pipelineMode);
+            return;
         }
         
-        // Now the main DLL
-        if (pipelineMode.getInternalValue() < 20) {
-            System.load("C:/Users/Livia/workspace/Canvas/libs/GLES_CM64.dll");
-        }else{
-            System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
+        boolean is64bit = is64Bit();
+        String basePath = "C:/Users/Livia/workspace/Canvas/libs/";
+        Log.i(TAG, "loadLibs using basePath as:"  + basePath);
+        
+        
+        try {
+            Log.i(TAG, "loadLibs() - loading SDK: "  + selectedSDK);
+            if (SDK.ADRENO == selectedSDK) {
+                System.load(basePath + "adreno/TextureConverter.dll");
+                System.load(basePath + "adreno/libGLESv2.dll");
+                System.load(basePath + "adreno/libEGL.dll");
+            } else
+            
+            if (SDK.ANGLE == selectedSDK) {
+                System.load(basePath + "d3dcompiler_46.dll");
+                System.load(basePath + "libGLESv2.dll");
+                System.load(basePath + "angle/libEGL.dll");
+            } else 
+            
+            if (SDK.PowerVR == selectedSDK) {
+                if (pipelineMode.isFFP()) {
+                    System.load(basePath + "PowerVR/libGLES_CM.dll");
+                } else {
+                    System.load(basePath + "PowerVR/libGLESv2.dll");
+                    System.load(basePath + "PowerVR/libEGL.dll");
+                }
+            } else if (SDK.MALI == selectedSDK) {
+                System.load(basePath + "Mali/log4cplus.dll");
+                System.load(basePath + "Mali/libMaliEmulator.dll");
+                
+                if (pipelineMode.isFFP()) {
+                    System.load(basePath + "Mali/libGLES_CM.dll");
+                } else {
+                    System.load(basePath + "Mali/libGLESv2.dll");
+                    System.load(basePath + "Mali/libEGL.dll");
+                }
+            }
+            
+            // Now the main DLL
+            if (pipelineMode.version() < 20) {
+                System.load("C:/Users/Livia/workspace/Canvas/libs/GLES_CM64.dll");
+            }else{
+                System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
+            }
+            
+            nativeLibsLoaded = true;
+            
+        } catch (RuntimeException e) {            
+           Log.e(TAG, "Unable to load native libs for " + pipelineMode, e);
+           glPipeLoaded.remove(pipelineMode);           
+           e.printStackTrace();
+           throw e;
         } 
+        
+        Log.i(TAG, "loadLibs() : success loading SDK: "+ selectedSDK + " and pipeline " + pipelineMode); 
+        
     }
     
     /**
@@ -352,6 +485,43 @@ public class Sys {
          }
          
          return displayMetrics;  
+    }
+
+    /**
+     * return SDK info
+     * @return
+     */
+    public static String getSDKInfo() {
+        String info = "SDK: " + selectedSDK.name();
+        info += "GL-ES pipelines loaded: ";
+        for(GL_PIPE pipe : glPipeLoaded){
+            info += pipe.toString();
+            info += " ";
+        }
+        return info;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+   
+    public static String asString() {        
+        String s = "Sys [";
+        s += " selectedSDK: " + selectedSDK;
+        s += ", is64Bits: " + is64Bit();
+        s += ", isGL10: " + isGL10();
+        s += ", isGL20: " + isGL20();
+        s += ", isGL30: " + isGL30();
+        s += ", isGL31: " + isGL31();
+        s += ", nativeLibsLoaded:" + nativeLibsLoaded;
+        s += ", glPipeLoaded: " + Arrays.toString(glPipeLoaded.toArray());        
+        s += "]";
+        return s;        
+    }
+
+    public static boolean isNativeLibsLoaded() {
+        // TODO Auto-generated method stub
+        return nativeLibsLoaded;
     }
 
 }
