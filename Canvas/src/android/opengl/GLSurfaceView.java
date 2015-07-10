@@ -29,13 +29,16 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.graphics.PixelFormat;
 import android.opengl.Context;
 import android.util.Log;
+import gles.emulator.CanvasEGL;
+import gles.internal.Sys;
 //import android.content.pm.ConfigurationInfo;
 //import android.os.SystemProperties;
 //import android.util.AttributeSet;
-import gles.view.SurfaceHolder;
-import gles.view.SurfaceView;//android.view.SurfaceView;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 /**
  * An implementation of SurfaceView that uses the dedicated surface for
@@ -161,6 +164,7 @@ import gles.view.SurfaceView;//android.view.SurfaceView;
  *
  */
 public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+    
     private final static String TAG = "GLSurfaceView";
     private final static boolean LOG_ATTACH_DETACH = false;
     private final static boolean LOG_THREADS = false;
@@ -210,7 +214,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * must call {@link #setRenderer} to register a renderer.
      */
     public GLSurfaceView(Context context) {
-        super(context);
+        super(getCanvas(null),context,null);
         init();
     }
 
@@ -219,8 +223,18 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * must call {@link #setRenderer} to register a renderer.
      */
     public GLSurfaceView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        super(getCanvas(null),context, attrs);
         init();
+    }
+    
+    /**
+     * GLES emulator method.
+     * It gets a previously created CanvasEGL from Sys
+     * @param surfaceView the owner of canvas
+     * @return a CanvasEGL instance
+     */
+    private static CanvasEGL getCanvas(SurfaceView surfaceView ){
+       return Sys.getCanvas(surfaceView);
     }
 
     @Override
@@ -761,7 +775,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
         public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig config) {
             int[] attrib_list = {EGL_CONTEXT_CLIENT_VERSION, mEGLContextClientVersion,
-                    EGL10.EGL_NONE };
+                                 EGL10.EGL_NONE };
 
             return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT,
                     mEGLContextClientVersion != 0 ? attrib_list : null);
@@ -922,8 +936,8 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
        }
 
         @Override
-        public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display,
-                EGLConfig[] configs) {
+        public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display, EGLConfig[] configs) {
+            
             for (EGLConfig config : configs) {
                 int d = findConfigAttrib(egl, display, config,
                         EGL10.EGL_DEPTH_SIZE, 0);
@@ -996,6 +1010,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             }
             /*
              * Get an EGL instance
+             * 
              */
             mEgl = (EGL10) EGLContext.getEGL();
 
@@ -1806,12 +1821,23 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     "setRenderer has already been called for this instance.");
         }
     }
+    
+    /**
+     * This method returns the SurfaceHolder.<br>
+     * In GLES emulator it is the CanvasEGL instance, 
+     * where it will display the 3D stuff
+     * 
+     *  @TODO Test it a lot
+     */
+//    public SurfaceHolder getHolder() {		
+//               return canvasEGL.getHolder();
+//	}
 
-    public SurfaceHolder getHolder() {
-		// TODO Auto-generated method stub
-               return null;
-	}
-
+    /**
+     * GLThreadManager
+     * 
+     *
+     */
 	private static class GLThreadManager {
         private static String TAG = "GLThreadManager";
 
@@ -1927,8 +1953,8 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     private static final GLThreadManager sGLThreadManager = new GLThreadManager();
 
-    private final WeakReference<GLSurfaceView> mThisWeakRef =
-            new WeakReference<GLSurfaceView>(this);
+    private final WeakReference<GLSurfaceView> 
+                  mThisWeakRef = new WeakReference<GLSurfaceView>(this);
     private GLThread mGLThread;
     private Renderer mRenderer;
     private boolean mDetached;

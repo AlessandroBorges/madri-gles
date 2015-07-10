@@ -8,6 +8,7 @@ import android.graphics.Rect;
  * @author Alessandro Borges
  *
  */
+@Deprecated
 public class Surface implements android.view.Surface {
     
     protected long handle;

@@ -3,7 +3,6 @@ package gles.emulator;
 import gles.emulator.util.DrawingSurfaceInfo;
 import gles.emulator.util.JAWT;
 import gles.internal.Sys;
-import gles.view.SurfaceView;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,6 +29,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 public class CanvasEGL
         extends java.awt.Canvas

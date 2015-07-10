@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-//package com.google.android.gles_jni;
 package gles.internal;
 
-import javax.microedition.khronos.egl.*;
 
+/**
+ * EGLDisplay implementation
+ * @author Alessandro Borges
+ *
+ */
 public class EGLDisplayImpl 
 extends android.opengl.EGLDisplay
 implements javax.microedition.khronos.egl.EGLDisplay 
@@ -26,6 +29,15 @@ implements javax.microedition.khronos.egl.EGLDisplay
 
     protected EGLDisplayImpl(long display) {
        super(display);
+    }
+    
+    /**
+     * Get a instance of EGLDisplayImpl
+     * @param handle native handle
+     * @return instance of EGLDisplay
+     */
+    public static EGLDisplayImpl getInstance(long handle){
+        return new EGLDisplayImpl(handle);
     }
     
 }

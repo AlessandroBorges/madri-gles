@@ -23,11 +23,20 @@ extends android.opengl.EGLSurface
 implements EGLSurface 
 {
    
-    private long mNativePixelRef;    
+    protected long mNativePixelRef;    
     
     protected EGLSurfaceImpl(long surface) { 
         super(surface);
         mNativePixelRef = 0;
+    }
+    
+    /**
+     * Get a instance of EGLDisplayImpl
+     * @param handle native handle
+     * @return instance of EGLDisplay
+     */
+    public static EGLSurfaceImpl getInstance(long handle){
+        return new EGLSurfaceImpl(handle);
     }
     
 }

@@ -3,12 +3,17 @@
  */
 package gles.internal;
 
+import gles.emulator.CanvasEGL;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import android.util.Log;
 import android.util.DisplayMetrics;
+import android.view.SurfaceView;
 
 /**
  * @author Alessandro Borges
@@ -523,5 +528,20 @@ public class Sys {
         // TODO Auto-generated method stub
         return nativeLibsLoaded;
     }
+
+    /**
+     * recover the CanvasEGL instances to be used by EGL/GLES.<br> 
+     * 
+     * @param surfaceView a reference to where the canvas is going. Not used yet
+     * @return first CanvasEGL available on Sys
+     */
+    public static CanvasEGL getCanvas(SurfaceView surfaceView) {        
+        return listCanvasEGL.remove(0);
+    }
+    
+    /**
+     * Stores one or more Canvas.
+     */
+    private static List<CanvasEGL> listCanvasEGL = new ArrayList<CanvasEGL>(2);
 
 }

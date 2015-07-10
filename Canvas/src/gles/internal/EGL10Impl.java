@@ -15,40 +15,23 @@ import javax.microedition.khronos.opengles.GL;
 import android.opengl.EGL14;
 
 /**
- * Implementation of javax.microedition.khronos.egl.EGL10
+ * Implementation of javax.microedition.khronos.egl.EGL10 <br>
+ * This implementation delegate calls to EGL14
  * @author Alessandro Borges
  *
  */
 public class EGL10Impl implements EGL, EGL10, EGL11 {
     
+      
     private static final int offset = 0;
-
-    private static android.opengl.EGLConfig fix(EGLConfig config) {
-        EGLConfigImpl conf = (EGLConfigImpl) (config);
-        return conf;
-    }
-
-    private static android.opengl.EGLDisplay fix(EGLDisplay display) {
-        return (android.opengl.EGLDisplay) display;
+    
+    /**
+     * simple, lazy, constructor. 
+     */
+    public EGL10Impl(){        
     }
 
-    private static android.opengl.EGLConfig[] fix(EGLConfig[] config) {
-        if (config == null) return null;
-        return (android.opengl.EGLConfig[]) config;
-    }
-    
-    private static android.opengl.EGLSurface fix(EGLSurface surface) {
-        return (android.opengl.EGLSurface) surface;
-    }
-    
-    private static android.opengl.EGLContext fix(EGLContext context) {
-        if(context == null || context.equals(EGL_NO_CONTEXT)){
-            return EGL14.EGL_NO_CONTEXT;
-        }        
-        long handle = ((EGLContextImpl)context).mEGLContext;        
-        return (android.opengl.EGLContext) EGLUtil.createEGLContext(handle);
-    }
-    
+       
     /*
      * (non-Javadoc)
      * 
@@ -136,8 +119,7 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
      * javax.microedition.khronos.egl.EGLConfig, java.lang.Object, int[])
      */
     @Override
-    public EGLSurface eglCreatePixmapSurface(
-                                             EGLDisplay display,
+    public EGLSurface eglCreatePixmapSurface(EGLDisplay display,
                                              EGLConfig config,
                                              Object native_pixmap,
                                              int[] attrib_list) {    
@@ -158,8 +140,7 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
      * javax.microedition.khronos.egl.EGLConfig, java.lang.Object, int[])
      */
     @Override
-    public EGLSurface eglCreateWindowSurface(
-                                             EGLDisplay display,
+    public EGLSurface eglCreateWindowSurface(EGLDisplay display,
                                              EGLConfig config,
                                              Object native_window,
                                              int[] attrib_list) {
@@ -414,6 +395,32 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
     @Override
     public boolean eglWaitNative(int engine, Object bindTarget) {        
         return EGL14.eglWaitNative(engine);
+    }
+    
+    private static android.opengl.EGLConfig fix(EGLConfig config) {
+        EGLConfigImpl conf = (EGLConfigImpl) (config);
+        return conf;
+    }
+
+    private static android.opengl.EGLDisplay fix(EGLDisplay display) {
+        return (android.opengl.EGLDisplay) display;
+    }
+
+    private static android.opengl.EGLConfig[] fix(EGLConfig[] config) {
+        if (config == null) return null;
+        return (android.opengl.EGLConfig[]) config;
+    }
+    
+    private static android.opengl.EGLSurface fix(EGLSurface surface) {
+        return (android.opengl.EGLSurface) surface;
+    }
+    
+    private static android.opengl.EGLContext fix(EGLContext context) {
+        if(context == null || context.equals(EGL_NO_CONTEXT)){
+            return EGL14.EGL_NO_CONTEXT;
+        }        
+        long handle = ((EGLContextImpl)context).mEGLContext;        
+        return (android.opengl.EGLContext) EGLUtil.createEGLContext(handle);
     }
 
 }

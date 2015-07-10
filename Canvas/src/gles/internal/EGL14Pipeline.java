@@ -23,9 +23,9 @@ import android.graphics.SurfaceTexture;
 import android.opengl.*;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import gles.emulator.CanvasEGL;
 //import gles.view.Surface;
-import gles.view.SurfaceView;
 //import gles.view.SurfaceHolder;
 import static gles.internal.EGLUtil.*;
 
@@ -893,15 +893,15 @@ public class EGL14Pipeline implements Pipeline {
         checkAttrib(attrib_list, offset);
         
         if(null == win){
-            throw new IllegalArgumentException("Make sure the SurfaceView or associated SurfaceHolder has a valid Surface");
+            throw new IllegalArgumentException("Make sure the SurfaceView or "
+                    + "associated SurfaceHolder has a valid Surface");
         }
         
         Surface sur = null;
         if(win instanceof CanvasEGL){
             CanvasEGL canvasEGL = (CanvasEGL)win;            
             sur = canvasEGL.getHolder().getSurface();
-        }else
-        if (win instanceof SurfaceView) {
+        }else if (win instanceof SurfaceView) {
             SurfaceView surfaceView = (SurfaceView)win;
             sur = surfaceView.getHolder().getSurface();
         } else if (win instanceof SurfaceHolder) {

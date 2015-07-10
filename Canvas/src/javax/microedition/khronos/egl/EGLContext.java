@@ -16,11 +16,14 @@
 
 package javax.microedition.khronos.egl;
 
+import gles.internal.EGL10Impl;
+import gles.internal.EGLContextImpl;
+
 import javax.microedition.khronos.opengles.GL;
 
 public abstract class EGLContext
 {
-    protected static  EGL EGL_INSTANCE;
+    protected static  EGL EGL_INSTANCE = new EGL10Impl();// EGLContextImpl.getEGL();
     
     public static EGL getEGL() {
         return EGL_INSTANCE;

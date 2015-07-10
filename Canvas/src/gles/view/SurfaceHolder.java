@@ -2,7 +2,8 @@ package gles.view;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
-
+import android.view.SurfaceView;
+@Deprecated
 public class SurfaceHolder 
     implements 
       android.view.SurfaceHolder {

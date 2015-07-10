@@ -58,11 +58,11 @@ public class GL11Impl
     /**
      * From Android's GLImpl
      */
-    private boolean haveCheckedExtensions;
-    private boolean have_OES_blend_equation_separate;
-    private boolean have_OES_blend_subtract;
-    private boolean have_OES_framebuffer_object;
-    private boolean have_OES_texture_cube_map;
+//    private boolean haveCheckedExtensions;
+//    private boolean have_OES_blend_equation_separate;
+//    private boolean have_OES_blend_subtract;
+//    private boolean have_OES_framebuffer_object;
+//    private boolean have_OES_texture_cube_map;
     
     private boolean isGL20 = false;
     

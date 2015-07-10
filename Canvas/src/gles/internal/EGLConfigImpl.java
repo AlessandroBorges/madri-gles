@@ -29,5 +29,14 @@ public class EGLConfigImpl
         // TODO Auto-generated constructor stub
     }
 
+    /**
+     * Get a instance of EGLConfigImpl
+     * @param handle native handle
+     * @return instance of EGLConfigImpl
+     */
+    public static EGLConfigImpl getInstance(long handle){
+        return new EGLConfigImpl(handle);
+    }
+    
    
 }

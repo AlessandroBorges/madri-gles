@@ -32,12 +32,20 @@ public class EGLContextImpl
     long mEGLContext;
 
     static{
-        EGLContext.EGL_INSTANCE = new EGL10Impl();
+        // possibly unnecessary 
+        if(EGLContext.EGL_INSTANCE==null){
+            System.err.println("EGL10Impl instance created at EGLContextImpl");
+            EGLContext.EGL_INSTANCE = new EGL10Impl();
+        }
     }
     
+    /**
+     * simple Ctor
+     * @param ctx
+     */
     public EGLContextImpl(long ctx) {
         mEGLContext = ctx;
-        mGLContext = new GL11Impl();
+        mGLContext = null;
     }
     
     /**
@@ -48,8 +56,17 @@ public class EGLContextImpl
         return EGLUtil.createEGLConfig(mEGLContext);
     }
 
+    /**
+     * Get GL10 implementation.<br>
+     * On GLES 20 pipeline it uses a limited set of GL10's functions.<br>
+     * 
+     * It uses lazy loading of GL10Impl
+     */
     @Override
     public GL getGL() {
+        if(mGLContext==null){
+            mGLContext =  new GL11Impl();
+        }
         return mGLContext;
     }
 

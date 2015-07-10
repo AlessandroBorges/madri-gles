@@ -92,10 +92,10 @@ public interface EGL10 extends EGL {
     /**
      *  This is mark for default display - use display ZERO instead
      */
-    Object     EGL_DEFAULT_DISPLAY = Integer.valueOf(0xBEBACAFE); //null
-    EGLDisplay EGL_NO_DISPLAY = null;//new com.google.android.gles_jni.EGLDisplayImpl(0);
-    EGLContext EGL_NO_CONTEXT = null;//new com.google.android.gles_jni.EGLContextImpl(0);
-    EGLSurface EGL_NO_SURFACE = null;//new com.google.android.gles_jni.EGLSurfaceImpl(0);
+    Object     EGL_DEFAULT_DISPLAY = Integer.valueOf(0); 
+    EGLDisplay EGL_NO_DISPLAY = gles.internal.EGLDisplayImpl.getInstance(0);
+    EGLContext EGL_NO_CONTEXT = new gles.internal.EGLContextImpl(0);
+    EGLSurface EGL_NO_SURFACE = gles.internal.EGLSurfaceImpl.getInstance(0);
     
     boolean     eglChooseConfig(EGLDisplay display, int[] attrib_list, EGLConfig[] configs, int config_size, int[] num_config);
     boolean     eglCopyBuffers(EGLDisplay display, EGLSurface surface, Object native_pixmap);
@@ -110,11 +110,7 @@ public interface EGL10 extends EGL {
     EGLContext  eglGetCurrentContext();
     EGLDisplay  eglGetCurrentDisplay();
     EGLSurface  eglGetCurrentSurface(int readdraw);
-    /**
-     * Is 
-     * @param native_display - if native_display is EGL_DEFAULT_DISPLAY, query for may display
-     * @return a Display
-     */
+    
     EGLDisplay  eglGetDisplay(Object native_display);
     int         eglGetError();
     boolean     eglInitialize(EGLDisplay display, int[] major_minor);

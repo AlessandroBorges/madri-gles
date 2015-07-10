@@ -17,12 +17,12 @@
 package android.opengl;
 
 import android.graphics.SurfaceTexture;
+import android.view.SurfaceView;
 import gles.internal.EGL14Pipeline;
 import gles.internal.EGLUtil;
 import gles.internal.Sys;
-import gles.view.Surface;
-import gles.view.SurfaceHolder;
-import gles.view.SurfaceView;
+import android.view.Surface;
+import android.view.SurfaceHolder;
 
 
 
@@ -615,24 +615,32 @@ public class EGL14 {
                                                     Object win,
                                                     int[] attrib_list, int offset) 
     {
-//        Surface sur = null;
-//        if (win instanceof SurfaceView) {
-//            SurfaceView surfaceView = (SurfaceView) win;
-//            sur = surfaceView.getHolder().getSurface();
-//        } else if (win instanceof SurfaceHolder) {
-//            SurfaceHolder holder = (SurfaceHolder) win;
-//            sur = holder.getSurface();
-//        } else if (win instanceof Surface) {
-//            sur = (Surface) win;
-//        }
+        Surface sur = null;
+        if (win instanceof SurfaceView) {
+            SurfaceView surfaceView = (SurfaceView) win;
+            sur = surfaceView.getHolder().getSurface();
+        } else if (win instanceof SurfaceHolder) {
+            SurfaceHolder holder = (SurfaceHolder) win;
+            sur = holder.getSurface();
+        } else if (win instanceof Surface) {
+            sur = (Surface) win;
+        }
 
         EGLSurface surface;
+        
+        if (sur != null) {
+           surface = _eglCreateWindowSurface(dpy, config, sur, attrib_list, offset);
+        }else        
         if (win instanceof gles.emulator.CanvasEGL) {
             surface = _eglCreateWindowSurface(dpy, config, win, attrib_list, offset);
-        } else if (win instanceof SurfaceTexture) {
+        }        
+        else if (win instanceof SurfaceTexture) {
             surface = _eglCreateWindowSurfaceTexture(dpy, config, win, attrib_list, offset);
         } else {
-            throw new java.lang.UnsupportedOperationException("eglCreateWindowSurface() can only be called with an instance of " + "Surface, SurfaceView, SurfaceTexture or SurfaceHolder at the moment, " + "this will be fixed later.");
+            throw new java.lang.UnsupportedOperationException("eglCreateWindowSurface() can "
+                    + "only be called with an instance of " +
+                    "Surface, SurfaceView, SurfaceTexture or SurfaceHolder at the moment, " 
+                    + "this will be fixed later.");
         }
         return surface;
     }
