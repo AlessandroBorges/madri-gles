@@ -29,8 +29,8 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.graphics.PixelFormat;
-import android.opengl.Context;
 import android.util.Log;
 import gles.emulator.CanvasEGL;
 import gles.internal.Sys;

@@ -2,8 +2,8 @@ package android.view;
 
 import gles.emulator.CanvasEGL;
 import android.view.SurfaceHolder;//gles.view.SurfaceHolder;
+import android.content.Context;
 import android.opengl.AttributeSet;
-import android.opengl.Context;
 
 /**
  * This class shall/should extends/WRAPs AWT.Canvas

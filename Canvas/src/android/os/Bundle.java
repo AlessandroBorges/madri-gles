@@ -11,11 +11,11 @@ import java.util.*;
  */
 public class Bundle {
 
-    Map<String,String> mapString = null;
+    Map<String,String> mapString = new HashMap<String, String>(); 
+    Map<String,Boolean> mapBoolean = new HashMap<String, Boolean>();
     
     public Bundle() {
-        mapString = new HashMap<String, String>();
-        
+        mapString = new HashMap<String, String>();        
     }
     
     public Bundle(Bundle data) {
@@ -34,9 +34,17 @@ public class Bundle {
     public Bundle clone(){
         return new Bundle(this);
     }
-    
-    
-    
+
+    public boolean getBoolean(String showedToast, boolean b) {
+       String val = mapString.get(showedToast);
+       if(val == null) return b;
+       
+        return Boolean.valueOf(val);
+    }
+
+    public void putBoolean(String showedToast, boolean b) {
+        mapString.put(showedToast, (b ? "true" : "false"));        
+    }
     
     
     

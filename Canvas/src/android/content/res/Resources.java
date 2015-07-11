@@ -23,4 +23,9 @@ public class Resources {
         return null;
     }
 
+    public InputStream openRawResource(int resourceId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
