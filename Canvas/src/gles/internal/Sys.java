@@ -30,7 +30,17 @@ public class Sys {
        *
        */
       public enum SDK {
-          ADRENO, ANGLE, PowerVR, MALI
+          ADRENO(false), ANGLE(false), PowerVR(true), MALI(true);
+          
+          private boolean isFFP;
+          
+          private SDK(boolean ffp){
+              isFFP = ffp;
+          }
+          
+          public boolean isFFP(){ 
+              return isFFP;
+          }
       };
       
       /**
@@ -109,6 +119,10 @@ public class Sys {
      * display metrics for this instance of Emulator
      */
     private static DisplayMetrics displayMetrics = null;
+    /**
+     * 
+     */
+    private static boolean allowFFPsdk=true;
 
     /**
      * Enumeration of EGL pipelines.<br>
@@ -357,8 +371,22 @@ public class Sys {
         String basePath = "C:/Users/Livia/workspace/Canvas/libs/";
         Log.i(TAG, "loadLibs using basePath as:"  + basePath);
         
+        // pipelineMode has higher priority than SDK
+        if(allowFFPsdk){
+            if(pipelineMode.isFFP() && !selectedSDK.isFFP()){
+              for(SDK sdk : SDK.values()){
+                if(sdk.isFFP()){
+                    selectedSDK = sdk;
+                    break;
+                }
+              }
+                
+            }
+        }
+        
         
         try {
+            glPipeLoaded.add(pipelineMode);
             Log.i(TAG, "loadLibs() - loading SDK: "  + selectedSDK);
             if (SDK.ADRENO == selectedSDK) {
                 System.load(basePath + "adreno/TextureConverter.dll");
@@ -382,7 +410,7 @@ public class Sys {
             } else if (SDK.MALI == selectedSDK) {
                 System.load(basePath + "Mali/log4cplus.dll");
                 System.load(basePath + "Mali/libMaliEmulator.dll");
-                
+                setMaliCompilerPath(basePath);
                 if (pipelineMode.isFFP()) {
                     System.load(basePath + "Mali/libGLES_CM.dll");
                 } else {
@@ -409,6 +437,12 @@ public class Sys {
         
         Log.i(TAG, "loadLibs() : success loading SDK: "+ selectedSDK + " and pipeline " + pipelineMode); 
         
+    }
+    
+    private static void setMaliCompilerPath(String s){
+        String envVar = "MALI_EMULATOR_COMPILER_MANAGER_PATH";
+        String envMali = System.getenv(envVar);
+        System.out.println("MALI compiler: " + envMali);
     }
     
     /**
@@ -539,8 +573,12 @@ public class Sys {
         return listCanvasEGL.remove(0);
     }
     
+    public static boolean saveCanvas(CanvasEGL canvas){
+       return  listCanvasEGL.add(canvas);
+    }
+    
     /**
-     * Stores one or more Canvas.
+     * Stores one or more CanvasEGL in instances.
      */
     private static List<CanvasEGL> listCanvasEGL = new ArrayList<CanvasEGL>(2);
 

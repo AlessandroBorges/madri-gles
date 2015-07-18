@@ -19,11 +19,14 @@ package android.util;
 //import com.android.internal.os.RuntimeInit;
 //import com.android.internal.util.FastPrintWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 /**
  * API for sending log output.
@@ -367,8 +370,9 @@ public final  class Log {
     
     private static Logger getLogger(){
         if(logger==null){
-            logger = Logger.getLogger("Madri GLES - OpenGL ES emulator.");
-            logger.setLevel(Level.ALL);
+            logger = LoggerFactory.getLogger("Madri GLES.");
+                    //Logger.getLogger("Madri GLES - OpenGL ES emulator.");
+           // logger.setLevel(Level.ALL);
         }
         return logger;
     }
@@ -379,35 +383,42 @@ public final  class Log {
                                      String tag,
                                      String msg) {
         Logger myLog = getLogger();
-       
+        String lg = tag + " - " + msg;
 
         switch (priority) {
         case VERBOSE:
-              myLog.log(Level.FINE, "V/" + tag, msg);
+             // myLog.log(Level.FINE, "V/" + tag, msg);
+            myLog.info("V/" + tag + msg );
             break;
             
         case ASSERT:
-            myLog.log(Level.FINE, "A/" + tag, msg);
+           // myLog.log(Level.FINE, "A/" + tag, msg);
+            myLog.info( "A/" + tag + " " + msg);
             break;
             
         case DEBUG:
-            myLog.log(Level.CONFIG, "D/" + tag, msg);
+            // myLog.log(Level.CONFIG, "D/" + tag, msg);
+            myLog.info( "D/" + tag + " " + msg);
             break;
             
         case ERROR:
-            myLog.log(Level.SEVERE, "E/" + tag, msg);
+            // myLog.log(Level.SEVERE, "E/" + tag, msg);
+            myLog.info( "E/" + tag + " " + msg);
             break;
 
         case INFO:
-            myLog.log(Level.INFO, "I/" + tag, msg);
+            // myLog.log(Level.INFO, "I/" + tag, msg);
+            myLog.info( "I/" + tag + " " + msg);
             break;
 
         case WARN:
-            myLog.log(Level.WARNING, "W/" + tag, msg);
+            //myLog.log(Level.WARNING, "W/" + tag, msg);
+            myLog.info( "W/" + tag + " " + msg);
             break;        
 
         default:
-            myLog.log(Level.FINE, "V/" + tag, msg);
+            // myLog.log(Level.FINE, "V/" + tag, msg);
+            myLog.info( "V/" + tag + " " + msg);
             break;
         }
 

@@ -3,12 +3,16 @@
  */
 package android.app;
 
+import gles.emulator.CanvasEGL;
+import gles.internal.Sys;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.SurfaceView;
 
 /**
+ * 
+ * TODO bring android.app.ActivityTransitionState
  * @author Alessandro Borges
  *
  */
@@ -17,68 +21,105 @@ public class Activity extends Context{
     protected SurfaceView mSurfaceView2;    
     protected ActivityManager  mActivityManager = new ActivityManager();
     
+    public enum ActivityStatus {
+        NONE,
+        CREATED,        
+        STARTING,
+        RUNNING,
+        PAUSED,
+        STOPPED,
+        DESTROYED
+    }
+    
+    /**
+     * keep track of current status
+     */
+    public ActivityStatus currentStatus = ActivityStatus.NONE;
+    
+    public static boolean DEBUG = true;
     
     public Activity(){
        
     }
     
-    protected void onCreate(Bundle savedInstanceState){       
-    }
-
-    protected void onStart(){        
-    }
-
-    protected void onRestart(){        
-    }
-
-    protected void onResume(){        
-    }
-
-    protected void onPause(){        
-    }
-
-    protected void onStop(){        
-    }
-
-    protected void onDestroy(){        
+    protected  ActivityStatus getCurrentState(){
+        return currentStatus;
     }
     
-    public void setContentView(SurfaceView surfaceView2) {
-      this.mSurfaceView2 = surfaceView2;
+    private void setCurrentState(ActivityStatus status){
+        currentStatus = status;
+    }
+    
+    protected void setContentView(SurfaceView surfaceView) {
+        this.mSurfaceView2 = surfaceView;    
+        if(mSurfaceView2 instanceof GLSurfaceView){
+            GLSurfaceView glSurfaceView = (GLSurfaceView)mSurfaceView2;
+           // CanvasEGL canvas = Sys.getCanvas(glSurfaceView);
+          //  xxx
+            
+        }
+      }
+    
+    private static void debug(String msg){
+        System.out.println(msg);
+    }
+    
+    protected void onCreate(Bundle savedInstanceState){   
+        setCurrentState(ActivityStatus.CREATED);
+        debug("onCreate()");
+        
+    }
+
+    protected void onStart(){  
+        setCurrentState(ActivityStatus.STARTING);
+        debug("onStart()");
+    }
+    
+    protected void onResume(){ 
+        setCurrentState(ActivityStatus.RUNNING);
+        debug("onResume()");
+    }
+
+    protected void onRestart(){  
+        setCurrentState(ActivityStatus.RUNNING);
+        debug("onRestart()");
+    }
+
+   
+    protected void onPause(){  
+        setCurrentState(ActivityStatus.PAUSED);
+        debug("onPause()");
+    }
+
+    protected void onStop(){ 
+        setCurrentState(ActivityStatus.STOPPED);
+        debug("onStop()");
+    }
+
+    protected void onDestroy(){  
+        setCurrentState(ActivityStatus.DESTROYED);
+        debug("onDestroy()");
+    }
+    
+    protected void onRestoredInstanceState(Bundle savedInstanceState){
+      // setCurrentState(ActivityStatus.RUNNING);
+   }
+    
+
+    protected void onSaveInstanceState(Bundle outState) {
+       // setCurrentState(ActivityStatus.STOPPED);
         
     }
     
     public Object getSystemService(String name) {
-        //(ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        if(name==Context.ACTIVITY_SERVICE){
-            return mActivityManager;
-        }
+        // (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (name == Context.ACTIVITY_SERVICE) { return mActivityManager; }
         return null;
-        
-//                if (getBaseContext() == null) {
-//                    throw new IllegalStateException(
-//                            "System services not available to Activities before onCreate()");
-//                }
-//        
-//                if (WINDOW_SERVICE.equals(name)) {
-//                    return mWindowManager;
-//                } else if (SEARCH_SERVICE.equals(name)) {
-//                    ensureSearchManager();
-//                    return mSearchManager;
-//                }
-//                return super.getSystemService(name);
-            }
-    
-    
-   
+    }
 
-    protected void onSaveInstanceState(Bundle outState) {
-        // TODO Auto-generated method stub
+    public void onSaveInstanceState() {
         
     }
     
-    public static void main(String[] args) {
-        
-    }
     
 }

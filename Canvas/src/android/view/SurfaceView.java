@@ -11,7 +11,7 @@ import android.opengl.AttributeSet;
  * @author Alessandro Borges
  *
  */
-public class SurfaceView {
+public class SurfaceView extends View {
     
     Context ctx;
     AttributeSet attrs;
@@ -52,5 +52,29 @@ public class SurfaceView {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/**
+	 * This method does not bellpog to Android API.
+	 * Called by emulator only
+	 */
+	public CanvasEGL getCanvasEGL(){
+	    return mCanvas;
+	}
+
+    @Override
+    public int getHeight() {
+        if(mCanvas!= null){
+            return mCanvas.getHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getWidth() {
+        if(mCanvas!= null){
+            return mCanvas.getWidth();
+        }
+        return 0;
+    }
 
 }

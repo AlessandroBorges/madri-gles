@@ -80,6 +80,7 @@ public class GL11Impl
         if(!Sys.isNativeLibsLoaded()){
             Sys.loadNativeLibs();
         }
+        
         if(Sys.isGL20()){
             glCommon = (GLCommon) Sys.getGLPipelineInstance(Sys.GL_PIPE.GLES_COMMON);
             isGL20 = true;

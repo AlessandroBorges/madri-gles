@@ -1,12 +1,16 @@
 package gles.emulator;
 
+import java.awt.Frame;
+import java.awt.Toolkit;
 import java.io.StringWriter;
 import java.nio.IntBuffer;
 import java.util.*;
 
 import android.opengl.EGL14;
 import android.opengl.EGLConfig;
+import android.opengl.EGLContext;
 import android.opengl.EGLDisplay;
+import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 
@@ -647,6 +651,205 @@ class GLESInfo {
             eglInfo.setmEGLAvailable(false);
         }
     }
+    
+    
+    /**
+     * Query GL_VENDOR, GL_RENDERER, GL_VERSION, GL_SHADING_LANGUAGE_VERSION, or GL_EXTENSIONS.
+     */
+    protected void queryGL(){
+        //GL_VENDOR, GL_RENDERER, GL_VERSION, GL_SHADING_LANGUAGE_VERSION, or GL_EXTENSIONS.
+       print("GL_VENDOR: " + GLES20.glGetString(GLES20.GL_VENDOR));
+       print("GL_RENDERER: " + GLES20.glGetString(GLES20.GL_RENDERER));
+       print("GL_VERSION: " + GLES20.glGetString(GLES20.GL_VERSION));
+       print("GL_SHADING_LANGUAGE_VERSION: " + GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
+       print("GL_EXTENSIONS: ");
+       
+       String glExtensions =   GLES20.glGetString(GLES20.GL_EXTENSIONS);
+       String[] extensions = glExtensions.split(" ");
+       Arrays.sort(extensions);
+       for (String ext : extensions) {
+        print('\t' + ext);
+        }
+      // Compressed formats 
+      int[] params = new int[1]; 
+      GLES20.glGetIntegerv(GLES20.GL_NUM_COMPRESSED_TEXTURE_FORMATS, params, 0);
+      int numCompressedFormats = params[0];
+      int[] compFormatsList = new int[numCompressedFormats];
+      GLES20.glGetIntegerv(GLES20.GL_COMPRESSED_TEXTURE_FORMATS, compFormatsList, 0);
+      print("");
+      print("GL_NUM_COMPRESSED_TEXTURE_FORMATS: " + numCompressedFormats);
+      print("GL_COMPRESSED_TEXTURE_FORMATS: ");
+      Arrays.sort(compFormatsList);
+        for (int i = 0; i < compFormatsList.length; i++) {
+            int format = compFormatsList[i];
+            String name = getCompressedFormatName(format);
+            if(name==null) name = "unknow";
+            print('\t' + name + " (0x" + Integer.toHexString(format) + ")");
+        }
+    }
+    
+    private void print(Object obj){
+        System.out.println(obj);
+    }
+    private void checkWM() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        if (!(tk.isFrameStateSupported(Frame.ICONIFIED))) {
+            print("Your window manager doesn't support ICONIFIED.");
+        } else print("Your window manager supports ICONIFIED.");
+        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_VERT))) {
+            print("Your window manager doesn't support MAXIMIZED_VERT.");
+        } else print("Your window manager supports MAXIMIZED_VERT.");
+        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_HORIZ))) {
+            print("Your window manager doesn't support MAXIMIZED_HORIZ.");
+        } else print("Your window manager supports MAXIMIZED_HORIZ.");
+        if (!(tk.isFrameStateSupported(Frame.MAXIMIZED_BOTH))) {
+            print("Your window manager doesn't support MAXIMIZED_BOTH.");
+        } else {
+            print("Your window manager supports MAXIMIZED_BOTH.");
+        }
+    }
       
+    
+    private void checkEGL(CanvasEGL myCanvasEGL){
+        /*
+         * Get an EGL instance
+         */
+        EGL14LogWrapper egl = new EGL14LogWrapper(false, false, System.out);        
+        
+        EGLDisplay mEglDisplay = myCanvasEGL.getEGLDisplay();
+        
+        int[] major = new int[1];
+        int[] minor = new int[1];
+       
+        boolean ok = egl.eglInitialize(mEglDisplay, major, 0, minor, 0);        
+        if(ok){
+            System.out.println("### initialize OK !");
+          // queryEGL(mEglDisplay);          
+        }else{
+            System.err.println("### failed to initialize");
+        }
+        
+        ok = egl.eglBindAPI(EGL14.EGL_OPENGL_ES_API);        
+        
+        EGLConfig[] configs = chooseEGLConfig(true, mEglDisplay, egl);
+              
+        EGLConfig mEglConfig = configs[0];
+        ////////////////////////////////////////////////////
+        int ctxattr[] = {
+                EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
+                EGL14.EGL_NONE
+        };
+
+        EGLContext mEglContext = null;//(EGLContext)egl.eglGetCurrentContext();
+        
+        if(mEglContext == null || mEglContext == EGL14.EGL_NO_CONTEXT)
+            mEglContext = egl.eglCreateContext(mEglDisplay,
+                                               mEglConfig,
+                                               EGL14.EGL_NO_CONTEXT, ctxattr);
+        if (mEglContext == EGL14.EGL_NO_CONTEXT) {
+            System.out.println("### mEglContext == EGL_NO_CONTEXT !");
+            mEglContext = (EGLContext)egl.eglGetCurrentContext();
+            System.out.println("### eglGetCurrentContext: " + mEglContext);
+           // return;
+        }
+        
+        ///////////////////////////////////////////////////////////////////////
+        EGLSurface mEglSurface = egl.eglCreateWindowSurface(mEglDisplay,
+                                                            mEglConfig,
+                                                            myCanvasEGL,
+                                                            null);
+        System.out.println("EGLSurface: " + mEglSurface);
+        if (mEglSurface == EGL14.EGL_NO_SURFACE) {
+            System.err.println("### mEglSurface is an EGL_NO_SURFACE: " + mEglSurface);
+            // return;
+        } else {
+            System.out.println("### mEglSurface is : " + mEglSurface);
+            int[] value = new int[4];
+            // EGL_HORIZONTAL_RESOLUTION EGL_VERTICAL_RESOLUTION
+            EGL14.eglQuerySurface(mEglDisplay, mEglSurface, EGL14.EGL_WIDTH, value, 0);
+            EGL14.eglQuerySurface(mEglDisplay, mEglSurface, EGL14.EGL_HEIGHT, value, 1);
+
+            EGL14.eglQuerySurface(mEglDisplay, mEglSurface, EGL14.EGL_HORIZONTAL_RESOLUTION, value, 2);
+            EGL14.eglQuerySurface(mEglDisplay, mEglSurface, EGL14.EGL_VERTICAL_RESOLUTION, value, 3);
+
+            System.out.println("Surface width:" + value[0]);
+            System.out.println("Surface height:" + value[1]);
+
+            System.out.println("Surface EGL_HORIZONTAL_RESOLUTION:" + value[2]);
+            System.out.println("Surface EGL_VERTICAL_RESOLUTION:" + value[3]);
+
+        }
+        
+        System.out.println("EGLContext: " + mEglContext);
+        if (!egl.eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext)) {
+            System.err.println("failed to MakeCurrent");
+        } else {
+            System.out.println("### MakeCurrent !!!");           
+            GLES20.glClearColor(0.2f, 0.2f, .8f, 0.5f);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+            GLES20.glFlush();
+            egl.eglSwapBuffers(mEglDisplay, mEglSurface);
+        }        
+    }
   
+    
+    
+    /**
+     * Query EGL Vendor, Version, EGL APIS, EGL Extensions
+     * @param mEglDisplay current EGLDisplay 
+     */
+    protected void queryEGL(EGLDisplay mEglDisplay){
+        System.out.println("Vendor: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VENDOR));
+        System.out.println("Version: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VERSION));
+        System.out.println("EGL APIS: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_CLIENT_APIS));
+        System.out.println("Extensions: " );
+        String glExtensions = EGL14.eglQueryString(mEglDisplay, EGL14.EGL_EXTENSIONS);
+        String[] extensions = glExtensions.split(" ");
+        Arrays.sort(extensions);
+        for (String ext : extensions) {
+         print('\t' + ext);
+         }
+    }
+    
+    
+    private EGLConfig[] chooseEGLConfig(boolean tryES3, EGLDisplay mEglDisplay, EGL14LogWrapper egl){
+        int[] num_config = new int[1];
+        int EGL_OPENGL_ES3_BIT = 0x00000040;
+        int renderType = tryES3 ? EGL_OPENGL_ES3_BIT : EGL14.EGL_OPENGL_ES2_BIT;
+        if(tryES3){
+            
+        }
+     // typical high-quality attrib list
+        int configSpec[] = {
+        // colors
+                EGL14.EGL_RED_SIZE,   5,
+                EGL14.EGL_GREEN_SIZE, 6,
+                EGL14.EGL_BLUE_SIZE,  5,
+        // at least 16 bit depth
+                EGL14.EGL_DEPTH_SIZE, 16,
+                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_WINDOW_BIT,
+        // want opengl-es 2.x conformant CONTEXT
+                EGL14.EGL_RENDERABLE_TYPE, renderType , 
+                EGL14.EGL_NONE
+        };           
+             
+        egl.eglChooseConfig(mEglDisplay, configSpec, null, 0, num_config);
+        System.out.println("### num available Configs(ES3/ES2): " + num_config[0]);
+        
+        // failed to get Config
+        if(num_config[0]==0){
+            System.out.println("Failed to get ES3. Try ES2...");
+            configSpec[11] = EGL14.EGL_OPENGL_ES2_BIT; 
+            egl.eglChooseConfig(mEglDisplay, configSpec, null, 1, num_config);
+            System.out.println("### num available Configs (ES2): " + num_config[0]);
+        }
+        
+        int avail_configs = num_config[0];
+        EGLConfig[] configs = new EGLConfig[avail_configs];   
+        egl.eglChooseConfig(mEglDisplay, configSpec, configs, avail_configs, num_config);
+        System.out.println("### returned EGLConfigs: " + num_config[0]);
+        return configs;
+    }
+    
+    
 }

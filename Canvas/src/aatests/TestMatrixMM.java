@@ -25,9 +25,10 @@ public class TestMatrixMM {
         Matrix.setIdentityM(rhs, 0);
         
         Matrix.multiplyMM(c, 0, lhs, 0, rhs, 0);
-       // Matrix.mulMM(c, lhs, rhs);
-        Matrix.native_multiplyMM(d, lhs, rhs);        
-        test("multiply identity", lhs, rhs, c, d);
+        Matrix.mulMM(d, lhs, rhs);
+        Matrix.native_multiplyMM(e, lhs, rhs);        
+        test("multiply identity c-d", lhs, rhs, c, d);
+        test("multiply identity d-e", lhs, rhs, c, d);
         
         Matrix.setRotateM(rhs,0, 30f, 0.5f, 0.5f, 0.5f);
         Matrix.translateM(lhs, 0, 4, 8, 10);        
@@ -37,7 +38,7 @@ public class TestMatrixMM {
         Matrix.mulMM(e, lhs, rhs);
         
         test("rotate + translate",lhs,rhs,c,d);
-     //   test("rotate + translate (M3G)",lhs,rhs,e, d);
+        test("rotate + translate (M3G)",lhs,rhs,e, d);
         
         Matrix.setIdentityM(e, 0);
         Matrix.setIdentityM(c, 0);

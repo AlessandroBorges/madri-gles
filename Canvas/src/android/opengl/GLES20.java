@@ -1685,7 +1685,10 @@ public class GLES20 {
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Delegate Method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, int precisiontype, int[] range, int rangeOffset, int[] precision, int precisionOffset]);
+     * Delegate Method generated from GLES20.glGetShaderPrecisionFormat([int shadertype, 
+     *                                                                  int precisiontype, 
+     *                                                                  int[] range, int rangeOffset, 
+     *                                                                  int[] precision, int precisionOffset]);
      * 
      *  C function void glGetShaderPrecisionFormat ( GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision )
 

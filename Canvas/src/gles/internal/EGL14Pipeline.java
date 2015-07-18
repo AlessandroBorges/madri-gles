@@ -19,6 +19,8 @@
 package gles.internal;
 
 
+import javax.smartcardio.ATR;
+
 import android.graphics.SurfaceTexture;
 import android.opengl.*;
 import android.view.Surface;
@@ -1423,7 +1425,10 @@ public class EGL14Pipeline implements Pipeline {
         long dpyHandle = check(dpy);
         long configHandle = check(config);
         long share_contextHandle = check(share_context);
-              
+         if(attrib_list==null){
+             attrib_list = new int[1];
+             attrib_list[0] = EGL14.EGL_NONE;
+         }
         checkAttrib(attrib_list, offset);
         
         long handle = eglCreateContext0(dpyHandle, 

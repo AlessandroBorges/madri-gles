@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.awt.Canvas;
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -37,7 +38,7 @@ public class CanvasEGL
 {
 
     protected final String TAG = "CanvasEGL";
-    protected JAWT  jawt;
+    private JAWT  jawt;
 
     /**
      * EGLDisplay binding
@@ -47,6 +48,28 @@ public class CanvasEGL
     
     protected Surface    mSurface     = new MySurface(this);
     protected SurfaceView mSurfaveView = new SurfaceView(this);
+    
+    final ComponentAdapter myCompAdapter = new ComponentAdapter() {
+        public void componentResized(ComponentEvent e){
+            System.out.println("CanvasEGL resized: " + e.toString());
+            requestLayout();
+        }
+        
+        public void componentShown(ComponentEvent e){
+            System.out.println("CanvasEGL show: " + e.toString());
+        }
+        
+        public void componentHidden(ComponentEvent e){
+            System.out.println("CanvasEGL hidden: " + e.toString());
+        }
+        
+        public void componentMoved(ComponentEvent e){
+            System.out.println("CanvasEGL moved: " + e.toString());
+        }
+        
+   }; 
+    
+    
     /**
      * Wrapper for Surface
      * @author Alessandro Borges
@@ -82,7 +105,7 @@ public class CanvasEGL
         }        
     }// end MySurface
     
-    private boolean mIsCreating = false;
+    private boolean mIsCreating = true;
     
     final ArrayList<SurfaceHolder.Callback> mCallbacks = 
             new ArrayList<SurfaceHolder.Callback>();
@@ -130,6 +153,7 @@ public class CanvasEGL
         addMouseMotionListener(new MyMouseMotionListener(this));
         addComponentListener(new MyComponentListener(this));
         addKeyListener(new MyKeyListener(this));
+        addComponentListener(myCompAdapter);
     }
     
     /**
@@ -153,14 +177,14 @@ public class CanvasEGL
      * @return
      */
     protected long getHDC() {
-        DrawingSurfaceInfo dsi = jawt.getDrawingSurfaceInfo();
+        DrawingSurfaceInfo dsi = getJawt().getDrawingSurfaceInfo();
         long hdc = dsi.getHDC();
         //jawt.freeDrawingSurfaceInfo(dsi);
         return hdc;
     }
     
     protected long getHWND(){
-        DrawingSurfaceInfo dsi = jawt.getDrawingSurfaceInfo();
+        DrawingSurfaceInfo dsi = getJawt().getDrawingSurfaceInfo();
         long hwnd = dsi.getHWND();
        // jawt.freeDrawingSurfaceInfo(dsi);
         return hwnd;
@@ -188,21 +212,21 @@ public class CanvasEGL
 
  
     public android.graphics.Canvas lockCanvas() {
-        jawt.dsLock(); 
+        getJawt().dsLock(); 
         return null;
     }
 
 
    
     public android.graphics.Canvas lockCanvas(Rect dirty) {
-        jawt.dsLock(); 
+        getJawt().dsLock(); 
         return null;
     }
 
 
   
     public void unlockCanvasAndPost(android.graphics.Canvas canvas) {
-        jawt.dsUnlock();        
+        getJawt().dsUnlock();        
     }
 
  
@@ -216,7 +240,30 @@ public class CanvasEGL
     public Surface getSurface() {        
         return mSurface;
     }
-
+    
+    /**
+     * Must be called from EMULATOR before running application
+     */
+    public void onCreate() {
+        // TODO - DEBUG CALLBACK
+        if(mCallbacks.size()==0)
+            return;        
+        for(SurfaceHolder.Callback call : mCallbacks){
+            call.surfaceCreated(mSurfaceHolder);
+        }
+    }
+    /**
+     * Must be called from EMULATOR before shutdown application
+     */
+    public void onDestroy(){
+        // TODO - DEBUG CALLBACK
+        if(mCallbacks.size()==0)
+            return;        
+        for(SurfaceHolder.Callback call : mCallbacks){
+            call.surfaceDestroyed(mSurfaceHolder);
+        }
+    }
+    
     /**
      * from SurfaceView.
      * call repaint()
@@ -224,19 +271,27 @@ public class CanvasEGL
      * @param redrawNeeded
      */
     protected void updateWindow(boolean force, boolean redrawNeeded) {
-        repaint();
+        //repaint();
+        
     }
     /**
      * from SurfaceView.
-     * Does nothing
+     * Does perform a call back
      
      */
     protected void requestLayout(){
+        // TODO - DEBUG CALLBACK
+        if(mCallbacks.size()==0)
+            return;
         
+        for(SurfaceHolder.Callback call : mCallbacks){
+            call.surfaceChanged(mSurfaceHolder, 0, this.getWidth(), this.getHeight());
+        }
     }
     
     void handleGetNewSurface() {
-        updateWindow(false, false);
+        requestLayout();
+        //updateWindow(false, false);
     }
     
     private boolean isAngle = true;
@@ -291,7 +346,7 @@ public class CanvasEGL
     }
     
     
-    private class MyMouseListener implements MouseListener{
+     class MyMouseListener implements MouseListener{
         
         protected  CanvasEGL canvasEGL = null;
         
@@ -604,25 +659,29 @@ public class CanvasEGL
         }
     }
 
+    /**
+     * Loads JAWT
+     */
     public void nativeBinding() {       
-        jawt = new JAWT(this);
-        
-        //Rectangle r = jawt.getDrawingSurfaceInfo().getRectangle();
-        //System.out.println("Bounds " +r);
-        
-       // long dspHandle = jawt.getEGLNativeDisplayType();
-       // EGLDisplay dsp = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);//dspHandle);
-        
-       // this.mEGLDisplay = dsp;
-        
-//        if(Sys.DEBUG){
-//            System.out.println("myEGLDisplay: " + mEGLDisplay.getNativeHandle());
-//            System.out.println("egl error: 0x" + Integer.toHexString(EGL14.eglGetError()));
-//        }
-        // TODO create EGLSurface
-        //this.myEGLSurface = ...
-        
-    };
-    
+        setJawt(new JAWT(this));
+    }
 
+    /**
+     * @return the jawt
+     */
+    protected JAWT getJawt() {
+        if(jawt==null){
+            nativeBinding();
+        }
+        return jawt;
+    }
+
+    /**
+     * @param jawt the jawt to set
+     */
+    protected void setJawt(JAWT jawt) {
+        this.jawt = jawt;
+    }
+
+   
 }

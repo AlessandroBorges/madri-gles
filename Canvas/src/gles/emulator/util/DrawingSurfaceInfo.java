@@ -34,27 +34,27 @@ package gles.emulator.util;
 	    protected static final int EGLNativeWindowType_index = 2;
 	    
 	    /**
-	     * <pre>
+	     * <pre><font size="3">
 	     * This long array will store the handlers for some EGL types.
 	     *  Below are the corresponding native pointers:	     
-	     *  ┌----------------------┬------------┬------------┐  
+	     *  #----------------------#------------#------------#  
 	     *  | EGL type             | Win32 type |  X11 unix  |
-	     *  ├----------------------┼------------┼------------┤    
+	     *  |----------------------|------------|------------|    
 	     *  | EGLNativeDisplayType |   HDC      |  Display * |
 	     *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
 	     *  | EGLNativeWindowType  |   HWND     |  Window    |
-	     *  └----------------------┴------------┴------------┘ 
+	     *  #----------------------#------------#------------# 
 	     *  
-	     *  ┌----------------------┬---------------------┬----------------------┐  
+	     *  #----------------------#---------------------#----------------------#  
 	     *  | EGL type             |     Android         |  Apple IOS MACOS     |
-	     *  ├----------------------┼---------------------┼----------------------┤    
+	     *  |----------------------|---------------------|----------------------|    
 	     *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
 	     *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
 	     *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
-	     *  └----------------------┴---------------------┴----------------------┘
+	     *  #----------------------#---------------------#----------------------#
 	     *   For IOS / Mac EGL handlers, 
 	     *   see https://github.com/alco/EGL_mac_ios/blob/master/include/EGL/eglplatform.h
-	     *  </pre>
+	     * </font> </pre>
 	     * 
 	     */
 	    private long[] egl_handlers = null;
@@ -104,31 +104,32 @@ package gles.emulator.util;
 	   
 	    
 	    /**
-	     * Get the native handler of <b>EGLNativeDisplayType</b>
-	     * <pre>
-	     * The EGL types are the following.
+	     * <p> Get the native handler of <b>EGLNativeDisplayType.</p>
+	     * 
+	     * <pre><font size="3">
+	     * The EGL types varies for each paltform.
 	     *  Below are the corresponding native pointers:	     
-	     *  ┌----------------------┬------------┬------------┐  
-	     *  | EGL type             | Win32 type |  X11 unix  |
-	     *  ├----------------------┼------------┼------------┤    
-	     *  | EGLNativeDisplayType |   HDC      |  Display * |
-	     *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
-	     *  | EGLNativeWindowType  |   HWND     |  Window    |
-	     *  └----------------------┴------------┴------------┘ 
-	     *  
-	     *  ┌----------------------┬---------------------┬----------------------┐  
-	     *  | EGL type             |     Android         |  Apple IOS MACOS     |
-	     *  ├----------------------┼---------------------┼----------------------┤    
-	     *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
-	     *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
-	     *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
-	     *  └----------------------┴---------------------┴----------------------┘
+	     *  #----------------------#------------#------------#  
+             *  | EGL type             | Win32 type |  X11 unix  |
+             *  |----------------------|------------|------------|    
+             *  | EGLNativeDisplayType |   HDC      |  Display * |
+             *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
+             *  | EGLNativeWindowType  |   HWND     |  Window    |
+             *  #----------------------#------------#------------# 
+             *  
+             *  #----------------------#---------------------#----------------------#  
+             *  | EGL type             |     Android         |  Apple IOS MACOS     |
+             *  |----------------------|---------------------|----------------------|    
+             *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
+             *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
+             *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
+             *  #----------------------#---------------------#----------------------#
 	     *   For IOS / Mac EGL handlers, 
 	     *   see https://github.com/alco/EGL_mac_ios/blob/master/include/EGL/eglplatform.h
 	     *   
-	     *  </pre>
-	     *	 @see https://github.com/alco/EGL_mac_ios/blob/master/include/EGL/eglplatform.h   
-	     * @return nstive handler of EGLNativeDisplayType
+	     *  </font></pre>
+	     *	    
+	     *   @return native handler of EGLNativeDisplayType
 	     */
 	    public long getEGLNativeDisplayType(){
 		if(null == egl_handlers || alwaysUpdate){
@@ -139,27 +140,27 @@ package gles.emulator.util;
 	    
 	    /**
 	     * Get the native handler of <b>EGLNativePixmapType</b>
-	     * <pre>
+	     * <pre><font size="3">
 	     * The EGL types are the following.
 	     *  Below are the corresponding native pointers:	     
-	     *  ┌----------------------┬------------┬------------┐  
-	     *  | EGL type             | Win32 type |  X11 unix  |
-	     *  ├----------------------┼------------┼------------┤    
-	     *  | EGLNativeDisplayType |   HDC      |  Display * |
-	     *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
-	     *  | EGLNativeWindowType  |   HWND     |  Window    |
-	     *  └----------------------┴------------┴------------┘ 
-	     *  
-	     *  ┌----------------------┬---------------------┬----------------------┐  
-	     *  | EGL type             |     Android         |  Apple IOS MACOS     |
-	     *  ├----------------------┼---------------------┼----------------------┤    
-	     *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
-	     *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
-	     *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
-	     *  └----------------------┴---------------------┴----------------------┘
+	     *  #----------------------#------------#------------#  
+             *  | EGL type             | Win32 type |  X11 unix  |
+             *  |----------------------|------------|------------|    
+             *  | EGLNativeDisplayType |   HDC      |  Display * |
+             *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
+             *  | EGLNativeWindowType  |   HWND     |  Window    |
+             *  #----------------------#------------#------------# 
+             *  
+             *  #----------------------#---------------------#----------------------#  
+             *  | EGL type             |     Android         |  Apple IOS MACOS     |
+             *  |----------------------|---------------------|----------------------|    
+             *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
+             *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
+             *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
+             *  #----------------------#---------------------#----------------------#
 	     *   For IOS / Mac EGL handlers, 
 	     *   see https://github.com/alco/EGL_mac_ios/blob/master/include/EGL/eglplatform.h
-	     *  </pre>
+	     * </font></pre>
 	     *	    
 	     * @return nstive handler of EGLNativePixmapType
 	     */
@@ -172,26 +173,26 @@ package gles.emulator.util;
 	    
 	    /**
 	     * Get the native handler of <b>EGLNativeWindowType</b>
-	     * <pre>
+	     * <pre><font size="3">
 	     * The EGL types are the following:	     
-	     *  ┌----------------------┬------------┬------------┐  
-	     *  | EGL type             | Win32 type |  X11 unix  |
-	     *  ├----------------------┼------------┼------------┤    
-	     *  | EGLNativeDisplayType |   HDC      |  Display * |
-	     *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
-	     *  | EGLNativeWindowType  |   HWND     |  Window    |
-	     *  └----------------------┴------------┴------------┘ 
-	     *  
-	     *  ┌----------------------┬---------------------┬----------------------┐  
-	     *  | EGL type             |     Android         |  Apple IOS MACOS     |
-	     *  ├----------------------┼---------------------┼----------------------┤    
-	     *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
-	     *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
-	     *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
-	     *  └----------------------┴---------------------┴----------------------┘
+	     *  #----------------------#------------#------------#  
+             *  | EGL type             | Win32 type |  X11 unix  |
+             *  |----------------------|------------|------------|    
+             *  | EGLNativeDisplayType |   HDC      |  Display * |
+             *  | EGLNativePixmapType  |   HBITMAP  |  Pixmap    |
+             *  | EGLNativeWindowType  |   HWND     |  Window    |
+             *  #----------------------#------------#------------# 
+             *  
+             *  #----------------------#---------------------#----------------------#  
+             *  | EGL type             |     Android         |  Apple IOS MACOS     |
+             *  |----------------------|---------------------|----------------------|    
+             *  | EGLNativeDisplayType | ANativeWindow*      |  int                 |
+             *  | EGLNativePixmapType  | egl_native_pixmap_t*|  void *              |
+             *  | EGLNativeWindowType  | void*               |  appleEGLWindow *    |
+             *  #----------------------#---------------------#----------------------#
 	     *   For IOS / Mac EGL handlers, 
 	     *   see https://github.com/alco/EGL_mac_ios/blob/master/include/EGL/eglplatform.h
-	     *  </pre>
+	     * </font></pre>
 	     *	    
 	     * @return nstive handler of EGLNativeWindowType
 	     */
@@ -222,7 +223,7 @@ package gles.emulator.util;
     /**
      * get HWND
      * 
-     * @return
+     * @return Window handler
      */
     public long getHWND() {
         if (JAWT.getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)) {
@@ -235,7 +236,7 @@ package gles.emulator.util;
     /**
      * get HDC
      * 
-     * @return
+     * @return HDC handler
      */
     public long getHDC() {
         if (JAWT.getHWND(ds.getNativeHandle(), getNativeHandle(), hwnd_hdc)) {

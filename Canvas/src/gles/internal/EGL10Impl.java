@@ -48,11 +48,20 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
                                    int config_size,
                                    int[] num_config) {
         
-        return EGL14.eglChooseConfig(fix(display), 
+        android.opengl.EGLConfig[] egl14Conf =  fix(configs);
+        boolean val =  EGL14.eglChooseConfig(fix(display), 
                                      attrib_list, 0, 
-                                     fix(configs), 0, 
+                                     egl14Conf, 0, 
                                      config_size, 
-                                     num_config, 0);        
+                                     num_config, 0);
+        if(val & null != configs){
+            for (int i = 0; i < configs.length; i++) {
+                configs[i] = egl14Conf[i];
+                }
+         }
+        
+        return val;
+        
     }
 
     /*
@@ -184,7 +193,7 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
      */
     @Override
     public boolean eglGetConfigAttrib(EGLDisplay display, EGLConfig config, int attribute, int[] value) {        
-        return EGL14.eglGetConfigAttrib(fix(display), fix(config), attribute, value, attribute);
+        return EGL14.eglGetConfigAttrib(fix(display), fix(config), attribute, value, 0);
     }
 
     /*
@@ -198,7 +207,16 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
     @Override
     public boolean eglGetConfigs(EGLDisplay display, EGLConfig[] configs, int config_size, int[] num_config) {
         
-        return EGL14.eglGetConfigs(fix(display), fix(configs), offset, config_size, num_config, offset);
+        android.opengl.EGLConfig[] egl14Conf =  fix(configs);
+        boolean val =  EGL14.eglGetConfigs(fix(display), egl14Conf, offset, config_size, num_config, offset);
+        
+        if(val & null != configs){
+            for (int i = 0; i < configs.length; i++) {
+                configs[i] = egl14Conf[i];
+                }
+         }
+        
+        return val;
     }
 
     /*
@@ -398,8 +416,7 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
     }
     
     private static android.opengl.EGLConfig fix(EGLConfig config) {
-        EGLConfigImpl conf = (EGLConfigImpl) (config);
-        return conf;
+         return (android.opengl.EGLConfig)config;
     }
 
     private static android.opengl.EGLDisplay fix(EGLDisplay display) {
@@ -408,7 +425,9 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
 
     private static android.opengl.EGLConfig[] fix(EGLConfig[] config) {
         if (config == null) return null;
-        return (android.opengl.EGLConfig[]) config;
+        android.opengl.EGLConfig[] confs = new android.opengl.EGLConfig[config.length];
+        return confs;
+        //return (EGLConfigImpl[]) config;
     }
     
     private static android.opengl.EGLSurface fix(EGLSurface surface) {

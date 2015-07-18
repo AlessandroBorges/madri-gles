@@ -124,6 +124,8 @@ public class Matrix {
         // matrixStack.push(mLocal);
     }
     
+    
+    
     /**
      * get index of 4x4 column major matrix. 
      * @param i - row
@@ -196,7 +198,7 @@ public class Matrix {
         //using original Android implementation,
         // http://androidxref.com/5.1.0_r1/xref/frameworks/base/core/jni/android/opengl/util.cpp#494
         for (int i=0 ; i<4 ; i++) {
-             final float rhs_i0 = rhs[ rhsOffset + idx(i,0) ];
+             float rhs_i0 = rhs[ rhsOffset + idx(i,0) ];
              float ri0 = lhs[ lhsOffset + idx(0,0) ] * rhs_i0;
              float ri1 = lhs[ lhsOffset + idx(0,1) ] * rhs_i0;
              float ri2 = lhs[ lhsOffset + idx(0,2) ] * rhs_i0;
@@ -208,10 +210,10 @@ public class Matrix {
                 ri2 += lhs[ lhsOffset + idx(j,2) ] * rhs_ij;
                 ri3 += lhs[ lhsOffset + idx(j,3) ] * rhs_ij;
             }
-            result[ idx(i,0) ] = ri0;
-            result[ idx(i,1) ] = ri1;
-            result[ idx(i,2) ] = ri2;
-            result[ idx(i,3) ] = ri3;
+            result[resultOffset + idx(i,0) ] = ri0;
+            result[resultOffset + idx(i,1) ] = ri1;
+            result[resultOffset + idx(i,2) ] = ri2;
+            result[resultOffset + idx(i,3) ] = ri3;
         }
     }
 

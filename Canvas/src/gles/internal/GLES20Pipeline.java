@@ -79,15 +79,17 @@ public class GLES20Pipeline
         StringBuilder builder = new StringBuilder();
         builder.append("GLES20Pipeline [ ");
         
+        if(Sys.isNativeLibsLoaded() && Sys.isGL20()){
         try {
-//            String vendor = glGetString(GLES20.GL_VENDOR);
-//            String version = glGetString(GLES20.GL_VERSION);
-//            
-//            builder.append("Vendor: ").append(vendor);
-//            builder.append(", Version: ").append(version);
+            String vendor = glGetString(GLES20.GL_VENDOR);
+            String version = glGetString(GLES20.GL_VERSION);
+            
+            builder.append("Vendor: ").append(vendor);
+            builder.append(", Version: ").append(version);
             
         } catch (Exception e) {
            e.printStackTrace();
+        }
         }
         builder.append("]");
         return builder.toString();
@@ -1187,7 +1189,7 @@ public class GLES20Pipeline
      * */
     private static native void nGLDeleteBuffers(int n, int[] buffers, int offset);/*
                     // native
-                    glDeleteBuffers((GLsizei) n, (const GLuint *) &buffers[offset] );
+                    glDeleteBuffers((GLsizei) n, ( GLuint *) (buffers + offset) );
     
     */
 
@@ -1242,7 +1244,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLDeleteFramebuffers(int n, int[] framebuffers, int offset);/*
-      glDeleteFramebuffers((GLsizei) n, (const GLuint *) &framebuffers[offset] );
+      glDeleteFramebuffers((GLsizei) n, (GLuint *) (framebuffers + offset) );
     */
 
     /**
@@ -1316,7 +1318,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLDeleteRenderbuffers(int n, int[] renderbuffers, int offset);/*    
-          glDeleteRenderbuffers((GLsizei) n, (const GLuint *) &renderbuffers[offset] );
+          glDeleteRenderbuffers((GLsizei) n, ( GLuint *) (renderbuffers + offset));
     */
 
     /**
@@ -1389,7 +1391,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLDeleteTextures(int n, int[] textures, int offset);/*
-      glDeleteTextures((GLsizei) n,(GLuint *) &textures[offset] );                                              
+      glDeleteTextures((GLsizei) n,(GLuint *) (textures + offset));                                              
     */
 
     /**
@@ -1829,7 +1831,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLGenBuffers(int n, int[] buffers, int offset);/* 
-       glGenBuffers((GLsizei) n, (GLuint *) &buffers[offset] );
+       glGenBuffers((GLsizei) n, (GLuint *) (buffers + offset) );
     */
 
     /**
@@ -1903,7 +1905,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLGenFramebuffers(int n, int[] framebuffers, int offset);/*                               
-            glGenFramebuffers((GLsizei) n, (GLuint *) &framebuffers[offset] );
+            glGenFramebuffers((GLsizei) n, (GLuint *) (framebuffers + offset) );
     */
 
     /**
@@ -2833,7 +2835,7 @@ public class GLES20Pipeline
              glGetFramebufferAttachmentParameteriv((GLenum) target, 
                                                      (GLenum) attachment, 
                                                      (GLenum) pname, 
-                                                     (GLint *) &params[offset] );    
+                                                     (GLint *) (params + offset) );    
     */
 
     /**
@@ -2958,7 +2960,7 @@ public class GLES20Pipeline
     private static native void nGLGetProgramiv(int program, int pname, int[] params, int offset);/*
             glGetProgramiv( (GLuint) program, 
                             (GLenum) pname, 
-                            (GLint *) &params[offset] );
+                            (GLint *) (params + offset) );
     */
 
     /**
@@ -3058,7 +3060,7 @@ public class GLES20Pipeline
     private static native void nGLGetRenderbufferParameteriv(int target, int pname, int[] params, int offset);/*        
             glGetRenderbufferParameteriv((GLenum) target, 
                                            (GLenum) pname, 
-                                           (GLint *) &params[offset]);
+                                           (GLint *) (params + offset));
     */
 
     /**
@@ -3116,7 +3118,7 @@ public class GLES20Pipeline
     private static native void nGLGetShaderiv(int shader, int pname, int[] params, int offset);/*
             glGetShaderiv( (GLuint) shader, 
                            (GLenum) pname, 
-                           (GLint *) &params[offset] );
+                           (GLint *) (params + offset) );
     
     */
 
@@ -3423,7 +3425,7 @@ public class GLES20Pipeline
      *  C function void glGetTexParameterfv((GLenum) target, (GLenum) pname, (GLfloat *)params )
      * */
     private static native void nGLGetTexParameterfv(int target, int pname, float[] params, int offset);/*
-            glGetTexParameterfv((GLenum) target, (GLenum) pname,  (GLfloat *)  &params[offset]);    
+            glGetTexParameterfv((GLenum) target, (GLenum) pname,  (GLfloat *)  (params + offset));    
     */
 
     /**
@@ -3474,7 +3476,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLGetTexParameteriv(int target, int pname, int[] params, int offset);/*
-            glGetTexParameteriv((GLenum) target, (GLenum) pname,  (GLint *)  &params[offset] );    
+            glGetTexParameteriv((GLenum) target, (GLenum) pname,  (GLint *)  (params + offset) );    
     */
 
     /**
@@ -3526,7 +3528,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLGetUniformfv(int program, int location, float[] params, int offset);/*
-            glGetUniformfv((GLuint) program, (GLint) location, (GLfloat *) &params[offset] );    
+            glGetUniformfv((GLuint) program, (GLint) location, (GLfloat *) (params + offset) );    
     */
 
     /**
@@ -3578,7 +3580,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLGetUniformiv(int program, int location, int[] params, int offset);/*
-            glGetUniformiv((GLuint) program, (GLint) location, (GLint *) &params[offset]  );    
+            glGetUniformiv((GLuint) program, (GLint) location, (GLint *) (params + offset)  );    
     */
 
     /**
@@ -3706,7 +3708,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLGetVertexAttribiv(int index, int pname, int[] params, int offset);/*
-            glGetVertexAttribiv((GLuint) index, (GLenum) pname,  (GLint *)  &params[offset] );
+            glGetVertexAttribiv((GLuint) index, (GLenum) pname,  (GLint *)  (params + offset) );
     */
 
     /**
@@ -4692,7 +4694,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLTexParameteriv(int target, int pname, int[] params, int offset);/*                            
-            glTexParameteriv((GLenum) target, (GLenum) pname, (const GLint *) &params[offset]);    
+            glTexParameteriv((GLenum) target, (GLenum) pname, (const GLint *) (params + offset));    
     */
 
     /**
@@ -4928,7 +4930,7 @@ public class GLES20Pipeline
      *  C function void glUniform1fv((GLint) location, (GLsizei) count, (const (GLfloat) *)v )
      * */
     private static native void nGLUniform1fv(int location, int count, float[] v, int offset);/*
-            glUniform1fv( (GLint) location, (GLsizei) count, (const GLfloat *) &v[offset] );                                    
+            glUniform1fv( (GLint) location, (GLsizei) count, (GLfloat *) (v +offset) );                                    
     */
 
     /**
@@ -5001,7 +5003,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniform1iv(int location, int count, int[] v, int offset);/*
-             glUniform1iv((GLint) location, (GLsizei) count, (GLint *) &v[offset] );
+             glUniform1iv((GLint) location, (GLsizei) count, (GLint *) (v + offset) );
     */
 
     /**
@@ -5074,7 +5076,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniform2fv(int location, int count, float[] v, int offset);/*
-            glUniform2fv( (GLint) location, (GLsizei) count, (const GLfloat *) &v[offset] );
+            glUniform2fv( (GLint) location, (GLsizei) count, (GLfloat *) (v + offset) );
     */
 
     /**
@@ -5150,7 +5152,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniform2iv(int location, int count, int[] v, int offset);/*
-            glUniform2iv((GLint) location, (GLsizei) count, (const GLint *) &v[offset] );    
+            glUniform2iv((GLint) location, (GLsizei) count, (GLint *) (v + offset) );    
     */
 
     /**
@@ -5299,7 +5301,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniform3iv(int location, int count, int[] value, int offset);/*    
-            glUniform3iv((GLint) location, (GLsizei) count, (const GLint *) &value[offset] );  
+            glUniform3iv((GLint) location, (GLsizei) count, (const GLint *) (value + offset) );  
     */
 
     /**
@@ -5363,7 +5365,8 @@ public class GLES20Pipeline
 
      * */
     public void glUniform4fv(int location, int count, float[] v, int offset) {
-        GLES20Pipeline.nGLUniform4fv(location, 4*count, v, offset);
+        checkArray(v, offset, 4*count, VALUES);
+        GLES20Pipeline.nGLUniform4fv(location, count, v, offset);
     }
 
     /**
@@ -5374,7 +5377,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniform4fv(int location, int count, float[] v, int offset);/*
-            glUniform4fv((GLint) location, (GLsizei) count, (const GLfloat *) &v[offset] );
+            glUniform4fv((GLint) location, (GLsizei) count, (GLfloat *) (v + offset));
     */
 
     /**
@@ -5505,7 +5508,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniformMatrix2fv(int location, int count, boolean transpose, float[] value, int offset);/*
-             glUniformMatrix2fv((GLint) location, (GLsizei) count, (GLboolean)  transpose, (const GLfloat *) &value[offset] );
+             glUniformMatrix2fv((GLint) location, (GLsizei) count, (GLboolean)  transpose, (GLfloat *) (value + offset) );
     */
 
     /**
@@ -5566,7 +5569,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLUniformMatrix3fv(int location, int count, boolean transpose, float[] value, int offset);/*
-            glUniformMatrix3fv((GLint) location, (GLsizei) count, (GLboolean)  transpose, (GLfloat *) &value[offset] );
+            glUniformMatrix3fv((GLint) location, (GLsizei) count, (GLboolean)  transpose, (GLfloat *) (value + offset) );
     */
 
     /**
@@ -5642,7 +5645,7 @@ public class GLES20Pipeline
             glUniformMatrix4fv((GLint) location, 
                                (GLsizei) count, 
                                (GLboolean)  transpose, 
-                               (GLfloat *) &value[offset] );
+                               (GLfloat *) (value + offset) );
     
     */
 
@@ -5837,7 +5840,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLVertexAttrib2fv(int indx, float[] values, int offset);/*    
-            glVertexAttrib2fv((GLuint) indx, (const GLfloat *)(values + offset) );
+            glVertexAttrib2fv((GLuint) indx, ( GLfloat *)(values + offset) );
     */
 
     /**
@@ -5867,7 +5870,7 @@ public class GLES20Pipeline
 
      * */
     private static native void nGLVertexAttrib2fv(int indx, java.nio.FloatBuffer values, int offset);/*    
-            glVertexAttrib2fv((GLuint) indx,  (const GLfloat *)(values + offset) );    
+            glVertexAttrib2fv((GLuint) indx,  ( GLfloat *)(values + offset) );    
     */
 
     /**
