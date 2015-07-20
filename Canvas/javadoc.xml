@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="package" additionalparam="-J-Xmx256m " author="true" classpath="C:\Projetos\Tools\jnigen\gdx-jnigen-1.5.5.jar;E:\Eclipse\Juno\plugins\org.hamcrest.core_1.3.0.v201303031735.jar;E:\Eclipse\Juno\plugins\org.junit_4.11.0.v201303080030\junit.jar;C:\Projetos\Tools\jnigen\javaparser-1.0.11.jar" destdir="doc" doctitle="GLES Emulator" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="aatests,android.util,javax.microedition.khronos.egl,gles.emulator,android.view,android.graphics,gles.emulator.util,gles.texture,gles.view,android.opengl,android.app,builder,android.os,javax.microedition.khronos.opengles,android.content.pm,test,gles.internal,gles.util,gles.graphics,android.content.res,android.content,test.android.os" source="1.6" sourcepath="src" splitindex="true" use="true" version="true">
+            <link href="jar:file:/C:/Projetos/Tools/jnigen/gdx-jnigen-1.5.5-javadoc.jar!/"/>
+            <link href="https://docs.oracle.com/javase/8/docs/api/"/>
+        </javadoc>
+    </target>
+</project>
