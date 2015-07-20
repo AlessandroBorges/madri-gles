@@ -24,7 +24,7 @@ public class GLES11ExtPipeline
     /** Includes **/
     //@off
     /*JNI
-      #define GL_GLEXT_PROTOTYPES
+      #define GL_GLEXT_PROTOTYPES 1
       #include <GLES/gl.h>
       #include <GLES/glext.h>
       #include <GLES/egl.h>
@@ -33,7 +33,9 @@ public class GLES11ExtPipeline
       #include <stdlib.h>
       #include <vector>
       
-      using namespace std;
+    //  static PFNGLBLENDEQUATIONSEPARATEOESPROC glBlendEquationSeparateOES;
+      
+      //using namespace std;
       
       ////////////////////////////////////////
      */
@@ -42,7 +44,7 @@ public class GLES11ExtPipeline
 	 * static & native initialization
 	 */
 	static{
-		
+	    nGLES11ExtClassInit();
 	}
 	
 	/**
@@ -73,7 +75,7 @@ public class GLES11ExtPipeline
      *  C function void glBlendEquationSeparateOES((GLenum)  modeRGB, (GLenum)  modeAlpha )
 
      * */
-    public void GLES11ExtClassInit() {
+    public static void GLES11ExtClassInit() {
         GLES11ExtPipeline.nGLES11ExtClassInit();
     }
 
@@ -85,7 +87,8 @@ public class GLES11ExtPipeline
 
      * */
     private static native void nGLES11ExtClassInit();/*
-    
+          // PFNGLBLENDEQUATIONSEPARATEOESPROC glBlendEquationSeparateOES;
+          // glBlendEquationSeparateOES =  reinterpret_cast<PFNGLBLENDEQUATIONSEPARATEOESPROC>(eglGetProcAddress("glBlendEquationSeparateOES"));    
     */
 
     /**
@@ -107,7 +110,14 @@ public class GLES11ExtPipeline
 
      * */
     private static native void nGLBlendEquationSeparateOES(int modeRGB, int modeAlpha);/*
-       glBlendEquationSeparateOES((GLenum)  modeRGB, (GLenum)  modeAlpha );
+         glBlendEquationSeparateOES((GLenum)  modeRGB, (GLenum)  modeAlpha );
+         
+//      if(glBlendEquationSeparateOES){
+//         glBlendEquationSeparateOES((GLenum)  modeRGB, (GLenum)  modeAlpha );
+//         return JNI_TRUE;
+//      }else{
+//         return JNI_FALSE;
+//      }
     */
 
     /**

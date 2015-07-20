@@ -98,7 +98,16 @@ public class GLES10ExtPipeline implements Pipeline {
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
 
      * */
-    private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);/*     
+    private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);/* 
+     PFNGLQUERYMATRIXXOESPROC glQueryMatrixxOES = 
+     reinterpret_cast<PFNGLQUERYMATRIXXOESPROC>(eglGetProcAddress("glQueryMatrixxOES"));
+
+    if (!glQueryMatrixxOES){
+        //throw Exception::CreateException(E_FAIL, L"Failed to get function eglGetPlatformDisplayEXT");
+        printf(" glQueryMatrixxOES - Failed to get function glQueryMatrixxOES");
+        return (jlong) 0;
+    }
+         
      jint val = 0;
      val = (jint) glQueryMatrixxOES((GLfixed *)(mantissa + mantissaOffset), 
                                     (GLint *)(exponent + exponentOffset));
@@ -135,6 +144,14 @@ public class GLES10ExtPipeline implements Pipeline {
 
      * */
     private static native int nGLQueryMatrixxOES(java.nio.IntBuffer mantissa, int mantissaOffset, java.nio.IntBuffer exponent, int exponentOffset);/*
+        PFNGLQUERYMATRIXXOESPROC glQueryMatrixxOES = 
+        reinterpret_cast<PFNGLQUERYMATRIXXOESPROC>(eglGetProcAddress("glQueryMatrixxOES"));
+
+    if (!glQueryMatrixxOES){
+        //throw Exception::CreateException(E_FAIL, L"Failed to get function eglGetPlatformDisplayEXT");
+        printf(" glQueryMatrixxOES - Failed to get function glQueryMatrixxOES");
+        return (jlong) 0;
+    }
        jint val = 0;
        val = (jint) glQueryMatrixxOES((GLfixed *)(mantissa + mantissaOffset), 
                                     (GLint *)(exponent + exponentOffset));    

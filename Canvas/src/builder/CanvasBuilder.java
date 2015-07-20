@@ -17,30 +17,30 @@ public class CanvasBuilder {
     };
 
  // Adreno Stuff
-    public static String ADRENO_INC = "C:/Projetos/Android/Builder/Adreno/inc/";
-    public static String ADRENO_LIB_X86 = "C:/Projetos/Android/Builder/Adreno/x86/";
-    public static String ADRENO_LIB_X64 = "C:/Projetos/Android/Builder/Adreno/x64/";
+    private static String ADRENO_INC = "C:/Projetos/Android/Builder/Adreno/inc/";
+    private static String ADRENO_LIB_X86 = "C:/Projetos/Android/Builder/Adreno/x86/";
+    private static String ADRENO_LIB_X64 = "C:/Projetos/Android/Builder/Adreno/x64/";
     
  // Angle Stuff
-    public static String ANGLE_INC = "C:/Projetos/Android/Builder/Angle/inc";
-    public static String ANGLE_LIB_X86 = "C:/Projetos/Android/Builder/Angle/x86/libs";
-    public static String ANGLE_LIB_X64 = "C:/Projetos/Android/Builder/Angle/x64/libs";      
+    private static String ANGLE_INC = "C:/Projetos/Android/Builder/Angle/inc";
+    private static String ANGLE_LIB_X86 = "C:/Projetos/Android/Builder/Angle/x86/libs";
+    private static String ANGLE_LIB_X64 = "C:/Projetos/Android/Builder/Angle/x64/libs";      
 
     // Mali Stuff
-    public static String MALI_INC = "C:/Projetos/Android/Builder/Mali/inc/";
-    public static String MALI_LIB_X86 = "C:/Projetos/Android/Builder/Mali/x86/";
-    public static String MALI_LIB_X64 = "C:/Projetos/Android/Builder/Mali/x64/";
+    private static String MALI_INC = "C:/Projetos/Android/Builder/Mali/inc/";
+    private static String MALI_LIB_X86 = "C:/Projetos/Android/Builder/Mali/x86/";
+    private static String MALI_LIB_X64 = "C:/Projetos/Android/Builder/Mali/x64/";
 
     // PowerVR Stuff
-    public static String PowerVR_INC = "C:/Projetos/Android/Builder/PowerVR/inc/";
-    public static String PowerVR_LIB_X86 = "C:/Projetos/Android/Builder/PowerVR/x86/";
-    public static String PowerVR_LIB_X64 = "C:/Projetos/Android/Builder/PowerVR/x64/";
+    private static String PowerVR_INC = "C:/Projetos/Android/Builder/PowerVR/inc/";
+    private static String PowerVR_LIB_X86 = "C:/Projetos/Android/Builder/PowerVR/x86/";
+    private static String PowerVR_LIB_X64 = "C:/Projetos/Android/Builder/PowerVR/x64/";
 
     // SDKs paths
-    public static SDKPath ADRENO_SDK = new SDKPath(ADRENO_INC, ADRENO_LIB_X86, ADRENO_LIB_X64);
-    public static SDKPath ANGLE_SDK = new SDKPath(ANGLE_INC, ANGLE_LIB_X86, ANGLE_LIB_X64);
-    public static SDKPath PowerVR_SDK = new SDKPath(PowerVR_INC, PowerVR_LIB_X86, PowerVR_LIB_X64);
-    public static SDKPath MALI_SDK =  new SDKPath(MALI_INC, MALI_LIB_X86, MALI_LIB_X64);
+    private static SDKPath ADRENO_SDK = new SDKPath(ADRENO_INC, ADRENO_LIB_X86, ADRENO_LIB_X64);
+    private static SDKPath ANGLE_SDK = new SDKPath(ANGLE_INC, ANGLE_LIB_X86, ANGLE_LIB_X64);
+    private static SDKPath PowerVR_SDK = new SDKPath(PowerVR_INC, PowerVR_LIB_X86, PowerVR_LIB_X64);
+    private static SDKPath MALI_SDK =  new SDKPath(MALI_INC, MALI_LIB_X86, MALI_LIB_X64);
     
     
     /**
@@ -51,42 +51,70 @@ public class CanvasBuilder {
 
         String src = "src", bin = "bin", jni = "jni";
 
-        boolean genFFP = false;
+        boolean genFFP = true;
 
-        SDK sdk = SDK.ADRENO;
-      String[] exclude = {""
-              
+        SDK sdk = SDK.PowerVR;
+      
+      
+      String[] ffpExclude ={  "**/gles/internal/GLES20Pipeline.java",
+			   "**/gles/internal/GLES30Pipeline.java",
+			   "**/gles/internal/GLES31Pipeline.java", 
+     };
+      
+      String[] ppExclude ={ "**/gles/internal/GLES10Pipeline.java", 
+                           "**/gles/internal/GLES10ExtPipeline.java", 
+                           "**/gles/internal/GLES11Pipeline.java",
+			   "**/gles/internal/GLES11ExtPipeline.java",
       };
+      
+       String[] ffpcExclude ={ "gles.internal.GLES20Pipeline.cpp",
+			       "gles.internal.GLES30Pipeline.cpp",
+			       "gles.internal.GLES31Pipeline.cpp", 
+     };
+      
+      String[] ppcExclude ={ "gle.internal.GLES10Pipeline.cpp", 
+                             "gles.internal.GLES10ExtPipeline.cpp", 
+                             "gles.internal.GLES11Pipeline.cpp",
+			     "gles.internal.GLES11ExtPipeline.cpp",
+      };
+      
       
       String[]	ffpSrc = { "**/gles/emulator/util/JAWT.java",                           
                            "**/gles/internal/GLES10Pipeline.java", 
                            "**/gles/internal/GLES10ExtPipeline.java", 
                            "**/gles/internal/GLES11Pipeline.java",
 			   "**/gles/internal/GLES11ExtPipeline.java",
-			            //	"**/android/opengl/EGL14.java", 
-			            //	"**/android/opengl/EGLExt.java"
+			   "**/android/opengl/EGL14.java", 
+			   "**/android/opengl/EGLExt.java",
+                           "**/gles/internal/UtilPipeline.java",
 			            	};
       
       String[]  ppSrc =  { "**/gles/emulator/util/JAWT.java",					
 			   "**/gles/internal/EGL14Pipeline.java",
 			   "**/gles/internal/GLES20Pipeline.java",
-			//   "**/gles/internal/GLES30Pipeline.java",
-			//   "**/gles/internal/GLES31Pipeline.java",
-			    "**/gles/internal/UtilPipeline.java",
-			//"**/gles/internal/GLES31ExtPipeline.java",
+			   "**/gles/internal/GLES30Pipeline.java",
+			   "**/gles/internal/GLES31Pipeline.java",
+			   "**/gles/internal/UtilPipeline.java",
+			   "**/gles/internal/GLES31ExtPipeline.java",
 			//"**/gles/internal/TesteGL.java",					
     		  };
       
      
-            
+      String[] exclude = null;   
+      String[] cExcludes = null;
       String[] src2Natives = null;
+      
       if(genFFP) {
 	  src2Natives = ffpSrc; /* Fixed Pipeline */ 
+          exclude = ffpExclude;
+          cExcludes = ffpcExclude;
       }else{ 
 	  src2Natives = ppSrc;  /* Programable Pipeline */	
+          exclude = ppExclude;
+          cExcludes = ppcExclude;
       };
-      	
       
+   
      
 	if (generateCPP) {
 	    System.out.println("\n\n### jnigen.generate...\n");
@@ -96,7 +124,7 @@ public class CanvasBuilder {
 		    bin, // the .class folder
 		    jni, // output folder
 		    src2Natives, // files/directories to parse and generate files *.h
-		    null); // files/directores to exclude
+		    exclude); // files/directores to exclude
 	    System.out.println("end generation.");
 
 	}
@@ -111,8 +139,12 @@ public class CanvasBuilder {
 	  
 	  String[] libsWin32Dir={jawt_Lib32};
 	  String[] libsWin64Dir={jawt_Lib64};
-	  String[] libGLESAngle={"-llibGLESv2-x64"};
-	  String[] libGLES={"-lGLESv2"};
+	  String libGLESAngle64 =" -llibGLESv2-x64 ";
+	  String libGLESAngle86 =" -llibGLESv2 ";
+	  String libEGL = " -lEGL'";
+	  String libGLES=" -lGLESv2 ";
+	  String libGLES_CM=" -lGLES_CM";
+	  String libMaliEMulator =" -lMaliEmulator ";
 	 
 	  switch (sdk) {
 	    case ADRENO:
@@ -124,13 +156,13 @@ public class CanvasBuilder {
 	    case ANGLE:
 		 headerDir = ANGLE_SDK.mergeInclude(headerDir);
 		 libsWin32Dir = ANGLE_SDK.mergeWin32Lib(libsWin32Dir);
-		 libsWin64Dir= merge(libsWin64Dir, libGLES);
 		 libsWin64Dir = ANGLE_SDK.mergeWin64Lib(libsWin64Dir);
 		 break;		 
 	    case MALI:
 		 headerDir = MALI_SDK.mergeInclude(headerDir);
 		 libsWin32Dir = MALI_SDK.mergeWin32Lib(libsWin32Dir);
 		 libsWin64Dir = MALI_SDK.mergeWin64Lib(libsWin64Dir);
+		 libsWin64Dir = merge(libsWin64Dir, libMaliEMulator);
 
 		 break;
 	    case PowerVR:
@@ -142,31 +174,39 @@ public class CanvasBuilder {
 	    default:
 		break;
 	    }
-	     
+	  
+	  String GLES_LIB="";
+	  if(genFFP){
+	      GLES_LIB = libGLES_CM;	      
+	  }else{
+	      GLES_LIB =  libEGL + (sdk==SDK.ANGLE ? libGLESAngle64 : libGLES); 	     
+	  }
+	  
 	     String[] cIncludes = {"DLLMain.c",};
 	    // Build Base
 	    BuildTarget win32 = null;
 	    win32 = BuildTarget.newDefaultTarget(TargetOs.Windows, false);
 	    win32.cIncludes = cIncludes;
-	    win32.compilerPrefix = "mingw32-";;
+            win32.cppExcludes = exclude;
+	    win32.compilerPrefix = "mingw32-";
 	    win32.cppFlags += " ";
 	    win32.headerDirs = headerDir;//
 	    win32.libraries = SDKPath.libPath(libsWin32Dir) 
-		             + " -ljawt -luser32 -lGLESv2 "  ;
+		             + " -ljawt -luser32 " + GLES_LIB  ;
 		              //"-ljawt -lwinmm -lgdi32 -lshell32 -luser32 -lkernel32 -lcomctl32 ";
 	    win32.cFlags += " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
-        win32.linkerFlags = " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
+            win32.linkerFlags = " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
 	   // win32.linkerFlags = " -Wl,-verbose ";
             
             ///////////////////////////////////////////////////////////////////////////
             
             BuildTarget win64 = BuildTarget.newDefaultTarget(TargetOs.Windows, true);
             win64.cIncludes = cIncludes;
+            win64.cppExcludes = cExcludes;
             win64.compilerPrefix = "";// "mingw32-";
             win64.headerDirs = headerDir;// {"HEADERS HERE"};
             win64.libraries = SDKPath.libPath(libsWin64Dir) +
-                              "-ljawt -luser32 -lGLESv2 -lEGL";
-        	           //  " -ljawt -luser32 -llibGLESv2-x64 ";
+                              "-ljawt -luser32 " + GLES_LIB;        	          
             
             win64.cFlags +=  " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
             win64.linkerFlags += win32.linkerFlags;
@@ -187,10 +227,16 @@ public class CanvasBuilder {
 
             }
             if (createBuild) {
-        	System.out.println("\n\n#### Create Ant Build  ... \n");
-		    BuildConfig config = new BuildConfig("GLES");
+                if(genFFP){    
+                    System.out.println("\n\n#### Create Ant Build  ... \n");
+		    BuildConfig config = new BuildConfig("GLES_CM");
 		    new AntScriptGenerator().generate(config, win32, win64);
-		}
+                }else{
+                    System.out.println("\n\n#### Create Ant Build  ... \n");
+		    BuildConfig config = new BuildConfig("GLES");
+		    new AntScriptGenerator().generate(config, win32, win64);                  
+                }
+            }
             
 	    if (buildIt) {
 		System.out.println("\n\n#### Run Ant Build  ... \n");
@@ -287,7 +333,10 @@ class SDKPath {
 	
 	StringBuilder sb = new StringBuilder();
 	for(String p : paths){
-	    sb.append(" -L").append(p).append(" ");
+	    p = p.trim();
+	    if(p.length()>1){
+	        sb.append(" -L").append(p).append(" ");
+	    }
 	}
 	
 	return sb.toString();

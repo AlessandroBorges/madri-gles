@@ -60,10 +60,15 @@ public final class MessageQueue {
       //  t.notify();
     }
     
+    /**
+     * TODO - debug it
+     * @param ptr
+     * @return
+     */
     private  static boolean nativeIsIdling(long ptr){
        //return  Looper.myLooper().isIdling();
-       Thread t =  Thread.currentThread();
-       if(t.isAlive()){
+       Thread t =  Looper.myLooper().getThread();//Thread.currentThread();
+       if(t!= null && t.isAlive()){
           Thread.State state = t.getState();
           if(state == Thread.State.BLOCKED || state == Thread.State.WAITING || state == Thread.State.TIMED_WAITING){
               return true;

@@ -395,8 +395,8 @@ public class Sys {
             } else
             
             if (SDK.ANGLE == selectedSDK) {
-                System.load(basePath + "d3dcompiler_46.dll");
-                System.load(basePath + "libGLESv2.dll");
+                System.load(basePath + "angle/d3dcompiler_46.dll");
+                System.load(basePath + "angle/libGLESv2.dll");
                 System.load(basePath + "angle/libEGL.dll");
             } else 
             

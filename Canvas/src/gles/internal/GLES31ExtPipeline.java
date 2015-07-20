@@ -9,6 +9,7 @@ import gles.util.BufferInfo;
 import android.opengl.GLES31Ext.DebugProcKHR;
 
 public class GLES31ExtPipeline implements Pipeline{
+     public static final int GL_MAX_DEBUG_MESSAGE_LENGTH = 0x9143;
 
     /** Includes **/
     //@off
@@ -49,12 +50,20 @@ public class GLES31ExtPipeline implements Pipeline{
 	 * Get a instance of this Pipeline implementation
 	 * @return a live instance of GLES10EXT
 	 */
-    public static Pipeline getPipelineInstance() {
+      public static Pipeline getPipelineInstance() {
         if (instance == null) {
             instance = new GLES31ExtPipeline();
         }
         return instance;
-    }
+      }
+      
+      private GLES30Pipeline getGLES30Pipeline(){
+          return (GLES30Pipeline) GLES30Pipeline.getPipelineInstance();
+      }
+      
+      private GLES20Pipeline getGLES20Pipeline(){
+          return (GLES20Pipeline) GLES20Pipeline.getPipelineInstance();
+      }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
@@ -190,7 +199,22 @@ public class GLES31ExtPipeline implements Pipeline{
      * */
     public void glDebugMessageInsertKHR(int source, int type, int id, int severity, String buf) {
         if(null == buf) throw new IllegalArgumentException("buf == null");
-        GLES31ExtPipeline.nGLDebugMessageInsertKHR(source, type, id, severity, buf);
+        
+        //length contains a count of the characters in the character array whose 
+        //address is given in message. If length is negative then message is treated as a null-terminated string. 
+        //The length of the message, whether specified explicitly or implicitly, 
+        //must be less than or equal to the implementation defined constant GL_MAX_DEBUG_MESSAGE_LENGTH. 
+        
+        int[] params = new int[1]; 
+        getGLES20Pipeline().glGetIntegerv(GL_MAX_DEBUG_MESSAGE_LENGTH, params, 0);
+        int maxLength = params[0];
+        
+        int len = buf.length() + 1; // including null terminator when converted to (char *)        
+        maxLength = Math.min(maxLength, len);
+        buf = buf.substring(0, maxLength-1);           
+        len = buf.length()+1;
+        
+        GLES31ExtPipeline.nGLDebugMessageInsertKHR(source, type, id, severity, buf, len);
     }
 
     /**
@@ -199,27 +223,24 @@ public class GLES31ExtPipeline implements Pipeline{
      * 
      *  C function void glDebugMessageInsertKHR ( (GLenum) source, (GLenum) type, (GLuint) id, (GLenum) severity, (GLsizei) length, const (GLchar *) buf )
 
-     * */
-    private static native void nGLDebugMessageInsertKHR(int source, int type, int id, int severity, String buf);/*
+     */
+    private static native void nGLDebugMessageInsertKHR( int source,  int type,  int id,  int severity,   String buf, int length);/*      
       glDebugMessageInsertKHR ( (GLenum) source, 
                                 (GLenum) type, 
                                 (GLuint) id, 
                                 (GLenum) severity, 
                                 (GLsizei) length, 
-                                ((GLchar *) ) buf );
+                                (GLchar *) buf );
     */
 
     
- // C function void glDebugMessageCallbackKHR ( GLDEBUGPROCKHR callback, const  (void *) userParam )
-
    
      
     /**
      * MACHINE GENERATED! Please, do not edit !
      * Delegate Method generated from GLES31Ext.glDebugMessageCallbackKHR([DebugProcKHR callback]);
+     * C function void glDebugMessageCallbackKHR ( GLDEBUGPROCKHR callback, const  (void *) userParam )
      * 
-     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
-
      * */
     public void glDebugMessageCallbackKHR(DebugProcKHR callback) {
          throw new UnsupportedOperationException("not implemented yet");
@@ -263,7 +284,7 @@ public class GLES31ExtPipeline implements Pipeline{
                                                        int[] severities, int severitiesOffset, 
                                                        int[] lengths, int lengthsOffset, 
                                                        byte[] messageLog, int messageLogOffset);/*
-     glGetDebugMessageLogKHR ( (GLuint) count, 
+    int res = glGetDebugMessageLogKHR ( (GLuint) count, 
                                (GLsizei) bufSize, 
                                (GLenum *) (sources + sourcesOffset ), 
                                (GLenum *) (types + typesOffset ), 
@@ -271,6 +292,7 @@ public class GLES31ExtPipeline implements Pipeline{
                                (GLenum *) (severities + severitiesOffset), 
                                (GLsizei *) (lengths + lengthsOffset ), 
                                (GLchar *)  (messageLog + messageLogOffset ) );
+        return (jint) res;                       
     */
 
     /**
@@ -294,12 +316,13 @@ public class GLES31ExtPipeline implements Pipeline{
                                        java.nio.ByteBuffer messageLog) {
         // throw new UnsupportedOperationException("not implemented yet");
         return nGLGetDebugMessageLogKHR(count, 
-                                        sources, 
-                                        types, 
-                                        ids, 
-                                        severities, 
-                                        lengths, 
-                                        messageLog);
+                                        sources, checkBuffer(sources, count, "sources"),
+                                        types,   checkBuffer(types, count, "types"),
+                                        ids,     checkBuffer(ids, count, "ids"),
+                                        severities,  checkBuffer(severities, count, "severities"),
+                                        lengths,     checkBuffer(lengths, count, "lengths"),
+                                        messageLog,  checkBuffer(messageLog, 1, "messageLog"),
+                                        messageLog.limit());
     }
 
     /**
@@ -315,23 +338,23 @@ public class GLES31ExtPipeline implements Pipeline{
      * 
      * */
     private static native int nGLGetDebugMessageLogKHR(int count,
-                                                       java.nio.IntBuffer sources,
-                                                       java.nio.IntBuffer types,
-                                                       java.nio.IntBuffer ids,
-                                                       java.nio.IntBuffer severities,
-                                                       java.nio.IntBuffer lengths,
-                                                       java.nio.ByteBuffer messageLog);/*
+                                                       java.nio.IntBuffer sources, int offSou,
+                                                       java.nio.IntBuffer types, int offTyp,
+                                                       java.nio.IntBuffer ids, int offIds,
+                                                       java.nio.IntBuffer severities,int offSev,
+                                                       java.nio.IntBuffer lengths, int offLen,
+                                                       java.nio.ByteBuffer messageLog, int offMes, int bufSize);/*
       // no op
        
-       glGetDebugMessageLogKHR ( (GLuint) count, 
+       int res = glGetDebugMessageLogKHR ( (GLuint) count, 
                                  (GLsizei) bufSize, 
-                                 (GLenum *)sources, 
-                                 (GLenum *)types, 
-                                 (GLuint *) ids, 
-                                 (GLenum *)severities, 
-                                 (GLsizei *) lengths, 
-                                 (GLchar *) messageLog );
-        
+                                 (GLenum *)(sources + offSou), 
+                                 (GLenum *) (types + offTyp), 
+                                 (GLuint *) (ids + offIds), 
+                                 (GLenum *) (severities + offSev), 
+                                 (GLsizei *)(lengths + offLen), 
+                                 (GLchar *) (messageLog + offMes));
+        return (jint) res;
     */
 
     /**
@@ -346,49 +369,52 @@ public class GLES31ExtPipeline implements Pipeline{
      * 
      * */
     public String[] glGetDebugMessageLogKHR(int count,
-                                            int[] sources,
-                                            int sourcesOffset,
-                                            int[] types,
-                                            int typesOffset,
-                                            int[] ids,
-                                            int idsOffset,
-                                            int[] severities,
-                                            int severitiesOffset) {
+                                            int[] sources,  int sourcesOffset,
+                                            int[] types,    int typesOffset,
+                                            int[] ids,      int idsOffset,
+                                            int[] severities, int severitiesOffset) 
+    {
         // throw new UnsupportedOperationException("not implemented yet");
-        return nGLGetDebugMessageLogKHR(count,
-                sources,
-                sourcesOffset,
-                types,
-                typesOffset,
-                ids,
-                idsOffset,
-                severities,
-                severitiesOffset);
+        int bufSize = 1024;
+        return nGLGetDebugMessageLogKHR(count, bufSize,
+                sources, sourcesOffset,
+                types,   typesOffset,
+                ids,     idsOffset,
+                severities, severitiesOffset);
     }
 
     /**
      * MACHINE GENERATED! Please, do not edit !
-     * Native method generated from GLES31Ext.glGetDebugMessageLogKHR([int count, int[] sources, int sourcesOffset, int[] types, int typesOffset, int[] ids, int idsOffset, int[] severities, int severitiesOffset]);
+     * Native method generated from GLES31Ext.glGetDebugMessageLogKHR(
+     * [int count, int[] sources, int sourcesOffset, int[] types, int typesOffset,
+     * int[] ids, int idsOffset, int[] severities, int severitiesOffset]);
      * 
-     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, (GLsizei) bufSize, (GLenum *)sources, (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
-
+     *  C function (GLuint) glGetDebugMessageLogKHR ( (GLuint) count, 
+     *                                                (GLsizei) bufSize, 
+     *                                                (GLenum *)sources,
+     * (GLenum *)types, (GLuint *) ids, (GLenum *)severities, (GLsizei *) lengths, (GLchar *) messageLog )
+     * See: 
+     * https://www.opengl.org/sdk/docs/man/html/glGetDebugMessageLog.xhtml
+     * https://www.opengl.org/wiki/Debug_Output
      * */
-    private static native String[] nGLGetDebugMessageLogKHR(int count,
+    private static native String[] nGLGetDebugMessageLogKHR(int count,  int bufSize,          
                                                             int[] sources,  int sourcesOffset,
                                                             int[] types, int typesOffset,
                                                             int[] ids,   int idsOffset,
                                                             int[] severities, int severitiesOffset);/*
-       GLsizei length = 0;
+       GLsizei lengths = 0;
        GLchar * messageLog = NULL;
       // no op
        glGetDebugMessageLogKHR((GLuint) count, 
                                (GLsizei) bufSize, 
                                (GLenum *)(sources + sourcesOffset), 
                                (GLenum *)(types + typesOffset  ), 
-                               (GLuint *) ( ids +   idsOffset), 
+                               (GLuint *)( ids +   idsOffset), 
                                (GLenum *) (severities + severitiesOffset  ), 
-                               (GLsizei *) (lengths ), 
+                               (GLsizei *) (&lengths ), 
                                (GLchar *) (messageLog));
+    
+     return NULL;
     */
 
     /**
@@ -416,12 +442,12 @@ public class GLES31ExtPipeline implements Pipeline{
      *                                                (GLsizei *) lengths, (GLchar *) messageLog )
 
      * */
-    private static native String[] nGLGetDebugMessageLogKHR(int count,
-                                                            java.nio.IntBuffer sources,
-                                                            java.nio.IntBuffer types,
-                                                            java.nio.IntBuffer ids,
-                                                            java.nio.IntBuffer severities);/*
-       GLsizei length = 0;
+    private static native String[] nGLGetDebugMessageLogKHR(int count, int bufSize,
+                                                            java.nio.IntBuffer sources, int sourcesOffset,
+                                                            java.nio.IntBuffer types, int typesOffset,
+                                                            java.nio.IntBuffer ids, int idsOffset,
+                                                            java.nio.IntBuffer severities, int severitiesOffset);/*
+       GLsizei * lengths = NULL;
        GLchar * messageLog = NULL;
       // no op
        glGetDebugMessageLogKHR((GLuint) count, 
@@ -432,6 +458,7 @@ public class GLES31ExtPipeline implements Pipeline{
                                (GLenum *) (severities + severitiesOffset  ), 
                                (GLsizei *) (lengths ), 
                                (GLchar *) (messageLog));
+           return NULL;
     */
     
 
@@ -457,10 +484,10 @@ public class GLES31ExtPipeline implements Pipeline{
 
      * */
     private static native void nGLPushDebugGroupKHR(int source, int id, int length, String message);/*
-        glPushDebugGroupKHR(   (GLenum)source,
-                (GLuint)id,
-                (GLsizei)length,
-                ((GLchar *) message);
+        glPushDebugGroupKHR( (GLenum)source,
+                             (GLuint)id,
+                             (GLsizei)length,
+                             (GLchar *) message);
     */
 
     /**
@@ -510,7 +537,7 @@ public class GLES31ExtPipeline implements Pipeline{
       glObjectLabelKHR( (GLenum)identifier,
                         (GLuint)name,
                         (GLsizei)length,
-                        ((GLchar *) label );
+                        (GLchar *) label );
     */
 
     /**
@@ -530,11 +557,23 @@ public class GLES31ExtPipeline implements Pipeline{
      * Native method generated from GLES31Ext.glGetObjectLabelKHR([int identifier, int name]);
      * 
      *  C function void glGetObjectLabelKHR ( (GLenum) identifier, (GLuint) name, (GLsizei) bufSize, (GLsizei *) length, (GLchar *) label )
-
      * */
     private static native String nGLGetObjectLabelKHR(int identifier, int name);/*
        // no op
-        *return (jobject)0;
+        #define GL_MAX_LABEL_LENGTH  0x82E8
+        
+        GLsizei length = 256;
+        glGetIntegerv(GL_MAX_LABEL_LENGTH, &length);
+        GLsizei bufSize = length +1;
+        std::vector<GLchar> label(length + 1);
+        
+        glGetObjectLabelKHR ( (GLenum) identifier, (GLuint) name, 
+                               (GLsizei) bufSize, 
+                               (GLsizei *) &length, 
+                               (GLchar *) &label[0]);
+                               
+         jstring res = env->NewStringUTF(&label[0]);          
+         return res;                               
     */
 
     /**
@@ -581,6 +620,18 @@ public class GLES31ExtPipeline implements Pipeline{
      * */
     private static native String nGLGetObjectPtrLabelKHR(long ptr);/*
      // no op
+         GLsizei length = 256;
+        glGetIntegerv(GL_MAX_LABEL_LENGTH, &length);
+        GLsizei bufSize = length;
+        
+        std::vector<GLchar> label(length);
+        
+         glGetObjectPtrLabelKHR ( (void *) ptr, 
+                                  (GLsizei) bufSize, 
+                                  (GLsizei *) &length, 
+                                  (GLchar *) &label[0] );
+         jstring res = env->NewStringUTF(&label[0]);          
+         return res;                            
     */
 
     /**
@@ -602,9 +653,11 @@ public class GLES31ExtPipeline implements Pipeline{
      *  C function void glGetPointervKHR ( (GLenum) pname,  (void *) *params )
 
      * */
-    private static native DebugProcKHR nGLGetDebugMessageCallbackKHR();/*
+    private static native DebugProcKHR nGLGetDebugMessageCallbackKHR(int pname, long[] param);/*
        // no op
-        glGetPointervKHR ( (GLenum) pname,  (void *)params );
+      //  int * params[] = new int[1] ;
+        
+        glGetPointervKHR ( (GLenum) pname, (void **) NULL );
         return (jobject)0;
     */
 
@@ -1144,7 +1197,7 @@ public class GLES31ExtPipeline implements Pipeline{
     private static native void nGLGetTexParameterIivEXT(int target, int pname, int[] params, int offset);/*
             glTexParameterIivEXT(  (GLenum)target,
                                 (GLenum)pname,
-                                (GLuint *)(params + offset) );
+                                (GLint *)(params + offset) );
     */
 
     /**
@@ -1337,7 +1390,7 @@ public class GLES31ExtPipeline implements Pipeline{
 
      * */
     private static native void nGLSamplerParameterIuivEXT(int sampler, int pname, java.nio.IntBuffer param, int offset);/*
-            glGetSamplerParameterIivEXT((GLuint) sampler, (GLenum) pname, (GLint *)(params + offset) );
+            glGetSamplerParameterIivEXT((GLuint) sampler, (GLenum) pname, (GLint *)(param + offset) );
     */
 
     /**
@@ -1616,13 +1669,14 @@ public class GLES31ExtPipeline implements Pipeline{
      *             in following cases: <li>if values is null; <li>if offset < 0;
      *             <li>if array length < 1.
      */
-    protected static void checkBuffer(java.nio.ByteBuffer values, int needed,
+    protected static int checkBuffer(java.nio.ByteBuffer values, int needed,
             String bufferName) {
         if (null == values)
             throw new IllegalArgumentException(bufferName + " == null");
         if (values.remaining() < needed)
             throw new IllegalArgumentException(bufferName
                     + " remaining() < needed = " + needed);
+        return getOffset(values);
     }
 
     /**
@@ -1637,13 +1691,14 @@ public class GLES31ExtPipeline implements Pipeline{
      *             in following cases: <li>if values is null; <li>if offset < 0;
      *             <li>if array length < 1.
      */
-    protected static void checkBuffer(java.nio.Buffer values, int needed,
+    protected static int checkBuffer(java.nio.Buffer values, int needed,
             String bufferName) {
         if (null == values)
             throw new IllegalArgumentException(bufferName + " == null");
         if (values.remaining() < needed)
             throw new IllegalArgumentException(bufferName
                     + " remaining() < needed = " + needed);
+        return getOffset(values);
     }
 
     /**
@@ -1658,13 +1713,15 @@ public class GLES31ExtPipeline implements Pipeline{
      *             in following cases: <li>if values is null; <li>if offset < 0;
      *             <li>if array length < 1.
      */
-    protected static void checkBuffer(java.nio.IntBuffer values, int needed,
+    protected static int checkBuffer(java.nio.IntBuffer values, int needed,
             String bufferName) {
         if (null == values)
             throw new IllegalArgumentException(bufferName + " == null");
         if (values.remaining() < needed)
             throw new IllegalArgumentException(bufferName
                     + " remaining() < needed = " + needed);
+        
+         return getOffset(values);
     }
 
     /**
