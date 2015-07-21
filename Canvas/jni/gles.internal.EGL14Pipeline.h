@@ -138,10 +138,10 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePbufferSurface
 /*
  * Class:     gles_internal_EGL14Pipeline
  * Method:    eglCreatePixmapSurface0
- * Signature: (JJI[II)Landroid/opengl/EGLSurface;
+ * Signature: (JJJ[II)J
  */
-JNIEXPORT jobject JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0
-  (JNIEnv *, jclass, jlong, jlong, jint, jintArray, jint);
+JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0
+  (JNIEnv *, jclass, jlong, jlong, jlong, jintArray, jint);
 
 /*
  * Class:     gles_internal_EGL14Pipeline

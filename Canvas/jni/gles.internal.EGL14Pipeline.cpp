@@ -316,22 +316,24 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePbufferSurface
 	return JNI_returnValue;
 }
 
-static inline jobject wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0
-(JNIEnv* env, jclass clazz, jlong dpy, jlong config, jint pixmap, jintArray obj_attrib_list, jint offset, int* attrib_list) {
+static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0
+(JNIEnv* env, jclass clazz, jlong dpy, jlong config, jlong pixmap, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:1019
+//@line:1024
 
         
-         // no op
-          return JNI_FALSE;
-        
+        EGLSurface sur =  eglCreatePixmapSurface( (EGLDisplay) dpy, 
+                                                  (EGLConfig) config, 
+                                                  (EGLNativePixmapType) pixmap, 
+                                                  (EGLint *)(attrib_list + offset) );         
+          return (jlong) sur;
         
 }
 
-JNIEXPORT jobject JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0(JNIEnv* env, jclass clazz, jlong dpy, jlong config, jint pixmap, jintArray obj_attrib_list, jint offset) {
+JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0(JNIEnv* env, jclass clazz, jlong dpy, jlong config, jlong pixmap, jintArray obj_attrib_list, jint offset) {
 	int* attrib_list = (int*)env->GetPrimitiveArrayCritical(obj_attrib_list, 0);
 
-	jobject JNI_returnValue = wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0(env, clazz, dpy, config, pixmap, obj_attrib_list, offset, attrib_list);
+	jlong JNI_returnValue = wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurface0(env, clazz, dpy, config, pixmap, obj_attrib_list, offset, attrib_list);
 
 	env->ReleasePrimitiveArrayCritical(obj_attrib_list, attrib_list, 0);
 
@@ -341,7 +343,7 @@ JNIEXPORT jobject JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePixmapSurfac
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroySurface0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface) {
 
 
-//@line:1051
+//@line:1058
                     
       return (jboolean) eglDestroySurface ( (EGLDisplay) dpy, (EGLSurface) surface );
      
@@ -351,7 +353,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroySurface0(J
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglQuerySurface0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint attribute, jintArray obj_value, jint offset, int* value) {
 
-//@line:1094
+//@line:1101
 
         
         return (jboolean) eglQuerySurface((EGLDisplay) dpy, 
@@ -375,7 +377,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglQuerySurface0(JNI
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindAPI0(JNIEnv* env, jclass clazz, jint api) {
 
 
-//@line:1119
+//@line:1126
 
        return (jboolean) eglBindAPI((EGLenum) api);
     
@@ -385,7 +387,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindAPI0(JNIEnv* 
 JNIEXPORT jint JNICALL Java_gles_internal_EGL14Pipeline_eglQueryAPI0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1137
+//@line:1144
 
          return (jint) eglQueryAPI();
     
@@ -395,7 +397,7 @@ JNIEXPORT jint JNICALL Java_gles_internal_EGL14Pipeline_eglQueryAPI0(JNIEnv* env
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitClient0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1156
+//@line:1163
 
       return (jboolean) eglWaitClient();
     
@@ -405,7 +407,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitClient0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseThread0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1173
+//@line:1180
 
       return (jboolean) eglReleaseThread();
     
@@ -415,7 +417,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseThread0(JN
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreatePbufferFromClientBuffer0
 (JNIEnv* env, jclass clazz, jlong dpy, jint buftype, jlong buffer, jlong config, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:1266
+//@line:1273
 
         
         EGLSurface surface = eglCreatePbufferFromClientBuffer ( (EGLDisplay) dpy, 
@@ -440,7 +442,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreatePbufferFromCli
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSurfaceAttrib0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint attribute, jint value) {
 
 
-//@line:1311
+//@line:1318
         
         return (jboolean) eglSurfaceAttrib((EGLDisplay) dpy, 
                                            (EGLSurface) surface, 
@@ -454,7 +456,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSurfaceAttrib0(JN
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindTexImage0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint buffer) {
 
 
-//@line:1344
+//@line:1351
         
         return (jboolean) eglBindTexImage( (EGLDisplay) dpy, (EGLSurface) surface, (EGLint) buffer );        
         
@@ -464,7 +466,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglBindTexImage0(JNI
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseTexImage0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jint buffer) {
 
 
-//@line:1374
+//@line:1381
 
         return (jboolean) eglReleaseTexImage((EGLDisplay) dpy, 
                                              (EGLSurface) surface, 
@@ -477,7 +479,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglReleaseTexImage0(
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapInterval0(JNIEnv* env, jclass clazz, jlong dpy, jint interval) {
 
 
-//@line:1401
+//@line:1408
 
          return (jboolean) eglSwapInterval((EGLDisplay) dpy, (EGLint) interval);
            
@@ -488,7 +490,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapInterval0(JNI
 static inline jlong wrapped_Java_gles_internal_EGL14Pipeline_eglCreateContext0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong config, jlong share_context, jintArray obj_attrib_list, jint offset, int* attrib_list) {
 
-//@line:1454
+//@line:1461
 
                                                      
        return (jlong) eglCreateContext((EGLDisplay) dpy, 
@@ -512,7 +514,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglCreateContext0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroyContext0(JNIEnv* env, jclass clazz, jlong dpy, jlong ctx) {
 
 
-//@line:1486
+//@line:1493
 
      return (jboolean) eglDestroyContext((EGLDisplay) dpy, (EGLContext) ctx);
     
@@ -522,7 +524,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglDestroyContext0(J
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglMakeCurrent0(JNIEnv* env, jclass clazz, jlong dpy, jlong draw, jlong read, jlong ctx) {
 
 
-//@line:1526
+//@line:1533
 
                                                 
        return (jboolean) eglMakeCurrent((EGLDisplay) dpy, 
@@ -536,7 +538,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglMakeCurrent0(JNIE
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentContext0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1550
+//@line:1557
 
        return (jlong) eglGetCurrentContext();
     
@@ -546,7 +548,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentContext0(J
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentSurface0(JNIEnv* env, jclass clazz, jint readdraw) {
 
 
-//@line:1573
+//@line:1580
 
         return (jlong) eglGetCurrentSurface((EGLint)readdraw);     
     
@@ -556,7 +558,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentSurface0(J
 JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentDisplay0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1589
+//@line:1596
         
        return (jlong) eglGetCurrentDisplay();
     
@@ -566,7 +568,7 @@ JNIEXPORT jlong JNICALL Java_gles_internal_EGL14Pipeline_eglGetCurrentDisplay0(J
 static inline jboolean wrapped_Java_gles_internal_EGL14Pipeline_eglQueryContext0
 (JNIEnv* env, jclass clazz, jlong dpy, jlong ctx, jint attribute, jintArray obj_value, jint offset, int* value) {
 
-//@line:1631
+//@line:1638
 
          return (jboolean) eglQueryContext((EGLDisplay)dpy,
                                              (EGLContext)ctx,
@@ -588,7 +590,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglQueryContext0(JNI
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitGL0(JNIEnv* env, jclass clazz) {
 
 
-//@line:1653
+//@line:1660
 
         return (jboolean) eglWaitGL();
     
@@ -598,7 +600,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitGL0(JNIEnv* e
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitNative0(JNIEnv* env, jclass clazz, jint engine) {
 
 
-//@line:1667
+//@line:1674
         
         return (jboolean) eglWaitNative((EGLint) engine);        
      
@@ -608,7 +610,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglWaitNative0(JNIEn
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapBuffers0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface) {
 
 
-//@line:1692
+//@line:1699
  
         return (jboolean) eglSwapBuffers ( (EGLDisplay) dpy, (EGLSurface) surface );        
        
@@ -618,7 +620,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglSwapBuffers0(JNIE
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglCopyBuffers0(JNIEnv* env, jclass clazz, jlong dpy, jlong surface, jlong target) {
 
 
-//@line:1726
+//@line:1733
         
        return (jboolean) eglCopyBuffers((EGLDisplay) dpy, 
                                         (EGLSurface) surface, 
@@ -630,7 +632,7 @@ JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglCopyBuffers0(JNIE
 JNIEXPORT jboolean JNICALL Java_gles_internal_EGL14Pipeline_eglPresentationTimeANDROID0(JNIEnv* env, jclass clazz, jlong dpy, jlong sur, jlong time) {
 
 
-//@line:1761
+//@line:1768
 
         #ifdef   eglPresentationTimeANDROID                                                   
         return (jboolean) eglPresentationTimeANDROID((EGLDisplay) dpy,
