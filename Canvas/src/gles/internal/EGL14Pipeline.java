@@ -991,18 +991,23 @@ public class EGL14Pipeline implements Pipeline {
                                              EGLConfig config,
                                              int pixmap,
                                              int[] attrib_list,
-                                             int offset
-            ) {
-        throw new UnsupportedOperationException("eglCreatePixmapSurface");
-        //if( null == dpy) throw new IllegalArgumentException(ERROR_EGLDISPLAY_NULL);
-        //if( null == config) throw new IllegalArgumentException(ERROR_EGLSURFACE_NULL);
+                                             int offset) {
         
-        //return createEGLSurface(0);
+        if( null == dpy) throw new IllegalArgumentException(ERROR_EGLDISPLAY_NULL);
+        if( null == config) throw new IllegalArgumentException(ERROR_EGLSURFACE_NULL);
+        if(attrib_list==null){
+            int[] temp = {EGL14.EGL_NONE};
+            attrib_list = temp;
+        }
+        checkAttrib(attrib_list, offset);
+        long sur = eglCreatePixmapSurface0(dpy.getNativeHandle(), config.getNativeHandle(), pixmap, attrib_list, offset);
+        
+        return createEGLSurface(sur);
     }
 
     /**
      * native impl.
-     * 
+     *   eglCreatePixmapSurface( EGLDisplay dpy, EGLConfig config, EGLNativePixmapType pixmap, const EGLint *attrib_list )
      * @param dpy
      * @param config
      * @param pixmap
@@ -1010,17 +1015,19 @@ public class EGL14Pipeline implements Pipeline {
      * @param offset
      * @return
      */
-    private static native EGLSurface eglCreatePixmapSurface0(
+    private static native long eglCreatePixmapSurface0(
             long dpy,
             long config,
-            int pixmap,
+            long pixmap,
             int[] attrib_list,
             int offset
         );/*
         
-         // no op
-          return JNI_FALSE;
-        
+        EGLSurface sur =  eglCreatePixmapSurface( (EGLDisplay) dpy, 
+                                                  (EGLConfig) config, 
+                                                  (EGLNativePixmapType) pixmap, 
+                                                  (EGLint *)(attrib_list + offset) );         
+          return (jlong) sur;
         */
 
     /**

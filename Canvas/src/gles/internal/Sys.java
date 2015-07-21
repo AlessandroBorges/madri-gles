@@ -403,6 +403,7 @@ public class Sys {
             if (SDK.PowerVR == selectedSDK) {
                 if (pipelineMode.isFFP()) {
                     System.load(basePath + "PowerVR/libGLES_CM.dll");
+                  //  System.load(basePath + "PowerVR/libEGL.dll");
                 } else {
                     System.load(basePath + "PowerVR/libGLESv2.dll");
                     System.load(basePath + "PowerVR/libEGL.dll");
@@ -421,7 +422,8 @@ public class Sys {
             
             // Now the main DLL
             if (pipelineMode.version() < 20) {
-                System.load("C:/Users/Livia/workspace/Canvas/libs/GLES_CM64.dll");
+               // System.load(basePath + "liGLES_CM.dll");
+                System.load(basePath + "GLES_CM64.dll");
             }else{
                 System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
             }

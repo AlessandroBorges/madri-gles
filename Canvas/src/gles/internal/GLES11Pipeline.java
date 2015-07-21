@@ -1992,4 +1992,7 @@ public class GLES11Pipeline
     private static native void nGLVertexPointer(int size, int type, int stride, int offset);/*
          glVertexPointer((GLint)  size,  (GLenum)  type, (GLsizei)  stride,  reinterpret_cast<GLvoid *>(offset));
     */
+    
+    
+    
 }

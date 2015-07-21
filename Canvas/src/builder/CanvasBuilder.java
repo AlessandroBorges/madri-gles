@@ -84,8 +84,7 @@ public class CanvasBuilder {
                            "**/gles/internal/GLES10ExtPipeline.java", 
                            "**/gles/internal/GLES11Pipeline.java",
 			   "**/gles/internal/GLES11ExtPipeline.java",
-			   "**/android/opengl/EGL14.java", 
-			   "**/android/opengl/EGLExt.java",
+			   "**/gles/internal/EGL14Pipeline.java",			  
                            "**/gles/internal/UtilPipeline.java",
 			            	};
       
