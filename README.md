@@ -7,7 +7,11 @@ Goal : Port android.opengl package to PC environment, to help development of por
 across several platforms supporting Java language.
 
 Platforms to be supported:
+
 1 - Windows x86 & x64
+
 2 - Linux x86 & x64
+
 3 - Android, with backport of this API (fixing some issues with original Android GLES API)
+
 4 - OSX - at very end of the list. 
