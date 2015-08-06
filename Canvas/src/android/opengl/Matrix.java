@@ -145,7 +145,7 @@ public class Matrix {
      * @param lhs
      * @param rhs
      */
-    private static void native_multiplyMM(float[] r,  float[] lhs, float[] rhs)
+    private static  void native_multiplyMM(float[] r,  float[] lhs, float[] rhs)
     {
         for (int i=0 ; i<4 ; i++) {
              final float rhs_i0 = rhs[ idx(i,0) ];

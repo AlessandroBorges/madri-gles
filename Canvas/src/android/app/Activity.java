@@ -38,8 +38,7 @@ public class Activity extends Context{
     
     public static boolean DEBUG = true;
     
-    public Activity(){
-       
+    public Activity(){       
     }
     
     protected  ActivityStatus getCurrentState(){

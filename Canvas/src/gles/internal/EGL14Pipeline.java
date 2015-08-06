@@ -19,8 +19,6 @@
 package gles.internal;
 
 
-import javax.smartcardio.ATR;
-
 import android.graphics.SurfaceTexture;
 import android.opengl.*;
 import android.view.Surface;
@@ -655,6 +653,10 @@ public class EGL14Pipeline implements Pipeline {
             String error = null;
             if (configs == null){
                 config_size = 0;
+                //Adreno debug
+                config_size = 200;                
+                configs = new EGLConfig[config_size];
+                
                 configsOffset=0;
             }
             if (configsOffset < 0) error = "configsOffset < 0";            

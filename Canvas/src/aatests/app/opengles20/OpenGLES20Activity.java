@@ -15,6 +15,7 @@
  */
 package aatests.app.opengles20;
 
+import gles.emulator.GLESInfo;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class OpenGLES20Activity extends Activity {
         // as the ContentView for this Activity
         mGLView = new MyGLSurfaceView(this);
         setContentView(mGLView);
+       
     }
 
     @Override

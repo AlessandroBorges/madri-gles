@@ -15,9 +15,12 @@
  */
 package aatests.app.opengles20;
 
+import gles.emulator.GLESInfo;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.opengl.EGL14;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
@@ -56,6 +59,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
         mTriangle = new Triangle();
         mSquare   = new Square();
+        
+        GLESInfo info = new GLESInfo();
+        info.queryEGL(EGL14.eglGetCurrentDisplay());
+        System.out.println(info.toString());
+        
     }
 
     @Override

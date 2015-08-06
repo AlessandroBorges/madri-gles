@@ -2,6 +2,8 @@ package gles.emulator;
 
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.io.StringWriter;
 import java.nio.IntBuffer;
 import java.util.*;
@@ -14,7 +16,7 @@ import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 
-class GLESInfo {
+public class GLESInfo {
         public String mRenderer = "none";
         public String mVersion = "none";
         public String mVendor = "none";
@@ -402,7 +404,7 @@ class GLESInfo {
                 
                 IntBuffer capsValue = IntBuffer.allocate(2); 
                 mapCaps20 = new LinkedHashMap<String, String>(capNames.length);
-
+                
                 for (int i=0; i < capValues.length; i++) {                        
                         GLES20.glGetIntegerv(capValues[i], (IntBuffer)capsValue.rewind());              
                         if (GLES20.glGetError() == GLES20.GL_NO_ERROR) {                               
@@ -626,23 +628,30 @@ class GLESInfo {
         }
 
         // Get EGL information of current implementation
-    public void getEGLImplementationInfo() {
-        EGL14LogWrapper EGL = new EGL14LogWrapper(false, false, System.out);// (EGL10)EGLContext.getEGL();
-        EGLDisplay eglDisplay = EGL.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
+    public void getEGLImplementationInfo()  {
+        PrintStream out = System.out;
+        try {
+            out = new PrintStream("dump.txt");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        EGL14LogWrapper myEGL = new EGL14LogWrapper(false, false, out);// (EGL10)EGLContext.getEGL();
+        EGLDisplay eglDisplay = myEGL.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
         int[] major = new int[2];
-        if (EGL.eglInitialize(eglDisplay, major, 0, major, 1)) {
+        if (myEGL.eglInitialize(eglDisplay, major, 0, major, 1)) {
             eglInfo.setmEGLAvailable(true);
-            eglInfo.setmEGLVersion(EGL.eglQueryString(eglDisplay, EGL14.EGL_VERSION));
-            eglInfo.setmEGLVendor(EGL.eglQueryString(eglDisplay, EGL14.EGL_VENDOR));
-            eglInfo.setmEGLExtensions(EGL.eglQueryString(eglDisplay, EGL14.EGL_EXTENSIONS));
-            eglInfo.setmEGLClientAPIs(EGL.eglQueryString(eglDisplay, EGL14.EGL_CLIENT_APIS));
+            eglInfo.setmEGLVersion(myEGL.eglQueryString(eglDisplay, EGL14.EGL_VERSION));
+            eglInfo.setmEGLVendor(myEGL.eglQueryString(eglDisplay, EGL14.EGL_VENDOR));
+            eglInfo.setmEGLExtensions(myEGL.eglQueryString(eglDisplay, EGL14.EGL_EXTENSIONS));
+            eglInfo.setmEGLClientAPIs(myEGL.eglQueryString(eglDisplay, EGL14.EGL_CLIENT_APIS));
             
             // Available configurations
             int[] numEGLConfigs = new int[1];
-            EGL.eglGetConfigs(eglDisplay, null, 0, numEGLConfigs);
+            myEGL.eglGetConfigs(eglDisplay, null, 0, numEGLConfigs);
             int EGLConfigCount = numEGLConfigs[0];
             EGLConfig[] eglConfigs = new EGLConfig[EGLConfigCount];
-            EGL.eglGetConfigs(eglDisplay, eglConfigs, EGLConfigCount, numEGLConfigs);
+            myEGL.eglGetConfigs(eglDisplay, eglConfigs, EGLConfigCount, numEGLConfigs);
             eglInfo.setmEGLConfigs(new EGLConfigInfo[numEGLConfigs[0]]);
             for (int i = 0; i < eglConfigs.length; i++) {
                 eglInfo.getmEGLConfigs()[i] = new EGLConfigInfo(eglConfigs[i], eglDisplay);
@@ -798,11 +807,11 @@ class GLESInfo {
      * Query EGL Vendor, Version, EGL APIS, EGL Extensions
      * @param mEglDisplay current EGLDisplay 
      */
-    protected void queryEGL(EGLDisplay mEglDisplay){
-        System.out.println("Vendor: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VENDOR));
-        System.out.println("Version: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VERSION));
+    public void queryEGL(EGLDisplay mEglDisplay){
+        System.out.println("EGL Vendor: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VENDOR));
+        System.out.println("EGL Version: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_VERSION));
         System.out.println("EGL APIS: " + EGL14.eglQueryString(mEglDisplay, EGL14.EGL_CLIENT_APIS));
-        System.out.println("Extensions: " );
+        System.out.println("EGL Extensions: " );
         String glExtensions = EGL14.eglQueryString(mEglDisplay, EGL14.EGL_EXTENSIONS);
         String[] extensions = glExtensions.split(" ");
         Arrays.sort(extensions);

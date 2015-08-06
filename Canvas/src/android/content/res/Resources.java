@@ -2,6 +2,7 @@ package android.content.res;
 
 import java.io.InputStream;
 
+import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import gles.internal.Sys;
@@ -12,6 +13,14 @@ import gles.internal.Sys;
  *
  */
 public class Resources {
+    
+    Context ctx;
+    
+    protected Resources(){}
+    
+    public Resources(Context ctx){
+        this.ctx = ctx;
+    }
 
     public DisplayMetrics getDisplayMetrics() {
         return Sys.getDisplayMetrics();

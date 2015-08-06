@@ -234,7 +234,8 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * @return a CanvasEGL instance
      */
     private static CanvasEGL getCanvas(SurfaceView surfaceView ){
-       return Sys.getCanvas(surfaceView);
+       CanvasEGL canvas = Sys.getCanvas(surfaceView);      
+       return canvas;
     }
 
     @Override
@@ -958,6 +959,31 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     }
                 }
             }
+            
+            
+            if(true){
+            //ADRENO workaround - it only runs if alpha fails
+            for (EGLConfig config : configs) {
+                int d = findConfigAttrib(egl, display, config,
+                        EGL10.EGL_DEPTH_SIZE, 0);
+                int s = findConfigAttrib(egl, display, config,
+                        EGL10.EGL_STENCIL_SIZE, 0);
+                if ((d >= mDepthSize) && (s >= mStencilSize)) {
+                    int r = findConfigAttrib(egl, display, config,
+                            EGL10.EGL_RED_SIZE, 0);
+                    int g = findConfigAttrib(egl, display, config,
+                             EGL10.EGL_GREEN_SIZE, 0);
+                    int b = findConfigAttrib(egl, display, config,
+                              EGL10.EGL_BLUE_SIZE, 0);
+                    int a = findConfigAttrib(egl, display, config,
+                            EGL10.EGL_ALPHA_SIZE, 0);
+                    if ((r == mRedSize) && (g == mGreenSize)
+                            && (b == mBlueSize) /*&& (a == mAlphaSize)*/) {
+                        return config;
+                    }
+                }
+            }
+            }
             return null;
         }
 
@@ -1018,6 +1044,12 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
              * Get to the default display.
              */
             mEglDisplay = mEgl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+            
+            if(Sys.SDK.ADRENO==Sys.getSDK()){
+                CanvasEGL canvas = getCanvas(null);
+                if(canvas!= null)
+                mEglDisplay = canvas.getEGLDisplay();
+            }
 
             if (mEglDisplay == EGL10.EGL_NO_DISPLAY) {
                 throw new RuntimeException("eglGetDisplay failed");

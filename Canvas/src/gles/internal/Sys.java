@@ -425,7 +425,7 @@ public class Sys {
                // System.load(basePath + "liGLES_CM.dll");
                 System.load(basePath + "GLES_CM64.dll");
             }else{
-                System.load("C:/Users/Livia/workspace/Canvas/libs/GLES64.dll");
+                System.load(basePath + "GLES64.dll");
             }
             
             nativeLibsLoaded = true;
@@ -571,8 +571,11 @@ public class Sys {
      * @param surfaceView a reference to where the canvas is going. Not used yet
      * @return first CanvasEGL available on Sys
      */
-    public static CanvasEGL getCanvas(SurfaceView surfaceView) {        
-        return listCanvasEGL.remove(0);
+    public static CanvasEGL getCanvas(SurfaceView surfaceView) { 
+        if(listCanvasEGL.size()==0) 
+            return null;
+        
+        return listCanvasEGL.get(0);
     }
     
     public static boolean saveCanvas(CanvasEGL canvas){

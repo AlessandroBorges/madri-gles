@@ -5,9 +5,9 @@ import com.badlogic.gdx.jnigen.BuildTarget.TargetOs;
 
 public class CanvasBuilder {
 
-    static final boolean buildIt = true;
-    static final boolean createBuild = true;
-    static final boolean generateCPP = true;
+    static final boolean buildIt = false;
+    static final boolean createBuild = false;
+    static final boolean generateCPP = false;
     static final boolean packIt = true;
     static final boolean buildLinux = false;
     
@@ -248,12 +248,18 @@ public class CanvasBuilder {
 		
 	    }
 	    
-	    if(packIt){
-		System.out.println("\n\n#### Pack it  ... \n");
-		BuildExecutor.executeAnt("jni/build.xml", "-v pack-natives");
-	    }
+	    
+    } //buildIt
+   
+   if(packIt){
+       System.out.println("\n\n#### Pack it  ... \n");
+       BuildExecutor.executeAnt("jni/build.xml", "-v pack-natives");
+       BuildExecutor.executeAnt("libs/buildNativeJar.xml", "-v pack-natives");
    }
-  }
+   
+  } // main
+    
+    
 	/**
 	 * Merge String Arrays
 	 * @param a input array
