@@ -5,8 +5,8 @@
 
 package android.opengl;
 
+import gles.emulator.Sys;
 import gles.internal.GLES31ExtPipeline;
-import gles.internal.Sys;
 
 public class GLES31Ext {
 

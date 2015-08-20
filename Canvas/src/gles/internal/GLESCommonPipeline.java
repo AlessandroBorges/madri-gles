@@ -3,6 +3,8 @@
  */
 package gles.internal;
 
+import gles.emulator.Sys;
+
 import java.nio.Buffer;
 import java.nio.IntBuffer;
 
@@ -10,10 +12,10 @@ import java.nio.IntBuffer;
  * This class delegates some common functions from GLES20Pipeline
  * to be used as GLES10 pipeline. <br>
  * Not all SDK GL ES Emulators implements GL-ES 1.X, but we need it to
- * run basic applications on GLSurfaceView
+ * run basic tasks on GLSurfaceView
  * 
  * @author Alessandro Borges
- * @see gles.internal.Sys
+ * @see gles.emulator.Sys
  */
 public class GLESCommonPipeline implements Pipeline, GLCommon {
     GLCommon glES_Common;

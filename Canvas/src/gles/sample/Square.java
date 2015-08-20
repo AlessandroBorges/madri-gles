@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package aatests.app.opengles20;
+package gles.sample;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

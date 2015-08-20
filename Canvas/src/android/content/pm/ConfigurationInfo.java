@@ -1,6 +1,6 @@
 package android.content.pm;
 
-import gles.internal.Sys;
+import gles.emulator.Sys;
 import android.content.res.Configuration;
 
 public class ConfigurationInfo {

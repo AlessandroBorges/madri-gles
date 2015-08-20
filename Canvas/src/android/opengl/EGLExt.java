@@ -18,8 +18,8 @@
 
 package android.opengl;
 
+import gles.emulator.Sys;
 import gles.internal.EGL14Pipeline;
-import gles.internal.Sys;
 
 /**
  * EGL Extensions

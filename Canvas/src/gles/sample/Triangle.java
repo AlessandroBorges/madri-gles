@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package aatests.app.opengles20;
+package gles.sample;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -31,21 +31,26 @@ public class Triangle {
             // the coordinates of the objects that use this vertex shader
             "uniform mat4 uMVPMatrix;" +
             "attribute vec4 vPosition;" +
+            "attribute vec4 vColor;"+ // new line
+            "     " +
+            "varying vec4 v_v4FillColor;"+//new line
             "void main() {" +
             // the matrix must be included as a modifier of gl_Position
             // Note that the uMVPMatrix factor *must be first* in order
             // for the matrix multiplication product to be correct.
-            "  gl_Position = uMVPMatrix * vPosition;" +
+            "  gl_Position = uMVPMatrix * vPosition; \n" +
+            "  v_v4FillColor = vColor;" +
             "}";
 
     private final String fragmentShaderCode =
             "precision mediump float;" +
-            "uniform vec4 vColor;" +
+            "varying vec4 v_v4FillColor;" + //"uniform vec4 vColor;" +
             "void main() {" +
-            "  gl_FragColor = vColor;" +
+            "  gl_FragColor = v_v4FillColor;" +
             "}";
 
     private final FloatBuffer vertexBuffer;
+    private final FloatBuffer colorBuffer;
     private final int mProgram;
     private int mPositionHandle;
     private int mColorHandle;
@@ -62,7 +67,16 @@ public class Triangle {
     private final int vertexCount = triangleCoords.length / COORDS_PER_VERTEX;
     private final int vertexStride = COORDS_PER_VERTEX * 4; // 4 bytes per vertex
 
-    float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 0.0f };
+    //float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 0.0f };
+    static float color[] =
+        {
+            1.0f, 0.0f, 0.0f, 1.0f,
+            0.0f, 1.0f, 0.0f, 1.0f,
+            0.0f, 0.0f, 1.0f, 1.0f,
+        };
+     static final int COLORS_PER_VERTEX = 4;
+     private final int colorCount = color.length / COLORS_PER_VERTEX;
+     private final int colorStride = COLORS_PER_VERTEX * 4; // 4 bytes per vertex
 
     /**
      * Sets up the drawing object data for use in an OpenGL ES context.
@@ -81,12 +95,15 @@ public class Triangle {
         vertexBuffer.put(triangleCoords);
         // set the buffer to read the first coordinate
         vertexBuffer.position(0);
+        
+        ByteBuffer bc = ByteBuffer.allocateDirect(color.length * 4);
+        colorBuffer =  bc.order(ByteOrder.nativeOrder()).asFloatBuffer();
+        colorBuffer.put(color);
+        colorBuffer.position(0);
 
         // prepare shaders and OpenGL program
-        int vertexShader = MyGLRenderer.loadShader(
-                GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        int fragmentShader = MyGLRenderer.loadShader(
-                GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        int vertexShader = MyGLRenderer.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        int fragmentShader = MyGLRenderer.loadShader( GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
 
         mProgram = GLES20.glCreateProgram();             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader);   // add the vertex shader to program
@@ -112,17 +129,18 @@ public class Triangle {
         GLES20.glEnableVertexAttribArray(mPositionHandle);
 
         // Prepare the triangle coordinate data
-        GLES20.glVertexAttribPointer(
-                mPositionHandle, COORDS_PER_VERTEX,
-                GLES20.GL_FLOAT, false,
-                vertexStride, vertexBuffer);
+        GLES20.glVertexAttribPointer( mPositionHandle, COORDS_PER_VERTEX, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer);
 
         // get handle to fragment shader's vColor member
-        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
+        mColorHandle = GLES20.glGetAttribLocation(mProgram, "vColor");
 
         // Set color for drawing the triangle
-        GLES20.glUniform4fv(mColorHandle, 1, color, 0);
-
+       // GLES20.glUniform4fv(mColorHandle, 1, color, 0);
+     // Enable a handle to the triangle vertices
+       
+        GLES20.glVertexAttribPointer( mColorHandle, COLORS_PER_VERTEX,  GLES20.GL_FLOAT, false, colorStride, colorBuffer);
+        GLES20.glEnableVertexAttribArray(mColorHandle);
+        
         // get handle to shape's transformation matrix
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         MyGLRenderer.checkGlError("glGetUniformLocation");

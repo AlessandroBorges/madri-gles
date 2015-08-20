@@ -1,4 +1,4 @@
-<project name="GLES_CM-Windows-32" basedir="." default="postcompile">
+<project name="GLES-Windows-32" basedir="." default="postcompile">
 	<!-- include the environment -->
 	<property environment="env"/>	
 	<!-- output directory for temporary object files -->
@@ -6,7 +6,7 @@
 	<!-- output directory for the shared library -->
 	<property name="libsDir" value="../libs/windows32" />
 	<!-- the name of the shared library -->
-	<property name="libName" value="GLES_CM.dll"/>
+	<property name="libName" value="GLES.dll"/>
 	<!-- the jni header jniPlatform to use -->
 	<property name="jniPlatform" value="win32"/>
 	<!-- the compilerPrefix for the C & C++ compilers -->
@@ -32,16 +32,17 @@
 		<exclude name="target/"/>
 				<include name="**/*.cpp"/>
 
-				<exclude name="**/gles/internal/GLES20Pipeline.java"/>
-		<exclude name="**/gles/internal/GLES30Pipeline.java"/>
-		<exclude name="**/gles/internal/GLES31Pipeline.java"/>
+				<exclude name="**/gles/internal/GLES10Pipeline.java"/>
+		<exclude name="**/gles/internal/GLES10ExtPipeline.java"/>
+		<exclude name="**/gles/internal/GLES11Pipeline.java"/>
+		<exclude name="**/gles/internal/GLES11ExtPipeline.java"/>
 
 	</fileset>
 
 	<!-- define linker and options -->
 	<property name="linker" value="${compilerPrefix}g++${compilerSuffix}"/>
 	<property name="linker-opts" value=" -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "/>
-	<property name="libraries" value=" -LC:\NVPACK\jdk1.7.0_45\lib  -LC:/Projetos/Android/Builder/PowerVR/x86/  -ljawt -luser32  -lGLES_CM"/>
+	<property name="libraries" value=" -LC:\NVPACK\jdk1.7.0_45\lib  -LC:/Projetos/Android/Builder/Adreno/x86/  -ljawt -luser32  -lEGL -lGLESv2 "/>
 	
 	<!-- cleans the build directory, removes all object files and shared libs -->
 	<target name="clean">
@@ -94,7 +95,7 @@
 			<arg value="-Ijni-headers"/>
 			<arg value="-Ijni-headers/${jniPlatform}"/>
 			<arg value="-I."/>
-						<arg value="-IC:/Projetos/Android/Builder/PowerVR/inc/"/>
+						<arg value="-IC:/Projetos/Android/Builder/Adreno/inc/"/>
 
 			<srcfile/>
 			<arg value="-o"/>
@@ -110,7 +111,7 @@
 			<arg value="-Ijni-headers"/>
 			<arg value="-Ijni-headers/${jniPlatform}"/>
 			<arg value="-I."/>
-						<arg value="-IC:/Projetos/Android/Builder/PowerVR/inc/"/>
+						<arg value="-IC:/Projetos/Android/Builder/Adreno/inc/"/>
 
 			<srcfile/>
 			<arg value="-o"/>

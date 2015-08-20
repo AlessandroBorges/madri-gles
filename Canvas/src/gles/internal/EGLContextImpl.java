@@ -90,4 +90,16 @@ public class EGLContextImpl
         result = 31 * result + (int) (mEGLContext ^ (mEGLContext >>> 32));
         return result;
     }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "gles.internal.EGLContextImpl [" + (mGLContext != null ? "mGLContext=" + mGLContext + ", " : "") + "mEGLContext="
+                + mEGLContext + "]";
+    }
+    
+    
+    
 }

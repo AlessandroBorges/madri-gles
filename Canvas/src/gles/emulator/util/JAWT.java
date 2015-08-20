@@ -3,8 +3,8 @@
  */
 package gles.emulator.util;
 
+import gles.emulator.Sys;
 import gles.internal.EGLUtil;
-import gles.internal.Sys;
 
 import java.awt.Component;
 import java.util.HashMap;

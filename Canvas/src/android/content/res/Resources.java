@@ -5,7 +5,7 @@ import java.io.InputStream;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import gles.internal.Sys;
+import gles.emulator.Sys;
 
 /**
  * implementation of Resources

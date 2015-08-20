@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gles.emulator;
+package gles.util;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;

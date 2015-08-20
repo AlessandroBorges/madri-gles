@@ -3,7 +3,8 @@
  */
 package gles.internal;
 
-import gles.internal.Sys.GL_PIPE;
+import gles.emulator.Sys;
+import gles.emulator.Sys.GL_PIPE;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;

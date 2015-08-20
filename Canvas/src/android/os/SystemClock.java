@@ -96,10 +96,13 @@ public final class SystemClock {
     
     private static long startTimeMillis;
     private static long startTimeNano;
+    private static java.lang.management.ThreadMXBean threadBean;
+    private static boolean tmBeanSupported, tmBeanEnabled, tmBeanInit;
     
     static {        
         startTimeMillis = System.currentTimeMillis();
-        startTimeNano = System.nanoTime();
+        startTimeNano = System.nanoTime(); 
+        
     }
 
     /**
@@ -165,12 +168,13 @@ public final class SystemClock {
         return false;
     }
 
+        
     /**
      * Returns milliseconds since boot, not counting time spent in deep sleep.
      *
      * @return milliseconds of non-sleep uptime since boot.
      */
-    public static long uptimeMillis(){
+    public static long uptimeMillis(){       
         return System.currentTimeMillis() - startTimeMillis;
     }
 
@@ -197,11 +201,33 @@ public final class SystemClock {
      * 
      * @return elapsed milliseconds in the thread
      */
-    public static long currentThreadTimeMillis(){
-        // Not correct !
-        long time = elapsedRealtime();
+    public static long currentThreadTimeMillis(){       
+        initTMBX();        
+        long time =  tmBeanSupported && tmBeanEnabled ? 
+                     threadBean.getCurrentThreadCpuTime() 
+                    : elapsedRealtime();
         
         return time;
+    }
+    
+    private static void initTMBX() {
+        if(tmBeanInit) 
+            return;        
+        try {
+            tmBeanInit = true;
+            threadBean = java.lang.management.ManagementFactory.getThreadMXBean();
+            tmBeanSupported = threadBean.isThreadCpuTimeSupported();
+            if(tmBeanSupported){
+               tmBeanEnabled =  threadBean.isThreadCpuTimeEnabled();
+               if(!tmBeanEnabled)
+                   threadBean.setThreadCpuTimeEnabled(true);
+               // check if last call was OK
+               tmBeanEnabled =  threadBean.isThreadCpuTimeEnabled();
+            }
+        } catch (Throwable t) {
+            tmBeanSupported = false;
+            t.printStackTrace();
+        }
     }
 
     /**

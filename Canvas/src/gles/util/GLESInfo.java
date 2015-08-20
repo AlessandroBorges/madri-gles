@@ -1,4 +1,6 @@
-package gles.emulator;
+package gles.util;
+
+import gles.emulator.CanvasEGL;
 
 import java.awt.Frame;
 import java.awt.Toolkit;
@@ -44,11 +46,19 @@ public class GLESInfo {
         mGLShaderBinaryFormats = new ArrayList<String>();
         mGLProgramBinaryFormats = new ArrayList<String>();
         
-        getEGLImplementationInfo();
+        getEGLImplementationInfo(false);
         getOpenGLES20Caps();
         getOpenGLES30Caps();
         getOpenGLImplementationInfo();
         
+    }
+    
+    public GLESInfo(boolean eglMode) {
+        mGLCompressedFormats = new ArrayList<String>();
+        mGLShaderBinaryFormats = new ArrayList<String>();
+        mGLProgramBinaryFormats = new ArrayList<String>();
+        if(eglMode)
+            getEGLImplementationInfo(eglMode);
     }
     
     // Extract major and minor OpenGL ES version from version string 
@@ -628,13 +638,15 @@ public class GLESInfo {
         }
 
         // Get EGL information of current implementation
-    public void getEGLImplementationInfo()  {
+    public void getEGLImplementationInfo(boolean printConsole)  {
         PrintStream out = System.out;
-        try {
-            out = new PrintStream("dump.txt");
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (!printConsole) {
+            try {
+                out = new PrintStream("dump.txt");
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         EGL14LogWrapper myEGL = new EGL14LogWrapper(false, false, out);// (EGL10)EGLContext.getEGL();
         EGLDisplay eglDisplay = myEGL.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
@@ -654,11 +666,14 @@ public class GLESInfo {
             myEGL.eglGetConfigs(eglDisplay, eglConfigs, EGLConfigCount, numEGLConfigs);
             eglInfo.setmEGLConfigs(new EGLConfigInfo[numEGLConfigs[0]]);
             for (int i = 0; i < eglConfigs.length; i++) {
-                eglInfo.getmEGLConfigs()[i] = new EGLConfigInfo(eglConfigs[i], eglDisplay);
+                EGLConfigInfo conf = new EGLConfigInfo(eglConfigs[i], eglDisplay);
+                eglInfo.getmEGLConfigs()[i] = conf;
+                System.out.println(conf);
             }
         } else {
             eglInfo.setmEGLAvailable(false);
         }
+        
     }
     
     

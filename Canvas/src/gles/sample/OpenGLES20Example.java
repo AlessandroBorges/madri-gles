@@ -13,14 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package aatests.app.opengles20;
+package gles.sample;
 
-import gles.emulator.GLESInfo;
+import gles.util.GLESInfo;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
-public class OpenGLES20Activity extends Activity {
+/**
+ * This is a example of OpenGL-ES application using Android API.<br>
+ * This example extends a android.app.Activity class and uses
+ * a android.opengl.GLSurfaceView to render a simple example.
+ * 
+ * @author Alessandro Borges
+ *
+ */
+public class OpenGLES20Example extends Activity {
 
     private GLSurfaceView mGLView;
 

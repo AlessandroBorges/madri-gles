@@ -18,14 +18,25 @@ package javax.microedition.khronos.egl;
 
 import gles.internal.EGL10Impl;
 import gles.internal.EGLContextImpl;
+import gles.util.EGL14LogWrapper;
 
 import javax.microedition.khronos.opengles.GL;
 
+import android.opengl.GLDebugHelper;
+
 public abstract class EGLContext
 {
+    public static boolean enableLog = false;
     protected static  EGL EGL_INSTANCE = new EGL10Impl();// EGLContextImpl.getEGL();
     
     public static EGL getEGL() {
+        if(enableLog){
+            int config = /*GLDebugHelper.CONFIG_CHECK_GL_ERROR | */ GLDebugHelper.CONFIG_LOG_ARGUMENT_NAMES; 
+            java.io.Writer writer = new java.io.PrintWriter(System.out);
+            return new android.opengl.EGLLogWrapper((EGL10)EGL_INSTANCE, 
+                     config,
+                     writer);
+        }
         return EGL_INSTANCE;
     }
 

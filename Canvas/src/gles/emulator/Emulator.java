@@ -3,8 +3,10 @@
  */
 package gles.emulator;
 
-import gles.internal.Sys;
-import gles.internal.Sys.SDK;
+import gles.emulator.Sys.SDK;
+import gles.sample.OpenGLES20Example;
+import gles.util.EGL14LogWrapper;
+import gles.util.GLESInfo;
 
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -28,8 +30,10 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 
 /**
- * The emulator Window.
- * TODO make it as simple and used as Java3D's MainFrame
+ * The emulator Window.<br>
+ * This is a JFrame window where your OpenGL-ES application will work.
+ * 
+ * 
  * @author Alessandro Borges
  *
  */
@@ -291,7 +295,10 @@ public class Emulator extends JFrame {
             public void run() {
                 Log.i("EMULATOR", "starting main()");
                 Sys.setSDK(SDK.PowerVR);
-                final Emulator emulator = new Emulator("Emulator");                
+                final Emulator emulator = 
+                        new Emulator("OpenGL-ES 2.0 example", // title
+                                     new OpenGLES20Example(), // Activity 
+                                     640,480); // width and height               
             }
         };           
         SwingUtilities.invokeLater(doRun);

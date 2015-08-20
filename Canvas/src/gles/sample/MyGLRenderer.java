@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package aatests.app.opengles20;
+package gles.sample;
 
-import gles.emulator.GLESInfo;
+import gles.util.Alpha;
+import gles.util.GLESInfo;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -26,6 +27,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.os.SystemClock;
 import android.util.Log;
 
 /**
@@ -42,6 +44,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "MyGLRenderer";
     private Triangle mTriangle;
     private Square   mSquare;
+    private Alpha alpha = new Alpha(4000, -1);
 
     // mMVPMatrix is an abbreviation for "Model View Projection Matrix"
     private final float[] mMVPMatrix = new float[16];
@@ -55,19 +58,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {
 
         // Set the background frame color
-        GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        GLES20.glClearColor(0.20f, 0.20f, 0.40f, 1.0f);
 
         mTriangle = new Triangle();
         mSquare   = new Square();
         
         GLESInfo info = new GLESInfo();
         info.queryEGL(EGL14.eglGetCurrentDisplay());
-        System.out.println(info.toString());
+        System.out.println("Some GLESInfo:\n " + info.toString());
         
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
+       // mAngle += 0.04f;
         float[] scratch = new float[16];
 
         // Draw background color
@@ -80,14 +84,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
         Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 
         // Draw square
-        mSquare.draw(mMVPMatrix);
+       // mSquare.draw(mMVPMatrix);
 
         // Create a rotation for the triangle
 
         // Use the following code to generate constant rotation.
         // Leave this code out when using TouchEvents.
-        // long time = SystemClock.uptimeMillis() % 4000L;
-        // float angle = 0.090f * ((int) time);
+       // float f = 3000;
+       // long time = SystemClock.uptimeMillis() % (long)f;       
+       // float alpha = (float)Math.sin((float) time/f * 2f * 3.1415f);
+      //  float angle = 45f * alpha;
+        float angle = 45f * alpha.getSinWave();
+        mAngle = angle;
+        
+        Matrix.setRotateM(mRotationMatrix, 0, -mAngle, 0, 0, 1.0f);
+        Matrix.multiplyMM(scratch, 0, mMVPMatrix, 0, mRotationMatrix, 0);
+       // Draw square
+        mSquare.draw(scratch);
 
         Matrix.setRotateM(mRotationMatrix, 0, mAngle, 0, 0, 1.0f);
 

@@ -4,7 +4,7 @@
 package android.app;
 
 import gles.emulator.CanvasEGL;
-import gles.internal.Sys;
+import gles.emulator.Sys;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;

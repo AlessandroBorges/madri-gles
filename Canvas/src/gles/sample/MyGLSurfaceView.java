@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package aatests.app.opengles20;
+package gles.sample;
 
+import gles.util.GlesEGLConfigChooser;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
@@ -36,10 +37,17 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
         // Set the Renderer for drawing on the GLSurfaceView
         mRenderer = new MyGLRenderer();
+         
+        GlesEGLConfigChooser configChooser = new GlesEGLConfigChooser(false, false, false, false, false, false, 2);
+        configChooser.printConfigs(true);
+      this.setEGLConfigChooser(configChooser);
+     //  this.setEGLConfigChooser(8, 8, 8, 0, 16, 0);
+        
         setRenderer(mRenderer);
 
         // Render the view only when there is a change in the drawing data
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        //setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     private final float TOUCH_SCALE_FACTOR = 180.0f / 320;
@@ -71,9 +79,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
                     dy = dy * -1 ;
                 }
 
-                mRenderer.setAngle(
-                        mRenderer.getAngle() +
-                        ((dx + dy) * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
+                mRenderer.setAngle( mRenderer.getAngle() +
+                                   ((dx + dy) * TOUCH_SCALE_FACTOR));  // = 180.0f / 320
                 requestRender();
         }
 

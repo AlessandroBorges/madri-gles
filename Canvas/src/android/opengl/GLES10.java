@@ -5,8 +5,8 @@
 
 package android.opengl;
 
+import gles.emulator.Sys;
 import gles.internal.GLES10Pipeline;
-import gles.internal.Sys;
 
 import java.nio.Buffer;
 

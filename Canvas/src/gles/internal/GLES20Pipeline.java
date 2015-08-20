@@ -18,6 +18,7 @@ import android.opengl.GLES20;
 
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
+import gles.emulator.Sys;
 import gles.util.BufferInfo;
 
 /**

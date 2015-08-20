@@ -5,14 +5,14 @@ import com.badlogic.gdx.jnigen.BuildTarget.TargetOs;
 
 public class CanvasBuilder {
 
-    static final boolean buildIt = false;
-    static final boolean createBuild = false;
+    static final boolean buildIt = true;
+    static final boolean createBuild = true;
     static final boolean generateCPP = false;
     static final boolean packIt = true;
     static final boolean buildLinux = false;
     
   
-    public enum SDK {
+    protected enum SDK_Build {
 	ADRENO, ANGLE, PowerVR, MALI
     };
 
@@ -51,9 +51,9 @@ public class CanvasBuilder {
 
         String src = "src", bin = "bin", jni = "jni";
 
-        boolean genFFP = true;
+        boolean genFFP = false;
 
-        SDK sdk = SDK.PowerVR;
+        SDK_Build sdk = SDK_Build.ADRENO;
       
       
       String[] ffpExclude ={  "**/gles/internal/GLES20Pipeline.java",
@@ -140,7 +140,7 @@ public class CanvasBuilder {
 	  String[] libsWin64Dir={jawt_Lib64};
 	  String libGLESAngle64 =" -llibGLESv2-x64 ";
 	  String libGLESAngle86 =" -llibGLESv2 ";
-	  String libEGL = " -lEGL'";
+	  String libEGL = " -lEGL";
 	  String libGLES=" -lGLESv2 ";
 	  String libGLES_CM=" -lGLES_CM";
 	  String libMaliEMulator =" -lMaliEmulator ";
@@ -178,7 +178,7 @@ public class CanvasBuilder {
 	  if(genFFP){
 	      GLES_LIB = libGLES_CM;	      
 	  }else{
-	      GLES_LIB =  libEGL + (sdk==SDK.ANGLE ? libGLESAngle64 : libGLES); 	     
+	      GLES_LIB =  libEGL + (sdk==SDK_Build.ANGLE ? libGLESAngle64 : libGLES); 	     
 	  }
 	  
 	     String[] cIncludes = {"DLLMain.c",};

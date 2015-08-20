@@ -1,7 +1,7 @@
 /**
  * 
  */
-package gles.emulator;
+package gles.util;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -13,6 +13,8 @@ import java.io.Writer;
 import android.opengl.*;
 import static android.opengl.EGL14.*;
 /**
+ * A log wrapper for simplified EGL 1.4 calls
+ * 
  * @author Alessandro Borges
  *
  */

@@ -3,6 +3,11 @@ package gles.texture;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+/**
+ * Unfinished class to handle OpenGL palleted textures.
+ * @author Alessandro Borges
+ *
+ */
 public class PaletteTexture {
     
     public static final int RGB = 1;

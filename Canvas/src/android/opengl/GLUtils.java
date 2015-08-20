@@ -19,7 +19,7 @@ package android.opengl;
 
 import java.nio.ByteBuffer;
 
-import gles.internal.Sys;
+import gles.emulator.Sys;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGL11;

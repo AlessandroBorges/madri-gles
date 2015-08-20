@@ -5,8 +5,8 @@
 
 package android.opengl;
 
+import gles.emulator.Sys;
 import gles.internal.GLES11ExtPipeline;
-import gles.internal.Sys;
 
 import java.nio.Buffer;
 

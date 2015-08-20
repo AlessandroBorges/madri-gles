@@ -5,8 +5,8 @@
 
 package android.opengl;
 
+import gles.emulator.Sys;
 import gles.internal.GLES30Pipeline;
-import gles.internal.Sys;
 
 
 /** OpenGL ES 3.0

@@ -16,6 +16,10 @@
 
 package android.opengl;
 
+import gles.emulator.CanvasEGL;
+import gles.emulator.Sys;
+import gles.util.EGL14LogWrapper;
+
 import java.io.Writer;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -30,10 +34,7 @@ import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.util.Log;
-import gles.emulator.CanvasEGL;
-import gles.internal.Sys;
 //import android.content.pm.ConfigurationInfo;
 //import android.os.SystemProperties;
 //import android.util.AttributeSet;
@@ -780,6 +781,8 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
             return egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT,
                     mEGLContextClientVersion != 0 ? attrib_list : null);
+            
+            
         }
 
         public void destroyContext(EGL10 egl, EGLDisplay display,
@@ -1045,15 +1048,32 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
              */
             mEglDisplay = mEgl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
             
-            if(Sys.SDK.ADRENO==Sys.getSDK()){
-                CanvasEGL canvas = getCanvas(null);
-                if(canvas!= null)
-                mEglDisplay = canvas.getEGLDisplay();
-            }
-
+//            if(Sys.SDK.ADRENO == Sys.getSDK() && Sys.isGL20()){
+//                CanvasEGL canvas = Sys.getCanvas(null);
+//                long native_display = canvas.getHDC();
+//                EGLDisplay canvasDisplay = mEgl.eglGetDisplay(native_display);
+//                {
+//                    long dspCanvas  = ((android.opengl.EGLDisplay)canvasDisplay).getNativeHandle();
+//                    mEglDisplay = mEgl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+//                    long dspDefault = ((android.opengl.EGLDisplay)mEglDisplay).getNativeHandle();
+//                    if(dspCanvas != dspDefault){
+//                        Log.e(TAG, "CanvasEGL (0x"+ Long.toHexString(dspCanvas) +")"
+//                                + " has diferent EGLDisplay  than EGL_DEFAULT_DISPLAY (0x"
+//                                + Long.toHexString(dspDefault) +")"); 
+//                        mEglDisplay = dspDefault == 0L ? canvasDisplay : mEglDisplay;
+//                    }else
+//                    {
+//                        Log.e(TAG, "CanvasEGL and EGL_DEFAULT_DISPLAY are the same: 0x"+Long.toHexString(dspDefault));
+//                    }
+//                }
+//            }else{
+//                mEglDisplay = mEgl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
+//            }
+                      
             if (mEglDisplay == EGL10.EGL_NO_DISPLAY) {
                 throw new RuntimeException("eglGetDisplay failed");
-            }
+            }         
+           
 
             /*
              * We can now initialize EGL for that display
@@ -1068,12 +1088,13 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 mEglContext = null;
             } else {
                 mEglConfig = view.mEGLConfigChooser.chooseConfig(mEgl, mEglDisplay);
-
+                                          
                 /*
                 * Create an EGL context. We want to do this as rarely as we can, because an
                 * EGL context is a somewhat heavy object.
                 */
                 mEglContext = view.mEGLContextFactory.createContext(mEgl, mEglDisplay, mEglConfig);
+                System.out.println(mEglContext);
             }
             if (mEglContext == null || mEglContext == EGL10.EGL_NO_CONTEXT) {
                 mEglContext = null;

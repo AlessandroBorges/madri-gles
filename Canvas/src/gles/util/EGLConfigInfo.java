@@ -1,4 +1,4 @@
-package gles.emulator;
+package gles.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +89,13 @@ public class EGLConfigInfo {
         getFromEGLConfig(display, config);
     }
     
+   
+    
+   /**
+    * retrieve data from config    
+    * @param display
+    * @param config
+    */
     private void getFromEGLConfig (EGLDisplay display, EGLConfig config) {
             int[] value = new int[1];
 
@@ -237,9 +244,7 @@ public class EGLConfigInfo {
         sb.append(depthBits);
         sb.append("  Stencil:");
         sb.append(stencilBits);
-        
-        sb.append("\n Renderable type: ").append(renderableTypeString);
-        
+             
         sb.append("\n Surface type: ");
         List<String> surfaces = getSurfaceTypeStrings();        
         for(String s : surfaces){

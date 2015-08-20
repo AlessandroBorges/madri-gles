@@ -13,6 +13,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 
 import android.opengl.EGL14;
+import android.opengl.EGLObjectHandle;
 
 /**
  * Implementation of javax.microedition.khronos.egl.EGL10 <br>
@@ -103,9 +104,12 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
                                                                 fix(config), 
                                                                 fix(share_context), 
                                                                 attrib_list, 0);
+        if(ctx.getNativeHandle()==0L)
+            return EGL10.EGL_NO_CONTEXT;
         
         EGLContext egl10Ctx = new EGLContextImpl(ctx.getNativeHandle()) ;
         return egl10Ctx;
+        
     }
 
     /*
@@ -116,8 +120,12 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
      * javax.microedition.khronos.egl.EGLConfig, int[])
      */
     @Override
-    public EGLSurface eglCreatePbufferSurface(EGLDisplay display, EGLConfig config, int[] attrib_list) {       
-        return EGL14.eglCreatePbufferSurface(fix(display), fix(config), attrib_list, offset);
+    public EGLSurface eglCreatePbufferSurface(EGLDisplay display, EGLConfig config, int[] attrib_list) {  
+        EGLSurface sur = EGL14.eglCreatePbufferSurface(fix(display), fix(config), attrib_list, offset);
+        if(0L == ((EGLObjectHandle)sur).getNativeHandle()){
+            return EGL10.EGL_NO_SURFACE;
+        }
+        return sur;
     }
 
     /*
@@ -138,7 +146,12 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
         }else {
             throw new IllegalArgumentException("Unsupported pointer to native_pixmap");
         }   
-        return EGL14.eglCreatePixmapSurface(fix(display), fix(config), pixmap, attrib_list, offset);
+        EGLSurface sur =  EGL14.eglCreatePixmapSurface(fix(display), fix(config), pixmap, attrib_list, offset);
+        
+        if(0L == ((EGLObjectHandle)sur).getNativeHandle()){
+            return EGL10.EGL_NO_SURFACE;
+        }
+        return sur;
     }
 
     /*
@@ -153,10 +166,15 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
                                              EGLConfig config,
                                              Object native_window,
                                              int[] attrib_list) {
-        return EGL14.eglCreateWindowSurface( fix(display), 
+        EGLSurface sur =  EGL14.eglCreateWindowSurface( fix(display), 
                                              fix(config), 
                                              native_window, 
                                              attrib_list, offset);
+        
+        if(0L == ((EGLObjectHandle)sur).getNativeHandle()){
+            return EGL10.EGL_NO_SURFACE;
+        }
+        return sur;
     }
 
     /*
@@ -244,7 +262,12 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
      */
     @Override
     public EGLDisplay eglGetCurrentDisplay() {      
-        return EGL14.eglGetCurrentDisplay();
+        EGLDisplay dpy =  EGL14.eglGetCurrentDisplay();
+        
+        if(0L == ((EGLObjectHandle)dpy).getNativeHandle()){
+            return EGL10.EGL_NO_DISPLAY;
+        }        
+        return dpy;
     }
 
     /*
@@ -254,7 +277,11 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
      */
     @Override
     public EGLSurface eglGetCurrentSurface(int readdraw) {        
-        return EGL14.eglGetCurrentSurface(readdraw);
+        EGLSurface sur = EGL14.eglGetCurrentSurface(readdraw);
+        if(0L == ((EGLObjectHandle)sur).getNativeHandle()){
+            return EGL10.EGL_NO_SURFACE;
+        }
+        return sur;
     }
 
     /*
@@ -270,7 +297,11 @@ public class EGL10Impl implements EGL, EGL10, EGL11 {
         } else if(native_display instanceof Number){
             display_id = ((Number)native_display).intValue();            
         }
-        return EGL14.eglGetDisplay(display_id);
+        EGLDisplay dpy =  EGL14.eglGetDisplay(display_id);
+        if(0L == ((EGLObjectHandle)dpy).getNativeHandle()){
+            return EGL10.EGL_NO_DISPLAY;
+        }        
+        return dpy;
     }
 
     /*

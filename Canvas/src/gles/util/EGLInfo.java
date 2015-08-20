@@ -1,4 +1,4 @@
-package gles.emulator;
+package gles.util;
 
 import java.util.Arrays;
 import java.util.Collection;

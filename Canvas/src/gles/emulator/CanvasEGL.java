@@ -2,7 +2,7 @@ package gles.emulator;
 
 import gles.emulator.util.DrawingSurfaceInfo;
 import gles.emulator.util.JAWT;
-import gles.internal.Sys;
+import gles.util.EGL14LogWrapper;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -39,6 +39,8 @@ public class CanvasEGL
 
     protected final String TAG = "CanvasEGL";
     private JAWT  jawt;
+    
+    android.graphics.Canvas androidCanvas = new android.graphics.Canvas();
 
     /**
      * EGLDisplay binding
@@ -172,18 +174,25 @@ public class CanvasEGL
     }
 
     /**
-     * Get the native handler of this Canvas 3D
+     * Get the native handler of this Canvas 3D.<br>
+     *  <b>HDC</b>, in EGL terms, is the <b>EGLNativeDisplayType</b>
      * 
-     * @return
+     * @return native pointer to HDC
      */
-    protected long getHDC() {
+    public long getHDC() {
         DrawingSurfaceInfo dsi = getJawt().getDrawingSurfaceInfo();
         long hdc = dsi.getHDC();
         //jawt.freeDrawingSurfaceInfo(dsi);
         return hdc;
     }
     
-    protected long getHWND(){
+    /**
+     * Get the native handler of frame Window.
+     *  <b>HWND</b>, in EGL terms, is the <b>EGLNativeNativeWindowType</b>
+     *  
+     * @return native pointer to HWND
+     */
+    public long getHWND(){
         DrawingSurfaceInfo dsi = getJawt().getDrawingSurfaceInfo();
         long hwnd = dsi.getHWND();
        // jawt.freeDrawingSurfaceInfo(dsi);
@@ -213,14 +222,14 @@ public class CanvasEGL
  
     public android.graphics.Canvas lockCanvas() {
         getJawt().dsLock(); 
-        return null;
+        return androidCanvas;
     }
 
 
    
     public android.graphics.Canvas lockCanvas(Rect dirty) {
         getJawt().dsLock(); 
-        return null;
+        return androidCanvas;
     }
 
 

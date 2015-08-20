@@ -5,8 +5,8 @@
 
 package android.opengl;
 
+import gles.emulator.Sys;
 import gles.internal.GLES10ExtPipeline;
-import gles.internal.Sys;
 
 public class GLES10Ext extends GLES10 {
 	

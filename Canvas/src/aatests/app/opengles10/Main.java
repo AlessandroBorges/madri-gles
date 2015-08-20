@@ -5,7 +5,7 @@ package aatests.app.opengles10;
 
 import android.app.Activity;
 import gles.emulator.Emulator;
-import gles.internal.Sys;
+import gles.emulator.Sys;
 
 /**
  * @author Alessandro Borges
