@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package gles.emulator;
 
 import gles.emulator.Sys.SDK;
@@ -30,10 +28,36 @@ import android.view.InputDevice;
 import android.view.MotionEvent;
 
 /**
- * The emulator Window.<br>
- * This is a JFrame window where your OpenGL-ES application will work.
+ * <p>The emulator Window. </p>
+ * <p>This class is used to run OpenGL-ES applications using Android's Activity class and GLView</p>
  * 
- * 
+ * <script type="text/javascript" src="../../css/shCore.js"></script>
+ * <script type="text/javascript" src="../../css/shBrushJava.js"></script>
+ * <link type="text/css" rel="stylesheet" href="../../css/shCoreDefault.css"/>
+ * <script type="text/javascript"> SyntaxHighlighter.all(); </script>
+ * <p>
+ * This is a JFrame window with an attached CanvasEGL where your OpenGL-ES application
+ * will perform all drawings.
+ * </p>
+ * <p>
+ * Example of Usage:
+ * <pre class="brush: java">
+ * public static void main(String[] args) {
+ *       Sys.setSDK(Sys.SDK.ANGLE);
+ *       final Activity app = new OpenGLES20Example();
+ *       Runnable doRun = new Runnable() {            
+ *         
+ *           public void run() {
+ *               // TODO Auto-generated method stub
+ *               Emulator em = new Emulator("Lesson one", app,640,480);                
+ *           }
+ *       };
+ *       SwingUtilities.invokeLater(doRun);
+ *   } 
+ *  
+ * </pre>
+ * @see GLSurfaceView
+ * @see Activity
  * @author Alessandro Borges
  *
  */
@@ -43,11 +67,14 @@ public class Emulator extends JFrame {
    
     protected static String SUB_TITLE = "GLES Emulator"; 
     protected static String DIV = " - ";
+    /**
+     * Drawing Canvas
+     */
     protected CanvasEGL myCanvasEGL;
     protected JPanel controlPanel;
     
     /**
-     * Window Size
+     * canvas size
      */
     protected int mHeight = 480, mWidth=512;
 
@@ -294,7 +321,7 @@ public class Emulator extends JFrame {
         final Runnable doRun =  new Runnable() {
             public void run() {
                 Log.i("EMULATOR", "starting main()");
-                Sys.setSDK(SDK.PowerVR);
+                Sys.setSDK(SDK.ANGLE);
                 final Emulator emulator = 
                         new Emulator("OpenGL-ES 2.0 example", // title
                                      new OpenGLES20Example(), // Activity 

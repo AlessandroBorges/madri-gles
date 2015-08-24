@@ -32,9 +32,16 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * This is a Canvas where EGL and OpenGL-ES performs all native drawing.<br>
+ * It uses the Java AWT Native Interface api to get the access to  drawing surface.
+ * 
+ * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/awt/AWT_Native_Interface.html">The AWT Native Interface</a>
+ * @author Alessandro Borges
+ *
+ */
 public class CanvasEGL
-        extends java.awt.Canvas
-        
+        extends java.awt.Canvas        
 {
 
     protected final String TAG = "CanvasEGL";

@@ -13,6 +13,7 @@ import gles.internal.GLES30Pipeline;
 import gles.internal.GLES31ExtPipeline;
 import gles.internal.GLESCommonPipeline;
 import gles.internal.Pipeline;
+import gles.util.NativeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,28 +34,40 @@ import android.view.SurfaceView;
  * 
  * <h2>PowerVR SDK Emulator</h2>
  * Supports:  
- * <li>OpenGL-ES 1.1 - 
- * <li>OpenGL-ES 2.0
- * <li>OpenGL-ES 3.0
- * <li>OpenGL-ES 3.1
- * 
- * <p>This native OpenGL-ES emulator from <b>Imagination Technologies&trade;</b> is one of 
- * the most stable and reliable OpenGL-ES platforms.</p>
- * The maker of GPUs used by Ipad and Iphones, as well many GPUs for by mobile 
- * Intel Atom cpu, also makes great tools  for developments targeting mobile market.</p>
+ * <pre>
+ *   _____________________________________
+ *  |    Target     |     Requeriments    |
+ *  |---------------|---------------------|
+ *  | OpenGL-ES 1.1 |  OpenGL 1.5+        |
+ *  | OpenGL-ES 2.0 |  OpenGL 2.0+        |
+ *  | OpenGL-ES 3.0 |  OpenGL 3.3+        |
+ *  | OpenGL-ES 3.1 |  OpenGL 4.3+        |
+ *  |---------------|---------------------|
+ * </pre>
+ * <p>This native OpenGL-ES driver from <b>Imagination Technologies&trade;</b> is one of 
+ * the most stable and reliable OpenGL-ES platforms available today.</p>
+ * <p>
+ * The maker of GPUs used by Ipads and Iphones, as well many GPUs for by mobile 
+ * Intel Atom series, also makes great tools for developments targeting mobile market.</p>
+ * <p>
  * Developers can join the PowerVR Insider programme and interact with the
  * community through online forums at <a href="www.powervrinsider.com">www.powervrinsider.com</a> 
  * </p><p>
  *  PowerVR SDK  support several platforms, as Windows, Linux and IOS.<br>
  *  In our current <b>Madri-GLES</b>  versions, we will use the <i>Windows</i> x86 and x64 
- *  OpengL-ES libraries. Other platforms will be added on next releases.<br>
+ *  OpenGL-ES drivers from Imagination PowerVR. Other platforms will be added on next releases.<br>
  *   
  *  
  * </p>
  * <h2>Google ANGLE- Almost Native Graphics Layer Engine</h2>
- * Supports:  
- * <li>OpenGL-ES 2.0  
- * 
+ Supports:  
+ * <pre>
+ *   _______________________________________________
+ *  |    Target     |          Requeriments         |
+ *  |---------------|-------------------------------|
+ *  | OpenGL-ES 2.0 |  DirectX 9.0c or DirectX 11.0 |
+ *  |---------------|-------------------------------|
+ * </pre>
  * <p><b>ANGLE (Almost Native Graphics Layer Engine)</b> is an <b><i>open source</i></b>, 
  * <b><i>BSD-licensed graphics</i></b> engine abstraction layer developed by Google.The API is mainly designed to bring high 
  * performance OpenGL compatibility to Windows desktops and to Web Browsers such as 
@@ -422,23 +435,27 @@ public class Sys {
             Log.i(TAG, "loadLibs(): there is no native libs for "  + pipelineMode);
             return;
         }
-        
-        boolean is64bit = is64Bit();
-        String basePath = "C:/Users/Livia/workspace/Canvas/libs/";
+        String basePath = "C:/Users/Livia/Documents/GitHub/madri-gles/Canvas/libs/native";
         Log.i(TAG, "loadLibs using basePath as:"  + basePath);
         
         // pipelineMode has higher priority than SDK
-        if(allowFFPsdk){
-            if(pipelineMode.isFFP() && !selectedSDK.isFFP()){
-              for(SDK sdk : SDK.values()){
-                if(sdk.isFFP()){
-                    selectedSDK = sdk;
-                    break;
+        if (allowFFPsdk) {
+            if (pipelineMode.isFFP() && !selectedSDK.isFFP()) {
+                for (SDK sdk : SDK.values()) {
+                    if (sdk.isFFP()) {
+                        selectedSDK = sdk;
+                        break;
+                    }
                 }
-              }
-                
             }
         }
+        
+        // build the path !
+        
+        String pathJar="/native/";        
+        boolean is64bit = is64Bit();
+        Log.i(TAG, "System is 64bit ?: "  + is64bit);
+        pathJar += is64bit ? "x64/" : "x86/";
         
         
         try {
@@ -453,22 +470,30 @@ public class Sys {
             } else
             */
             if (SDK.ANGLE == selectedSDK) {
-                System.load(basePath + "angle/d3dcompiler_46.dll");
-                System.load(basePath + "angle/libGLESv2.dll");
-                System.load(basePath + "angle/libEGL.dll");
+                pathJar = pathJar + "ANGLE/";
+                NativeUtils.load("d3dcompiler_46", pathJar, basePath + pathJar);
+                NativeUtils.load("libGLESv2", pathJar, basePath + pathJar);
+                NativeUtils.load("libEGL", pathJar, basePath + pathJar);
+                //System.load(basePath + "angle/d3dcompiler_46.dll");
+                //System.load(basePath + "angle/libGLESv2.dll");
+                //System.load(basePath + "angle/libEGL.dll");
             } else 
             
             if (SDK.PowerVR == selectedSDK) {
+                pathJar = pathJar + "PowerVR/";
+                
                 if (pipelineMode.isFFP()) {
-                    System.load(basePath + "PowerVR/libGLES_CM.dll");
-                  //  System.load(basePath + "PowerVR/libEGL.dll");
-                } else {
-                    System.load(basePath + "PowerVR/libGLESv2.dll");
-                    System.load(basePath + "PowerVR/libEGL.dll");
+                    NativeUtils.load("libGLES_CM", pathJar, basePath + pathJar);
+                    //System.load(basePath + "PowerVR/libGLES_CM.dll");                 
+                } else {                                   
+                    NativeUtils.load("libGLESv2", pathJar, basePath + pathJar);
+                    NativeUtils.load("libEGL", pathJar, basePath + pathJar);
+                    //System.load(basePath + "PowerVR/libGLESv2.dll");
+                    //System.load(basePath + "PowerVR/libEGL.dll");
                 }
             } 
             /*
-             // MALI ins unsupported in current release
+             // MALI is unsupported in current release
             else 
                 if (SDK.MALI == selectedSDK) {
                 System.load(basePath + "Mali/log4cplus.dll");
@@ -484,10 +509,11 @@ public class Sys {
             */
             // Now the main DLL
             if (pipelineMode.version() < 20) {
-               // System.load(basePath + "liGLES_CM.dll");
-                System.load(basePath + "GLES_CM64.dll");
+                NativeUtils.load("GLES_CM64", "/native/", basePath + "/native/");
+               // System.load(basePath + "GLES_CM64.dll");
             }else{
-                System.load(basePath + "GLES64.dll");
+                NativeUtils.load("GLES64", "/native/", basePath + "/native/");
+               // System.load(basePath + "GLES64.dll");
             }
             
             nativeLibsLoaded = true;

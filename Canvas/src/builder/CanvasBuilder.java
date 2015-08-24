@@ -5,15 +5,20 @@ import com.badlogic.gdx.jnigen.BuildTarget.TargetOs;
 
 public class CanvasBuilder {
 
-    static final boolean buildIt = true;
+    static final boolean buildIt     = true;
     static final boolean createBuild = true;
     static final boolean generateCPP = false;
-    static final boolean packIt = true;
-    static final boolean buildLinux = false;
-    
-  
+    static final boolean packIt      = false;
+    static final boolean genFFP      = true;
+    static final boolean build32     = true;
+    static final boolean build64     = true;
+    static final boolean buildLinux  = false;
+
     protected enum SDK_Build {
-	ADRENO, ANGLE, PowerVR, MALI
+        MALI, 
+        ADRENO, 
+	ANGLE, 
+	PowerVR
     };
 
  // Adreno Stuff
@@ -51,66 +56,86 @@ public class CanvasBuilder {
 
         String src = "src", bin = "bin", jni = "jni";
 
-        boolean genFFP = false;
+        
 
-        SDK_Build sdk = SDK_Build.ADRENO;
+        SDK_Build sdk = SDK_Build.PowerVR;
       
       
-      String[] ffpExclude ={  "**/gles/internal/GLES20Pipeline.java",
+      String[] ffpJavaExclude ={  "**/gles/internal/GLES20Pipeline.java",
 			   "**/gles/internal/GLES30Pipeline.java",
 			   "**/gles/internal/GLES31Pipeline.java", 
      };
       
-      String[] ppExclude ={ "**/gles/internal/GLES10Pipeline.java", 
+      String[] ppJavaExclude ={ "**/gles/internal/GLES10Pipeline.java", 
                            "**/gles/internal/GLES10ExtPipeline.java", 
                            "**/gles/internal/GLES11Pipeline.java",
 			   "**/gles/internal/GLES11ExtPipeline.java",
       };
       
-       String[] ffpcExclude ={ "gles.internal.GLES20Pipeline.cpp",
+      // Exclusion for Fixed Pipeline Cpp Source code
+      String[] ffpCPPExclude ={ "gles.internal.GLES20Pipeline.cpp",
 			       "gles.internal.GLES30Pipeline.cpp",
 			       "gles.internal.GLES31Pipeline.cpp", 
+			       "gles.internal.GLES31ExtPipeline.cpp",
+			      
      };
+       
+       
+      // Exclusion for Programable Pipeline Cpp Source code
+      String[] ppCPPExclude ={ "gles.internal.GLES10Pipeline.cpp", 
+                               "gles.internal.GLES10ExtPipeline.cpp", 
+                               "gles.internal.GLES11Pipeline.cpp",
+			       "gles.internal.GLES11ExtPipeline.cpp",
+			    
+      }; 
+       // common CPP source files
+       String[] cppCommon = { "gles.internal.UtilPipeline.cpp", 
+                               "gles.emulator.util.JAWT.cpp",
+                               "gles.internal.EGL14Pipeline.cpp", 
+                               "ETC1.cpp", 
+                               "poly_clip.cpp", 
+                               "memcpy_wrap.c",
+                               "dll.cpp",
+                               //"DllMain.c"
+                               };
+        // The CPP to compile
+        String[] ffpCppSource = merge(ppCPPExclude,  cppCommon);
+        String[] ppCppSource  = merge(ffpCPPExclude, cppCommon);
       
-      String[] ppcExclude ={ "gle.internal.GLES10Pipeline.cpp", 
-                             "gles.internal.GLES10ExtPipeline.cpp", 
-                             "gles.internal.GLES11Pipeline.cpp",
-			     "gles.internal.GLES11ExtPipeline.cpp",
-      };
-      
-      
-      String[]	ffpSrc = { "**/gles/emulator/util/JAWT.java",                           
-                           "**/gles/internal/GLES10Pipeline.java", 
-                           "**/gles/internal/GLES10ExtPipeline.java", 
-                           "**/gles/internal/GLES11Pipeline.java",
-			   "**/gles/internal/GLES11ExtPipeline.java",
-			   "**/gles/internal/EGL14Pipeline.java",			  
-                           "**/gles/internal/UtilPipeline.java",
+      String[]	ffpJavaSrc = { "**/gles/emulator/util/JAWT.java",                           
+                               "**/gles/internal/GLES10Pipeline.java", 
+                               "**/gles/internal/GLES10ExtPipeline.java", 
+                               "**/gles/internal/GLES11Pipeline.java",
+                               "**/gles/internal/GLES11ExtPipeline.java",
+                               "**/gles/internal/EGL14Pipeline.java",			  
+                               "**/gles/internal/UtilPipeline.java",
 			            	};
       
-      String[]  ppSrc =  { "**/gles/emulator/util/JAWT.java",					
-			   "**/gles/internal/EGL14Pipeline.java",
-			   "**/gles/internal/GLES20Pipeline.java",
-			   "**/gles/internal/GLES30Pipeline.java",
-			   "**/gles/internal/GLES31Pipeline.java",
-			   "**/gles/internal/UtilPipeline.java",
-			   "**/gles/internal/GLES31ExtPipeline.java",
-			//"**/gles/internal/TesteGL.java",					
-    		  };
+      String[]  ppJavaSrc =  { "**/gles/emulator/util/JAWT.java",					
+			       "**/gles/internal/EGL14Pipeline.java",
+			       "**/gles/internal/GLES20Pipeline.java",
+			       "**/gles/internal/GLES30Pipeline.java",
+			       "**/gles/internal/GLES31Pipeline.java",
+			       "**/gles/internal/UtilPipeline.java",
+			       "**/gles/internal/GLES31ExtPipeline.java",
+			       };
       
      
       String[] exclude = null;   
       String[] cExcludes = null;
       String[] src2Natives = null;
+      String[] cppSourceInclude = null;
       
       if(genFFP) {
-	  src2Natives = ffpSrc; /* Fixed Pipeline */ 
-          exclude = ffpExclude;
-          cExcludes = ffpcExclude;
+	  src2Natives = ffpJavaSrc; /* Fixed Pipeline */ 
+          exclude = ffpJavaExclude;
+          cExcludes = ffpCPPExclude;
+          cppSourceInclude = ffpCppSource;
       }else{ 
-	  src2Natives = ppSrc;  /* Programable Pipeline */	
-          exclude = ppExclude;
-          cExcludes = ppcExclude;
+	  src2Natives = ppJavaSrc;  /* Programable Pipeline */	
+          exclude = ppJavaExclude;
+          cExcludes = ppCPPExclude;
+          cppSourceInclude = ppCppSource;
       };
       
    
@@ -132,12 +157,19 @@ public class CanvasBuilder {
        System.out.println("\n\n#### Build it ... \n");
 	  // main Header
 	  String[] headerDir = {};//{ "**/gles/headers/JAWT_Info.h"  };
-	  String jawt_Lib32 = "C:\\NVPACK\\jdk1.7.0_45\\lib";
-	  String jawt_Lib64 = "C:/JDK8_64/lib";
 	  
+	  String jawt_win32_Lib32 = "C:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/win32/x86/lib/";//"C:/NVPACK/jdk1.7.0_45/lib";
+	  String jawt_win32_Lib64 = "C:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/win32/AMD64/lib/";//"C:/JDK8_64/lib";
 	  
-	  String[] libsWin32Dir={jawt_Lib32};
-	  String[] libsWin64Dir={jawt_Lib64};
+	  String jawt_linux_Lib32 = "C:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/Linux/x86/lib/";//"C:/NVPACK/jdk1.7.0_45/lib";
+          String jawt_linux_Lib64 = "C:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/Linux/AMD64/lib/";//"C:/JDK8_64/lib";
+	  
+	  String[] libsWin32Dir={jawt_win32_Lib32};
+	  String[] libsWin64Dir={jawt_win32_Lib64};
+	  
+	  String[] libsLinux32Dir={jawt_linux_Lib32};
+          String[] libsLinux64Dir={jawt_linux_Lib64};
+	  
 	  String libGLESAngle64 =" -llibGLESv2-x64 ";
 	  String libGLESAngle86 =" -llibGLESv2 ";
 	  String libEGL = " -lEGL";
@@ -181,11 +213,12 @@ public class CanvasBuilder {
 	      GLES_LIB =  libEGL + (sdk==SDK_Build.ANGLE ? libGLESAngle64 : libGLES); 	     
 	  }
 	  
-	     String[] cIncludes = {"DLLMain.c",};
+	     
 	    // Build Base
 	    BuildTarget win32 = null;
 	    win32 = BuildTarget.newDefaultTarget(TargetOs.Windows, false);
-	    win32.cIncludes = cIncludes;
+	    //win32.cIncludes = 
+	    win32.cppIncludes= cppSourceInclude;
             win32.cppExcludes = exclude;
 	    win32.compilerPrefix = "mingw32-";
 	    win32.cppFlags += " ";
@@ -194,13 +227,13 @@ public class CanvasBuilder {
 		             + " -ljawt -luser32 " + GLES_LIB  ;
 		              //"-ljawt -lwinmm -lgdi32 -lshell32 -luser32 -lkernel32 -lcomctl32 ";
 	    win32.cFlags += " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
-            win32.linkerFlags = " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
-	   // win32.linkerFlags = " -Wl,-verbose ";
+            win32.linkerFlags += " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
+	    //  win32.linkerFlags += " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ ";
             
             ///////////////////////////////////////////////////////////////////////////
             
             BuildTarget win64 = BuildTarget.newDefaultTarget(TargetOs.Windows, true);
-            win64.cIncludes = cIncludes;
+            win64.cppIncludes = cppSourceInclude;
             win64.cppExcludes = cExcludes;
             win64.compilerPrefix = "";// "mingw32-";
             win64.headerDirs = headerDir;// {"HEADERS HERE"};
@@ -216,12 +249,22 @@ public class CanvasBuilder {
             if (buildLinux) {
                 linux32 = BuildTarget.newDefaultTarget(TargetOs.Linux, false);
                 linux32.cIncludes = win32.cIncludes;
+                linux32.cppIncludes = win32.cppIncludes;
+                linux32.cppExcludes = win32.cppExcludes;
                 linux32.headerDirs = win32.headerDirs;
-                linux32.libraries = win32.libraries;
-                linux32.cFlags = win32.cFlags;
-                linux32.linkerFlags = win32.linkerFlags;
+                linux32.libraries = SDKPath.libPath(libsLinux32Dir) 
+                                   + " -ljawt " + GLES_LIB  ;;
+                //linux32.cFlags = win32.cFlags;
+                //linux32.linkerFlags = win32.linkerFlags;
 
                 linux64 = BuildTarget.newDefaultTarget(TargetOs.Linux, true);
+                linux64.cIncludes = linux32.cIncludes;
+                linux64.cppIncludes = linux32.cppIncludes;
+                linux64.cppExcludes = linux32.cppExcludes;
+                linux64.headerDirs = linux32.headerDirs;
+                linux64.libraries = SDKPath.libPath(libsLinux64Dir) 
+                        + " -ljawt " + GLES_LIB  ;;
+                
                 // BuildTarget mac = BuildTarget.newDefaultTarget(TargetOs.MacOsX, true);
 
             }
@@ -229,24 +272,48 @@ public class CanvasBuilder {
                 if(genFFP){    
                     System.out.println("\n\n#### Create Ant Build  ... \n");
 		    BuildConfig config = new BuildConfig("GLES_CM");
-		    new AntScriptGenerator().generate(config, win32, win64);
+		    if(buildLinux){
+		        new AntScriptGenerator().generate(config, win32, win64, linux32, linux64);
+		    }else{
+		        new AntScriptGenerator().generate(config, win32, win64);
+		    }
                 }else{
                     System.out.println("\n\n#### Create Ant Build  ... \n");
 		    BuildConfig config = new BuildConfig("GLES");
-		    new AntScriptGenerator().generate(config, win32, win64);                  
+		    if(buildLinux){
+		        new AntScriptGenerator().generate(config, win32, win64, linux32, linux64);                  
+		    }else{
+		        new AntScriptGenerator().generate(config, win32, win64);
+		    }
                 }
             }
             
-	    if (buildIt) {
-		System.out.println("\n\n#### Run Ant Build  ... \n");
-		//BuildExecutor.executeAnt("jni/build-windows32.xml", "-v -Dhas-compiler=true clean postcompile");
-		BuildExecutor.executeAnt("jni/build-windows64.xml", "-v -Dhas-compiler=true clean postcompile");
-		//BuildExecutor.executeAnt("jni/build-linux32.xml",   "-v -Dhas-compiler=true clean postcompile");
-		//BuildExecutor.executeAnt("jni/build-linux64.xml",  "-v -Dhas-compiler=true clean postcompile");
-		// BuildExecutor.executeAnt("jni/build-macosx32.xml",
-		// "-v -Dhas-compiler=true  clean postcompile");
-		
-	    }
+            if (buildIt) {
+                System.out.println("\n\n#### Run Ant Build  ... \n");
+                if (build32) {
+                    System.err.println("Build Win-32");
+                    BuildExecutor.executeAnt("jni/build-windows32.xml", "-v -Dhas-compiler=true clean postcompile");
+                }
+
+                if (build64) {
+                    System.err.println("Build Win AMD64");
+                    BuildExecutor.executeAnt("jni/build-windows64.xml", "-v -Dhas-compiler=true clean postcompile");
+                }
+
+                if (buildLinux) {
+                    if (build32) {
+                        System.err.println("Build Linux-32");
+                        BuildExecutor.executeAnt("jni/build-linux32.xml", "-v -Dhas-compiler=true clean postcompile");
+                    }
+
+                    if (build64) {
+                        System.err.println("Build Win AMD64");
+                        BuildExecutor.executeAnt("jni/build-linux64.xml", "-v -Dhas-compiler=true clean postcompile");
+                    }
+                    // BuildExecutor.executeAnt("jni/build-macosx32.xml",
+                    // "-v -Dhas-compiler=true  clean postcompile");
+                }
+	    }//buildIt
 	    
 	    
     } //buildIt

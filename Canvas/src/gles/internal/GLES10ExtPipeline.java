@@ -14,14 +14,16 @@ public class GLES10ExtPipeline implements Pipeline {
     /** Includes **/
     //@off
     /*JNI
-      #define GL_GLEXT_PROTOTYPES
-      #include <GLES/gl.h>
-      #include <GLES/glext.h>
-      #include <GLES/egl.h>
-          
       #include <stdio.h>
       #include <stdlib.h>
       #include <vector>
+      
+      #define GL_GLEXT_PROTOTYPES
+      #include <GLES/egl.h>
+      #include <GLES/gl.h>
+      #include <GLES/glext.h> 
+          
+     
       
       using namespace std;
       
@@ -99,8 +101,9 @@ public class GLES10ExtPipeline implements Pipeline {
 
      * */
     private static native int nGLQueryMatrixxOES(int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset);/* 
+     const char *name = "glQueryMatrixxOES";
      PFNGLQUERYMATRIXXOESPROC glQueryMatrixxOES = 
-     reinterpret_cast<PFNGLQUERYMATRIXXOESPROC>(eglGetProcAddress("glQueryMatrixxOES"));
+     reinterpret_cast<PFNGLQUERYMATRIXXOESPROC>(eglGetProcAddress(name));
 
     if (!glQueryMatrixxOES){
         //throw Exception::CreateException(E_FAIL, L"Failed to get function eglGetPlatformDisplayEXT");
@@ -144,8 +147,9 @@ public class GLES10ExtPipeline implements Pipeline {
 
      * */
     private static native int nGLQueryMatrixxOES(java.nio.IntBuffer mantissa, int mantissaOffset, java.nio.IntBuffer exponent, int exponentOffset);/*
+        const char *name = "glQueryMatrixxOES";
         PFNGLQUERYMATRIXXOESPROC glQueryMatrixxOES = 
-        reinterpret_cast<PFNGLQUERYMATRIXXOESPROC>(eglGetProcAddress("glQueryMatrixxOES"));
+        reinterpret_cast<PFNGLQUERYMATRIXXOESPROC>(eglGetProcAddress(name));
 
     if (!glQueryMatrixxOES){
         //throw Exception::CreateException(E_FAIL, L"Failed to get function eglGetPlatformDisplayEXT");

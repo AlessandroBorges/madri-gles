@@ -1,4 +1,4 @@
-<project name="GLES-Windows-64" basedir="." default="postcompile">
+<project name="GLES_CM-Windows-64" basedir="." default="postcompile">
 	<!-- include the environment -->
 	<property environment="env"/>	
 	<!-- output directory for temporary object files -->
@@ -6,7 +6,7 @@
 	<!-- output directory for the shared library -->
 	<property name="libsDir" value="../libs/windows64" />
 	<!-- the name of the shared library -->
-	<property name="libName" value="GLES64.dll"/>
+	<property name="libName" value="GLES_CM64.dll"/>
 	<!-- the jni header jniPlatform to use -->
 	<property name="jniPlatform" value="win32"/>
 	<!-- the compilerPrefix for the C & C++ compilers -->
@@ -20,7 +20,7 @@
 	<fileset id="gcc-files" dir="./">
 		<exclude name="target/"/>		
 				<include name="memcpy_wrap.c"/>
-		<include name="DLLMain.c"/>
+		<include name="**/*.c"/>
 
 		
 	</fileset>
@@ -30,19 +30,29 @@
 	<property name="g++-opts" value="-c -Wall -O2 -mfpmath=sse -msse2 -fmessage-length=0 -m64"/>
 	<fileset id="g++-files" dir="./">
 		<exclude name="target/"/>
-				<include name="**/*.cpp"/>
+				<include name="gles.internal.GLES10Pipeline.cpp"/>
+		<include name="gles.internal.GLES10ExtPipeline.cpp"/>
+		<include name="gles.internal.GLES11Pipeline.cpp"/>
+		<include name="gles.internal.GLES11ExtPipeline.cpp"/>
+		<include name="gles.internal.UtilPipeline.cpp"/>
+		<include name="gles.emulator.util.JAWT.cpp"/>
+		<include name="gles.internal.EGL14Pipeline.cpp"/>
+		<include name="ETC1.cpp"/>
+		<include name="poly_clip.cpp"/>
+		<include name="memcpy_wrap.c"/>
+		<include name="dll.cpp"/>
 
-				<exclude name="gle.internal.GLES10Pipeline.cpp"/>
-		<exclude name="gles.internal.GLES10ExtPipeline.cpp"/>
-		<exclude name="gles.internal.GLES11Pipeline.cpp"/>
-		<exclude name="gles.internal.GLES11ExtPipeline.cpp"/>
+				<exclude name="gles.internal.GLES20Pipeline.cpp"/>
+		<exclude name="gles.internal.GLES30Pipeline.cpp"/>
+		<exclude name="gles.internal.GLES31Pipeline.cpp"/>
+		<exclude name="gles.internal.GLES31ExtPipeline.cpp"/>
 
 	</fileset>
 
 	<!-- define linker and options -->
 	<property name="linker" value="${compilerPrefix}g++${compilerSuffix}"/>
-	<property name="linker-opts" value="-Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ -m64 -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "/>
-	<property name="libraries" value=" -LC:/JDK8_64/lib  -LC:/Projetos/Android/Builder/Adreno/x64/ -ljawt -luser32  -lEGL -lGLESv2 "/>
+	<property name="linker-opts" value="-Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ -m64-Wl,--kill-at -shared -m32 -static -static-libgcc -static-libstdc++ -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "/>
+	<property name="libraries" value=" -LC:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/win32/AMD64/lib/  -LC:/Projetos/Android/Builder/PowerVR/x64/ -ljawt -luser32  -lGLES_CM"/>
 	
 	<!-- cleans the build directory, removes all object files and shared libs -->
 	<target name="clean">
@@ -95,7 +105,7 @@
 			<arg value="-Ijni-headers"/>
 			<arg value="-Ijni-headers/${jniPlatform}"/>
 			<arg value="-I."/>
-						<arg value="-IC:/Projetos/Android/Builder/Adreno/inc/"/>
+						<arg value="-IC:/Projetos/Android/Builder/PowerVR/inc/"/>
 
 			<srcfile/>
 			<arg value="-o"/>
@@ -111,7 +121,7 @@
 			<arg value="-Ijni-headers"/>
 			<arg value="-Ijni-headers/${jniPlatform}"/>
 			<arg value="-I."/>
-						<arg value="-IC:/Projetos/Android/Builder/Adreno/inc/"/>
+						<arg value="-IC:/Projetos/Android/Builder/PowerVR/inc/"/>
 
 			<srcfile/>
 			<arg value="-o"/>
