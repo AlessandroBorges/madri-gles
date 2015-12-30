@@ -1,4 +1,4 @@
-# madri-gles
+# Madri-GLES
 
 This project is about a PC emulation of Android's Java OpenGL ES
 Now hosted at GitHub
@@ -6,12 +6,14 @@ Now hosted at GitHub
 Goal : Port android.opengl package to PC environment, to help development of portable OpenGL ES applications 
 across several platforms supporting Java language.
 
-Platforms to be supported:
+It uses Google's ANGLE OpenGL ES 2.0 emulator and PowerVR Emulation OpenGL-ES libs.
 
-1 - Windows x86 & x64
+Platforms to be supported (Native libs) :
+
+1 - Windows 7 and up - x86 & x64
 
 2 - Linux x86 & x64
 
 3 - Android, with backport of this API (fixing some issues with original Android GLES API)
 
-4 - OSX - at very end of the list. 
+4 - OSX - only with some sponsoring. 
