@@ -15,7 +15,7 @@
  ******************************************************************************/
 
 /**
- * This file is belongs to LIBGDX
+ * This file belongs to LIBGDX
  * 
  * https://code.google.com/p/libgdx-svg/source/browse/gdx/src/com/badlogic/gdx/graphics/GLCommon.java?r=11 
  */
@@ -25,8 +25,10 @@ package gles.internal;
 import java.nio.Buffer;
 import java.nio.IntBuffer;
 
-/** This interface defines methods common to GL10, GL11 and GL20.
- * @author mzechner */
+/** 
+ * This interface defines methods common to GL10, GL11 and GL20.
+ * @author mzechner 
+ **/
 public interface GLCommon {
 	public static final int GL_GENERATE_MIPMAP = 0x8191;
 

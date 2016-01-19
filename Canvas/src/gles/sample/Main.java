@@ -18,7 +18,7 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        Sys.setSDK(Sys.SDK.ANGLE);
+        Sys.setSDK(Sys.SDK.PowerVR);
         final Activity app = new OpenGLES20Example();
         Runnable doRun = new Runnable() {            
             @Override

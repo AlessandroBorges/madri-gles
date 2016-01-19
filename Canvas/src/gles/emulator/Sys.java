@@ -387,7 +387,7 @@ public class Sys {
      * If undefined SDK, loads Google's ANGLE and GLES20 pipeline
      * @return true if ok
      */
-    public static boolean loadNativeLibs(){
+    public static synchronized boolean loadNativeLibs(){
         if(nativeLibsLoaded) return true;
         if(selectedSDK==null){
            setSDK(SDK.ANGLE);   
@@ -409,7 +409,7 @@ public class Sys {
      * @throws UnsupportedOperationException if native libs are already loaded.
      * 
      */
-    public static void loadNativeLibs(SDK sdk, GL_PIPE pipeline){
+    public static synchronized void loadNativeLibs(SDK sdk, GL_PIPE pipeline){
         if(nativeLibsLoaded){
             String pipes = Arrays.toString(glPipeLoaded.toArray());
             Log.i(TAG, "loadNativeLibs()- libs already loaded " + selectedSDK +", " + pipes);
@@ -428,7 +428,7 @@ public class Sys {
      * @see GL_PIPE
      * @param pipelineMode one of GL_PIPE enumeration
      */
-    private static void loadLibs(GL_PIPE pipelineMode) {
+    private static synchronized void loadLibs(GL_PIPE pipelineMode) {
         Log.i(TAG, "loadLibs() : "  + pipelineMode);
         
         if(pipelineMode == null || pipelineMode==GL_PIPE.GLES_COMMON){
@@ -436,6 +436,7 @@ public class Sys {
             return;
         }
         String basePath = "C:/Users/Livia/Documents/GitHub/madri-gles/Canvas/libs/native";
+        String dllJNIPath = "C:/Users/Livia/Documents/GitHub/madri-gles/Canvas/libs/";
         Log.i(TAG, "loadLibs using basePath as:"  + basePath);
         
         // pipelineMode has higher priority than SDK
@@ -470,8 +471,9 @@ public class Sys {
             } else
             */
             if (SDK.ANGLE == selectedSDK) {
-                pathJar = pathJar + "ANGLE/";
-                NativeUtils.load("d3dcompiler_46", pathJar, basePath + pathJar);
+                //pathJar = pathJar + "ANGLE/";
+                pathJar = pathJar + "MS-TECH/";
+                NativeUtils.load("d3dcompiler_47", pathJar, basePath + pathJar);
                 NativeUtils.load("libGLESv2", pathJar, basePath + pathJar);
                 NativeUtils.load("libEGL", pathJar, basePath + pathJar);
                 //System.load(basePath + "angle/d3dcompiler_46.dll");
@@ -509,10 +511,18 @@ public class Sys {
             */
             // Now the main DLL
             if (pipelineMode.version() < 20) {
-                NativeUtils.load("GLES_CM64", "/native/", basePath + "/native/");
+                if(is64bit){
+                    NativeUtils.load("GLES_CM64", "/native/", dllJNIPath);
+                }else{
+                    NativeUtils.load("GLES_CM", "/native/", dllJNIPath);
+                }
                // System.load(basePath + "GLES_CM64.dll");
             }else{
-                NativeUtils.load("GLES64", "/native/", basePath + "/native/");
+                if(is64bit){
+                    NativeUtils.load("GLES64", "/native/", dllJNIPath);
+                }else{
+                    NativeUtils.load("GLES", "/native/", dllJNIPath);
+                }
                // System.load(basePath + "GLES64.dll");
             }
             

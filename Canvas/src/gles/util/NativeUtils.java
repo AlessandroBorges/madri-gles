@@ -159,15 +159,17 @@ public class NativeUtils {
             String dllName =  System.mapLibraryName(libName);
             System.load(devFullPath + dllName);
         } catch (UnsatisfiedLinkError exc) {
-
+            System.err.println("load(1) fail on devFullPath. -> " + exc.getMessage());
             try {
                 // used for tests. This library is in classpath only
                 System.loadLibrary(libName);
             } catch (UnsatisfiedLinkError e) {
+                System.err.println("load(2) fail on classpath. -> " + e.getMessage());
                 try {
                     // during runtime. .DLL within .JAR
                     NativeUtils.loadLibraryFromJar(folderPathInJar + System.mapLibraryName(libName));
                 } catch (IOException e1) {
+                    System.err.println("load(3) fail on jar. -> " + e1.getMessage());
                     throw new RuntimeException(e1);
                 }
             }

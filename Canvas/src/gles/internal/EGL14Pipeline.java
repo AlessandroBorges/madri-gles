@@ -37,12 +37,14 @@ public class EGL14Pipeline implements Pipeline {
     /* 
      * CPP codes
      */
-    //@off
+    //@formatter:off
     /*JNI
-        #define EGL_EGLEXT_PROTOTYPES   
-        #include <EGL/egl.h>
-        #include <EGL/eglext.h> 
-        #include <KHR/khrplatform.h>
+        #define EGL_EGLEXT_PROTOTYPES 
+        
+       #include <KHR/khrplatform.h>  
+       #include <EGL/egl.h>
+       #include <EGL/eglext.h> 
+       
         
         #include <stdio.h>
         #include <stdlib.h>
@@ -105,7 +107,7 @@ public class EGL14Pipeline implements Pipeline {
    * initialize native variables.
    */
     public static native void nativeClassInit();/*
-     // do nothing, meanwhile
+        
     */
     
     static {

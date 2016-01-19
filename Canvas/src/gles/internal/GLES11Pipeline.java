@@ -19,6 +19,7 @@ public class GLES11Pipeline
     /** Includes **/
     //@off
     /*JNI
+       #define GL_GLEXT_PROTOTYPES
       #include <GLES/gl.h>
       #include <GLES/glext.h>
       #include <GLES/egl.h>

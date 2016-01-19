@@ -21,9 +21,11 @@ public class GLES10Pipeline implements Pipeline, GLCommon {
     /** Includes **/
     //@off
     /*JNI
+      #define GL_GLEXT_PROTOTYPES 
+      #include <GLES/egl.h>
       #include <GLES/gl.h>
       #include <GLES/glext.h>
-      #include <GLES/egl.h>
+      
           
       #include <stdio.h>
       #include <stdlib.h>

@@ -6,11 +6,11 @@ import com.badlogic.gdx.jnigen.BuildTarget.TargetOs;
 public class CanvasBuilder {
 
     static final boolean buildIt     = true;
-    static final boolean createBuild = true;
-    static final boolean generateCPP = false;
+    static final boolean createBuild = false;
+    static final boolean generateCPP = true;
     static final boolean packIt      = false;
     static final boolean genFFP      = true;
-    static final boolean build32     = true;
+    static final boolean build32     = false;
     static final boolean build64     = true;
     static final boolean buildLinux  = false;
 
@@ -38,8 +38,8 @@ public class CanvasBuilder {
 
     // PowerVR Stuff
     private static String PowerVR_INC = "C:/Projetos/Android/Builder/PowerVR/inc/";
-    private static String PowerVR_LIB_X86 = "C:/Projetos/Android/Builder/PowerVR/x86/";
-    private static String PowerVR_LIB_X64 = "C:/Projetos/Android/Builder/PowerVR/x64/";
+    private static String PowerVR_LIB_X86 = "C:/Projetos/Android/Builder/PowerVR/x86_32/Lib";
+    private static String PowerVR_LIB_X64 = "C:/Projetos/Android/Builder/PowerVR/x86_64/Lib";
 
     // SDKs paths
     private static SDKPath ADRENO_SDK = new SDKPath(ADRENO_INC, ADRENO_LIB_X86, ADRENO_LIB_X64);
@@ -70,6 +70,7 @@ public class CanvasBuilder {
                            "**/gles/internal/GLES10ExtPipeline.java", 
                            "**/gles/internal/GLES11Pipeline.java",
 			   "**/gles/internal/GLES11ExtPipeline.java",
+			   "**/gles/internal/GLES1Extensions.java",
       };
       
       // Exclusion for Fixed Pipeline Cpp Source code
@@ -174,7 +175,7 @@ public class CanvasBuilder {
 	  String libGLESAngle86 =" -llibGLESv2 ";
 	  String libEGL = " -lEGL";
 	  String libGLES=" -lGLESv2 ";
-	  String libGLES_CM=" -lGLES_CM";
+	  String libGLES_CM=" -llibGLES_CM";
 	  String libMaliEMulator =" -lMaliEmulator ";
 	 
 	  switch (sdk) {
@@ -226,8 +227,8 @@ public class CanvasBuilder {
 	    win32.libraries = SDKPath.libPath(libsWin32Dir) 
 		             + " -ljawt -luser32 " + GLES_LIB  ;
 		              //"-ljawt -lwinmm -lgdi32 -lshell32 -luser32 -lkernel32 -lcomctl32 ";
-	    win32.cFlags += " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
-            win32.linkerFlags += " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "; 
+	    win32.cFlags += " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL ";
+            win32.linkerFlags += " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ --enable-stdcall-fixup "; 
 	    //  win32.linkerFlags += " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ ";
             
             ///////////////////////////////////////////////////////////////////////////
@@ -241,7 +242,7 @@ public class CanvasBuilder {
                               "-ljawt -luser32 " + GLES_LIB;        	          
             
             win64.cFlags +=  " -D_WINGDI_ -D_JNI_IMPLEMENTATION_ -DBUILD_DLL";
-            win64.linkerFlags += win32.linkerFlags;
+            win64.linkerFlags += " -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ --enable-stdcall-fixup "; //win32.linkerFlags;
             
             BuildTarget linux32 = null;
             BuildTarget linux64 = null;

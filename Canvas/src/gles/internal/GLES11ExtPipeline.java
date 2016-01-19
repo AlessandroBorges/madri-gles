@@ -22,22 +22,19 @@ public class GLES11ExtPipeline
 	implements Pipeline {
 	
     /** Includes **/
-    //@off
-    /*JNI
-      #define GL_GLEXT_PROTOTYPES 1
-      #include <GLES/gl.h>
-      #include <GLES/glext.h>
-      #include <GLES/egl.h>
-          
-      #include <stdio.h>
-      #include <stdlib.h>
-      #include <vector>
-      
-    //  static PFNGLBLENDEQUATIONSEPARATEOESPROC glBlendEquationSeparateOES;
-      
-      //using namespace std;
-      
-      ////////////////////////////////////////
+    // @formatter:off 
+    /*JNI 
+    // EGL includes
+    #define EGL_EGLEXT_PROTOTYPES 1
+    #include <EGL/egl.h>
+    #include <EGL/eglext.h>
+
+  // GLES 1.x  api
+    #define GL_GLEXT_PROTOTYPES 1 
+    #include <GLES/egl.h>
+    #include <GLES/gl.h>
+    #include <GLES/glext.h>
+
      */
 	
 	/**
@@ -88,7 +85,8 @@ public class GLES11ExtPipeline
      * */
     private static native void nGLES11ExtClassInit();/*
           // PFNGLBLENDEQUATIONSEPARATEOESPROC glBlendEquationSeparateOES;
-          // glBlendEquationSeparateOES =  reinterpret_cast<PFNGLBLENDEQUATIONSEPARATEOESPROC>(eglGetProcAddress("glBlendEquationSeparateOES"));    
+          // glBlendEquationSeparateOES =  reinterpret_cast<PFNGLBLENDEQUATIONSEPARATEOESPROC>(eglGetProcAddress("glBlendEquationSeparateOES"));
+         
     */
 
     /**
