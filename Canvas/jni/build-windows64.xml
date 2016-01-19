@@ -51,8 +51,8 @@
 
 	<!-- define linker and options -->
 	<property name="linker" value="${compilerPrefix}g++${compilerSuffix}"/>
-	<property name="linker-opts" value="-Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ -m64-Wl,--kill-at -shared -m32 -static -static-libgcc -static-libstdc++ -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ "/>
-	<property name="libraries" value=" -LC:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/win32/AMD64/lib/  -LC:/Projetos/Android/Builder/PowerVR/x64/ -ljawt -luser32  -lGLES_CM"/>
+	<property name="linker-opts" value="-Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ -m64 -Wl,--kill-at -shared -static -static-libgcc -static-libstdc++ --enable-stdcall-fixup "/>
+	<property name="libraries" value=" -LC:/Users/Livia/Documents/GitHub/madri-gles/canvas/lib/win32/AMD64/lib/  -LC:/Projetos/Android/Builder/PowerVR/x86_64/Lib -ljawt -luser32  -llibGLES_CM"/>
 	
 	<!-- cleans the build directory, removes all object files and shared libs -->
 	<target name="clean">

@@ -10,10 +10,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -22,7 +22,7 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  **/
- 
+
 #ifndef __glad_egl_h_
 
 #ifdef __egl_h_
@@ -32,18 +32,32 @@
 #define __glad_egl_h_
 #define __egl_h_
 
+
+#include <KHR/khrplatform.h>
+#include <EGL/eglplatform.h>
+
+
+#ifndef GLAPI
+#define GLAPI    EGLAPI
+#endif
+
+#ifndef APIENTRY
+#define APIENTRY EGLAPIENTRY
+#endif
+
+
 #if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__)
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif
-#include <windows.h>
+//#include <windows.h>
 #endif
 
 #ifndef APIENTRY
 #define APIENTRY
 #endif
 #ifndef APIENTRYP
-#define APIENTRYP APIENTRY *
+#define APIENTRYP EGLAPIENTRYP
 #endif
 #ifndef GLAPI
 #define GLAPI extern
@@ -58,8 +72,72 @@ typedef void* (* GLADloadproc)(const char *name);
 GLAPI int gladLoadEGL(void);
 GLAPI int gladLoadEGLLoader(GLADloadproc);
 
-#include <KHR/khrplatform.h>
-#include <EGL/eglplatform.h>
+// #include <KHR/khrplatform.h>
+// #include <EGL/eglplatform.h>
+///////////////////////
+#define EGL_ALPHA_SIZE                    0x3021
+#define EGL_BAD_ACCESS                    0x3002
+#define EGL_BAD_ALLOC                     0x3003
+#define EGL_BAD_ATTRIBUTE                 0x3004
+#define EGL_BAD_CONFIG                    0x3005
+#define EGL_BAD_CONTEXT                   0x3006
+#define EGL_BAD_CURRENT_SURFACE           0x3007
+#define EGL_BAD_DISPLAY                   0x3008
+#define EGL_BAD_MATCH                     0x3009
+#define EGL_BAD_NATIVE_PIXMAP             0x300A
+#define EGL_BAD_NATIVE_WINDOW             0x300B
+#define EGL_BAD_PARAMETER                 0x300C
+#define EGL_BAD_SURFACE                   0x300D
+#define EGL_BLUE_SIZE                     0x3022
+#define EGL_BUFFER_SIZE                   0x3020
+#define EGL_CONFIG_CAVEAT                 0x3027
+#define EGL_CONFIG_ID                     0x3028
+#define EGL_CORE_NATIVE_ENGINE            0x305B
+#define EGL_DEPTH_SIZE                    0x3025
+#define EGL_DONT_CARE                     ((EGLint)-1)
+#define EGL_DRAW                          0x3059
+#define EGL_EXTENSIONS                    0x3055
+#define EGL_FALSE                         0
+#define EGL_GREEN_SIZE                    0x3023
+#define EGL_HEIGHT                        0x3056
+#define EGL_LARGEST_PBUFFER               0x3058
+#define EGL_LEVEL                         0x3029
+#define EGL_MAX_PBUFFER_HEIGHT            0x302A
+#define EGL_MAX_PBUFFER_PIXELS            0x302B
+#define EGL_MAX_PBUFFER_WIDTH             0x302C
+#define EGL_NATIVE_RENDERABLE             0x302D
+#define EGL_NATIVE_VISUAL_ID              0x302E
+#define EGL_NATIVE_VISUAL_TYPE            0x302F
+#define EGL_NONE                          0x3038
+#define EGL_NON_CONFORMANT_CONFIG         0x3051
+#define EGL_NOT_INITIALIZED               0x3001
+#define EGL_NO_CONTEXT                    ((EGLContext)0)
+#define EGL_NO_DISPLAY                    ((EGLDisplay)0)
+#define EGL_NO_SURFACE                    ((EGLSurface)0)
+#define EGL_PBUFFER_BIT                   0x0001
+#define EGL_PIXMAP_BIT                    0x0002
+#define EGL_READ                          0x305A
+#define EGL_RED_SIZE                      0x3024
+#define EGL_SAMPLES                       0x3031
+#define EGL_SAMPLE_BUFFERS                0x3032
+#define EGL_SLOW_CONFIG                   0x3050
+#define EGL_STENCIL_SIZE                  0x3026
+#define EGL_SUCCESS                       0x3000
+#define EGL_SURFACE_TYPE                  0x3033
+#define EGL_TRANSPARENT_BLUE_VALUE        0x3035
+#define EGL_TRANSPARENT_GREEN_VALUE       0x3036
+#define EGL_TRANSPARENT_RED_VALUE         0x3037
+#define EGL_TRANSPARENT_RGB               0x3052
+#define EGL_TRANSPARENT_TYPE              0x3034
+#define EGL_TRUE                          1
+#define EGL_VENDOR                        0x3053
+#define EGL_VERSION                       0x3054
+#define EGL_WIDTH                         0x3057
+#define EGL_WINDOW_BIT                    0x0004
+
+
+///////////////////////
+
 typedef unsigned int EGLBoolean;
 typedef unsigned int EGLenum;
 typedef intptr_t EGLAttribKHR;

@@ -31,11 +31,28 @@
 #define __glad_h_
 #define __gl_h_
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <GLES/glplatform.h>
+
+
+#ifndef GLAPI
+#define GLAPI    GL_API
+#endif
+
+#ifndef APIENTRY
+#define APIENTRY GL_APIENTRY
+#endif
+
+
 #if defined(_WIN32) && !defined(APIENTRY) && !defined(__CYGWIN__) && !defined(__SCITECH_SNAP__)
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN 1
 #endif
-#include <windows.h>
+//#include <windows.h>
 #endif
 
 #ifndef APIENTRY
@@ -45,9 +62,6 @@
 #define APIENTRYP APIENTRY *
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 struct gladGLversionStruct {
     int major;
