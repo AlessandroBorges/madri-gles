@@ -18,7 +18,7 @@ This Software uses third-party software components from several sources. Portion
 
 Current Third-Party Software:
 
-Google ANGLE ( throught ) - https://github.com/google/angle 
-MSOpenTech ANGLE - https://github.com/MSOpenTech/angle 
-Imagination PowerVR SDK - https://github.com/powervr-graphics/Native_SDK
-LibGDX jnigen - https://github.com/libgdx/libgdx/wiki/jnigen
+- Google ANGLE ( throught ) - https://github.com/google/angle 
+- MSOpenTech ANGLE - https://github.com/MSOpenTech/angle 
+- Imagination PowerVR SDK - https://github.com/powervr-graphics/Native_SDK
+- LibGDX jnigen - https://github.com/libgdx/libgdx/wiki/jnigen
