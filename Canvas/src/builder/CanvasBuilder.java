@@ -69,8 +69,8 @@ public class CanvasBuilder {
       String[] ppJavaExclude ={ "**/gles/internal/GLES10Pipeline.java", 
                            "**/gles/internal/GLES10ExtPipeline.java", 
                            "**/gles/internal/GLES11Pipeline.java",
-			   "**/gles/internal/GLES11ExtPipeline.java",
-			   "**/gles/internal/GLES1Extensions.java",
+			 //  "**/gles/internal/GLES11ExtPipeline.java",
+			   "**/gles/internal/GLES11Extensions.java",
       };
       
       // Exclusion for Fixed Pipeline Cpp Source code
@@ -87,6 +87,7 @@ public class CanvasBuilder {
                                "gles.internal.GLES10ExtPipeline.cpp", 
                                "gles.internal.GLES11Pipeline.cpp",
 			       "gles.internal.GLES11ExtPipeline.cpp",
+			       "gles.internal.GLES11Extensions.java"
 			    
       }; 
        // common CPP source files
@@ -108,8 +109,10 @@ public class CanvasBuilder {
                                "**/gles/internal/GLES10ExtPipeline.java", 
                                "**/gles/internal/GLES11Pipeline.java",
                                "**/gles/internal/GLES11ExtPipeline.java",
+                               "**/gles/internal/GLES11Extensions.java",
                                "**/gles/internal/EGL14Pipeline.java",			  
                                "**/gles/internal/UtilPipeline.java",
+                               
 			            	};
       
       String[]  ppJavaSrc =  { "**/gles/emulator/util/JAWT.java",					
