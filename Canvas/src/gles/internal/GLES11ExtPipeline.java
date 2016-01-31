@@ -24,8 +24,8 @@ public class GLES11ExtPipeline
     /** Includes **/
     // @formatter:off 
     /*JNI 
-    // EGL includes
-    #define EGL_EGLEXT_PROTOTYPES 1
+     
+     #define EGL_EGLEXT_PROTOTYPES 1
     #include <EGL/egl.h>
     #include <EGL/eglext.h>
 
@@ -35,14 +35,956 @@ public class GLES11ExtPipeline
     #include <GLES/gl.h>
     #include <GLES/glext.h>
 
-     */
-	
-	/**
-	 * static & native initialization
-	 */
-	static{
-	    nGLES11ExtClassInit();
-	}
+ // raise a Exception
+  static int throwException(JNIEnv *env, const char* className, const char* msg) {    
+        jclass Exception = env->FindClass(className);
+        env->ThrowNew(Exception, msg);
+        return 1;
+    }
+   
+   // raise a Unsupported Operation Exception 
+  static int throwUOPException(JNIEnv *env, const char* msg) {    
+        jclass Exception = env->FindClass("java/lang/UnsupportedOperationException");
+        env->ThrowNew(Exception, msg);
+         return 1;
+    }
+
+   // raise a NPE Exception 
+  static int throwUOPE(JNIEnv *env, const char* msg) {    
+        jclass Exception = env->FindClass("java/lang/NullPointerException");
+        env->ThrowNew(Exception, msg);
+         return 1;
+    }
+  
+  // raise a IAE Exception 
+  static int throwIAE(JNIEnv *env, const char* msg) {    
+        jclass Exception = env->FindClass("java/lang/IllegalArgumentException");
+        env->ThrowNew(Exception, msg);
+         return 1;
+    }
+  
+  // function pointers section 
+   // Declaration of FuncPointer vars 
+
+
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_APPLE_copy_texture_levels
+ // API: gles1|gles2
+ //////////////////////////////////
+      static PFNGLCOPYTEXTURELEVELSAPPLEPROC gles_glCopyTextureLevelsAPPLE;
+      #define  glCopyTextureLevelsAPPLE gles_glCopyTextureLevelsAPPLE
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_APPLE_framebuffer_multisample
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLRENDERBUFFERSTORAGEMULTISAMPLEAPPLEPROC    glRenderbufferStorageMultisampleAPPLE;
+         static PFNGLRESOLVEMULTISAMPLEFRAMEBUFFERAPPLEPROC     glResolveMultisampleFramebufferAPPLE;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_APPLE_sync
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLFENCESYNCAPPLEPROC glFenceSyncAPPLE;
+         static PFNGLFENCESYNCPROC      glFenceSync;
+         static PFNGLISSYNCAPPLEPROC    glIsSyncAPPLE;
+         static PFNGLISSYNCPROC glIsSync;
+         static PFNGLDELETESYNCAPPLEPROC        glDeleteSyncAPPLE;
+         static PFNGLDELETESYNCPROC     glDeleteSync;
+         static PFNGLCLIENTWAITSYNCAPPLEPROC    glClientWaitSyncAPPLE;
+         static PFNGLCLIENTWAITSYNCPROC glClientWaitSync;
+         static PFNGLWAITSYNCAPPLEPROC  glWaitSyncAPPLE;
+         static PFNGLWAITSYNCPROC       glWaitSync;
+         static PFNGLGETINTEGER64VAPPLEPROC     glGetInteger64vAPPLE;
+         static PFNGLGETINTEGER64VPROC  glGetInteger64v;
+         static PFNGLGETSYNCIVAPPLEPROC glGetSyncivAPPLE;
+         static PFNGLGETSYNCIVPROC      glGetSynciv;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_discard_framebuffer
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLDISCARDFRAMEBUFFEREXTPROC  glDiscardFramebufferEXT;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_map_buffer_range
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLMAPBUFFERRANGEEXTPROC      glMapBufferRangeEXT;
+         static PFNGLMAPBUFFERRANGEPROC glMapBufferRange;
+         static PFNGLFLUSHMAPPEDBUFFERRANGEEXTPROC      glFlushMappedBufferRangeEXT;
+         static PFNGLFLUSHMAPPEDBUFFERRANGEPROC glFlushMappedBufferRange;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_multi_draw_arrays
+ // API: gl|gles1|gles2
+ //////////////////////////////////
+         static PFNGLMULTIDRAWARRAYSEXTPROC     glMultiDrawArraysEXT;
+         static PFNGLMULTIDRAWARRAYSPROC        glMultiDrawArrays;
+         static PFNGLMULTIDRAWELEMENTSEXTPROC   glMultiDrawElementsEXT;
+         static PFNGLMULTIDRAWELEMENTSPROC      glMultiDrawElements;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_multisampled_render_to_texture
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC      glRenderbufferStorageMultisampleEXT;
+         static PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC glRenderbufferStorageMultisample;
+         static PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC     glFramebufferTexture2DMultisampleEXT;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_robustness
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLGETGRAPHICSRESETSTATUSEXTPROC      glGetGraphicsResetStatusEXT;
+         static PFNGLREADNPIXELSEXTPROC glReadnPixelsEXT;
+         static PFNGLREADNPIXELSPROC    glReadnPixels;
+         static PFNGLGETNUNIFORMFVEXTPROC       glGetnUniformfvEXT;
+         static PFNGLGETNUNIFORMIVEXTPROC       glGetnUniformivEXT;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_texture_storage
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLTEXSTORAGE1DEXTPROC        glTexStorage1DEXT;
+         static PFNGLTEXSTORAGE1DPROC   glTexStorage1D;
+         static PFNGLTEXSTORAGE2DEXTPROC        glTexStorage2DEXT;
+         static PFNGLTEXSTORAGE2DPROC   glTexStorage2D;
+         static PFNGLTEXSTORAGE3DEXTPROC        glTexStorage3DEXT;
+         static PFNGLTEXSTORAGE3DPROC   glTexStorage3D;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_EXT_texture_storage
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLTEXTURESTORAGE1DEXTPROC    glTextureStorage1DEXT;
+         static PFNGLTEXTURESTORAGE2DEXTPROC    glTextureStorage2DEXT;
+         static PFNGLTEXTURESTORAGE3DEXTPROC    glTextureStorage3DEXT;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_IMG_multisampled_render_to_texture
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLRENDERBUFFERSTORAGEMULTISAMPLEIMGPROC      glRenderbufferStorageMultisampleIMG;
+         static PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEIMGPROC     glFramebufferTexture2DMultisampleIMG;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_IMG_user_clip_plane
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLCLIPPLANEFIMGPROC  glClipPlanefIMG;
+         static PFNGLCLIPPLANEXIMGPROC  glClipPlanexIMG;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_NV_fence
+ // API: gl|gles1|gles2
+ //////////////////////////////////
+         static PFNGLDELETEFENCESNVPROC glDeleteFencesNV;
+         static PFNGLGENFENCESNVPROC    glGenFencesNV;
+         static PFNGLISFENCENVPROC      glIsFenceNV;
+         static PFNGLTESTFENCENVPROC    glTestFenceNV;
+         static PFNGLGETFENCEIVNVPROC   glGetFenceivNV;
+         static PFNGLFINISHFENCENVPROC  glFinishFenceNV;
+         static PFNGLSETFENCENVPROC     glSetFenceNV;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_EGL_image
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLEGLIMAGETARGETTEXTURE2DOESPROC     glEGLImageTargetTexture2DOES;
+         static PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC   glEGLImageTargetRenderbufferStorageOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_blend_equation_separate
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLBLENDEQUATIONSEPARATEOESPROC       glBlendEquationSeparateOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_blend_func_separate
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLBLENDFUNCSEPARATEOESPROC   glBlendFuncSeparateOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_blend_subtract
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLBLENDEQUATIONOESPROC       glBlendEquationOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_draw_texture
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLDRAWTEXSOESPROC    glDrawTexsOES;
+         static PFNGLDRAWTEXIOESPROC    glDrawTexiOES;
+         static PFNGLDRAWTEXXOESPROC    glDrawTexxOES;
+         static PFNGLDRAWTEXSVOESPROC   glDrawTexsvOES;
+         static PFNGLDRAWTEXIVOESPROC   glDrawTexivOES;
+         static PFNGLDRAWTEXXVOESPROC   glDrawTexxvOES;
+         static PFNGLDRAWTEXFOESPROC    glDrawTexfOES;
+         static PFNGLDRAWTEXFVOESPROC   glDrawTexfvOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_fixed_point
+ // API: gl|gles1
+ //////////////////////////////////
+         static PFNGLALPHAFUNCXOESPROC  glAlphaFuncxOES;
+         static PFNGLCLEARCOLORXOESPROC glClearColorxOES;
+         static PFNGLCLEARDEPTHXOESPROC glClearDepthxOES;
+         static PFNGLCLIPPLANEXOESPROC  glClipPlanexOES;
+         static PFNGLCOLOR4XOESPROC     glColor4xOES;
+         static PFNGLDEPTHRANGEXOESPROC glDepthRangexOES;
+         static PFNGLFOGXOESPROC        glFogxOES;
+         static PFNGLFOGXVOESPROC       glFogxvOES;
+         static PFNGLFRUSTUMXOESPROC    glFrustumxOES;
+         static PFNGLGETCLIPPLANEXOESPROC       glGetClipPlanexOES;
+         static PFNGLGETFIXEDVOESPROC   glGetFixedvOES;
+         static PFNGLGETTEXENVXVOESPROC glGetTexEnvxvOES;
+         static PFNGLGETTEXPARAMETERXVOESPROC   glGetTexParameterxvOES;
+         static PFNGLLIGHTMODELXOESPROC glLightModelxOES;
+         static PFNGLLIGHTMODELXVOESPROC        glLightModelxvOES;
+         static PFNGLLIGHTXOESPROC      glLightxOES;
+         static PFNGLLIGHTXVOESPROC     glLightxvOES;
+         static PFNGLLINEWIDTHXOESPROC  glLineWidthxOES;
+         static PFNGLLOADMATRIXXOESPROC glLoadMatrixxOES;
+         static PFNGLMATERIALXOESPROC   glMaterialxOES;
+         static PFNGLMATERIALXVOESPROC  glMaterialxvOES;
+         static PFNGLMULTMATRIXXOESPROC glMultMatrixxOES;
+         static PFNGLMULTITEXCOORD4XOESPROC     glMultiTexCoord4xOES;
+         static PFNGLNORMAL3XOESPROC    glNormal3xOES;
+         static PFNGLORTHOXOESPROC      glOrthoxOES;
+         static PFNGLPOINTPARAMETERXVOESPROC    glPointParameterxvOES;
+         static PFNGLPOINTSIZEXOESPROC  glPointSizexOES;
+         static PFNGLPOLYGONOFFSETXOESPROC      glPolygonOffsetxOES;
+         static PFNGLROTATEXOESPROC     glRotatexOES;
+         static PFNGLSCALEXOESPROC      glScalexOES;
+         static PFNGLTEXENVXOESPROC     glTexEnvxOES;
+         static PFNGLTEXENVXVOESPROC    glTexEnvxvOES;
+         static PFNGLTEXPARAMETERXOESPROC       glTexParameterxOES;
+         static PFNGLTEXPARAMETERXVOESPROC      glTexParameterxvOES;
+         static PFNGLTRANSLATEXOESPROC  glTranslatexOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_fixed_point
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLGETLIGHTXVOESPROC  glGetLightxvOES;
+         static PFNGLGETMATERIALXVOESPROC       glGetMaterialxvOES;
+         static PFNGLPOINTPARAMETERXOESPROC     glPointParameterxOES;
+         static PFNGLSAMPLECOVERAGEXOESPROC     glSampleCoveragexOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_framebuffer_object
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLISRENDERBUFFEROESPROC      glIsRenderbufferOES;
+         static PFNGLBINDRENDERBUFFEROESPROC    glBindRenderbufferOES;
+         static PFNGLDELETERENDERBUFFERSOESPROC glDeleteRenderbuffersOES;
+         static PFNGLGENRENDERBUFFERSOESPROC    glGenRenderbuffersOES;
+         static PFNGLRENDERBUFFERSTORAGEOESPROC glRenderbufferStorageOES;
+         static PFNGLGETRENDERBUFFERPARAMETERIVOESPROC  glGetRenderbufferParameterivOES;
+         static PFNGLISFRAMEBUFFEROESPROC       glIsFramebufferOES;
+         static PFNGLBINDFRAMEBUFFEROESPROC     glBindFramebufferOES;
+         static PFNGLDELETEFRAMEBUFFERSOESPROC  glDeleteFramebuffersOES;
+         static PFNGLGENFRAMEBUFFERSOESPROC     glGenFramebuffersOES;
+         static PFNGLCHECKFRAMEBUFFERSTATUSOESPROC      glCheckFramebufferStatusOES;
+         static PFNGLFRAMEBUFFERRENDERBUFFEROESPROC     glFramebufferRenderbufferOES;
+         static PFNGLFRAMEBUFFERTEXTURE2DOESPROC        glFramebufferTexture2DOES;
+         static PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVOESPROC glGetFramebufferAttachmentParameterivOES;
+         static PFNGLGENERATEMIPMAPOESPROC      glGenerateMipmapOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_mapbuffer
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLMAPBUFFEROESPROC   glMapBufferOES;
+         static PFNGLMAPBUFFERPROC      glMapBuffer;
+         static PFNGLUNMAPBUFFEROESPROC glUnmapBufferOES;
+         static PFNGLUNMAPBUFFERPROC    glUnmapBuffer;
+         static PFNGLGETBUFFERPOINTERVOESPROC   glGetBufferPointervOES;
+         static PFNGLGETBUFFERPOINTERVPROC      glGetBufferPointerv;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_matrix_palette
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLCURRENTPALETTEMATRIXOESPROC        glCurrentPaletteMatrixOES;
+         static PFNGLLOADPALETTEFROMMODELVIEWMATRIXOESPROC      glLoadPaletteFromModelViewMatrixOES;
+         static PFNGLMATRIXINDEXPOINTEROESPROC  glMatrixIndexPointerOES;
+         static PFNGLWEIGHTPOINTEROESPROC       glWeightPointerOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_point_size_array
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLPOINTSIZEPOINTEROESPROC    glPointSizePointerOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_query_matrix
+ // API: gl|gles1
+ //////////////////////////////////
+         static PFNGLQUERYMATRIXXOESPROC        glQueryMatrixxOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_single_precision
+ // API: gl|gles1
+ //////////////////////////////////
+         static PFNGLCLEARDEPTHFOESPROC glClearDepthfOES;
+         static PFNGLCLEARDEPTHFPROC    glClearDepthf;
+         static PFNGLCLIPPLANEFOESPROC  glClipPlanefOES;
+         static PFNGLDEPTHRANGEFOESPROC glDepthRangefOES;
+         static PFNGLDEPTHRANGEFPROC    glDepthRangef;
+         static PFNGLFRUSTUMFOESPROC    glFrustumfOES;
+         static PFNGLGETCLIPPLANEFOESPROC       glGetClipPlanefOES;
+         static PFNGLORTHOFOESPROC      glOrthofOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_texture_cube_map
+ // API: gles1
+ //////////////////////////////////
+         static PFNGLTEXGENFOESPROC     glTexGenfOES;
+         static PFNGLTEXGENFVOESPROC    glTexGenfvOES;
+         static PFNGLTEXGENIOESPROC     glTexGeniOES;
+         static PFNGLTEXGENIVOESPROC    glTexGenivOES;
+         static PFNGLTEXGENXOESPROC     glTexGenxOES;
+         static PFNGLTEXGENXVOESPROC    glTexGenxvOES;
+         static PFNGLGETTEXGENFVOESPROC glGetTexGenfvOES;
+         static PFNGLGETTEXGENIVOESPROC glGetTexGenivOES;
+         static PFNGLGETTEXGENXVOESPROC glGetTexGenxvOES;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_OES_vertex_array_object
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLBINDVERTEXARRAYOESPROC     glBindVertexArrayOES;
+         static PFNGLBINDVERTEXARRAYPROC        glBindVertexArray;
+         static PFNGLDELETEVERTEXARRAYSOESPROC  glDeleteVertexArraysOES;
+         static PFNGLDELETEVERTEXARRAYSPROC     glDeleteVertexArrays;
+         static PFNGLGENVERTEXARRAYSOESPROC     glGenVertexArraysOES;
+         static PFNGLGENVERTEXARRAYSPROC        glGenVertexArrays;
+         static PFNGLISVERTEXARRAYOESPROC       glIsVertexArrayOES;
+         static PFNGLISVERTEXARRAYPROC  glIsVertexArray;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_QCOM_driver_control
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLGETDRIVERCONTROLSQCOMPROC  glGetDriverControlsQCOM;
+         static PFNGLGETDRIVERCONTROLSTRINGQCOMPROC     glGetDriverControlStringQCOM;
+         static PFNGLENABLEDRIVERCONTROLQCOMPROC        glEnableDriverControlQCOM;
+         static PFNGLDISABLEDRIVERCONTROLQCOMPROC       glDisableDriverControlQCOM;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_QCOM_extended_get
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLEXTGETTEXTURESQCOMPROC     glExtGetTexturesQCOM;
+         static PFNGLEXTGETBUFFERSQCOMPROC      glExtGetBuffersQCOM;
+         static PFNGLEXTGETRENDERBUFFERSQCOMPROC        glExtGetRenderbuffersQCOM;
+         static PFNGLEXTGETFRAMEBUFFERSQCOMPROC glExtGetFramebuffersQCOM;
+         static PFNGLEXTGETTEXLEVELPARAMETERIVQCOMPROC  glExtGetTexLevelParameterivQCOM;
+         static PFNGLEXTTEXOBJECTSTATEOVERRIDEIQCOMPROC glExtTexObjectStateOverrideiQCOM;
+         static PFNGLEXTGETTEXSUBIMAGEQCOMPROC  glExtGetTexSubImageQCOM;
+         static PFNGLEXTGETBUFFERPOINTERVQCOMPROC       glExtGetBufferPointervQCOM;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_QCOM_extended_get2
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLEXTGETSHADERSQCOMPROC      glExtGetShadersQCOM;
+         static PFNGLEXTGETPROGRAMSQCOMPROC     glExtGetProgramsQCOM;
+         static PFNGLEXTISPROGRAMBINARYQCOMPROC glExtIsProgramBinaryQCOM;
+         static PFNGLEXTGETPROGRAMBINARYSOURCEQCOMPROC  glExtGetProgramBinarySourceQCOM;
+
+ ///////////////////////////////////
+ // PFN_PROC functions declaration 
+ // Extension: GL_QCOM_tiled_rendering
+ // API: gles1|gles2
+ //////////////////////////////////
+         static PFNGLSTARTTILINGQCOMPROC        glStartTilingQCOM;
+         static PFNGLENDTILINGQCOMPROC  glEndTilingQCOM;
+  // extension loaders
+  // function loader
+  #define myFuncLoader(x) eglGetProcAddress(x)
+
+   // Declaration of LOADERS for function pointers - PFN_PROC 
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_APPLE_copy_texture_levels
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_APPLE_copy_texture_levels(){
+          gles_glCopyTextureLevelsAPPLE = (PFNGLCOPYTEXTURELEVELSAPPLEPROC) myFuncLoader("glCopyTextureLevelsAPPLE");
+
+          return 1;
+     } // end of loadExtFuncGL_APPLE_copy_texture_levels()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_APPLE_framebuffer_multisample
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_APPLE_framebuffer_multisample(){
+          glRenderbufferStorageMultisampleAPPLE = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEAPPLEPROC) myFuncLoader("glRenderbufferStorageMultisampleAPPLE");
+          glResolveMultisampleFramebufferAPPLE = (PFNGLRESOLVEMULTISAMPLEFRAMEBUFFERAPPLEPROC) myFuncLoader("glResolveMultisampleFramebufferAPPLE");
+
+          return 1;
+     } // end of loadExtFuncGL_APPLE_framebuffer_multisample()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_APPLE_sync
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_APPLE_sync(){
+          glFenceSyncAPPLE = (PFNGLFENCESYNCAPPLEPROC) myFuncLoader("glFenceSyncAPPLE");
+          glFenceSync = (PFNGLFENCESYNCPROC) myFuncLoader("glFenceSync");
+          glIsSyncAPPLE = (PFNGLISSYNCAPPLEPROC) myFuncLoader("glIsSyncAPPLE");
+          glIsSync = (PFNGLISSYNCPROC) myFuncLoader("glIsSync");
+          glDeleteSyncAPPLE = (PFNGLDELETESYNCAPPLEPROC) myFuncLoader("glDeleteSyncAPPLE");
+          glDeleteSync = (PFNGLDELETESYNCPROC) myFuncLoader("glDeleteSync");
+          glClientWaitSyncAPPLE = (PFNGLCLIENTWAITSYNCAPPLEPROC) myFuncLoader("glClientWaitSyncAPPLE");
+          glClientWaitSync = (PFNGLCLIENTWAITSYNCPROC) myFuncLoader("glClientWaitSync");
+          glWaitSyncAPPLE = (PFNGLWAITSYNCAPPLEPROC) myFuncLoader("glWaitSyncAPPLE");
+          glWaitSync = (PFNGLWAITSYNCPROC) myFuncLoader("glWaitSync");
+          glGetInteger64vAPPLE = (PFNGLGETINTEGER64VAPPLEPROC) myFuncLoader("glGetInteger64vAPPLE");
+          glGetInteger64v = (PFNGLGETINTEGER64VPROC) myFuncLoader("glGetInteger64v");
+          glGetSyncivAPPLE = (PFNGLGETSYNCIVAPPLEPROC) myFuncLoader("glGetSyncivAPPLE");
+          glGetSynciv = (PFNGLGETSYNCIVPROC) myFuncLoader("glGetSynciv");
+
+          return 1;
+     } // end of loadExtFuncGL_APPLE_sync()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_discard_framebuffer
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_discard_framebuffer(){
+          glDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC) myFuncLoader("glDiscardFramebufferEXT");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_discard_framebuffer()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_map_buffer_range
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_map_buffer_range(){
+          glMapBufferRangeEXT = (PFNGLMAPBUFFERRANGEEXTPROC) myFuncLoader("glMapBufferRangeEXT");
+          glMapBufferRange = (PFNGLMAPBUFFERRANGEPROC) myFuncLoader("glMapBufferRange");
+          glFlushMappedBufferRangeEXT = (PFNGLFLUSHMAPPEDBUFFERRANGEEXTPROC) myFuncLoader("glFlushMappedBufferRangeEXT");
+          glFlushMappedBufferRange = (PFNGLFLUSHMAPPEDBUFFERRANGEPROC) myFuncLoader("glFlushMappedBufferRange");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_map_buffer_range()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_multi_draw_arrays
+  // API: gl|gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_multi_draw_arrays(){
+          glMultiDrawArraysEXT = (PFNGLMULTIDRAWARRAYSEXTPROC) myFuncLoader("glMultiDrawArraysEXT");
+          glMultiDrawArrays = (PFNGLMULTIDRAWARRAYSPROC) myFuncLoader("glMultiDrawArrays");
+          glMultiDrawElementsEXT = (PFNGLMULTIDRAWELEMENTSEXTPROC) myFuncLoader("glMultiDrawElementsEXT");
+          glMultiDrawElements = (PFNGLMULTIDRAWELEMENTSPROC) myFuncLoader("glMultiDrawElements");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_multi_draw_arrays()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_multisampled_render_to_texture
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_multisampled_render_to_texture(){
+          glRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) myFuncLoader("glRenderbufferStorageMultisampleEXT");
+          glRenderbufferStorageMultisample = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC) myFuncLoader("glRenderbufferStorageMultisample");
+          glFramebufferTexture2DMultisampleEXT = (PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC) myFuncLoader("glFramebufferTexture2DMultisampleEXT");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_multisampled_render_to_texture()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_robustness
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_robustness(){
+          glGetGraphicsResetStatusEXT = (PFNGLGETGRAPHICSRESETSTATUSEXTPROC) myFuncLoader("glGetGraphicsResetStatusEXT");
+          glReadnPixelsEXT = (PFNGLREADNPIXELSEXTPROC) myFuncLoader("glReadnPixelsEXT");
+          glReadnPixels = (PFNGLREADNPIXELSPROC) myFuncLoader("glReadnPixels");
+          glGetnUniformfvEXT = (PFNGLGETNUNIFORMFVEXTPROC) myFuncLoader("glGetnUniformfvEXT");
+          glGetnUniformivEXT = (PFNGLGETNUNIFORMIVEXTPROC) myFuncLoader("glGetnUniformivEXT");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_robustness()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_texture_storage
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_texture_storage(){
+          glTexStorage1DEXT = (PFNGLTEXSTORAGE1DEXTPROC) myFuncLoader("glTexStorage1DEXT");
+          glTexStorage1D = (PFNGLTEXSTORAGE1DPROC) myFuncLoader("glTexStorage1D");
+          glTexStorage2DEXT = (PFNGLTEXSTORAGE2DEXTPROC) myFuncLoader("glTexStorage2DEXT");
+          glTexStorage2D = (PFNGLTEXSTORAGE2DPROC) myFuncLoader("glTexStorage2D");
+          glTexStorage3DEXT = (PFNGLTEXSTORAGE3DEXTPROC) myFuncLoader("glTexStorage3DEXT");
+          glTexStorage3D = (PFNGLTEXSTORAGE3DPROC) myFuncLoader("glTexStorage3D");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_texture_storage()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_EXT_texture_storage
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_EXT_texture_storage(){
+          glTextureStorage1DEXT = (PFNGLTEXTURESTORAGE1DEXTPROC) myFuncLoader("glTextureStorage1DEXT");
+          glTextureStorage2DEXT = (PFNGLTEXTURESTORAGE2DEXTPROC) myFuncLoader("glTextureStorage2DEXT");
+          glTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC) myFuncLoader("glTextureStorage3DEXT");
+
+          return 1;
+     } // end of loadExtFuncGL_EXT_texture_storage()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_IMG_multisampled_render_to_texture
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_IMG_multisampled_render_to_texture(){
+          glRenderbufferStorageMultisampleIMG = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEIMGPROC) myFuncLoader("glRenderbufferStorageMultisampleIMG");
+          glFramebufferTexture2DMultisampleIMG = (PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEIMGPROC) myFuncLoader("glFramebufferTexture2DMultisampleIMG");
+
+          return 1;
+     } // end of loadExtFuncGL_IMG_multisampled_render_to_texture()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_IMG_user_clip_plane
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_IMG_user_clip_plane(){
+          glClipPlanefIMG = (PFNGLCLIPPLANEFIMGPROC) myFuncLoader("glClipPlanefIMG");
+          glClipPlanexIMG = (PFNGLCLIPPLANEXIMGPROC) myFuncLoader("glClipPlanexIMG");
+
+          return 1;
+     } // end of loadExtFuncGL_IMG_user_clip_plane()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_NV_fence
+  // API: gl|gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_NV_fence(){
+          glDeleteFencesNV = (PFNGLDELETEFENCESNVPROC) myFuncLoader("glDeleteFencesNV");
+          glGenFencesNV = (PFNGLGENFENCESNVPROC) myFuncLoader("glGenFencesNV");
+          glIsFenceNV = (PFNGLISFENCENVPROC) myFuncLoader("glIsFenceNV");
+          glTestFenceNV = (PFNGLTESTFENCENVPROC) myFuncLoader("glTestFenceNV");
+          glGetFenceivNV = (PFNGLGETFENCEIVNVPROC) myFuncLoader("glGetFenceivNV");
+          glFinishFenceNV = (PFNGLFINISHFENCENVPROC) myFuncLoader("glFinishFenceNV");
+          glSetFenceNV = (PFNGLSETFENCENVPROC) myFuncLoader("glSetFenceNV");
+
+          return 1;
+     } // end of loadExtFuncGL_NV_fence()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_EGL_image
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_OES_EGL_image(){
+          glEGLImageTargetTexture2DOES = (PFNGLEGLIMAGETARGETTEXTURE2DOESPROC) myFuncLoader("glEGLImageTargetTexture2DOES");
+          glEGLImageTargetRenderbufferStorageOES = (PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC) myFuncLoader("glEGLImageTargetRenderbufferStorageOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_EGL_image()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_blend_equation_separate
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_blend_equation_separate(){
+          glBlendEquationSeparateOES = (PFNGLBLENDEQUATIONSEPARATEOESPROC) myFuncLoader("glBlendEquationSeparateOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_blend_equation_separate()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_blend_func_separate
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_blend_func_separate(){
+          glBlendFuncSeparateOES = (PFNGLBLENDFUNCSEPARATEOESPROC) myFuncLoader("glBlendFuncSeparateOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_blend_func_separate()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_blend_subtract
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_blend_subtract(){
+          glBlendEquationOES = (PFNGLBLENDEQUATIONOESPROC) myFuncLoader("glBlendEquationOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_blend_subtract()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_draw_texture
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_draw_texture(){
+          glDrawTexsOES = (PFNGLDRAWTEXSOESPROC) myFuncLoader("glDrawTexsOES");
+          glDrawTexiOES = (PFNGLDRAWTEXIOESPROC) myFuncLoader("glDrawTexiOES");
+          glDrawTexxOES = (PFNGLDRAWTEXXOESPROC) myFuncLoader("glDrawTexxOES");
+          glDrawTexsvOES = (PFNGLDRAWTEXSVOESPROC) myFuncLoader("glDrawTexsvOES");
+          glDrawTexivOES = (PFNGLDRAWTEXIVOESPROC) myFuncLoader("glDrawTexivOES");
+          glDrawTexxvOES = (PFNGLDRAWTEXXVOESPROC) myFuncLoader("glDrawTexxvOES");
+          glDrawTexfOES = (PFNGLDRAWTEXFOESPROC) myFuncLoader("glDrawTexfOES");
+          glDrawTexfvOES = (PFNGLDRAWTEXFVOESPROC) myFuncLoader("glDrawTexfvOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_draw_texture()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_fixed_point
+  // API: gl|gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_fixed_point(){
+          glAlphaFuncxOES = (PFNGLALPHAFUNCXOESPROC) myFuncLoader("glAlphaFuncxOES");
+          glClearColorxOES = (PFNGLCLEARCOLORXOESPROC) myFuncLoader("glClearColorxOES");
+          glClearDepthxOES = (PFNGLCLEARDEPTHXOESPROC) myFuncLoader("glClearDepthxOES");
+          glClipPlanexOES = (PFNGLCLIPPLANEXOESPROC) myFuncLoader("glClipPlanexOES");
+          glColor4xOES = (PFNGLCOLOR4XOESPROC) myFuncLoader("glColor4xOES");
+          glDepthRangexOES = (PFNGLDEPTHRANGEXOESPROC) myFuncLoader("glDepthRangexOES");
+          glFogxOES = (PFNGLFOGXOESPROC) myFuncLoader("glFogxOES");
+          glFogxvOES = (PFNGLFOGXVOESPROC) myFuncLoader("glFogxvOES");
+          glFrustumxOES = (PFNGLFRUSTUMXOESPROC) myFuncLoader("glFrustumxOES");
+          glGetClipPlanexOES = (PFNGLGETCLIPPLANEXOESPROC) myFuncLoader("glGetClipPlanexOES");
+          glGetFixedvOES = (PFNGLGETFIXEDVOESPROC) myFuncLoader("glGetFixedvOES");
+          glGetTexEnvxvOES = (PFNGLGETTEXENVXVOESPROC) myFuncLoader("glGetTexEnvxvOES");
+          glGetTexParameterxvOES = (PFNGLGETTEXPARAMETERXVOESPROC) myFuncLoader("glGetTexParameterxvOES");
+          glLightModelxOES = (PFNGLLIGHTMODELXOESPROC) myFuncLoader("glLightModelxOES");
+          glLightModelxvOES = (PFNGLLIGHTMODELXVOESPROC) myFuncLoader("glLightModelxvOES");
+          glLightxOES = (PFNGLLIGHTXOESPROC) myFuncLoader("glLightxOES");
+          glLightxvOES = (PFNGLLIGHTXVOESPROC) myFuncLoader("glLightxvOES");
+          glLineWidthxOES = (PFNGLLINEWIDTHXOESPROC) myFuncLoader("glLineWidthxOES");
+          glLoadMatrixxOES = (PFNGLLOADMATRIXXOESPROC) myFuncLoader("glLoadMatrixxOES");
+          glMaterialxOES = (PFNGLMATERIALXOESPROC) myFuncLoader("glMaterialxOES");
+          glMaterialxvOES = (PFNGLMATERIALXVOESPROC) myFuncLoader("glMaterialxvOES");
+          glMultMatrixxOES = (PFNGLMULTMATRIXXOESPROC) myFuncLoader("glMultMatrixxOES");
+          glMultiTexCoord4xOES = (PFNGLMULTITEXCOORD4XOESPROC) myFuncLoader("glMultiTexCoord4xOES");
+          glNormal3xOES = (PFNGLNORMAL3XOESPROC) myFuncLoader("glNormal3xOES");
+          glOrthoxOES = (PFNGLORTHOXOESPROC) myFuncLoader("glOrthoxOES");
+          glPointParameterxvOES = (PFNGLPOINTPARAMETERXVOESPROC) myFuncLoader("glPointParameterxvOES");
+          glPointSizexOES = (PFNGLPOINTSIZEXOESPROC) myFuncLoader("glPointSizexOES");
+          glPolygonOffsetxOES = (PFNGLPOLYGONOFFSETXOESPROC) myFuncLoader("glPolygonOffsetxOES");
+          glRotatexOES = (PFNGLROTATEXOESPROC) myFuncLoader("glRotatexOES");
+          glScalexOES = (PFNGLSCALEXOESPROC) myFuncLoader("glScalexOES");
+          glTexEnvxOES = (PFNGLTEXENVXOESPROC) myFuncLoader("glTexEnvxOES");
+          glTexEnvxvOES = (PFNGLTEXENVXVOESPROC) myFuncLoader("glTexEnvxvOES");
+          glTexParameterxOES = (PFNGLTEXPARAMETERXOESPROC) myFuncLoader("glTexParameterxOES");
+          glTexParameterxvOES = (PFNGLTEXPARAMETERXVOESPROC) myFuncLoader("glTexParameterxvOES");
+          glTranslatexOES = (PFNGLTRANSLATEXOESPROC) myFuncLoader("glTranslatexOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_fixed_point()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_fixed_point
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_fixed_point(){
+          glGetLightxvOES = (PFNGLGETLIGHTXVOESPROC) myFuncLoader("glGetLightxvOES");
+          glGetMaterialxvOES = (PFNGLGETMATERIALXVOESPROC) myFuncLoader("glGetMaterialxvOES");
+          glPointParameterxOES = (PFNGLPOINTPARAMETERXOESPROC) myFuncLoader("glPointParameterxOES");
+          glSampleCoveragexOES = (PFNGLSAMPLECOVERAGEXOESPROC) myFuncLoader("glSampleCoveragexOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_fixed_point()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_framebuffer_object
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_framebuffer_object(){
+          glIsRenderbufferOES = (PFNGLISRENDERBUFFEROESPROC) myFuncLoader("glIsRenderbufferOES");
+          glBindRenderbufferOES = (PFNGLBINDRENDERBUFFEROESPROC) myFuncLoader("glBindRenderbufferOES");
+          glDeleteRenderbuffersOES = (PFNGLDELETERENDERBUFFERSOESPROC) myFuncLoader("glDeleteRenderbuffersOES");
+          glGenRenderbuffersOES = (PFNGLGENRENDERBUFFERSOESPROC) myFuncLoader("glGenRenderbuffersOES");
+          glRenderbufferStorageOES = (PFNGLRENDERBUFFERSTORAGEOESPROC) myFuncLoader("glRenderbufferStorageOES");
+          glGetRenderbufferParameterivOES = (PFNGLGETRENDERBUFFERPARAMETERIVOESPROC) myFuncLoader("glGetRenderbufferParameterivOES");
+          glIsFramebufferOES = (PFNGLISFRAMEBUFFEROESPROC) myFuncLoader("glIsFramebufferOES");
+          glBindFramebufferOES = (PFNGLBINDFRAMEBUFFEROESPROC) myFuncLoader("glBindFramebufferOES");
+          glDeleteFramebuffersOES = (PFNGLDELETEFRAMEBUFFERSOESPROC) myFuncLoader("glDeleteFramebuffersOES");
+          glGenFramebuffersOES = (PFNGLGENFRAMEBUFFERSOESPROC) myFuncLoader("glGenFramebuffersOES");
+          glCheckFramebufferStatusOES = (PFNGLCHECKFRAMEBUFFERSTATUSOESPROC) myFuncLoader("glCheckFramebufferStatusOES");
+          glFramebufferRenderbufferOES = (PFNGLFRAMEBUFFERRENDERBUFFEROESPROC) myFuncLoader("glFramebufferRenderbufferOES");
+          glFramebufferTexture2DOES = (PFNGLFRAMEBUFFERTEXTURE2DOESPROC) myFuncLoader("glFramebufferTexture2DOES");
+          glGetFramebufferAttachmentParameterivOES = (PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVOESPROC) myFuncLoader("glGetFramebufferAttachmentParameterivOES");
+          glGenerateMipmapOES = (PFNGLGENERATEMIPMAPOESPROC) myFuncLoader("glGenerateMipmapOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_framebuffer_object()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_mapbuffer
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_OES_mapbuffer(){
+          glMapBufferOES = (PFNGLMAPBUFFEROESPROC) myFuncLoader("glMapBufferOES");
+          glMapBuffer = (PFNGLMAPBUFFERPROC) myFuncLoader("glMapBuffer");
+          glUnmapBufferOES = (PFNGLUNMAPBUFFEROESPROC) myFuncLoader("glUnmapBufferOES");
+          glUnmapBuffer = (PFNGLUNMAPBUFFERPROC) myFuncLoader("glUnmapBuffer");
+          glGetBufferPointervOES = (PFNGLGETBUFFERPOINTERVOESPROC) myFuncLoader("glGetBufferPointervOES");
+          glGetBufferPointerv = (PFNGLGETBUFFERPOINTERVPROC) myFuncLoader("glGetBufferPointerv");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_mapbuffer()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_matrix_palette
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_matrix_palette(){
+          glCurrentPaletteMatrixOES = (PFNGLCURRENTPALETTEMATRIXOESPROC) myFuncLoader("glCurrentPaletteMatrixOES");
+          glLoadPaletteFromModelViewMatrixOES = (PFNGLLOADPALETTEFROMMODELVIEWMATRIXOESPROC) myFuncLoader("glLoadPaletteFromModelViewMatrixOES");
+          glMatrixIndexPointerOES = (PFNGLMATRIXINDEXPOINTEROESPROC) myFuncLoader("glMatrixIndexPointerOES");
+          glWeightPointerOES = (PFNGLWEIGHTPOINTEROESPROC) myFuncLoader("glWeightPointerOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_matrix_palette()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_point_size_array
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_point_size_array(){
+          glPointSizePointerOES = (PFNGLPOINTSIZEPOINTEROESPROC) myFuncLoader("glPointSizePointerOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_point_size_array()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_query_matrix
+  // API: gl|gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_query_matrix(){
+          glQueryMatrixxOES = (PFNGLQUERYMATRIXXOESPROC) myFuncLoader("glQueryMatrixxOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_query_matrix()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_single_precision
+  // API: gl|gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_single_precision(){
+          glClearDepthfOES = (PFNGLCLEARDEPTHFOESPROC) myFuncLoader("glClearDepthfOES");
+          glClearDepthf = (PFNGLCLEARDEPTHFPROC) myFuncLoader("glClearDepthf");
+          glClipPlanefOES = (PFNGLCLIPPLANEFOESPROC) myFuncLoader("glClipPlanefOES");
+          glDepthRangefOES = (PFNGLDEPTHRANGEFOESPROC) myFuncLoader("glDepthRangefOES");
+          glDepthRangef = (PFNGLDEPTHRANGEFPROC) myFuncLoader("glDepthRangef");
+          glFrustumfOES = (PFNGLFRUSTUMFOESPROC) myFuncLoader("glFrustumfOES");
+          glGetClipPlanefOES = (PFNGLGETCLIPPLANEFOESPROC) myFuncLoader("glGetClipPlanefOES");
+          glOrthofOES = (PFNGLORTHOFOESPROC) myFuncLoader("glOrthofOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_single_precision()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_texture_cube_map
+  // API: gles1
+  /// =====================================
+  static  int loadExtFuncGL_OES_texture_cube_map(){
+          glTexGenfOES = (PFNGLTEXGENFOESPROC) myFuncLoader("glTexGenfOES");
+          glTexGenfvOES = (PFNGLTEXGENFVOESPROC) myFuncLoader("glTexGenfvOES");
+          glTexGeniOES = (PFNGLTEXGENIOESPROC) myFuncLoader("glTexGeniOES");
+          glTexGenivOES = (PFNGLTEXGENIVOESPROC) myFuncLoader("glTexGenivOES");
+          glTexGenxOES = (PFNGLTEXGENXOESPROC) myFuncLoader("glTexGenxOES");
+          glTexGenxvOES = (PFNGLTEXGENXVOESPROC) myFuncLoader("glTexGenxvOES");
+          glGetTexGenfvOES = (PFNGLGETTEXGENFVOESPROC) myFuncLoader("glGetTexGenfvOES");
+          glGetTexGenivOES = (PFNGLGETTEXGENIVOESPROC) myFuncLoader("glGetTexGenivOES");
+          glGetTexGenxvOES = (PFNGLGETTEXGENXVOESPROC) myFuncLoader("glGetTexGenxvOES");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_texture_cube_map()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_OES_vertex_array_object
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_OES_vertex_array_object(){
+          glBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC) myFuncLoader("glBindVertexArrayOES");
+          glBindVertexArray = (PFNGLBINDVERTEXARRAYPROC) myFuncLoader("glBindVertexArray");
+          glDeleteVertexArraysOES = (PFNGLDELETEVERTEXARRAYSOESPROC) myFuncLoader("glDeleteVertexArraysOES");
+          glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC) myFuncLoader("glDeleteVertexArrays");
+          glGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC) myFuncLoader("glGenVertexArraysOES");
+          glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC) myFuncLoader("glGenVertexArrays");
+          glIsVertexArrayOES = (PFNGLISVERTEXARRAYOESPROC) myFuncLoader("glIsVertexArrayOES");
+          glIsVertexArray = (PFNGLISVERTEXARRAYPROC) myFuncLoader("glIsVertexArray");
+
+          return 1;
+     } // end of loadExtFuncGL_OES_vertex_array_object()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_QCOM_driver_control
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_QCOM_driver_control(){
+          glGetDriverControlsQCOM = (PFNGLGETDRIVERCONTROLSQCOMPROC) myFuncLoader("glGetDriverControlsQCOM");
+          glGetDriverControlStringQCOM = (PFNGLGETDRIVERCONTROLSTRINGQCOMPROC) myFuncLoader("glGetDriverControlStringQCOM");
+          glEnableDriverControlQCOM = (PFNGLENABLEDRIVERCONTROLQCOMPROC) myFuncLoader("glEnableDriverControlQCOM");
+          glDisableDriverControlQCOM = (PFNGLDISABLEDRIVERCONTROLQCOMPROC) myFuncLoader("glDisableDriverControlQCOM");
+
+          return 1;
+     } // end of loadExtFuncGL_QCOM_driver_control()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_QCOM_extended_get
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_QCOM_extended_get(){
+          glExtGetTexturesQCOM = (PFNGLEXTGETTEXTURESQCOMPROC) myFuncLoader("glExtGetTexturesQCOM");
+          glExtGetBuffersQCOM = (PFNGLEXTGETBUFFERSQCOMPROC) myFuncLoader("glExtGetBuffersQCOM");
+          glExtGetRenderbuffersQCOM = (PFNGLEXTGETRENDERBUFFERSQCOMPROC) myFuncLoader("glExtGetRenderbuffersQCOM");
+          glExtGetFramebuffersQCOM = (PFNGLEXTGETFRAMEBUFFERSQCOMPROC) myFuncLoader("glExtGetFramebuffersQCOM");
+          glExtGetTexLevelParameterivQCOM = (PFNGLEXTGETTEXLEVELPARAMETERIVQCOMPROC) myFuncLoader("glExtGetTexLevelParameterivQCOM");
+          glExtTexObjectStateOverrideiQCOM = (PFNGLEXTTEXOBJECTSTATEOVERRIDEIQCOMPROC) myFuncLoader("glExtTexObjectStateOverrideiQCOM");
+          glExtGetTexSubImageQCOM = (PFNGLEXTGETTEXSUBIMAGEQCOMPROC) myFuncLoader("glExtGetTexSubImageQCOM");
+          glExtGetBufferPointervQCOM = (PFNGLEXTGETBUFFERPOINTERVQCOMPROC) myFuncLoader("glExtGetBufferPointervQCOM");
+
+          return 1;
+     } // end of loadExtFuncGL_QCOM_extended_get()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_QCOM_extended_get2
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_QCOM_extended_get2(){
+          glExtGetShadersQCOM = (PFNGLEXTGETSHADERSQCOMPROC) myFuncLoader("glExtGetShadersQCOM");
+          glExtGetProgramsQCOM = (PFNGLEXTGETPROGRAMSQCOMPROC) myFuncLoader("glExtGetProgramsQCOM");
+          glExtIsProgramBinaryQCOM = (PFNGLEXTISPROGRAMBINARYQCOMPROC) myFuncLoader("glExtIsProgramBinaryQCOM");
+          glExtGetProgramBinarySourceQCOM = (PFNGLEXTGETPROGRAMBINARYSOURCEQCOMPROC) myFuncLoader("glExtGetProgramBinarySourceQCOM");
+
+          return 1;
+     } // end of loadExtFuncGL_QCOM_extended_get2()
+
+  /// ====================================
+  // PFN_PROC Extensions functions Loader. 
+  // Extension: GL_QCOM_tiled_rendering
+  // API: gles1|gles2
+  /// =====================================
+  static  int loadExtFuncGL_QCOM_tiled_rendering(){
+          glStartTilingQCOM = (PFNGLSTARTTILINGQCOMPROC) myFuncLoader("glStartTilingQCOM");
+          glEndTilingQCOM = (PFNGLENDTILINGQCOMPROC) myFuncLoader("glEndTilingQCOM");
+
+          return 1;
+     } // end of loadExtFuncGL_QCOM_tiled_rendering()
+
+
+  // Declaration of loadALL(), to call all PFN_PROC pointers 
+ static int loadALL(){
+         loadExtFuncGL_APPLE_copy_texture_levels();
+         loadExtFuncGL_APPLE_framebuffer_multisample();
+         loadExtFuncGL_APPLE_sync();
+         loadExtFuncGL_EXT_discard_framebuffer();
+         loadExtFuncGL_EXT_map_buffer_range();
+         loadExtFuncGL_EXT_multi_draw_arrays();
+         loadExtFuncGL_EXT_multisampled_render_to_texture();
+         loadExtFuncGL_EXT_robustness();
+         loadExtFuncGL_EXT_texture_storage();
+         loadExtFuncGL_IMG_multisampled_render_to_texture();
+         loadExtFuncGL_IMG_user_clip_plane();
+         loadExtFuncGL_NV_fence();
+         loadExtFuncGL_OES_EGL_image();
+         loadExtFuncGL_OES_blend_equation_separate();
+         loadExtFuncGL_OES_blend_func_separate();
+         loadExtFuncGL_OES_blend_subtract();
+         loadExtFuncGL_OES_draw_texture();
+         loadExtFuncGL_OES_fixed_point();
+         loadExtFuncGL_OES_framebuffer_object();
+         loadExtFuncGL_OES_mapbuffer();
+         loadExtFuncGL_OES_matrix_palette();
+         loadExtFuncGL_OES_point_size_array();
+         loadExtFuncGL_OES_query_matrix();
+         loadExtFuncGL_OES_single_precision();
+         loadExtFuncGL_OES_texture_cube_map();
+         loadExtFuncGL_OES_vertex_array_object();
+         loadExtFuncGL_QCOM_driver_control();
+         loadExtFuncGL_QCOM_extended_get();
+         loadExtFuncGL_QCOM_extended_get2();
+         loadExtFuncGL_QCOM_tiled_rendering();
+       return 1;
+   } 
+    
+  */
+  // end of JNI header
+
+  static protected native void init(); /* 
+    loadAll();
+  */
+
+  /** loading native stuff */
+  static{
+    init();
+  }
+
 	
 	/**
 	 * Private constructor
@@ -65,29 +1007,8 @@ public class GLES11ExtPipeline
         return instance;
     }
 
-    /**
-     * <pre>
-     * Delegate Method generated from GLES11Ext._nativeClassInit();
-     * 
-     *  C function void glBlendEquationSeparateOES((GLenum)  modeRGB, (GLenum)  modeAlpha )
 
-     * */
-    public static void GLES11ExtClassInit() {
-        GLES11ExtPipeline.nGLES11ExtClassInit();
-    }
-
-    /**
-     * <pre>
-     * Native method generated from GLES11Ext._nativeClassInit();
-     * 
-     *  C function void glBlendEquationSeparateOES((GLenum)  modeRGB, (GLenum)  modeAlpha )
-
-     * */
-    private static native void nGLES11ExtClassInit();/*
-          // PFNGLBLENDEQUATIONSEPARATEOESPROC glBlendEquationSeparateOES;
-          // glBlendEquationSeparateOES =  reinterpret_cast<PFNGLBLENDEQUATIONSEPARATEOESPROC>(eglGetProcAddress("glBlendEquationSeparateOES"));
-         
-    */
+    
 
     /**
      * <pre>
