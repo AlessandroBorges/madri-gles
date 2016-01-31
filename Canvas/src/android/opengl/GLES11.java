@@ -267,7 +267,7 @@ public class GLES11 extends GLES10 {
     }
     
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11._nativeClassInit();
      * 
      *  C function void glBindBuffer ( GLenum target, GLuint buffer )
@@ -287,7 +287,7 @@ public class GLES11 extends GLES10 {
     private static Buffer _pointSizePointerOES;
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glBindBuffer([int target, int buffer]);
      * 
      *  C function void glBindBuffer ( GLenum target, GLuint buffer )
@@ -298,7 +298,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glBufferData([int target, int size, java.nio.Buffer data, int usage]);
      * 
      *  C function void glBufferData ( GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage )
@@ -309,7 +309,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glBufferSubData([int target, int offset, int size, java.nio.Buffer data]);
      * 
      *  C function void glBufferSubData ( GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data )
@@ -320,7 +320,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glClipPlanef([int plane, float[] equation, int offset]);
      * 
      *  C function void glClipPlanef ( GLenum plane, const GLfloat *equation )
@@ -331,7 +331,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glClipPlanef([int plane, java.nio.FloatBuffer equation]);
      * 
      *  C function void glClipPlanef ( GLenum plane, const GLfloat *equation )
@@ -342,7 +342,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glClipPlanex([int plane, int[] equation, int offset]);
      * 
      *  C function void glClipPlanex ( GLenum plane, const GLfixed *equation )
@@ -353,7 +353,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glClipPlanex([int plane, java.nio.IntBuffer equation]);
      * 
      *  C function void glClipPlanex ( GLenum plane, const GLfixed *equation )
@@ -364,7 +364,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glColor4ub([byte red, byte green, byte blue, byte alpha]);
      * 
      *  C function void glColor4ub ( GLubyte red, GLubyte green, GLubyte blue, GLubyte alpha )
@@ -375,7 +375,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glColorPointer([int size, int type, int stride, int offset]);
      * 
      *  C function void glColorPointer ( GLint size, GLenum type, GLsizei stride, GLint offset )
@@ -386,7 +386,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glDeleteBuffers([int n, int[] buffers, int offset]);
      * 
      *  C function void glDeleteBuffers ( GLsizei n, const GLuint *buffers )
@@ -397,7 +397,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glDeleteBuffers([int n, java.nio.IntBuffer buffers]);
      * 
      *  C function void glDeleteBuffers ( GLsizei n, const GLuint *buffers )
@@ -408,7 +408,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glDrawElements([int mode, int count, int type, int offset]);
      * 
      *  C function void glDrawElements ( GLenum mode, GLsizei count, GLenum type, GLint offset )
@@ -419,7 +419,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGenBuffers([int n, int[] buffers, int offset]);
      * 
      *  C function void glGenBuffers ( GLsizei n, GLuint *buffers )
@@ -430,7 +430,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGenBuffers([int n, java.nio.IntBuffer buffers]);
      * 
      *  C function void glGenBuffers ( GLsizei n, GLuint *buffers )
@@ -441,7 +441,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetBooleanv([int pname, boolean[] params, int offset]);
      * 
      *  C function void glGetBooleanv ( GLenum pname, GLboolean *params )
@@ -452,7 +452,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetBooleanv([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetBooleanv ( GLenum pname, GLboolean *params )
@@ -463,7 +463,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetBufferParameteriv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glGetBufferParameteriv ( GLenum target, GLenum pname, GLint *params )
@@ -474,7 +474,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetBufferParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetBufferParameteriv ( GLenum target, GLenum pname, GLint *params )
@@ -485,7 +485,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetClipPlanef([int pname, float[] eqn, int offset]);
      * 
      *  C function void glGetClipPlanef ( GLenum pname, GLfloat *eqn )
@@ -496,7 +496,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetClipPlanef([int pname, java.nio.FloatBuffer eqn]);
      * 
      *  C function void glGetClipPlanef ( GLenum pname, GLfloat *eqn )
@@ -507,7 +507,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetClipPlanex([int pname, int[] eqn, int offset]);
      * 
      *  C function void glGetClipPlanex ( GLenum pname, GLfixed *eqn )
@@ -518,7 +518,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetClipPlanex([int pname, java.nio.IntBuffer eqn]);
      * 
      *  C function void glGetClipPlanex ( GLenum pname, GLfixed *eqn )
@@ -529,7 +529,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetFixedv([int pname, int[] params, int offset]);
      * 
      *  C function void glGetFixedv ( GLenum pname, GLfixed *params )
@@ -540,7 +540,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetFixedv([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetFixedv ( GLenum pname, GLfixed *params )
@@ -551,7 +551,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetFloatv([int pname, float[] params, int offset]);
      * 
      *  C function void glGetFloatv ( GLenum pname, GLfloat *params )
@@ -562,7 +562,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetFloatv([int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetFloatv ( GLenum pname, GLfloat *params )
@@ -573,7 +573,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetLightfv([int light, int pname, float[] params, int offset]);
      * 
      *  C function void glGetLightfv ( GLenum light, GLenum pname, GLfloat *params )
@@ -584,7 +584,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetLightfv([int light, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetLightfv ( GLenum light, GLenum pname, GLfloat *params )
@@ -595,7 +595,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetLightxv([int light, int pname, int[] params, int offset]);
      * 
      *  C function void glGetLightxv ( GLenum light, GLenum pname, GLfixed *params )
@@ -606,7 +606,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetLightxv([int light, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetLightxv ( GLenum light, GLenum pname, GLfixed *params )
@@ -617,7 +617,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetMaterialfv([int face, int pname, float[] params, int offset]);
      * 
      *  C function void glGetMaterialfv ( GLenum face, GLenum pname, GLfloat *params )
@@ -628,7 +628,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetMaterialfv([int face, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetMaterialfv ( GLenum face, GLenum pname, GLfloat *params )
@@ -639,7 +639,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetMaterialxv([int face, int pname, int[] params, int offset]);
      * 
      *  C function void glGetMaterialxv ( GLenum face, GLenum pname, GLfixed *params )
@@ -650,7 +650,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetMaterialxv([int face, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetMaterialxv ( GLenum face, GLenum pname, GLfixed *params )
@@ -661,7 +661,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexEnvfv([int env, int pname, float[] params, int offset]);
      * 
      *  C function void glGetTexEnvfv ( GLenum env, GLenum pname, GLfloat *params )
@@ -672,7 +672,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexEnvfv([int env, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetTexEnvfv ( GLenum env, GLenum pname, GLfloat *params )
@@ -683,7 +683,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexEnviv([int env, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexEnviv ( GLenum env, GLenum pname, GLint *params )
@@ -694,7 +694,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexEnviv([int env, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexEnviv ( GLenum env, GLenum pname, GLint *params )
@@ -705,7 +705,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexEnvxv([int env, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexEnvxv ( GLenum env, GLenum pname, GLfixed *params )
@@ -716,7 +716,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexEnvxv([int env, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexEnvxv ( GLenum env, GLenum pname, GLfixed *params )
@@ -727,7 +727,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexParameterfv([int target, int pname, float[] params, int offset]);
      * 
      *  C function void glGetTexParameterfv ( GLenum target, GLenum pname, GLfloat *params )
@@ -738,7 +738,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexParameterfv([int target, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetTexParameterfv ( GLenum target, GLenum pname, GLfloat *params )
@@ -749,7 +749,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexParameteriv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexParameteriv ( GLenum target, GLenum pname, GLint *params )
@@ -760,7 +760,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexParameteriv ( GLenum target, GLenum pname, GLint *params )
@@ -771,7 +771,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexParameterxv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexParameterxv ( GLenum target, GLenum pname, GLfixed *params )
@@ -782,7 +782,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glGetTexParameterxv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexParameterxv ( GLenum target, GLenum pname, GLfixed *params )
@@ -793,7 +793,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glIsBuffer([int buffer]);
      * 
      *  C function GLboolean glIsBuffer ( GLuint buffer )
@@ -804,7 +804,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glIsEnabled([int cap]);
      * 
      *  C function GLboolean glIsEnabled ( GLenum cap )
@@ -815,7 +815,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glIsTexture([int texture]);
      * 
      *  C function GLboolean glIsTexture ( GLuint texture )
@@ -826,7 +826,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glNormalPointer([int type, int stride, int offset]);
      * 
      *  C function void glNormalPointer ( GLenum type, GLsizei stride, GLint offset )
@@ -837,7 +837,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointParameterf([int pname, float param]);
      * 
      *  C function void glPointParameterf ( GLenum pname, GLfloat param )
@@ -848,7 +848,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointParameterfv([int pname, float[] params, int offset]);
      * 
      *  C function void glPointParameterfv ( GLenum pname, const GLfloat *params )
@@ -859,7 +859,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointParameterfv([int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glPointParameterfv ( GLenum pname, const GLfloat *params )
@@ -870,7 +870,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointParameterx([int pname, int param]);
      * 
      *  C function void glPointParameterx ( GLenum pname, GLfixed param )
@@ -881,7 +881,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointParameterxv([int pname, int[] params, int offset]);
      * 
      *  C function void glPointParameterxv ( GLenum pname, const GLfixed *params )
@@ -892,7 +892,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointParameterxv([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glPointParameterxv ( GLenum pname, const GLfixed *params )
@@ -903,7 +903,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glPointSizePointerOESBounds([int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
      *  C function void glPointSizePointerOES ( GLenum type, GLsizei stride, const GLvoid *pointer )
@@ -921,7 +921,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexCoordPointer([int size, int type, int stride, int offset]);
      * 
      *  C function void glTexCoordPointer ( GLint size, GLenum type, GLsizei stride, GLint offset )
@@ -932,7 +932,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexEnvi([int target, int pname, int param]);
      * 
      *  C function void glTexEnvi ( GLenum target, GLenum pname, GLint param )
@@ -943,7 +943,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexEnviv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glTexEnviv ( GLenum target, GLenum pname, const GLint *params )
@@ -954,7 +954,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexEnviv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexEnviv ( GLenum target, GLenum pname, const GLint *params )
@@ -965,7 +965,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameterfv([int target, int pname, float[] params, int offset]);
      * 
      *  C function void glTexParameterfv ( GLenum target, GLenum pname, const GLfloat *params )
@@ -976,7 +976,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameterfv([int target, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glTexParameterfv ( GLenum target, GLenum pname, const GLfloat *params )
@@ -987,7 +987,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameteri([int target, int pname, int param]);
      * 
      *  C function void glTexParameteri ( GLenum target, GLenum pname, GLint param )
@@ -998,7 +998,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameteriv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glTexParameteriv ( GLenum target, GLenum pname, const GLint *params )
@@ -1009,7 +1009,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexParameteriv ( GLenum target, GLenum pname, const GLint *params )
@@ -1020,7 +1020,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameterxv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glTexParameterxv ( GLenum target, GLenum pname, const GLfixed *params )
@@ -1031,7 +1031,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glTexParameterxv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexParameterxv ( GLenum target, GLenum pname, const GLfixed *params )
@@ -1042,7 +1042,7 @@ public class GLES11 extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11.glVertexPointer([int size, int type, int stride, int offset]);
      * 
      *  C function void glVertexPointer ( GLint size, GLenum type, GLsizei stride, GLint offset )

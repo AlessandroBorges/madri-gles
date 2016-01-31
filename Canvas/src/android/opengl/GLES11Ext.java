@@ -238,14 +238,14 @@ public class GLES11Ext
     }
     
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext._nativeClassInit();
      * 
      *  C function void glBlendEquationSeparateOES ( GLenum modeRGB, GLenum modeAlpha )
 
      * */
     private static void nativeClassInit() {
-        getPipeline().GLES11ExtClassInit();
+       // getPipeline().GLES11ExtClassInit();
     }
 
     static {
@@ -266,7 +266,7 @@ public class GLES11Ext
     private static Buffer _matrixIndexPointerOES;
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glBlendEquationSeparateOES([int modeRGB, int modeAlpha]);
      * 
      *  C function void glBlendEquationSeparateOES ( GLenum modeRGB, GLenum modeAlpha )
@@ -277,7 +277,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glBlendFuncSeparateOES([int srcRGB, int dstRGB, int srcAlpha, int dstAlpha]);
      * 
      *  C function void glBlendFuncSeparateOES ( GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha )
@@ -288,7 +288,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glBlendEquationOES([int mode]);
      * 
      *  C function void glBlendEquationOES ( GLenum mode )
@@ -299,7 +299,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexsOES([short x, short y, short z, short width, short height]);
      * 
      *  C function void glDrawTexsOES ( GLshort x, GLshort y, GLshort z, GLshort width, GLshort height )
@@ -310,7 +310,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexiOES([int x, int y, int z, int width, int height]);
      * 
      *  C function void glDrawTexiOES ( GLint x, GLint y, GLint z, GLint width, GLint height )
@@ -321,7 +321,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexxOES([int x, int y, int z, int width, int height]);
      * 
      *  C function void glDrawTexxOES ( GLfixed x, GLfixed y, GLfixed z, GLfixed width, GLfixed height )
@@ -332,7 +332,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexsvOES([short[] coords, int offset]);
      * 
      *  C function void glDrawTexsvOES ( const GLshort *coords )
@@ -343,7 +343,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexsvOES([java.nio.ShortBuffer coords]);
      * 
      *  C function void glDrawTexsvOES ( const GLshort *coords )
@@ -354,7 +354,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexivOES([int[] coords, int offset]);
      * 
      *  C function void glDrawTexivOES ( const GLint *coords )
@@ -365,7 +365,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexivOES([java.nio.IntBuffer coords]);
      * 
      *  C function void glDrawTexivOES ( const GLint *coords )
@@ -376,7 +376,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexxvOES([int[] coords, int offset]);
      * 
      *  C function void glDrawTexxvOES ( const GLfixed *coords )
@@ -387,7 +387,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexxvOES([java.nio.IntBuffer coords]);
      * 
      *  C function void glDrawTexxvOES ( const GLfixed *coords )
@@ -398,7 +398,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexfOES([float x, float y, float z, float width, float height]);
      * 
      *  C function void glDrawTexfOES ( GLfloat x, GLfloat y, GLfloat z, GLfloat width, GLfloat height )
@@ -409,7 +409,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexfvOES([float[] coords, int offset]);
      * 
      *  C function void glDrawTexfvOES ( const GLfloat *coords )
@@ -420,7 +420,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDrawTexfvOES([java.nio.FloatBuffer coords]);
      * 
      *  C function void glDrawTexfvOES ( const GLfloat *coords )
@@ -431,7 +431,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glEGLImageTargetTexture2DOES([int target, java.nio.Buffer image]);
      * 
      *  C function void glEGLImageTargetTexture2DOES ( GLenum target, GLeglImageOES image )
@@ -442,7 +442,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glEGLImageTargetRenderbufferStorageOES([int target, java.nio.Buffer image]);
      * 
      *  C function void glEGLImageTargetRenderbufferStorageOES ( GLenum target, GLeglImageOES image )
@@ -453,7 +453,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glAlphaFuncxOES([int func, int ref]);
      * 
      *  C function void glAlphaFuncxOES ( GLenum func, GLclampx ref )
@@ -464,7 +464,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClearColorxOES([int red, int green, int blue, int alpha]);
      * 
      *  C function void glClearColorxOES ( GLclampx red, GLclampx green, GLclampx blue, GLclampx alpha )
@@ -475,7 +475,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClearDepthxOES([int depth]);
      * 
      *  C function void glClearDepthxOES ( GLclampx depth )
@@ -486,7 +486,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClipPlanexOES([int plane, int[] equation, int offset]);
      * 
      *  C function void glClipPlanexOES ( GLenum plane, const GLfixed *equation )
@@ -497,7 +497,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClipPlanexOES([int plane, java.nio.IntBuffer equation]);
      * 
      *  C function void glClipPlanexOES ( GLenum plane, const GLfixed *equation )
@@ -508,7 +508,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glColor4xOES([int red, int green, int blue, int alpha]);
      * 
      *  C function void glColor4xOES ( GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha )
@@ -519,7 +519,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDepthRangexOES([int zNear, int zFar]);
      * 
      *  C function void glDepthRangexOES ( GLclampx zNear, GLclampx zFar )
@@ -530,7 +530,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFogxOES([int pname, int param]);
      * 
      *  C function void glFogxOES ( GLenum pname, GLfixed param )
@@ -541,7 +541,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFogxvOES([int pname, int[] params, int offset]);
      * 
      *  C function void glFogxvOES ( GLenum pname, const GLfixed *params )
@@ -552,7 +552,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFogxvOES([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glFogxvOES ( GLenum pname, const GLfixed *params )
@@ -563,7 +563,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFrustumxOES([int left, int right, int bottom, int top, int zNear, int zFar]);
      * 
      *  C function void glFrustumxOES ( GLfixed left, GLfixed right, GLfixed bottom, GLfixed top, GLfixed zNear, GLfixed zFar )
@@ -574,7 +574,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetClipPlanexOES([int pname, int[] eqn, int offset]);
      * 
      *  C function void glGetClipPlanexOES ( GLenum pname, GLfixed *eqn )
@@ -585,7 +585,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetClipPlanexOES([int pname, java.nio.IntBuffer eqn]);
      * 
      *  C function void glGetClipPlanexOES ( GLenum pname, GLfixed *eqn )
@@ -596,7 +596,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetFixedvOES([int pname, int[] params, int offset]);
      * 
      *  C function void glGetFixedvOES ( GLenum pname, GLfixed *params )
@@ -607,7 +607,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetFixedvOES([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetFixedvOES ( GLenum pname, GLfixed *params )
@@ -618,7 +618,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetLightxvOES([int light, int pname, int[] params, int offset]);
      * 
      *  C function void glGetLightxvOES ( GLenum light, GLenum pname, GLfixed *params )
@@ -629,7 +629,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetLightxvOES([int light, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetLightxvOES ( GLenum light, GLenum pname, GLfixed *params )
@@ -640,7 +640,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetMaterialxvOES([int face, int pname, int[] params, int offset]);
      * 
      *  C function void glGetMaterialxvOES ( GLenum face, GLenum pname, GLfixed *params )
@@ -651,7 +651,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetMaterialxvOES([int face, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetMaterialxvOES ( GLenum face, GLenum pname, GLfixed *params )
@@ -662,7 +662,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexEnvxvOES([int env, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexEnvxvOES ( GLenum env, GLenum pname, GLfixed *params )
@@ -673,7 +673,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexEnvxvOES([int env, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexEnvxvOES ( GLenum env, GLenum pname, GLfixed *params )
@@ -684,7 +684,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexParameterxvOES([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexParameterxvOES ( GLenum target, GLenum pname, GLfixed *params )
@@ -695,7 +695,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexParameterxvOES([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexParameterxvOES ( GLenum target, GLenum pname, GLfixed *params )
@@ -706,7 +706,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLightModelxOES([int pname, int param]);
      * 
      *  C function void glLightModelxOES ( GLenum pname, GLfixed param )
@@ -717,7 +717,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLightModelxvOES([int pname, int[] params, int offset]);
      * 
      *  C function void glLightModelxvOES ( GLenum pname, const GLfixed *params )
@@ -728,7 +728,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLightModelxvOES([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glLightModelxvOES ( GLenum pname, const GLfixed *params )
@@ -739,7 +739,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLightxOES([int light, int pname, int param]);
      * 
      *  C function void glLightxOES ( GLenum light, GLenum pname, GLfixed param )
@@ -750,7 +750,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLightxvOES([int light, int pname, int[] params, int offset]);
      * 
      *  C function void glLightxvOES ( GLenum light, GLenum pname, const GLfixed *params )
@@ -761,7 +761,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLightxvOES([int light, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glLightxvOES ( GLenum light, GLenum pname, const GLfixed *params )
@@ -772,7 +772,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLineWidthxOES([int width]);
      * 
      *  C function void glLineWidthxOES ( GLfixed width )
@@ -783,7 +783,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLoadMatrixxOES([int[] m, int offset]);
      * 
      *  C function void glLoadMatrixxOES ( const GLfixed *m )
@@ -794,7 +794,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLoadMatrixxOES([java.nio.IntBuffer m]);
      * 
      *  C function void glLoadMatrixxOES ( const GLfixed *m )
@@ -805,7 +805,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMaterialxOES([int face, int pname, int param]);
      * 
      *  C function void glMaterialxOES ( GLenum face, GLenum pname, GLfixed param )
@@ -816,7 +816,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMaterialxvOES([int face, int pname, int[] params, int offset]);
      * 
      *  C function void glMaterialxvOES ( GLenum face, GLenum pname, const GLfixed *params )
@@ -827,7 +827,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMaterialxvOES([int face, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glMaterialxvOES ( GLenum face, GLenum pname, const GLfixed *params )
@@ -838,7 +838,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMultMatrixxOES([int[] m, int offset]);
      * 
      *  C function void glMultMatrixxOES ( const GLfixed *m )
@@ -849,7 +849,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMultMatrixxOES([java.nio.IntBuffer m]);
      * 
      *  C function void glMultMatrixxOES ( const GLfixed *m )
@@ -860,7 +860,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMultiTexCoord4xOES([int target, int s, int t, int r, int q]);
      * 
      *  C function void glMultiTexCoord4xOES ( GLenum target, GLfixed s, GLfixed t, GLfixed r, GLfixed q )
@@ -871,7 +871,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glNormal3xOES([int nx, int ny, int nz]);
      * 
      *  C function void glNormal3xOES ( GLfixed nx, GLfixed ny, GLfixed nz )
@@ -882,7 +882,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glOrthoxOES([int left, int right, int bottom, int top, int zNear, int zFar]);
      * 
      *  C function void glOrthoxOES ( GLfixed left, GLfixed right, GLfixed bottom, GLfixed top, GLfixed zNear, GLfixed zFar )
@@ -893,7 +893,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glPointParameterxOES([int pname, int param]);
      * 
      *  C function void glPointParameterxOES ( GLenum pname, GLfixed param )
@@ -904,7 +904,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glPointParameterxvOES([int pname, int[] params, int offset]);
      * 
      *  C function void glPointParameterxvOES ( GLenum pname, const GLfixed *params )
@@ -915,7 +915,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glPointParameterxvOES([int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glPointParameterxvOES ( GLenum pname, const GLfixed *params )
@@ -926,7 +926,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glPointSizexOES([int size]);
      * 
      *  C function void glPointSizexOES ( GLfixed size )
@@ -937,7 +937,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glPolygonOffsetxOES([int factor, int units]);
      * 
      *  C function void glPolygonOffsetxOES ( GLfixed factor, GLfixed units )
@@ -948,7 +948,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glRotatexOES([int angle, int x, int y, int z]);
      * 
      *  C function void glRotatexOES ( GLfixed angle, GLfixed x, GLfixed y, GLfixed z )
@@ -959,7 +959,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glSampleCoveragexOES([int value, boolean invert]);
      * 
      *  C function void glSampleCoveragexOES ( GLclampx value, GLboolean invert )
@@ -970,7 +970,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glScalexOES([int x, int y, int z]);
      * 
      *  C function void glScalexOES ( GLfixed x, GLfixed y, GLfixed z )
@@ -981,7 +981,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexEnvxOES([int target, int pname, int param]);
      * 
      *  C function void glTexEnvxOES ( GLenum target, GLenum pname, GLfixed param )
@@ -992,7 +992,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexEnvxvOES([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glTexEnvxvOES ( GLenum target, GLenum pname, const GLfixed *params )
@@ -1003,7 +1003,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexEnvxvOES([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexEnvxvOES ( GLenum target, GLenum pname, const GLfixed *params )
@@ -1014,7 +1014,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexParameterxOES([int target, int pname, int param]);
      * 
      *  C function void glTexParameterxOES ( GLenum target, GLenum pname, GLfixed param )
@@ -1025,7 +1025,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexParameterxvOES([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glTexParameterxvOES ( GLenum target, GLenum pname, const GLfixed *params )
@@ -1036,7 +1036,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexParameterxvOES([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexParameterxvOES ( GLenum target, GLenum pname, const GLfixed *params )
@@ -1047,7 +1047,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTranslatexOES([int x, int y, int z]);
      * 
      *  C function void glTranslatexOES ( GLfixed x, GLfixed y, GLfixed z )
@@ -1058,7 +1058,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glIsRenderbufferOES([int renderbuffer]);
      * 
      *  C function GLboolean glIsRenderbufferOES ( GLuint renderbuffer )
@@ -1069,7 +1069,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glBindRenderbufferOES([int target, int renderbuffer]);
      * 
      *  C function void glBindRenderbufferOES ( GLenum target, GLuint renderbuffer )
@@ -1080,7 +1080,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDeleteRenderbuffersOES([int n, int[] renderbuffers, int offset]);
      * 
      *  C function void glDeleteRenderbuffersOES ( GLsizei n, const GLuint *renderbuffers )
@@ -1091,7 +1091,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDeleteRenderbuffersOES([int n, java.nio.IntBuffer renderbuffers]);
      * 
      *  C function void glDeleteRenderbuffersOES ( GLsizei n, const GLuint *renderbuffers )
@@ -1102,7 +1102,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGenRenderbuffersOES([int n, int[] renderbuffers, int offset]);
      * 
      *  C function void glGenRenderbuffersOES ( GLsizei n, GLuint *renderbuffers )
@@ -1113,7 +1113,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGenRenderbuffersOES([int n, java.nio.IntBuffer renderbuffers]);
      * 
      *  C function void glGenRenderbuffersOES ( GLsizei n, GLuint *renderbuffers )
@@ -1124,7 +1124,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glRenderbufferStorageOES([int target, int internalformat, int width, int height]);
      * 
      *  C function void glRenderbufferStorageOES ( GLenum target, GLenum internalformat, GLsizei width, GLsizei height )
@@ -1135,7 +1135,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetRenderbufferParameterivOES([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glGetRenderbufferParameterivOES ( GLenum target, GLenum pname, GLint *params )
@@ -1146,7 +1146,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetRenderbufferParameterivOES([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetRenderbufferParameterivOES ( GLenum target, GLenum pname, GLint *params )
@@ -1157,7 +1157,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glIsFramebufferOES([int framebuffer]);
      * 
      *  C function GLboolean glIsFramebufferOES ( GLuint framebuffer )
@@ -1168,7 +1168,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glBindFramebufferOES([int target, int framebuffer]);
      * 
      *  C function void glBindFramebufferOES ( GLenum target, GLuint framebuffer )
@@ -1179,7 +1179,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDeleteFramebuffersOES([int n, int[] framebuffers, int offset]);
      * 
      *  C function void glDeleteFramebuffersOES ( GLsizei n, const GLuint *framebuffers )
@@ -1190,7 +1190,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDeleteFramebuffersOES([int n, java.nio.IntBuffer framebuffers]);
      * 
      *  C function void glDeleteFramebuffersOES ( GLsizei n, const GLuint *framebuffers )
@@ -1201,7 +1201,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGenFramebuffersOES([int n, int[] framebuffers, int offset]);
      * 
      *  C function void glGenFramebuffersOES ( GLsizei n, GLuint *framebuffers )
@@ -1212,7 +1212,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGenFramebuffersOES([int n, java.nio.IntBuffer framebuffers]);
      * 
      *  C function void glGenFramebuffersOES ( GLsizei n, GLuint *framebuffers )
@@ -1223,7 +1223,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glCheckFramebufferStatusOES([int target]);
      * 
      *  C function GLenum glCheckFramebufferStatusOES ( GLenum target )
@@ -1234,7 +1234,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFramebufferRenderbufferOES([int target, int attachment, int renderbuffertarget, int renderbuffer]);
      * 
      *  C function void glFramebufferRenderbufferOES ( GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
@@ -1245,7 +1245,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFramebufferTexture2DOES([int target, int attachment, int textarget, int texture, int level]);
      * 
      *  C function void glFramebufferTexture2DOES ( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level )
@@ -1256,7 +1256,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetFramebufferAttachmentParameterivOES([int target, int attachment, int pname, int[] params, int offset]);
      * 
      *  C function void glGetFramebufferAttachmentParameterivOES ( GLenum target, GLenum attachment, GLenum pname, GLint *params )
@@ -1267,7 +1267,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetFramebufferAttachmentParameterivOES([int target, int attachment, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetFramebufferAttachmentParameterivOES ( GLenum target, GLenum attachment, GLenum pname, GLint *params )
@@ -1278,7 +1278,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGenerateMipmapOES([int target]);
      * 
      *  C function void glGenerateMipmapOES ( GLenum target )
@@ -1289,7 +1289,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glCurrentPaletteMatrixOES([int matrixpaletteindex]);
      * 
      *  C function void glCurrentPaletteMatrixOES ( GLuint matrixpaletteindex )
@@ -1300,7 +1300,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glLoadPaletteFromModelViewMatrixOES();
      * 
      *  C function void glLoadPaletteFromModelViewMatrixOES ( void )
@@ -1311,7 +1311,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glMatrixIndexPointerOESBounds([int size, int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
      *  C function void glMatrixIndexPointerOES ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer )
@@ -1336,7 +1336,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glWeightPointerOESBounds([int size, int type, int stride, java.nio.Buffer pointer, int remaining]);
      * 
      *  C function void glWeightPointerOES ( GLint size, GLenum type, GLsizei stride, const GLvoid *pointer )
@@ -1351,7 +1351,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glDepthRangefOES([float zNear, float zFar]);
      * 
      *  C function void glDepthRangefOES ( GLclampf zNear, GLclampf zFar )
@@ -1362,7 +1362,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glFrustumfOES([float left, float right, float bottom, float top, float zNear, float zFar]);
      * 
      *  C function void glFrustumfOES ( GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar )
@@ -1373,7 +1373,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glOrthofOES([float left, float right, float bottom, float top, float zNear, float zFar]);
      * 
      *  C function void glOrthofOES ( GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat zNear, GLfloat zFar )
@@ -1384,7 +1384,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClipPlanefOES([int plane, float[] equation, int offset]);
      * 
      *  C function void glClipPlanefOES ( GLenum plane, const GLfloat *equation )
@@ -1395,7 +1395,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClipPlanefOES([int plane, java.nio.FloatBuffer equation]);
      * 
      *  C function void glClipPlanefOES ( GLenum plane, const GLfloat *equation )
@@ -1406,7 +1406,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetClipPlanefOES([int pname, float[] eqn, int offset]);
      * 
      *  C function void glGetClipPlanefOES ( GLenum pname, GLfloat *eqn )
@@ -1417,7 +1417,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetClipPlanefOES([int pname, java.nio.FloatBuffer eqn]);
      * 
      *  C function void glGetClipPlanefOES ( GLenum pname, GLfloat *eqn )
@@ -1428,7 +1428,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glClearDepthfOES([float depth]);
      * 
      *  C function void glClearDepthfOES ( GLclampf depth )
@@ -1439,7 +1439,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenfOES([int coord, int pname, float param]);
      * 
      *  C function void glTexGenfOES ( GLenum coord, GLenum pname, GLfloat param )
@@ -1450,7 +1450,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenfvOES([int coord, int pname, float[] params, int offset]);
      * 
      *  C function void glTexGenfvOES ( GLenum coord, GLenum pname, const GLfloat *params )
@@ -1461,7 +1461,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenfvOES([int coord, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glTexGenfvOES ( GLenum coord, GLenum pname, const GLfloat *params )
@@ -1472,7 +1472,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGeniOES([int coord, int pname, int param]);
      * 
      *  C function void glTexGeniOES ( GLenum coord, GLenum pname, GLint param )
@@ -1483,7 +1483,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenivOES([int coord, int pname, int[] params, int offset]);
      * 
      *  C function void glTexGenivOES ( GLenum coord, GLenum pname, const GLint *params )
@@ -1494,7 +1494,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenivOES([int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexGenivOES ( GLenum coord, GLenum pname, const GLint *params )
@@ -1505,7 +1505,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenxOES([int coord, int pname, int param]);
      * 
      *  C function void glTexGenxOES ( GLenum coord, GLenum pname, GLfixed param )
@@ -1516,7 +1516,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenxvOES([int coord, int pname, int[] params, int offset]);
      * 
      *  C function void glTexGenxvOES ( GLenum coord, GLenum pname, const GLfixed *params )
@@ -1527,7 +1527,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glTexGenxvOES([int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glTexGenxvOES ( GLenum coord, GLenum pname, const GLfixed *params )
@@ -1538,7 +1538,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexGenfvOES([int coord, int pname, float[] params, int offset]);
      * 
      *  C function void glGetTexGenfvOES ( GLenum coord, GLenum pname, GLfloat *params )
@@ -1549,7 +1549,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexGenfvOES([int coord, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetTexGenfvOES ( GLenum coord, GLenum pname, GLfloat *params )
@@ -1560,7 +1560,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexGenivOES([int coord, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexGenivOES ( GLenum coord, GLenum pname, GLint *params )
@@ -1571,7 +1571,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexGenivOES([int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexGenivOES ( GLenum coord, GLenum pname, GLint *params )
@@ -1582,7 +1582,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexGenxvOES([int coord, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexGenxvOES ( GLenum coord, GLenum pname, GLfixed *params )
@@ -1593,7 +1593,7 @@ public class GLES11Ext
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES11Ext.glGetTexGenxvOES([int coord, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexGenxvOES ( GLenum coord, GLenum pname, GLfixed *params )

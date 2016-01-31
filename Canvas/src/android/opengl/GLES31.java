@@ -364,7 +364,7 @@ public class GLES31 extends GLES30 {
     
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31._nativeClassInit();
      * 
      *  C function void glDispatchCompute ( GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z )
@@ -382,7 +382,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glDispatchCompute([int num_groups_x, int num_groups_y, int num_groups_z]);
      * 
      *  C function void glDispatchCompute ( GLuint num_groups_x, GLuint num_groups_y, GLuint num_groups_z )
@@ -393,7 +393,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glDispatchComputeIndirect([long indirect]);
      * 
      *  C function void glDispatchComputeIndirect ( GLintptr indirect );
@@ -404,7 +404,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glDrawArraysIndirect([int mode, long indirect]);
      * 
      *  C function void glDrawArraysIndirect ( GLenum mode, const void *indirect );
@@ -415,7 +415,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glDrawElementsIndirect([int mode, int type, long indirect]);
      * 
      *  C function glDrawElementsIndirect ( GLenum mode, GLenum type, const void *indirect );
@@ -426,7 +426,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glFramebufferParameteri([int target, int pname, int param]);
      * 
      *  C function void glFramebufferParameteri ( GLenum target, GLenum pname, GLint param )
@@ -437,7 +437,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetFramebufferParameteriv([int target, int pname, int[] params, int offset]);
      * 
      *  C function void glGetFramebufferParameteriv ( GLenum target, GLenum pname, GLint *params )
@@ -448,7 +448,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetFramebufferParameteriv([int target, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetFramebufferParameteriv ( GLenum target, GLenum pname, GLint *params )
@@ -459,7 +459,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramInterfaceiv([int program, int programInterface, int pname, int[] params, int offset]);
      * 
      *  C function void glGetProgramInterfaceiv ( GLuint program, GLenum programInterface, GLenum pname, GLint *params )
@@ -470,7 +470,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramInterfaceiv([int program, int programInterface, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetProgramInterfaceiv ( GLuint program, GLenum programInterface, GLenum pname, GLint *params )
@@ -481,7 +481,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramResourceIndex([int program, int programInterface, String name]);
      * 
      *  C function GLuint glGetProgramResourceIndex ( GLuint program, GLenum programInterface, const GLchar *name )
@@ -492,7 +492,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramResourceName([int program, int programInterface, int index]);
      * 
      *  C function void glGetProgramResourceName ( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei *length, GLchar *name )
@@ -503,7 +503,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramResourceiv([int program, int programInterface, int index, int propCount, int[] props, int propsOffset, int bufSize, int[] length, int lengthOffset, int[] params, int paramsOffset]);
      * 
      *  C function void glGetProgramResourceiv ( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params )
@@ -514,7 +514,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramResourceiv([int program, int programInterface, int index, int propCount, java.nio.IntBuffer props, int bufSize, java.nio.IntBuffer length, java.nio.IntBuffer params]);
      * 
      *  C function void glGetProgramResourceiv ( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount, const GLenum *props, GLsizei bufSize, GLsizei *length, GLint *params )
@@ -525,7 +525,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramResourceLocation([int program, int programInterface, String name]);
      * 
      *  C function GLint glGetProgramResourceLocation ( GLuint program, GLenum programInterface, const GLchar *name )
@@ -536,7 +536,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glUseProgramStages([int pipeline, int stages, int program]);
      * 
      *  C function void glUseProgramStages ( GLuint pipeline, GLbitfield stages, GLuint program )
@@ -547,7 +547,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glActiveShaderProgram([int pipeline, int program]);
      * 
      *  C function void glActiveShaderProgram ( GLuint pipeline, GLuint program )
@@ -558,7 +558,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glCreateShaderProgramv([int type, String[] strings]);
      * 
      *  C function GLuint glCreateShaderProgramv ( GLenum type, GLsizei count, const GLchar *const *strings )
@@ -569,7 +569,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glBindProgramPipeline([int pipeline]);
      * 
      *  C function void glBindProgramPipeline ( GLuint pipeline )
@@ -580,7 +580,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glDeleteProgramPipelines([int n, int[] pipelines, int offset]);
      * 
      *  C function void glDeleteProgramPipelines ( GLsizei n, const GLuint *pipelines )
@@ -591,7 +591,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glDeleteProgramPipelines([int n, java.nio.IntBuffer pipelines]);
      * 
      *  C function void glDeleteProgramPipelines ( GLsizei n, const GLuint *pipelines )
@@ -602,7 +602,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGenProgramPipelines([int n, int[] pipelines, int offset]);
      * 
      *  C function void glGenProgramPipelines ( GLsizei n, GLuint *pipelines )
@@ -613,7 +613,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGenProgramPipelines([int n, java.nio.IntBuffer pipelines]);
      * 
      *  C function void glGenProgramPipelines ( GLsizei n, GLuint *pipelines )
@@ -624,7 +624,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glIsProgramPipeline([int pipeline]);
      * 
      *  C function GLboolean glIsProgramPipeline ( GLuint pipeline )
@@ -635,7 +635,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramPipelineiv([int pipeline, int pname, int[] params, int offset]);
      * 
      *  C function void glGetProgramPipelineiv ( GLuint pipeline, GLenum pname, GLint *params )
@@ -646,7 +646,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramPipelineiv([int pipeline, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetProgramPipelineiv ( GLuint pipeline, GLenum pname, GLint *params )
@@ -657,7 +657,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1i([int program, int location, int v0]);
      * 
      *  C function void glProgramUniform1i ( GLuint program, GLint location, GLint v0 )
@@ -668,7 +668,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2i([int program, int location, int v0, int v1]);
      * 
      *  C function void glProgramUniform2i ( GLuint program, GLint location, GLint v0, GLint v1 )
@@ -679,7 +679,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3i([int program, int location, int v0, int v1, int v2]);
      * 
      *  C function void glProgramUniform3i ( GLuint program, GLint location, GLint v0, GLint v1, GLint v2 )
@@ -690,7 +690,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4i([int program, int location, int v0, int v1, int v2, int v3]);
      * 
      *  C function void glProgramUniform4i ( GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3 )
@@ -701,7 +701,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1ui([int program, int location, int v0]);
      * 
      *  C function void glProgramUniform1ui ( GLuint program, GLint location, GLuint v0 )
@@ -712,7 +712,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2ui([int program, int location, int v0, int v1]);
      * 
      *  C function void glProgramUniform2ui ( GLuint program, GLint location, GLuint v0, GLuint v1 )
@@ -723,7 +723,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3ui([int program, int location, int v0, int v1, int v2]);
      * 
      *  C function void glProgramUniform3ui ( GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2 )
@@ -734,7 +734,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4ui([int program, int location, int v0, int v1, int v2, int v3]);
      * 
      *  C function void glProgramUniform4ui ( GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3 )
@@ -745,7 +745,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1f([int program, int location, float v0]);
      * 
      *  C function void glProgramUniform1f ( GLuint program, GLint location, GLfloat v0 )
@@ -756,7 +756,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2f([int program, int location, float v0, float v1]);
      * 
      *  C function void glProgramUniform2f ( GLuint program, GLint location, GLfloat v0, GLfloat v1 )
@@ -767,7 +767,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3f([int program, int location, float v0, float v1, float v2]);
      * 
      *  C function void glProgramUniform3f ( GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2 )
@@ -778,7 +778,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4f([int program, int location, float v0, float v1, float v2, float v3]);
      * 
      *  C function void glProgramUniform4f ( GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 )
@@ -789,7 +789,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1iv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform1iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -800,7 +800,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1iv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform1iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -811,7 +811,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2iv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform2iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -822,7 +822,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2iv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform2iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -833,7 +833,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3iv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform3iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -844,7 +844,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3iv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform3iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -855,7 +855,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4iv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform4iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -866,7 +866,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4iv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform4iv ( GLuint program, GLint location, GLsizei count, const GLint *value )
@@ -877,7 +877,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1uiv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform1uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -888,7 +888,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1uiv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform1uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -899,7 +899,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2uiv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform2uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -910,7 +910,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2uiv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform2uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -921,7 +921,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3uiv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform3uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -932,7 +932,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3uiv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform3uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -943,7 +943,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4uiv([int program, int location, int count, int[] value, int offset]);
      * 
      *  C function void glProgramUniform4uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -954,7 +954,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4uiv([int program, int location, int count, java.nio.IntBuffer value]);
      * 
      *  C function void glProgramUniform4uiv ( GLuint program, GLint location, GLsizei count, const GLuint *value )
@@ -965,7 +965,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1fv([int program, int location, int count, float[] value, int offset]);
      * 
      *  C function void glProgramUniform1fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -976,7 +976,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform1fv([int program, int location, int count, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniform1fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -987,7 +987,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2fv([int program, int location, int count, float[] value, int offset]);
      * 
      *  C function void glProgramUniform2fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -998,7 +998,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform2fv([int program, int location, int count, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniform2fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -1009,7 +1009,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3fv([int program, int location, int count, float[] value, int offset]);
      * 
      *  C function void glProgramUniform3fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -1020,7 +1020,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform3fv([int program, int location, int count, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniform3fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -1031,7 +1031,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4fv([int program, int location, int count, float[] value, int offset]);
      * 
      *  C function void glProgramUniform4fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -1042,7 +1042,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniform4fv([int program, int location, int count, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniform4fv ( GLuint program, GLint location, GLsizei count, const GLfloat *value )
@@ -1053,7 +1053,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix2fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix2fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1064,7 +1064,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix2fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix2fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1075,7 +1075,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix3fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix3fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1086,7 +1086,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix3fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix3fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1097,7 +1097,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix4fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix4fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1108,7 +1108,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix4fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix4fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1119,7 +1119,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix2x3fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix2x3fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1130,7 +1130,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix2x3fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix2x3fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1141,7 +1141,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix3x2fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix3x2fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1152,7 +1152,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix3x2fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix3x2fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1163,7 +1163,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix2x4fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix2x4fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1174,7 +1174,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix2x4fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix2x4fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1185,7 +1185,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix4x2fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix4x2fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1196,7 +1196,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix4x2fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix4x2fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1207,7 +1207,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix3x4fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix3x4fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1218,7 +1218,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix3x4fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix3x4fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1229,7 +1229,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix4x3fv([int program, int location, int count, boolean transpose, float[] value, int offset]);
      * 
      *  C function void glProgramUniformMatrix4x3fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1240,7 +1240,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glProgramUniformMatrix4x3fv([int program, int location, int count, boolean transpose, java.nio.FloatBuffer value]);
      * 
      *  C function void glProgramUniformMatrix4x3fv ( GLuint program, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value )
@@ -1251,7 +1251,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glValidateProgramPipeline([int pipeline]);
      * 
      *  C function void glValidateProgramPipeline ( GLuint pipeline )
@@ -1262,7 +1262,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetProgramPipelineInfoLog([int program]);
      * 
      *  C function void glGetProgramPipelineInfoLog( GLuint program, GLsizei maxLength, GLsizei * length, GLchar * infoLog);
@@ -1273,7 +1273,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glBindImageTexture([int unit, int texture, int level, boolean layered, int layer, int access, int format]);
      * 
      *  C function void glBindImageTexture ( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer, GLenum access, GLenum format )
@@ -1284,7 +1284,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetBooleani_v([int target, int index, boolean[] data, int offset]);
      * 
      *  C function void glGetBooleani_v ( GLenum target, GLuint index, GLboolean *data )
@@ -1295,7 +1295,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetBooleani_v([int target, int index, java.nio.IntBuffer data]);
      * 
      *  C function void glGetBooleani_v ( GLenum target, GLuint index, GLboolean *data )
@@ -1306,7 +1306,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glMemoryBarrier([int barriers]);
      * 
      *  C function void glMemoryBarrier ( GLbitfield barriers )
@@ -1317,7 +1317,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glMemoryBarrierByRegion([int barriers]);
      * 
      *  C function void glMemoryBarrierByRegion ( GLbitfield barriers )
@@ -1328,7 +1328,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glTexStorage2DMultisample([int target, int samples, int internalformat, int width, int height, boolean fixedsamplelocations]);
      * 
      *  C function void glTexStorage2DMultisample ( GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )
@@ -1339,7 +1339,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetMultisamplefv([int pname, int index, float[] val, int offset]);
      * 
      *  C function void glGetMultisamplefv ( GLenum pname, GLuint index, GLfloat *val )
@@ -1350,7 +1350,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetMultisamplefv([int pname, int index, java.nio.FloatBuffer val]);
      * 
      *  C function void glGetMultisamplefv ( GLenum pname, GLuint index, GLfloat *val )
@@ -1361,7 +1361,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glSampleMaski([int maskNumber, int mask]);
      * 
      *  C function void glSampleMaski ( GLuint maskNumber, GLbitfield mask )
@@ -1372,7 +1372,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetTexLevelParameteriv([int target, int level, int pname, int[] params, int offset]);
      * 
      *  C function void glGetTexLevelParameteriv ( GLenum target, GLint level, GLenum pname, GLint *params )
@@ -1383,7 +1383,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetTexLevelParameteriv([int target, int level, int pname, java.nio.IntBuffer params]);
      * 
      *  C function void glGetTexLevelParameteriv ( GLenum target, GLint level, GLenum pname, GLint *params )
@@ -1394,7 +1394,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetTexLevelParameterfv([int target, int level, int pname, float[] params, int offset]);
      * 
      *  C function void glGetTexLevelParameterfv ( GLenum target, GLint level, GLenum pname, GLfloat *params )
@@ -1405,7 +1405,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glGetTexLevelParameterfv([int target, int level, int pname, java.nio.FloatBuffer params]);
      * 
      *  C function void glGetTexLevelParameterfv ( GLenum target, GLint level, GLenum pname, GLfloat *params )
@@ -1416,7 +1416,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glBindVertexBuffer([int bindingindex, int buffer, long offset, int stride]);
      * 
      *  C function void glBindVertexBuffer ( GLuint bindingindex, GLuint buffer, GLintptr offset, GLsizei stride )
@@ -1427,7 +1427,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glVertexAttribFormat([int attribindex, int size, int type, boolean normalized, int relativeoffset]);
      * 
      *  C function void glVertexAttribFormat ( GLuint attribindex, GLint size, GLenum type, GLboolean normalized, GLuint relativeoffset )
@@ -1438,7 +1438,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glVertexAttribIFormat([int attribindex, int size, int type, int relativeoffset]);
      * 
      *  C function void glVertexAttribIFormat ( GLuint attribindex, GLint size, GLenum type, GLuint relativeoffset )
@@ -1449,7 +1449,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glVertexAttribBinding([int attribindex, int bindingindex]);
      * 
      *  C function void glVertexAttribBinding ( GLuint attribindex, GLuint bindingindex )
@@ -1460,7 +1460,7 @@ public class GLES31 extends GLES30 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES31.glVertexBindingDivisor([int bindingindex, int divisor]);
      * 
      *  C function void glVertexBindingDivisor ( GLuint bindingindex, GLuint divisor )

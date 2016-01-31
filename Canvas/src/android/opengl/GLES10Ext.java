@@ -31,7 +31,7 @@ public class GLES10Ext extends GLES10 {
     
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES10Ext._nativeClassInit();
      * 
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
@@ -46,7 +46,7 @@ public class GLES10Ext extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES10Ext.glQueryMatrixxOES([int[] mantissa, int mantissaOffset, int[] exponent, int exponentOffset]);
      * 
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
@@ -57,7 +57,7 @@ public class GLES10Ext extends GLES10 {
     }
 
     /**
-     * MACHINE GENERATED! Please, do not edit !
+     * This method forwards command to Pipeline.
      * Delegate Method generated from GLES10Ext.glQueryMatrixxOES([java.nio.IntBuffer mantissa, java.nio.IntBuffer exponent]);
      * 
      *  C function GLbitfield glQueryMatrixxOES ( GLfixed *mantissa, GLint *exponent )
