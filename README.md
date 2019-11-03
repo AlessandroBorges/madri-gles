@@ -17,3 +17,9 @@ Platforms to be supported (Native libs) :
 3 - Android, with backport of this API (fixing some issues with original Android GLES API)
 
 4 - OSX - only with some sponsoring. 
+
+
+
+![Test with PowerVR emulator](https://github.com/AlessandroBorges/madri-gles/blob/master/PowerVR_emulator.pnge)
+
+
