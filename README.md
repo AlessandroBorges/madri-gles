@@ -20,6 +20,6 @@ Platforms to be supported (Native libs) :
 
 
 
-![Test with PowerVR emulator](https://github.com/AlessandroBorges/madri-gles/blob/master/PowerVR_emulator.pnge)
+![Test with PowerVR emulator](https://github.com/AlessandroBorges/madri-gles/blob/master/PowerVR_emulator.png)
 
 
